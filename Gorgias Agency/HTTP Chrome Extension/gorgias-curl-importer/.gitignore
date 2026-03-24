@@ -1,0 +1,5 @@
+node_modules/
+config.js
+*.csv
+!actions-template.csv
+.DS_Store

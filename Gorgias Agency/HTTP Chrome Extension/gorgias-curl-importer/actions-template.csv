@@ -1,0 +1,4 @@
+name,description,requestName,url,method,headers,requiresConfirmation
+Check Order Status,Fetches the current status of a customer's order,Get Order Status,https://api.example.com/orders/{order_id},GET,"{""authorization"":""Bearer YOUR_API_KEY""}",false
+Update Customer Address,Updates the shipping address for a customer,Update Address,https://api.example.com/customers/{customer_id}/address,PUT,"{""authorization"":""Bearer YOUR_API_KEY"",""content-type"":""application/json""}",true
+Apply Discount Code,Applies a discount code to an order,Apply Discount,https://api.example.com/orders/{order_id}/discount,POST,"{""authorization"":""Bearer YOUR_API_KEY"",""content-type"":""application/json""}",false

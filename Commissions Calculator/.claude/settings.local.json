@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(open \"/Users/yohanloyer/Projects/Commissions Calculator/index.html\")",
+      "mcp__PDF_Tools_-_Analyze__Extract__Fill__Compare__read_pdf_content"
+    ]
+  }
+}

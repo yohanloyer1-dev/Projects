@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Audit Flowchart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; }
+        .phase-card { transition: all 0.3s ease; }
+        .phase-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function AuditFlowchart() {
+            const [expandedPhase, setExpandedPhase] = useState(null);
+            const [expandedStep, setExpandedStep] = useState(null);
+
+            const phases = [
+                {
+                    id: 1,
+                    phase: "Phase 1",
+                    title: "Client Kickoff",
+                    duration: "Week 1",
+                    color: "from-blue-500 to-blue-600",
+                    icon: "🎯",
+                    steps: [
+                        {
+                            id: "1a",
+                            title: "Understand Client Context",
+                            description: "Review meeting notes, goals, concerns about AI automation",
+                            reference: "CLIENT_DISCOVERY_QUESTIONS.md"
+                        },
+                        {
+                            id: "1b",
+                            title: "Gather Required Data",
+                            description: "Current costs, tech stack, automation goals, deadlines",
+                            reference: "CLIENT_DISCOVERY_QUESTIONS.md"
+                        }
+                    ],
+                    output: "Client brief with all required information"
+                },
+                {
+                    id: 2,
+                    phase: "Phase 2",
+                    title: "Data Collection",
+                    duration: "Week 1-2",
+                    color: "from-purple-500 to-purple-600",
+                    icon: "📊",
+                    steps: [
+                        {
+                            id: "2a",
+                            title: "Collect Gorgias Screenshots",
+                            description: "Intents, Overview Report, Performance, Guidances, Deploy settings",
+                            reference: "ai_agent_audit_playbook.md (Phase 1.1)"
+                        },
+                        {
+                            id: "2b",
+                            title: "Export CSV Data",
+                            description: "60 days of ticket messages with essential columns",
+                            reference: "ai_agent_audit_playbook.md (Phase 1.1)"
+                        },
+                        {
+                            id: "2c",
+                            title: "Request Business Data",
+                            description: "Outsourcing costs, ticket costs, tech stack, policies",
+                            reference: "ai_agent_audit_playbook.md (Phase 1.2)"
+                        }
+                    ],
+                    output: "Complete dataset ready for analysis"
+                },
+                {
+                    id: 3,
+                    phase: "Phase 3",
+                    title: "Deep Analysis",
+                    duration: "Week 2-3",
+                    color: "from-indigo-500 to-indigo-600",
+                    icon: "🔍",
+                    steps: [
+                        {
+                            id: "3a",
+                            title: "Analyze Metrics",
+                            description: "Coverage, success rate, CSAT, FRT/RT, automation rate",
+                            reference: "ai_agent_audit_playbook.md (Phase 2)"
+                        },
+                        {
+                            id: "3b",
+                            title: "Analyze Tickets (CSV)",
+                            description: "Pattern recognition, intent distribution, handover reasons",
+                            reference: "08_CSV_TICKET_ANALYSIS_PLAYBOOK.md"
+                        },
+                        {
+                            id: "3c",
+                            title: "Analyze Guidances",
+                            description: "Performance audit, avoidable vs justified handovers",
+                            reference: "09_GUIDANCE_AUDIT_PLAYBOOK.md"
+                        },
+                        {
+                            id: "3d",
+                            title: "Calculate ROI",
+                            description: "Current costs, projected costs, ROI, payback period",
+                            reference: "10_ECONOMIC_MODEL_ROI.md"
+                        }
+                    ],
+                    output: "Complete analysis with quantified opportunities"
+                },
+                {
+                    id: 4,
+                    phase: "Phase 4",
+                    title: "Report Writing",
+                    duration: "Week 3",
+                    color: "from-green-500 to-green-600",
+                    icon: "📝",
+                    steps: [
+                        {
+                            id: "4a",
+                            title: "Write Client Report",
+                            description: "Opportunity-focused, metrics, examples, recommendations",
+                            reference: "11_CLIENT_REPORT_WRITING_GUIDE.md"
+                        },
+                        {
+                            id: "4b",
+                            title: "Create HTML Delivery",
+                            description: "Styled version for client presentation via link",
+                            reference: "11_CLIENT_REPORT_WRITING_GUIDE.md"
+                        }
+                    ],
+                    output: "Client-ready report + HTML presentation"
+                },
+                {
+                    id: 5,
+                    phase: "Phase 5",
+                    title: "Implementation Planning",
+                    duration: "Week 4+",
+                    color: "from-orange-500 to-orange-600",
+                    icon: "⚙️",
+                    steps: [
+                        {
+                            id: "5a",
+                            title: "Create Guidances",
+                            description: "Use templates, adapt for client, test scenarios",
+                            reference: "12_ECOMMERCE_GUIDANCE_TEMPLATES.md"
+                        },
+                        {
+                            id: "5b",
+                            title: "Configure Features",
+                            description: "Order Management, Actions, Flows, handover topics",
+                            reference: "POST_AUDIT_IMPLEMENTATION_CHECKLIST.md"
+                        },
+                        {
+                            id: "5c",
+                            title: "Test & Rollout",
+                            description: "Pilot testing, full deployment, success tracking",
+                            reference: "POST_AUDIT_IMPLEMENTATION_CHECKLIST.md"
+                        }
+                    ],
+                    output: "Implementation roadmap → 50% automation target"
+                }
+            ];
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Header */}
+                        <div className="mb-12">
+                            <h1 className="text-4xl font-bold text-slate-900 mb-2">
+                                AI Agent Audit Flowchart
+                            </h1>
+                            <p className="text-lg text-slate-600">
+                                Complete methodology from kickoff to 50% automation
+                            </p>
+                            <div className="mt-4 flex gap-6 flex-wrap text-sm">
+                                <div className="flex items-center gap-2 text-slate-700">
+                                    <span className="text-lg">📚</span>
+                                    <span className="font-semibold">6 Playbooks</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-slate-700">
+                                    <span className="text-lg">⏱️</span>
+                                    <span className="font-semibold">4 Weeks</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-slate-700">
+                                    <span className="text-lg">🎯</span>
+                                    <span className="font-semibold">5 Phases</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Flowchart */}
+                        <div className="space-y-4">
+                            {phases.map((phase, idx) => (
+                                <div key={phase.id}>
+                                    {/* Phase Header */}
+                                    <div
+                                        onClick={() =>
+                                            setExpandedPhase(expandedPhase === phase.id ? null : phase.id)
+                                        }
+                                        className={`bg-gradient-to-r ${phase.color} text-white p-6 rounded-lg cursor-pointer hover:shadow-lg transition-all`}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-3xl">{phase.icon}</span>
+                                                <div>
+                                                    <div className="text-sm font-semibold opacity-90">
+                                                        {phase.phase}
+                                                    </div>
+                                                    <h2 className="text-2xl font-bold">{phase.title}</h2>
+                                                    <div className="text-sm opacity-90 mt-1">
+                                                        {phase.duration}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="text-white text-2xl">
+                                                {expandedPhase === phase.id ? "▼" : "▶"}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Phase Details */}
+                                    {expandedPhase === phase.id && (
+                                        <div className="bg-white border-l-4 border-slate-300 p-6 space-y-4">
+                                            {/* Steps */}
+                                            <div className="space-y-3">
+                                                {phase.steps.map((step, stepIdx) => (
+                                                    <div key={step.id}>
+                                                        <div
+                                                            onClick={() =>
+                                                                setExpandedStep(
+                                                                    expandedStep === step.id ? null : step.id
+                                                                )
+                                                            }
+                                                            className="bg-slate-50 p-4 rounded border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors"
+                                                        >
+                                                            <div className="flex items-start justify-between">
+                                                                <div className="flex-1">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <span className="text-slate-400 font-semibold">
+                                                                            {stepIdx + 1}.
+                                                                        </span>
+                                                                        <h3 className="font-semibold text-slate-900">
+                                                                            {step.title}
+                                                                        </h3>
+                                                                    </div>
+                                                                    <p className="text-slate-600 text-sm mt-1 ml-7">
+                                                                        {step.description}
+                                                                    </p>
+                                                                    {expandedStep === step.id && (
+                                                                        <div className="mt-3 ml-7 p-3 bg-blue-50 rounded border border-blue-200">
+                                                                            <div className="flex items-start gap-2 text-sm">
+                                                                                <span className="text-blue-600 text-lg">📖</span>
+                                                                                <div>
+                                                                                    <span className="font-semibold text-blue-900">
+                                                                                        Reference:{" "}
+                                                                                    </span>
+                                                                                    <span className="text-blue-700">
+                                                                                        {step.reference}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="ml-4 text-slate-400 text-xl">
+                                                                    {expandedStep === step.id ? "▼" : "▶"}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Output */}
+                                            <div className="mt-6 p-4 bg-green-50 rounded border border-green-200">
+                                                <div className="flex items-start gap-3">
+                                                    <span className="text-xl">✓</span>
+                                                    <div>
+                                                        <h4 className="font-semibold text-green-900">
+                                                            Phase Output:
+                                                        </h4>
+                                                        <p className="text-green-700 text-sm">{phase.output}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Arrow between phases */}
+                                    {idx < phases.length - 1 && (
+                                        <div className="flex justify-center py-2">
+                                            <div className="text-3xl text-slate-400">↓</div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Legend */}
+                        <div className="mt-12 p-6 bg-white rounded-lg border border-slate-200">
+                            <h3 className="font-bold text-slate-900 mb-4 text-lg">How to Use This</h3>
+                            <ul className="space-y-2 text-sm text-slate-700">
+                                <li className="flex items-start gap-2">
+                                    <span className="font-bold text-blue-600 text-lg">▶</span>
+                                    <span>
+                                        <strong>Click phases</strong> to expand and see all steps
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="font-bold text-blue-600 text-lg">▶</span>
+                                    <span>
+                                        <strong>Click steps</strong> to see which playbook to reference
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="font-bold text-blue-600 text-lg">▶</span>
+                                    <span>
+                                        Each phase has a clear output before moving to the next
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="font-bold text-blue-600 text-lg">▶</span>
+                                    <span>
+                                        <strong>Timeline:</strong> 4 weeks for full audit + implementation
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="mt-8 text-center text-sm text-slate-600">
+                            <p>
+                                This flowchart guides you through the complete audit methodology.
+                                Use it with your team and clients.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<AuditFlowchart />, document.getElementById('root'));
+    </script>
+</body>
+</html>

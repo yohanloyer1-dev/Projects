@@ -1,0 +1,17 @@
+url,name,type,country,ships_to_greece,has_rice_cookers,brands_available,price_range_eur,notes,legitimacy_score
+https://www.skroutz.gr/c/4406/Rice-Cookers.html,Skroutz.gr,Marketplace,Greece,Yes,Yes,"Hendi,Russell Hobbs,Sencor,Nedis,Life,Raf",20-300,Main Greek price comparison - blocked direct scraping,10/10
+https://www.bestprice.gr,BestPrice.gr,Price comparison,Greece,Yes,Yes,"Russell Hobbs,Sencor,Xiaomi,Black+Decker,Nedis",17-85,Greek price comparison site,9/10
+https://www.plaisio.gr,Plaisio,Retailer,Greece,Yes,Yes,"Xiaomi",60,Greek tech retailer,9/10
+https://www.public.gr,Public,Retailer,Greece,Yes,Yes,Various,Varies,Greek electronics retailer,9/10
+https://www.kotsovolos.gr,Kotsovolos,Retailer,Greece,Yes,Limited,Various,Varies,Major Greek electronics chain,9/10
+https://www.praktiker.gr,Praktiker,DIY/Home,Greece,Yes,Yes,"Life",30-50,Greek home improvement - budget options,8/10
+https://market1.gr,Market1,Retailer,Greece,Yes,Yes,"Hoomei",40-60,Greek retailer,7/10
+https://ecofrost.gr,Ecofrost,Professional,Greece,Yes,Yes,Professional brands,100-600,HoReCa equipment Greece,8/10
+https://zojirushi.gr,Zojirushi Greece,Official store,Greece,Yes,Yes,Zojirushi,385-416,Official Zojirushi distributor - premium prices,10/10
+https://yum-asia.com/eu,Yum Asia EU,Specialist,Netherlands,Yes,Yes,"Yum Asia,Zojirushi",90-450,Ships from Amsterdam - ceramic specialists - €37 to Greece,10/10
+https://www.amazon.de,Amazon Germany,Marketplace,Germany,Partial,Yes,"Reishunger,Gastroback,WMF,various",30-300,Some items don't ship to Greece - check each listing,9/10
+https://www.amazon.fr,Amazon France,Marketplace,France,Partial,Yes,Various,30-300,Alternative to Amazon.de,9/10
+https://www.ebay.com,eBay,Marketplace,International,Yes,Yes,"Cuckoo,Tiger,Zojirushi",100-400,Korean sellers ship 220V models with EU plug,8/10
+https://www.coolblue.nl,Coolblue,Retailer,Netherlands,Check,Yes,"Tristar,various",30-100,Dutch retailer - check Greece shipping,8/10
+https://www.reishunger.de,Reishunger,Specialist,Germany,Via Amazon,Yes,Reishunger,35-150,German rice specialist - ceramic options,9/10
+https://www.hendi.eu,Hendi Official,Professional,Netherlands,Via retailers,Yes,Hendi,55-200,HoReCa equipment manufacturer,9/10

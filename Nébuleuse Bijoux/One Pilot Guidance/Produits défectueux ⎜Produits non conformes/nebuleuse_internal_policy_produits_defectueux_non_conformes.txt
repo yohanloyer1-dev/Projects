@@ -1,0 +1,1189 @@
+Nébuleuse Bijoux — Internal Policy: Produits Défectueux | Produits Non Conformes
+Transcribed from internal KB screenshots on 2026-03-16
+[61 screenshots total]
+
+============================================================
+CAS 1: PRODUIT DÉFECTUEUX
+============================================================
+
+  Cas 1 : Produit défectueux
+    Sous cas 1 : Achat fait en Boutique Partenaire / au BHV / au corner des Galeries Lafayette
+    Sous-cas 2 : Achat n'a pas été fait en Boutique Partenaire / au BHV / au corner des Galeries Lafayette
+
+------------------------------------------------------------
+SOUS-CAS 1: Achat fait en Boutique Partenaire / au BHV / au corner des Galeries Lafayette
+------------------------------------------------------------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO (Points De Vente Partenaire):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Nous vous invitons à vous rendre directement dans la boutique où vous avez acheté les bijoux, munie de votre ticket de caisse 😊
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+    MACRO (BHV):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Vous avez 45 jours après votre achat, pour vous rendre au BHV, munie de votre ticket de caisse afin qu'ils puissent vous faire un échange 😊
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+    MACRO (Galeries Lafayette):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Vous avez 45 jours après votre achat, pour vous rendre aux Galeries Lafayette, munie de votre ticket de caisse afin qu'ils puissent vous faire un échange 😊
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+------------------------------------------------------------
+SOUS-CAS 2: Achat n'a pas été fait en Boutique Partenaire / au BHV / au corner des Galeries Lafayette
+------------------------------------------------------------
+
+  Step 1: Rechercher la commande sur Shopify
+
+    Sous cas 1 : On retrouve la commande
+    Sous cas 2 : On ne trouve pas la commande
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SOUS-CAS 2 > Sous cas 1 : On retrouve la commande
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Option 1 : Online Store  |  Etsy  |  Mirakl
+    Option 2 : Point de vente (Paris Marais/Paris Saint germain)
+    [BEIGE/TAN ROW] Nébuleuse Partenaires
+    [BEIGE/TAN ROW] Nébuleuse Bijoux / Nébuleuse Jewerly
+
+  [NOTE: Les options "Nébuleuse Partenaires" et "Nébuleuse Bijoux / Nébuleuse Jewerly" sont des parcours spécifiques à ces marques partenaires. Aucun détail de contenu n'est disponible dans les captures d'écran fournies pour ces deux options.]
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 1: Online Store | Etsy | Mirakl
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Step 1: Vérifier la date de la commande sur Shopify
+
+    Choix 1 : La commande a été passée il y a moins d'1 AN  (+ 1 semaine pour la livraison)
+    Choix 2 : Commande passée il y a plus d'1 AN  (+ 1 semaine pour la livraison)
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 1 > CHOIX 1: La commande a été passée il y a moins d'1 AN (+ 1 semaine pour la livraison)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Step 1: Sur Shopify, vérifier sur la page du client s'il y a une balise Garantie-XXX-SKU
+
+    [ORANGE BANNER:]
+      Le SKU dans la balise Garantie-XXX-SKU doit bien correspondre au bijou concerné par la demande de prise en charge ⚠️
+
+    Garantie2-XXX-SKU
+    Garantie-XXX-SKU ou PAS de balise correspondante
+
+  ----------
+  Garantie2-XXX-SKU
+  ----------
+
+  [ORANGE BANNER:]
+    Il faut bien que le SKU dans la balise corresponde au SKU du bijou signalé défectueux ⚠️
+
+  Step 1: Répondre :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie et je suis navrée pour le désagrément.
+
+      Nos produits sont garantis 1 an à réception de votre commande et vous avez déjà bénéficié de la garantie sur ce bijou, nous ne pourrons pas vous le renvoyer.
+
+      Cependant, si vous le souhaitez, nous pouvons procéder à son remboursement.
+
+      Cela vous conviendrait-il ?
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ----------
+  Garantie-XXX-SKU ou PAS de balise correspondante
+  ----------
+
+    Possibilité 1 : Boucle qui ne ferme plus
+    Possibilité 2 : Bijou qui noircit
+    Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+    Possibilité 4 : Tige tordue
+    Possibilité 5 : Piercing infinity ne se clipse pas correctement
+    Possibilité 6 : Pierres naturelles différentes / Pierre plates
+    Possibilité 7 : Tout autre problème
+
+  ----------
+  Possibilité 1 : Boucle qui ne ferme plus
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas que pour les boucles, pas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO (Mail):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] ne se ferme plus.
+
+      Pourriez-vous essayer la petite astuce expliquée dans cette vidéo s'il vous plait ?
+
+      Si cela ne résout pas votre problème, je vous invite à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne afin que nous puissions faire le nécessaire.
+
+      Si plusieurs pièces concernées, merci de ne remplir qu'un formulaire par commande.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+    Tags to add : Fermoir Défectueux
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 2 : Bijou qui noircit
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO (Mail):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a noirci.
+
+      Pourriez-vous nous indiquer si vous avez bien nettoyé vos bijoux à l'eau claire ?
+      Je vous invite également à consulter notre page prendre soin de ses bijoux pour retrouver tous nos conseils de nettoyage.
+
+      N'hésitez pas à revenir vers nous si le problème persiste 🙏
+
+      En vous souhaitant une excellente soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO (Mail):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a provoqué cette réaction.
+
+      Il semblerait que vous soyez allergique à l'un des composants de notre bijou...
+      Sachez qu'il peut aussi s'agir d'une infection ou d'une inflammation, qui peut ne pas être lié au port du nouveau bijou.
+
+      Je vous invite à retirer le bijou et à passer sur la gamme titane, celle ci est hypoallergénique, et vous conviendra parfaitement si vous avez la peau réactive.
+      Vous pouvez également consulter l'article sur notre blog à ce sujet pour plus d'informations.
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 4 : Tige tordue
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrés d'apprendre que la tige soit tordue.
+
+      Pourriez-vous essayer de la redresser délicatement s'il vous plaît ?
+      Ne vous inquiétez pas, cela ne vous empêchera pas de bénéficier de la garantie.
+
+      Si cela ne résout pas votre problème, je vous invite à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne afin que nous puissions faire le nécessaire.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 5 : Piercing infinity ne se clipse pas correctement
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en ajoutant la pièce jointe :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrés d'apprendre que votre piercing earfinity ne se clipse pas correctement.
+
+      Pourriez-vous essayer de courber légèrement l'extrémité de la barre pour l'ajuster correctement s'il vous plait ?
+
+      Vous trouverez sur cette page dans l'onglet "Tige courbée", le détail de la procédure.
+
+      Ne vous inquiétez pas, cela ne vous empêchera pas de bénéficier de la garantie.
+
+      Si cela ne résout pas votre problème, je vous invite à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne (un formulaire par commande) afin que nous puissions faire le nécessaire.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 6 : Pierres naturelles différentes / Pierre plates
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Nous sommes sincèrement navrés d'apprendre que la perle ne correspond pas à vos attentes. 😅
+
+      Les pierres naturelles ont chacune leurs propres caractéristiques uniques et ne sont donc pas toutes identiques.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 7 : Tout autre problème
+  (Choix 1 — commande < 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+    Possibilité 1 : Il ne s'agit pas d'un bijou perdu
+    Possibilité 2 : Bijou perdu/fermoir perdu
+
+  ----------
+  Possibilité 7 > Possibilité 1 : Il ne s'agit pas d'un bijou perdu
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] soit endommagée.
+
+      Je vous invite à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne afin que votre demande soit traitée.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 7 > Possibilité 2 : Bijou perdu/fermoir perdu
+  ----------
+
+  Step 1: Envoyer la macro :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message.
+
+      Nous sommes vraiment navrés d'apprendre que la [nom du produit] ait été perdue.
+
+      Malheureusement, nous ne pouvons pas proposer le remplacement d'un [Variable] perdu.
+
+      Cependant, si vous disposez d'une photo ou d'une vidéo pouvant démontrer que le bijou présentait un défaut (par exemple un fermoir défectueux) avant sa perte, nous vous invitons à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne afin qu'elle puisse être étudiée.
+
+      En vous souhaitant une excellente soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ attendre un éventuel retour du client
+
+    Option 1 : Pas possible d'envoyer les photos
+
+  ----------
+  Possibilité 7 > Possibilité 2 > Option 1 : Pas possible d'envoyer les photos
+  ----------
+
+  Step 1: Envoyer la bonne macro :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je suis vraiment navrée pour le désagrément.
+
+      La garantie fonctionne uniquement pour les produits défectueux, avec photos ou vidéos à l'appui. Malheureusement, elle ne prendra pas en compte un bijou perdu.
+
+      Je vous remercie pour votre compréhension.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 1 > CHOIX 2: Commande été passée il y a plus d'1 AN (+ 1 semaine pour la livraison)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  [ORANGE BANNER:]
+    Les produits sont garantis 1 AN
+
+    Possibilité 1 : Boucle qui ne ferme plus
+    Possibilité 2 : Bijou qui noircit
+    Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+    Possibilité 4 : Tige tordue
+    Possibilité 5 : Piercing infinity ne se clipse pas correctement
+    Possibilité 6 : Pierres naturelles différentes / Pierre plates
+    Possibilité 7 : Tout autre problème
+
+  ----------
+  Possibilité 1 : Boucle qui ne ferme plus
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas que pour les boucles, pas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO (Mail):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] ne se ferme plus.
+
+      Pourriez-vous essayer la petite astuce expliquée dans cette vidéo s'il vous plait ?
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir sur cette commande qui dépasse ces délais.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+    Tags to add : Fermoir Défectueux
+
+  ----------
+  Possibilité 2 : Bijou qui noircit
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a noirci.
+
+      Pourriez-vous nous indiquer si vous avez bien nettoyé vos bijoux à l'eau claire ?
+      Je vous invite également à consulter notre page prendre soin de ses bijoux pour retrouver tous nos conseils de nettoyage.
+
+      Nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pourrons plus intervenir sur cette commande.
+
+      Je reste à votre disposition pour de plus amples renseignements.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ----------
+  Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrées d'apprendre que la [mettre le nom du produit] a provoqué cette réaction.
+
+      Il semblerait que vous soyez allergique à l'un des composants de notre bijou...
+      Je vous indique donc à ne plus porter le bijou et à bien désinfecter votre oreille, cela devrait vous soulager et votre oreille devrait revenir à son état normal.
+
+      Nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pourrons plus intervenir sur cette commande.
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ----------
+  Possibilité 4 : Tige tordue
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] est tordue.
+
+      Je vous invite à essayer de la redresser délicatement, les tiges sont légèrement souple et peuvent parfois être redressées à la main.
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 5 : Piercing infinity ne se clipse pas correctement
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre au client en ajoutant la pièce jointe :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nous sommes vraiment navrés d'apprendre que votre piercing infinity ne se clipse pas correctement.
+
+      Pourriez-vous essayer de courber légèrement l'extrémité de la barre pour l'ajuster correctement s'il vous plait ?
+
+      Vous trouverez sur cette page dans l'onglet "Tige courbée", le détail de la procédure.
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 6 : Pierres naturelles différentes / Pierre plates
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Nous sommes sincèrement navrés d'apprendre que la perle ne correspond pas à vos attentes. 😅
+
+      Les pierres naturelles ont chacune leurs propres caractéristiques uniques et ne sont donc pas toutes identiques.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 7 : Tout autre problème
+  (Choix 2 — commande > 1 AN — Online Store / Etsy / Mirakl)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message je suis navrée pour ce désagrément. 😊
+
+      Nos produits sont garantis 1 an à réception de votre commande, malheureusement nous ne pouvons plus intervenir sur cette commande..
+
+      N'hésitez pas à revenir vers nous si vous avez d'autres questions.
+
+      Belle soirée ✨
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 2: Point de vente (Paris Marais/Paris Saint Germain)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Step 1: Vérifier la date de la commande sur Shopify
+
+    Alternative 1 : La commande a été passée il y a moins d'1 AN  (+ 1 semaine pour la livraison)
+    Alternative 2 : Commande été passée il y a plus d'1 AN  (+ 1 semaine pour la livraison)
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 2 > ALTERNATIVE 1: La commande a été passée il y a moins d'1 AN (+ 1 semaine pour la livraison)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Le client ne peut pas se rendre en Boutique // On ne sait pas
+    Le client peut se rendre en Boutique
+
+  ----------
+  Alternative 1 > Le client ne peut pas se rendre en Boutique // On ne sait pas
+  ----------
+
+    Possibilité 1 : Boucle qui ne ferme plus
+    Possibilité 2 : Bijou qui noircit
+    Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+    Possibilité 4 : Tige tordue
+    Possibilité 5 : Piercing infinity ne se clipse pas correctement
+    Possibilité 6 : Pierres naturelles différentes / Pierre plates
+    Possibilité 7 : Tout autre problème
+
+  ----------
+  Possibilité 1 : Boucle qui ne ferme plus
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas que pour les boucles, pas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] ne se ferme plus.
+
+      Pourriez-vous essayer la petite astuce expliquée dans cette vidéo s'il vous plait ?
+
+      Si cela ne résout pas votre problème, je vous invite à vous rendre dans notre boutique afin que nos conseillères puissent faire le nécessaire pour vous.
+
+      Si vous ne pouvez pas vous rendre en boutique, je vous invite à revenir vers nous.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+    Tags to add : Fermoir Défectueux
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 2 : Bijou qui noircit
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a noirci.
+
+      Pourriez-vous nous indiquer si vous avez bien nettoyé vos bijoux à l'eau claire ?
+      Je vous invite également à consulter notre page prendre soin de ses bijoux pour retrouver tous nos conseils de nettoyage.
+
+      Si cela ne résout pas votre problème, je vous invite à vous rendre dans notre boutique afin que nos conseillères puissent faire le nécessaire pour vous.
+
+      Si vous ne pouvez pas vous rendre en boutique, je vous invite à revenir vers nous.
+
+      En vous souhaitant une excellente soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a provoqué cette réaction.
+
+      Il semblerait que vous soyez allergique à l'un des composants de notre bijou...
+      Sachez qu'il peut aussi s'agir d'une infection ou d'une inflammation, qui peut ne pas être lié au port du nouveau bijou.
+
+      Je vous invite à retirer le bijou et à passer sur la gamme titane, celle ci est hypoallergénique, et vous conviendra parfaitement si vous avez la peau réactive.
+      Vous pouvez également consulter l'article sur notre blog à ce sujet pour plus d'informations.
+
+      Si cela ne résout pas votre problème, je vous invite à vous rendre dans notre boutique afin que nos conseillères puissent faire le nécessaire pour vous.
+
+      Si vous ne pouvez pas vous rendre en boutique, je vous invite à revenir vers nous.
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 4 : Tige tordue
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] est tordue.
+
+      Pourriez-vous essayer de la redresser délicatement s'il vous plait ?
+      Ne vous inquiétez pas, cela ne vous empêchera pas de bénéficier de la garantie.
+
+      Si cela ne résout pas votre problème, je vous invite à vous rendre dans notre boutique afin que nos conseillères puissent faire le nécessaire pour vous.
+
+      Si vous ne pouvez pas vous rendre en boutique, je vous invite à revenir vers nous.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 5 : Piercing infinity ne se clipse pas correctement
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Nous sommes vraiment navrés d'apprendre que votre piercing infinity ne se clipse pas correctement.
+
+      Pourriez-vous essayer de courber légèrement l'extrémité de la barre pour l'ajuster correctement s'il vous plait ?
+
+      Vous trouverez sur cette page dans l'onglet "Tige courbée", le détail de la procédure.
+
+      Ne vous inquiétez pas, cela ne vous empêchera pas de bénéficier de la garantie.
+
+      Si cela ne résout pas votre problème, je vous invite à vous rendre dans notre boutique afin que nos conseillères puissent faire le nécessaire pour vous.
+
+      Si vous ne pouvez pas vous rendre en boutique, je vous invite à revenir vers nous.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client nous recontacte car cela n'a pas fonctionné, suivre la possibilité 7
+
+  ----------
+  Possibilité 6 : Pierres naturelles différentes / Pierre plates
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Nous sommes sincèrement navrés d'apprendre que la perle ne correspond pas à vos attentes. 😅
+
+      Les pierres naturelles ont chacune leurs propres caractéristiques uniques et ne sont donc pas toutes identiques.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 7 : Tout autre problème
+  (Alternative 1 — commande < 1 AN — POS — client ne peut pas venir en boutique)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO (Bijou Non Perdu):
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour ce désagrément. 😊
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] soit endommagée.
+
+      Je vous invite à transmettre votre demande de prise en charge sous garantie via notre formulaire en ligne afin que votre demande soit traitée ou à vous rendre dans notre Boutique.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Alternative 1 > Le client peut se rendre en Boutique
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie et je suis navrée pour le désagrément.
+
+      Je vous invite à prendre contact par téléphone au 01 42 50 92 11 avec la Boutique Nébuleuse du Marais afin de connaitre la procédure pour retourner votre bijou.
+
+      Pour cela, il faudra simplement vous munir de votre numéro de commande et que votre retour soit effectué dans le délai de 1 an à compter de la date d'achat.
+
+      Je reste à votre disposition pour toute autre question.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  OPTION 2 > ALTERNATIVE 2: Commande été passée il y a plus d'1 AN (+ 1 semaine pour la livraison)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  [ORANGE BANNER:]
+    Les produits sont garantis 1 AN
+
+    Possibilité 1 : Boucle qui ne ferme plus
+    Possibilité 2 : Bijou qui noircit
+    Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+    Possibilité 4 : Tige tordue
+    Possibilité 5 : Piercing infinity ne se clipse pas correctement
+    Possibilité 6 : Pierres naturelles différentes / Pierre plates
+    Possibilité 7 : Tout autre problème
+
+  ----------
+  Possibilité 1 : Boucle qui ne ferme plus
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas que pour les boucles, pas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] ne se ferme plus.
+
+      Pourriez-vous essayer la petite astuce expliquée dans cette vidéo s'il vous plait ?
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir sur cette commande qui dépasse ces délais.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+    Tags to add : Fermoir Défectueux
+
+  ----------
+  Possibilité 2 : Bijou qui noircit
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] a noirci.
+
+      Pourriez-vous nous indiquer si vous avez bien nettoyé vos bijoux à l'eau claire ?
+      Je vous invite également à consulter notre page prendre soin de ses bijoux pour retrouver tous nos conseils de nettoyage.
+
+      Nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pourrons plus intervenir sur cette commande.
+
+      Je reste à votre disposition pour de plus amples renseignements.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ----------
+  Possibilité 3 : Les oreilles de la cliente réagissent aux bijoux
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nous sommes vraiment navrées d'apprendre que la [mettre le nom du produit] a provoqué cette réaction.
+
+      Il semblerait que vous soyez allergique à l'un des composants de notre bijou...
+      Je vous indique donc à ne plus porter le bijou et à bien désinfecter votre oreille, cela devrait vous soulager et votre oreille devrait revenir à son état normal.
+
+      Nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pourrons plus intervenir sur cette commande.
+
+      Je reste à votre disposition pour toute autre demande.
+
+      En vous souhaitant une excellente soirée ✨
+
+  ----------
+  Possibilité 4 : Tige tordue
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  [ORANGE BANNER:]
+    On n'utilise ce cas pour les piercings (avec tige)
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nous sommes vraiment navrés d'apprendre que la [mettre le nom du produit] est tordue.
+
+      Je vous invite à essayer de la redresser délicatement, les tiges sont légèrement souple et peuvent parfois être redressées à la main.
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 5 : Piercing infinity ne se clipse pas correctement
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  Step 1: Répondre au client en ajoutant la pièce jointe :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nous sommes vraiment navrés d'apprendre que votre piercing infinity ne se clipse pas correctement.
+
+      Pourriez-vous essayer de courber légèrement l'extrémité de la barre pour l'ajuster correctement s'il vous plait ?
+
+      Vous trouverez sur cette page dans l'onglet "Tige courbée", le détail de la procédure.
+
+      Si cela ne résout pas votre problème, nos produits sont garantis 1 an à réception de votre commande, et malheureusement nous ne pouvons plus intervenir.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 6 : Pierres naturelles différentes / Pierre plates
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Nous sommes sincèrement navrés d'apprendre que la perle ne correspond pas à vos attentes. 😅
+
+      Les pierres naturelles ont chacune leurs propres caractéristiques uniques et ne sont donc pas toutes identiques.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+  ----------
+  Possibilité 7 : Tout autre problème
+  (Alternative 2 — commande > 1 AN — POS)
+  ----------
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      J'accuse bonne réception de votre demande de prise en charge sous garantie.
+
+      Nos produits sont garantis 1 an à réception de votre commande, malheureusement nous ne pouvons plus intervenir sur cette commande..
+
+      N'hésitez pas à revenir vers nous si vous avez d'autres questions.
+
+      Belle soirée ✨
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SOUS-CAS 2 > Sous cas 2 : On ne trouve pas la commande
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Step 1: Répondre à la cliente en personnalisant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message 😊
+
+      Malheureusement, je ne trouve pas la commande en question.
+
+      Pouvez-vous me confirmer l'adresse e-mail utilisée pour la commande ou me fournir le numéro de commande que vous avez reçu, s'il vous plaît ?
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ✨
+
+============================================================
+CAS 2: DURÉE DE LA GARANTIE
+============================================================
+
+  [ORANGE BANNER:]
+    Les produits sont garantis 1 an
+
+  Step 1: Répondre à la cliente en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message. 😊
+
+      Nos produits sont garantis 1 an à compter de la réception de votre commande.
+
+      N'hésitez pas à revenir vers nous si vous avez d'autres questions.
+
+      Belle soirée ✨
+
+============================================================
+CAS 3: OÙ EN EST MON REMBOURSEMENT ?
+============================================================
+
+  Step 1: Retrouver la commande sur Shopify et vérifier le statut du paiement
+
+    Sous cas 1 : Remboursée ou Partiellement remboursée
+    Sous cas 2 : Autre statut
+
+------------------------------------------------------------
+CAS 3 > SOUS CAS 1: Remboursée ou Partiellement remboursée
+------------------------------------------------------------
+
+  Step 1: Vérifier le moyen de remboursement et la date dans le journal d'activité Shopify
+
+    Option 1 : PAYPAL
+    Option 2 : Carte bleue ou virement
+    Option 3 : Alma
+
+  ----------
+  Option 1 : PAYPAL
+  ----------
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Je vous confirme que nous avons bien déclenché votre remboursement le [Mettre la date du remboursement] comme indiqué.
+
+      Je vous invite dans un premier temps à vérifier votre compte PayPal afin de vous assurer que le montant ne vous a pas été crédité.
+
+      Si ce n'est pas le cas, je vous invite à nous recontacter.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ! ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client revient vers nous car il ne trouve pas le remboursement
+
+  Step 1: Escalader le ticket
+
+  ----------
+  Option 2 : Carte bleue ou virement
+  ----------
+
+    Choix 1 : Le remboursement a été déclenché il y a 10 jours ouvrés ou +
+    Choix 2 : Le remboursement a été effectué il y a — 10 jours ouvrés
+
+  ----------
+  Option 2 > Choix 1 : Le remboursement a été déclenché il y a 10 jours ouvrés ou +
+  ----------
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Je vous confirme que nous avons bien déclenché votre remboursement le [Mettre la date du remboursement] comme indiqué.
+
+      Je vous invite dans un premier temps à vérifier votre compte bancaire à la date du paiement ainsi qu'à la date du remboursement pour vous assurer que vous ne l'avez pas reçu.
+
+      Si vous ne voyez toujours pas, je vous invite à nous recontacter afin que nous puissions enquêter de notre côté.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ! ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client revient vers nous car il ne trouve pas le remboursement
+
+  Step 1: Escalader le ticket
+
+  ----------
+  Option 2 > Choix 2 : Le remboursement a été effectué il y a — 10 jours ouvrés
+  ----------
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Je vous confirme que nous avons bien déclenché votre remboursement le [Mettre la date du remboursement] comme indiqué.
+
+      Il faut compter 5 à 10 jours ouvrés, en fonction des banques, pour qu'il apparaisse sur votre compte.
+
+      Je vous invite à vérifier votre compte bancaire à la date du paiement ainsi qu'à la date du remboursement pour vous assurer que vous ne l'avez pas reçu.
+
+      Si ce délai est dépassé et que nous voyez pas le remboursement, n'hésitez pas à revenir vers nous pour que nous puissions enquêter de notre côté.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ! ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client revient vers nous car il ne trouve pas le remboursement
+
+  Step 1: Escalader le ticket
+
+  ----------
+  Option 3 : Alma
+  ----------
+
+  Step 1: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et je suis navrée pour le désagrément.
+
+      Je vous confirme que nous avons bien déclenché votre remboursement le [Mettre la date du remboursement] comme indiqué.
+
+      Je vous invite dans un premier temps à vérifier le statut votre échéancier via Alma pour vérifier si le remboursement a bien été pris en compte et déduis de ce dernier.
+
+      Si ce n'est pas le cas, je vous invite à nous recontacter.
+
+      Je reste disponible pour toute autre question.
+
+      Belle soirée ! ✨
+
+  [ORANGE NOTE:]
+    ⏳ Si le client revient vers nous car il ne trouve pas le remboursement
+
+  Step 1: Escalader le ticket
+
+------------------------------------------------------------
+CAS 3 > SOUS CAS 2: Autre statut
+------------------------------------------------------------
+
+  Step 1: Escalader le ticket
+
+============================================================
+CAS 4: LA TAILLE DU BIJOU REÇU N'EST PAS ADAPTÉE À L'EMPLACEMENT
+============================================================
+
+  Step 1: Vérifier les emplacements confirmés sur la fiche produit
+
+  Step 2: Répondre au client :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message.
+
+      Je vous confirme que la taille est bien adaptée à [Emplacements indiqués sur la fiche produit].
+
+      Il faut bien comprendre que ce sont des tailles standard et non des tailles spécialement adaptées à chaque personne.
+
+      Il est effectivement possible que la barre soit [longue ou courte] pour vous comme [longue ou courte] pour d'autres.
+
+      Si le bijou ne vous convient pas et que vous l'avez reçu il y a moins de 30 jours, vous pouvez également faire une demande de retour.
+
+      J'espère avoir répondu à vos questions et reste disponible pour toute autre demande.
+
+      Belle soirée !
+
+============================================================
+CAS 5: PEUT-ON RAMENER EN BOUTIQUE UN BIJOU DÉFECTUEUX ACHETÉ EN LIGNE ?
+============================================================
+
+    Sous-cas 1 : Boutique Nébuleuse
+    Sous-cas 2 : Tout autre point de vente
+
+------------------------------------------------------------
+CAS 5 > SOUS-CAS 1: Boutique Nébuleuse
+------------------------------------------------------------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Vous pouvez vous rendre dans notre boutique pour échanger ou retourner vos bijoux achetés en ligne.
+
+      Pour cela, il faudra simplement vous munir de votre numéro de commande et que votre retour soit effectué dans le délai de 30 jours à compter de la date de livraison.
+
+      Je reste à votre disposition pour toute autre question.
+
+      En vous souhaitant une excellente soirée ✨
+
+------------------------------------------------------------
+CAS 5 > SOUS-CAS 2: Tout autre point de vente
+------------------------------------------------------------
+
+  Step 1: Répondre au client en adaptant :
+
+    MACRO:
+      Bonsoir [First name] ,
+
+      Je vous remercie pour votre message et votre commande 😊
+
+      Malheureusement, il n'est pas possible de ramener votre bijou défectueux [dropdown variable] s'il a été acheté en ligne.
+
+      En revanche, nous pouvons vous aider si vous le souhaitez.
+
+      Pouvez-vous nous envoyer une photo et la référence de votre commande afin que nous puissions vous apporter une solution s'il vous plait ?
+
+      Je reste à votre disposition pour toute autre question.
+
+      En vous souhaitant une excellente soirée ✨
+
+============================================================
+END OF POLICY DOCUMENT
+============================================================

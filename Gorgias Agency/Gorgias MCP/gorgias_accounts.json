@@ -1,0 +1,14 @@
+{
+  "accounts": {
+    "ClientA": {
+      "domain": "clienta",
+      "email": "you@yourcompany.com",
+      "api_key": "YOUR_API_KEY_HERE"
+    },
+    "ClientB": {
+      "domain": "clientb",
+      "email": "you@yourcompany.com",
+      "api_key": "YOUR_API_KEY_HERE"
+    }
+  }
+}

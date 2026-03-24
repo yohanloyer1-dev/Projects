@@ -1,0 +1,2630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation AI Agent — Nébuleuse Bijoux</title>
+
+    <!-- Google Fonts - Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #050505;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .text-gold {
+            color: #D4AF37;
+        }
+
+        .bg-gold {
+            background-color: #D4AF37;
+        }
+
+        .border-gold {
+            border-color: #D4AF37;
+        }
+
+        /* Slide Container */
+        #presentation-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        /* Slide Management */
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            padding: 40px 60px;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Logo Watermark */
+        .logo-watermark {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 120px;
+            height: auto;
+            opacity: 0.3;
+            z-index: 10;
+        }
+
+        /* Glass-morphism Effects */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .glass-card {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(35, 35, 35, 0.6);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes pulse-gold {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse-gold {
+            animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                rgba(212, 175, 55, 0) 0%,
+                rgba(212, 175, 55, 0.3) 50%,
+                rgba(212, 175, 55, 0) 100%
+            );
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite;
+        }
+
+        /* Navigation Controls */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #D4AF37;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #D4AF37;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            color: #D4AF37;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 0 15px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+        }
+
+        thead th {
+            background: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        tfoot td {
+            background: rgba(212, 175, 55, 0.1);
+            font-weight: 600;
+            color: #D4AF37;
+            padding: 12px 16px;
+            border-top: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D4AF37, #F4D03F);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #FBBF24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-gold {
+            background: rgba(212, 175, 55, 0.2);
+            color: #D4AF37;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Icons */
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            color: #D4AF37;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.5);
+        }
+
+        /* Responsive container centering */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation-container">
+
+        <!-- Slide 1: Couverture (Cover) -->
+        <div class="slide active" data-slide="1">
+            <div class="flex flex-col items-center justify-center h-full relative">
+                <div class="text-center space-y-8">
+                    <div class="text-sm uppercase tracking-widest text-gold mb-4">Rapport stratégique</div>
+                    <h1 class="text-7xl font-bold leading-tight mb-6">
+                        OPTIMISATION<br/>
+                        <span class="text-gold">AI AGENT</span>
+                    </h1>
+                    <div class="text-3xl font-light text-gray-300 mb-8">Nébuleuse Bijoux</div>
+                    <div class="w-32 h-1 bg-gold mx-auto mb-8"></div>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                        Analyse de l'état actuel d'automatisation et plan d'action pour atteindre 50% d'automatisation
+                    </p>
+                </div>
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 2: Méthodologie -->
+        <div class="slide" data-slide="2">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">MÉTHODOLOGIE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-6 flex-1">
+                    <!-- Card 1 -->
+                    <div class="glass-card flex flex-col items-center text-center">
+                        <div class="icon-circle mb-4">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gold mb-3">COLLECTE DES DONNÉES</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            3 mois de conversations clients (sept-nov 2024)
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card flex flex-col items-center text-center">
+                        <div class="icon-circle mb-4">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gold mb-3">ANALYSE QUALITATIVE</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Revue manuelle de 200+ tickets transférés aux humains
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-card flex flex-col items-center text-center">
+                        <div class="icon-circle mb-4">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gold mb-3">ANALYSE QUANTITATIVE</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Segmentation par types de demandes, canaux, complexité
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-card flex flex-col items-center text-center">
+                        <div class="icon-circle mb-4">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gold mb-3">PLAN D'ACTION</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Roadmap en 3 phases avec gains mesurables
+                        </p>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 3: En Bref - Situation Actuelle -->
+        <div class="slide" data-slide="3">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">EN BREF — SITUATION ACTUELLE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <!-- KPI 1 -->
+                    <div class="glass-card text-center">
+                        <div class="text-5xl font-bold text-gold mb-2">37.3%</div>
+                        <p class="text-sm uppercase tracking-wide text-gray-400 mb-2">Taux d'automatisation</p>
+                        <p class="text-xs text-gray-500">Sept-Nov 2024</p>
+                        <div class="progress-bar mt-4">
+                            <div class="progress-fill" style="width: 37.3%"></div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2 -->
+                    <div class="glass-card text-center">
+                        <div class="text-5xl font-bold text-gold mb-2">1,037</div>
+                        <p class="text-sm uppercase tracking-wide text-gray-400 mb-2">Tickets traités</p>
+                        <p class="text-xs text-gray-500">Total sur 3 mois</p>
+                    </div>
+
+                    <!-- KPI 3 -->
+                    <div class="glass-card text-center">
+                        <div class="text-5xl font-bold text-gold mb-2">50%</div>
+                        <p class="text-sm uppercase tracking-wide text-gray-400 mb-2">Objectif cible</p>
+                        <p class="text-xs text-gray-500">+12.7 points</p>
+                        <div class="progress-bar mt-4">
+                            <div class="progress-fill" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1">
+                    <h3 class="text-xl font-semibold text-gold mb-4">📊 Répartition des canaux</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-3 bg-black bg-opacity-30 rounded">
+                            <span class="text-sm font-medium">Email</span>
+                            <span class="text-2xl font-bold text-gold">79.9%</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-black bg-opacity-30 rounded">
+                            <span class="text-sm font-medium">Chat</span>
+                            <span class="text-2xl font-bold text-gold">20.1%</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-black bg-opacity-40 rounded-lg border-l-4 border-gold">
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            <strong class="text-gold">Insight clé :</strong> L'email domine largement, mais le Chat présente 
+                            une opportunité majeure d'amélioration (seulement 10.5% d'automatisation vs 44.7% pour l'email).
+                        </p>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 4: Impact Mesurable -->
+        <div class="slide" data-slide="4">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">IMPACT MESURABLE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-3">Avant / Après l'atteinte de 50% d'automatisation</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 flex-1">
+                    <!-- AVANT -->
+                    <div class="glass-panel">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-gray-300">AVANT</h3>
+                        <div class="space-y-4">
+                            <div class="glass-card">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium">Taux d'automatisation</span>
+                                    <span class="text-3xl font-bold text-gray-400">37.3%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 37.3%; background: linear-gradient(90deg, #666, #888);"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-sm text-gray-400 mb-1">Tickets automatisés/mois</div>
+                                <div class="text-4xl font-bold text-gray-300">129</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-sm text-gray-400 mb-1">Tickets manuels/mois</div>
+                                <div class="text-4xl font-bold text-gray-300">217</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-sm text-gray-400 mb-1">Temps agent économisé</div>
+                                <div class="text-4xl font-bold text-gray-300">32h/mois</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- APRÈS -->
+                    <div class="glass-panel border-2 border-gold">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-gold">APRÈS (Objectif 50%)</h3>
+                        <div class="space-y-4">
+                            <div class="glass-card">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium">Taux d'automatisation</span>
+                                    <span class="text-3xl font-bold text-gold">50%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 50%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card border border-gold">
+                                <div class="text-sm text-gray-400 mb-1">Tickets automatisés/mois</div>
+                                <div class="text-4xl font-bold text-gold">173</div>
+                                <div class="text-sm text-green-400 mt-1">+44 tickets/mois (+34%)</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-sm text-gray-400 mb-1">Tickets manuels/mois</div>
+                                <div class="text-4xl font-bold text-gold">173</div>
+                                <div class="text-sm text-green-400 mt-1">-44 tickets/mois (-20%)</div>
+                            </div>
+
+                            <div class="glass-card border border-gold">
+                                <div class="text-sm text-gray-400 mb-1">Temps agent économisé</div>
+                                <div class="text-4xl font-bold text-gold">43h/mois</div>
+                                <div class="text-sm text-green-400 mt-1">+11h/mois (+34%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-gold bg-opacity-10 rounded-lg border-l-4 border-gold">
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        <strong class="text-gold">💡 Impact business :</strong> Atteindre 50% d'automatisation permettra 
+                        d'économiser environ <strong>11 heures d'agent par mois</strong>, soit l'équivalent d'un demi-poste 
+                        à temps partiel libéré pour des tâches à plus forte valeur ajoutée.
+                    </p>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 5: Les constats principaux -->
+        <div class="slide" data-slide="5">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">LES CONSTATS PRINCIPAUX</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 flex-1">
+                    <!-- Constat 1 -->
+                    <div class="glass-card flex flex-col">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="icon-circle flex-shrink-0">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gold mb-2">L'email performe bien</h3>
+                                <div class="text-4xl font-bold text-gold mb-2">44.7%</div>
+                                <p class="text-sm text-gray-400">d'automatisation sur les emails</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed mt-auto">
+                            Les instructions et la base de connaissance sont bien calibrées pour les échanges asynchrones.
+                        </p>
+                    </div>
+
+                    <!-- Constat 2 -->
+                    <div class="glass-card flex flex-col border-2 border-red-500">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="icon-circle flex-shrink-0" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #EF4444;">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-red-400 mb-2">Le Chat sous-performe</h3>
+                                <div class="text-4xl font-bold text-red-400 mb-2">10.5%</div>
+                                <p class="text-sm text-gray-400">d'automatisation sur le Chat</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed mt-auto">
+                            <strong class="text-red-400">Plus grande opportunité d'amélioration :</strong> Le Chat nécessite 
+                            des réponses plus rapides et conversationnelles.
+                        </p>
+                    </div>
+
+                    <!-- Constat 3 -->
+                    <div class="glass-card flex flex-col">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="icon-circle flex-shrink-0">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gold mb-2">Opportunités rapides identifiées</h3>
+                                <div class="text-3xl font-bold text-gold mb-2">7 Quick Wins</div>
+                                <p class="text-sm text-gray-400">déployables en Phase 1</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed mt-auto">
+                            Optimisations des instructions, enrichissement de la base de connaissance, gestion des FAQ.
+                        </p>
+                    </div>
+
+                    <!-- Constat 4 -->
+                    <div class="glass-card flex flex-col">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="icon-circle flex-shrink-0">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gold mb-2">Intégrations nécessaires</h3>
+                                <div class="text-3xl font-bold text-gold mb-2">Phase 2 & 3</div>
+                                <p class="text-sm text-gray-400">pour l'autonomie complète</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed mt-auto">
+                            Connexions Shopify, ShipStation, et autres outils pour actions automatiques (annulations, mises à jour, etc.).
+                        </p>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 6: Analyse Emails -->
+        <div class="slide" data-slide="6">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">ANALYSE EMAILS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Détails des 829 emails (79.9% du volume total)</p>
+                </div>
+
+                <div class="glass-panel flex-1 overflow-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CATÉGORIE</th>
+                                <th class="text-center">AUTOMATISÉS</th>
+                                <th class="text-center">TRANSFÉRÉS</th>
+                                <th class="text-center">TOTAL</th>
+                                <th class="text-center">% AUTO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Suivi de commande</strong></td>
+                                <td class="text-center">151</td>
+                                <td class="text-center">112</td>
+                                <td class="text-center">263</td>
+                                <td class="text-center"><span class="badge badge-success">57.4%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Modification/Annulation</strong></td>
+                                <td class="text-center">48</td>
+                                <td class="text-center">97</td>
+                                <td class="text-center">145</td>
+                                <td class="text-center"><span class="badge badge-warning">33.1%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Problème livraison</strong></td>
+                                <td class="text-center">44</td>
+                                <td class="text-center">58</td>
+                                <td class="text-center">102</td>
+                                <td class="text-center"><span class="badge badge-warning">43.1%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Information produit</strong></td>
+                                <td class="text-center">52</td>
+                                <td class="text-center">32</td>
+                                <td class="text-center">84</td>
+                                <td class="text-center"><span class="badge badge-success">61.9%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retour/Échange</strong></td>
+                                <td class="text-center">22</td>
+                                <td class="text-center">51</td>
+                                <td class="text-center">73</td>
+                                <td class="text-center"><span class="badge badge-warning">30.1%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Problème paiement</strong></td>
+                                <td class="text-center">18</td>
+                                <td class="text-center">31</td>
+                                <td class="text-center">49</td>
+                                <td class="text-center"><span class="badge badge-warning">36.7%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disponibilité produit</strong></td>
+                                <td class="text-center">26</td>
+                                <td class="text-center">13</td>
+                                <td class="text-center">39</td>
+                                <td class="text-center"><span class="badge badge-success">66.7%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Question personnalisation</strong></td>
+                                <td class="text-center">9</td>
+                                <td class="text-center">25</td>
+                                <td class="text-center">34</td>
+                                <td class="text-center"><span class="badge badge-warning">26.5%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remboursement</strong></td>
+                                <td class="text-center">1</td>
+                                <td class="text-center">19</td>
+                                <td class="text-center">20</td>
+                                <td class="text-center"><span class="badge badge-warning">5.0%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Autre</strong></td>
+                                <td class="text-center">0</td>
+                                <td class="text-center">20</td>
+                                <td class="text-center">20</td>
+                                <td class="text-center"><span class="badge badge-warning">0.0%</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>TOTAL</strong></td>
+                                <td class="text-center"><strong>371</strong></td>
+                                <td class="text-center"><strong>458</strong></td>
+                                <td class="text-center"><strong>829</strong></td>
+                                <td class="text-center"><span class="badge badge-gold">44.7%</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-4 p-3 bg-gold bg-opacity-10 rounded-lg border-l-4 border-gold">
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        <strong class="text-gold">💡 Insight :</strong> Les demandes simples (info produit, disponibilité) 
+                        sont bien automatisées. Les actions nécessitant des modifications système (annulations, remboursements) 
+                        sont majoritairement transférées.
+                    </p>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 7: Pourquoi les tickets sont transférés -->
+        <div class="slide" data-slide="7">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">POURQUOI LES TICKETS SONT TRANSFÉRÉS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Top 8 des raisons de handover aux agents humains</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 flex-1">
+                    <!-- Raison 1 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">1</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Actions système impossibles</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                L'Agent ne peut pas modifier/annuler commandes, gérer remboursements, ou mettre à jour les statuts dans Shopify/ShipStation.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-warning">Intégrations requises</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 2 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">2</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Informations manquantes</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Base de connaissance incomplète sur certains produits, politiques, ou procédures spécifiques.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-success">Quick Win</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 3 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">3</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Demandes complexes multi-étapes</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Situations nécessitant plusieurs actions coordonnées ou validation manuelle (ex: commandes personnalisées).
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-info">Workflow requis</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 4 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">4</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Instructions trop génériques</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Manque de guidance spécifique pour certains scénarios courants (ex: délais de livraison par région).
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-success">Quick Win</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 5 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">5</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Cas limites non documentés</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Situations rares mais récurrentes qui ne sont pas encore couvertes dans la KB.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-success">Quick Win</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 6 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">6</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Problèmes de compréhension Chat</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                L'Agent a du mal avec les messages courts, mal formulés, ou le langage familier typique du Chat.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-success">Quick Win</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 7 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">7</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Escalade sur demande client</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Client insiste pour parler à un humain, souvent par manque de confiance ou frustration.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-info">Formation client</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raison 8 -->
+                    <div class="glass-card flex items-start gap-4">
+                        <div class="text-4xl font-bold text-gold">8</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gold mb-2">Réclamations/Plaintes</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Situations sensibles nécessitant empathie avancée et gestes commerciaux.
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge badge-info">Toujours humain</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 8: Tendance mensuelle -->
+        <div class="slide" data-slide="8">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">TENDANCE MENSUELLE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-3">Évolution sur 3 mois (Sept-Nov 2024)</p>
+                </div>
+
+                <div class="glass-panel mb-6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>MOIS</th>
+                                <th class="text-center">AUTOMATISÉS</th>
+                                <th class="text-center">TRANSFÉRÉS</th>
+                                <th class="text-center">TOTAL</th>
+                                <th class="text-center">% AUTOMATISATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Septembre 2024</strong></td>
+                                <td class="text-center">118</td>
+                                <td class="text-center">213</td>
+                                <td class="text-center">331</td>
+                                <td class="text-center"><span class="badge badge-warning">35.6%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Octobre 2024</strong></td>
+                                <td class="text-center">123</td>
+                                <td class="text-center">228</td>
+                                <td class="text-center">351</td>
+                                <td class="text-center"><span class="badge badge-warning">35.0%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Novembre 2024</strong></td>
+                                <td class="text-center">146</td>
+                                <td class="text-center">209</td>
+                                <td class="text-center">355</td>
+                                <td class="text-center"><span class="badge badge-success">41.1%</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>MOYENNE</strong></td>
+                                <td class="text-center"><strong>129</strong></td>
+                                <td class="text-center"><strong>217</strong></td>
+                                <td class="text-center"><strong>346</strong></td>
+                                <td class="text-center"><span class="badge badge-gold">37.3%</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-2">Progression Sept → Nov</div>
+                        <div class="text-4xl font-bold text-green-400 mb-2">+5.5%</div>
+                        <p class="text-xs text-gray-500">Points d'automatisation gagnés</p>
+                        <div class="progress-bar mt-4">
+                            <div class="progress-fill" style="width: 55%; background: linear-gradient(90deg, #22C55E, #4ADE80);"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-2">Tickets automatisés (Nov)</div>
+                        <div class="text-4xl font-bold text-gold mb-2">+28</div>
+                        <p class="text-xs text-gray-500">vs moyenne Sept-Oct</p>
+                    </div>
+
+                    <div class="glass-card text-center border border-gold">
+                        <div class="text-sm text-gray-400 mb-2">Objectif restant</div>
+                        <div class="text-4xl font-bold text-gold mb-2">+8.9%</div>
+                        <p class="text-xs text-gray-500">Pour atteindre 50%</p>
+                        <div class="progress-bar mt-4">
+                            <div class="progress-fill" style="width: 89%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-green-500 bg-opacity-10 rounded-lg border-l-4 border-green-400">
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        <strong class="text-green-400">📈 Tendance positive :</strong> L'automatisation progresse naturellement 
+                        (+5.5% en 3 mois). Avec des optimisations ciblées, l'objectif de 50% est atteignable rapidement.
+                    </p>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 9: Répartition des demandes -->
+        <div class="slide" data-slide="9">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">RÉPARTITION DES DEMANDES</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Top 10 des catégories (1,037 tickets sur 3 mois)</p>
+                </div>
+
+                <div class="glass-panel flex-1 overflow-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CATÉGORIE</th>
+                                <th class="text-center">VOLUME</th>
+                                <th class="text-center">% DU TOTAL</th>
+                                <th class="text-center">AUTOMATISATION</th>
+                                <th>OPPORTUNITÉ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Suivi de commande</strong></td>
+                                <td class="text-center">272</td>
+                                <td class="text-center">26.2%</td>
+                                <td class="text-center"><span class="badge badge-success">56.6%</span></td>
+                                <td><span class="badge badge-info">Moyenne</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Modification/Annulation</strong></td>
+                                <td class="text-center">152</td>
+                                <td class="text-center">14.7%</td>
+                                <td class="text-center"><span class="badge badge-warning">31.6%</span></td>
+                                <td><span class="badge badge-warning">Haute (Actions)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Problème livraison</strong></td>
+                                <td class="text-center">113</td>
+                                <td class="text-center">10.9%</td>
+                                <td class="text-center"><span class="badge badge-warning">38.9%</span></td>
+                                <td><span class="badge badge-info">Moyenne</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Information produit</strong></td>
+                                <td class="text-center">95</td>
+                                <td class="text-center">9.2%</td>
+                                <td class="text-center"><span class="badge badge-success">54.7%</span></td>
+                                <td><span class="badge badge-success">Basse (déjà bon)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retour/Échange</strong></td>
+                                <td class="text-center">78</td>
+                                <td class="text-center">7.5%</td>
+                                <td class="text-center"><span class="badge badge-warning">28.2%</span></td>
+                                <td><span class="badge badge-warning">Haute (Process)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Problème paiement</strong></td>
+                                <td class="text-center">54</td>
+                                <td class="text-center">5.2%</td>
+                                <td class="text-center"><span class="badge badge-warning">33.3%</span></td>
+                                <td><span class="badge badge-info">Moyenne</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disponibilité produit</strong></td>
+                                <td class="text-center">47</td>
+                                <td class="text-center">4.5%</td>
+                                <td class="text-center"><span class="badge badge-success">55.3%</span></td>
+                                <td><span class="badge badge-success">Basse (déjà bon)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Question personnalisation</strong></td>
+                                <td class="text-center">41</td>
+                                <td class="text-center">4.0%</td>
+                                <td class="text-center"><span class="badge badge-warning">22.0%</span></td>
+                                <td><span class="badge badge-warning">Haute (KB)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remboursement</strong></td>
+                                <td class="text-center">23</td>
+                                <td class="text-center">2.2%</td>
+                                <td class="text-center"><span class="badge badge-warning">4.3%</span></td>
+                                <td><span class="badge badge-warning">Haute (Actions)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Autre</strong></td>
+                                <td class="text-center">162</td>
+                                <td class="text-center">15.6%</td>
+                                <td class="text-center"><span class="badge badge-warning">12.3%</span></td>
+                                <td><span class="badge badge-info">Segmentation requise</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>TOTAL</strong></td>
+                                <td class="text-center"><strong>1,037</strong></td>
+                                <td class="text-center"><strong>100%</strong></td>
+                                <td class="text-center"><span class="badge badge-gold">37.3%</span></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-4 p-3 bg-gold bg-opacity-10 rounded-lg border-l-4 border-gold">
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        <strong class="text-gold">💡 Focus :</strong> Les 3 premières catégories représentent 51.8% du volume. 
+                        Optimiser ces catégories aura le plus grand impact sur l'automatisation globale.
+                    </p>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 10: Comment AI Agent traite -->
+        <div class="slide" data-slide="10">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">COMMENT AI AGENT TRAITE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Capacités actuelles et limitations</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- Process Flow -->
+                    <div class="glass-panel">
+                        <h3 class="text-lg font-semibold text-gold mb-4">🔄 Processus actuel</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 bg-black bg-opacity-30 rounded">
+                                <div class="w-8 h-8 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-sm">1</div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Analyse de la demande</div>
+                                    <div class="text-xs text-gray-400">Base de connaissance + Instructions</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-black bg-opacity-30 rounded">
+                                <div class="w-8 h-8 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-sm">2</div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Réponse informative</div>
+                                    <div class="text-xs text-gray-400">Fournit infos, guide le client</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-red-500 bg-opacity-10 rounded border border-red-500">
+                                <div class="w-8 h-8 rounded-full bg-red-500 bg-opacity-20 flex items-center justify-center text-red-400 font-bold text-sm">⚠</div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-red-400">Action nécessaire ?</div>
+                                    <div class="text-xs text-gray-400">→ Transfert à l'humain</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Stats -->
+                    <div class="space-y-3">
+                        <div class="glass-card">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium">✅ Traitement automatique</span>
+                                <span class="text-2xl font-bold text-green-400">37.3%</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Réponses complètes sans intervention</p>
+                        </div>
+
+                        <div class="glass-card border border-gold">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium">🔄 Transfert requis</span>
+                                <span class="text-2xl font-bold text-gold">62.7%</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Nécessite action système ou expertise</p>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium">⏱ Temps de réponse moyen</span>
+                                <span class="text-2xl font-bold text-gold">&lt; 1 min</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Pour les tickets automatisés</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1 overflow-auto">
+                    <table style="font-size: 11px;">
+                        <thead>
+                            <tr>
+                                <th>TYPE DE DEMANDE</th>
+                                <th class="text-center">CAPACITÉ ACTUELLE</th>
+                                <th>LIMITATION</th>
+                                <th>SOLUTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Info produit</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Autonome</span></td>
+                                <td>Données KB parfois obsolètes</td>
+                                <td><span class="badge badge-success">Maj régulière KB</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Suivi commande</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Autonome</span></td>
+                                <td>Info parfois trop générique</td>
+                                <td><span class="badge badge-success">Instructions détaillées</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Annulation</strong></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Limité</span></td>
+                                <td>Ne peut pas exécuter l'annulation</td>
+                                <td><span class="badge badge-warning">Intégration Shopify</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Modification</strong></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Limité</span></td>
+                                <td>Ne peut pas modifier l'adresse/produit</td>
+                                <td><span class="badge badge-warning">API Shopify/ShipStation</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remboursement</strong></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Très limité</span></td>
+                                <td>Aucune capacité d'action</td>
+                                <td><span class="badge badge-warning">Workflow financier</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retour/Échange</strong></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Limité</span></td>
+                                <td>Ne peut pas générer label retour</td>
+                                <td><span class="badge badge-warning">Intégration transporteur</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Problème livraison</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Autonome</span></td>
+                                <td>Info générique si cas complexe</td>
+                                <td><span class="badge badge-success">KB + Escalade</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Personnalisation</strong></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Limité</span></td>
+                                <td>Options non documentées</td>
+                                <td><span class="badge badge-success">Enrichir KB</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 p-3 bg-gold bg-opacity-10 rounded-lg border-l-4 border-gold">
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        <strong class="text-gold">🎯 Stratégie :</strong> Phase 1 (Quick Wins) améliore les capacités actuelles. 
+                        Phases 2-3 ajoutent des intégrations pour l'exécution d'actions automatiques.
+                    </p>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 11: Instructions qui performent -->
+        <div class="slide" data-slide="11">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">INSTRUCTIONS QUI PERFORMENT</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Analyse des instructions actuelles et recommandations</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- Bonnes pratiques -->
+                    <div class="glass-panel">
+                        <h3 class="text-lg font-semibold text-green-400 mb-4">✅ Ce qui fonctionne bien</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card bg-green-500 bg-opacity-5 border-l-4 border-green-400">
+                                <h4 class="text-sm font-semibold mb-1">Ton professionnel et empathique</h4>
+                                <p class="text-xs text-gray-400">L'Agent maintient le ton de la marque de luxe</p>
+                            </div>
+                            <div class="glass-card bg-green-500 bg-opacity-5 border-l-4 border-green-400">
+                                <h4 class="text-sm font-semibold mb-1">Escalade proactive</h4>
+                                <p class="text-xs text-gray-400">Transfère rapidement si incertain ou action requise</p>
+                            </div>
+                            <div class="glass-card bg-green-500 bg-opacity-5 border-l-4 border-green-400">
+                                <h4 class="text-sm font-semibold mb-1">Structure des réponses</h4>
+                                <p class="text-xs text-gray-400">Réponses claires avec étapes numérotées</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- À améliorer -->
+                    <div class="glass-panel">
+                        <h3 class="text-lg font-semibold text-gold mb-4">🔧 Opportunités d'amélioration</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card bg-gold bg-opacity-5 border-l-4 border-gold">
+                                <h4 class="text-sm font-semibold mb-1">Instructions Chat manquantes</h4>
+                                <p class="text-xs text-gray-400">Besoin de guidance pour réponses courtes et réactives</p>
+                            </div>
+                            <div class="glass-card bg-gold bg-opacity-5 border-l-4 border-gold">
+                                <h4 class="text-sm font-semibold mb-1">Scénarios spécifiques</h4>
+                                <p class="text-xs text-gray-400">Ajouter exemples pour cas courants (délais, douanes)</p>
+                            </div>
+                            <div class="glass-card bg-gold bg-opacity-5 border-l-4 border-gold">
+                                <h4 class="text-sm font-semibold mb-1">FAQ pré-formatées</h4>
+                                <p class="text-xs text-gray-400">Créer réponses templates pour questions récurrentes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1">
+                    <h3 class="text-lg font-semibold text-gold mb-4">📝 Recommandations prioritaires</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card">
+                            <div class="flex items-start gap-3 mb-2">
+                                <div class="text-2xl">1️⃣</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Instructions Canal-spécifiques</h4>
+                                    <p class="text-xs text-gray-400 leading-relaxed">
+                                        Créer des guidelines différentes pour Email (détaillé) vs Chat (concis, rapide)
+                                    </p>
+                                    <div class="mt-2"><span class="badge badge-success">Quick Win</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="flex items-start gap-3 mb-2">
+                                <div class="text-2xl">2️⃣</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Exemples concrets</h4>
+                                    <p class="text-xs text-gray-400 leading-relaxed">
+                                        Inclure des exemples de bonnes réponses pour les 5 scénarios les plus courants
+                                    </p>
+                                    <div class="mt-2"><span class="badge badge-success">Quick Win</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="flex items-start gap-3 mb-2">
+                                <div class="text-2xl">3️⃣</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Arbres de décision</h4>
+                                    <p class="text-xs text-gray-400 leading-relaxed">
+                                        If/Then pour modifier commande, annuler, gérer retour selon statut
+                                    </p>
+                                    <div class="mt-2"><span class="badge badge-info">Phase 2</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="flex items-start gap-3 mb-2">
+                                <div class="text-2xl">4️⃣</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Clarification proactive</h4>
+                                    <p class="text-xs text-gray-400 leading-relaxed">
+                                        Demander infos manquantes (# commande, email) avant d'escalader
+                                    </p>
+                                    <div class="mt-2"><span class="badge badge-success">Quick Win</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 12: Fonctionnalités Gorgias -->
+        <div class="slide" data-slide="12">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">FONCTIONNALITÉS GORGIAS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Capacités disponibles et état d'utilisation</p>
+                </div>
+
+                <div class="glass-panel flex-1 overflow-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>FONCTIONNALITÉ</th>
+                                <th class="text-center">DISPONIBLE</th>
+                                <th class="text-center">UTILISÉE</th>
+                                <th>DESCRIPTION</th>
+                                <th>IMPACT POTENTIEL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Knowledge Base</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Oui</span></td>
+                                <td>Articles FAQ accessibles à l'Agent</td>
+                                <td><span class="badge badge-info">Bien utilisée</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agent Instructions</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Oui</span></td>
+                                <td>Guidelines de comportement</td>
+                                <td><span class="badge badge-gold">À optimiser</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shopify Integration</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-warning">⚠ Lecture seule</span></td>
+                                <td>Connexion aux données commandes</td>
+                                <td><span class="badge badge-warning">Haute (Actions requises)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Quick Responses</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-warning">✗ Non</span></td>
+                                <td>Templates pour réponses courantes</td>
+                                <td><span class="badge badge-gold">Moyenne (gain temps)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auto-responders</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Oui</span></td>
+                                <td>Réponses automatiques immédiates</td>
+                                <td><span class="badge badge-info">Bien utilisée</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sentiment Analysis</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-warning">✗ Non</span></td>
+                                <td>Détection émotions clients</td>
+                                <td><span class="badge badge-info">Basse</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Intent Detection</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Oui</span></td>
+                                <td>Classification automatique demandes</td>
+                                <td><span class="badge badge-info">Bien utilisée</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Actions (via API)</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-warning">✗ Non</span></td>
+                                <td>Modifier/Annuler/Rembourser via intégrations</td>
+                                <td><span class="badge badge-warning">Très haute (critique)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chat Widget</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-success">✓ Oui</span></td>
+                                <td>Chat en direct sur le site</td>
+                                <td><span class="badge badge-gold">À optimiser</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Proactive Messages</strong></td>
+                                <td class="text-center"><span class="badge badge-success">✓</span></td>
+                                <td class="text-center"><span class="badge badge-warning">✗ Non</span></td>
+                                <td>Messages automatiques selon comportement</td>
+                                <td><span class="badge badge-info">Moyenne (Phase 3)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-1">Fonctionnalités disponibles</div>
+                        <div class="text-3xl font-bold text-gold">10</div>
+                    </div>
+                    <div class="glass-card text-center border border-gold">
+                        <div class="text-sm text-gray-400 mb-1">Actuellement utilisées</div>
+                        <div class="text-3xl font-bold text-gold">5</div>
+                    </div>
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-1">Potentiel inexploité</div>
+                        <div class="text-3xl font-bold text-gold">50%</div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 13: Les 4 grandes opportunités -->
+        <div class="slide" data-slide="13">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">LES 4 GRANDES OPPORTUNITÉS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 flex-1">
+                    <!-- Opportunité 1 -->
+                    <div class="glass-card flex flex-col border-2 border-gold">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="text-5xl font-bold text-gold">1</div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gold mb-3">Améliorer le Chat</h3>
+                                <div class="text-4xl font-bold text-gold mb-2">10.5% → 35%</div>
+                                <p class="text-sm text-gray-400 mb-4">Passage de 10.5% à 35% d'automatisation</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>Instructions Chat-spécifiques</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>Réponses courtes et réactives</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>Gestion langage familier</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto p-3 bg-gold bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-gray-400">Impact estimé</div>
+                            <div class="text-2xl font-bold text-gold">+51 tickets/mois</div>
+                        </div>
+                    </div>
+
+                    <!-- Opportunité 2 -->
+                    <div class="glass-card flex flex-col border-2 border-gold">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="text-5xl font-bold text-gold">2</div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gold mb-3">Enrichir la KB</h3>
+                                <div class="text-4xl font-bold text-gold mb-2">+8%</div>
+                                <p class="text-sm text-gray-400 mb-4">Gain d'automatisation via KB complète</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>Produits et personnalisation</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>Procédures retours/échanges</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span>FAQ cas limites</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto p-3 bg-gold bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-gray-400">Impact estimé</div>
+                            <div class="text-2xl font-bold text-gold">+28 tickets/mois</div>
+                        </div>
+                    </div>
+
+                    <!-- Opportunité 3 -->
+                    <div class="glass-card flex flex-col">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="text-5xl font-bold text-gold">3</div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gold mb-3">Intégrations Actions</h3>
+                                <div class="text-4xl font-bold text-gold mb-2">+12%</div>
+                                <p class="text-sm text-gray-400 mb-4">Automatisation des actions système</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>API Shopify (modif/annulation)</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>Workflow remboursements</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>Génération labels retour</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto p-3 bg-gold bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-gray-400">Impact estimé</div>
+                            <div class="text-2xl font-bold text-gold">+42 tickets/mois</div>
+                        </div>
+                    </div>
+
+                    <!-- Opportunité 4 -->
+                    <div class="glass-card flex flex-col">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="text-5xl font-bold text-gold">4</div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gold mb-3">Optimisation continue</h3>
+                                <div class="text-4xl font-bold text-gold mb-2">+5%</div>
+                                <p class="text-sm text-gray-400 mb-4">Monitoring et ajustements réguliers</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>Analyse mensuelle des transferts</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>A/B testing instructions</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fas fa-check-circle text-gold"></i>
+                                <span>Ajustements base de données</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto p-3 bg-gold bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-gray-400">Impact estimé</div>
+                            <div class="text-2xl font-bold text-gold">+17 tickets/mois</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 glass-panel">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm text-gray-400 mb-1">Gain total potentiel</div>
+                            <div class="text-4xl font-bold text-gold">37.3% → 50%+</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-400 mb-1">Impact cumulé</div>
+                            <div class="text-4xl font-bold text-gold">+138 tickets/mois</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-400 mb-1">Temps économisé</div>
+                            <div class="text-4xl font-bold text-gold">+35h/mois</div>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 14: Opportunité Chat - Partie 1 -->
+        <div class="slide" data-slide="14">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">OPPORTUNITÉ CHAT — PARTIE 1</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Analyse détaillée et plan d'amélioration</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- État actuel -->
+                    <div class="glass-panel">
+                        <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ État actuel du Chat</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm">Taux d'automatisation</span>
+                                    <span class="text-3xl font-bold text-red-400">10.5%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 10.5%; background: linear-gradient(90deg, #EF4444, #DC2626);"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Volume Chat</div>
+                                <div class="text-2xl font-bold">208 tickets/3 mois</div>
+                                <div class="text-xs text-gray-400 mt-1">20.1% du volume total</div>
+                            </div>
+
+                            <div class="glass-card border border-red-500">
+                                <div class="text-xs text-gray-400 mb-1">Tickets automatisés</div>
+                                <div class="text-2xl font-bold text-red-400">Seulement 22</div>
+                                <div class="text-xs text-gray-400 mt-1">186 transférés aux humains</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problèmes identifiés -->
+                    <div class="glass-panel">
+                        <h3 class="text-xl font-bold text-gold mb-4">🔍 Problèmes identifiés</h3>
+                        <div class="space-y-2">
+                            <div class="glass-card border-l-4 border-gold">
+                                <div class="text-sm font-semibold mb-1">1. Instructions Email-centriques</div>
+                                <p class="text-xs text-gray-400">Réponses trop longues et formelles pour le Chat</p>
+                            </div>
+                            <div class="glass-card border-l-4 border-gold">
+                                <div class="text-sm font-semibold mb-1">2. Mauvaise gestion messages courts</div>
+                                <p class="text-xs text-gray-400">"Bonjour", "Merci", "OK" déclenchent transferts</p>
+                            </div>
+                            <div class="glass-card border-l-4 border-gold">
+                                <div class="text-sm font-semibold mb-1">3. Langage familier non traité</div>
+                                <p class="text-xs text-gray-400">Difficulté avec abréviations et expressions</p>
+                            </div>
+                            <div class="glass-card border-l-4 border-gold">
+                                <div class="text-sm font-semibold mb-1">4. Absence de contexte conversationnel</div>
+                                <p class="text-xs text-gray-400">Ne maintient pas le fil de la conversation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1">
+                    <h3 class="text-xl font-bold text-gold mb-4">✅ Solutions Quick Wins</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="glass-card text-center">
+                            <div class="icon-circle mx-auto mb-3">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h4 class="text-sm font-semibold mb-2">Instructions Chat dédiées</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                                Créer section spécifique avec ton conversationnel, réponses courtes (2-3 phrases max)
+                            </p>
+                            <span class="badge badge-success">Phase 1</span>
+                        </div>
+
+                        <div class="glass-card text-center">
+                            <div class="icon-circle mx-auto mb-3">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="text-sm font-semibold mb-2">Gestion intentions courtes</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                                Enseigner à l'Agent à demander clarification au lieu de transférer immédiatement
+                            </p>
+                            <span class="badge badge-success">Phase 1</span>
+                        </div>
+
+                        <div class="glass-card text-center">
+                            <div class="icon-circle mx-auto mb-3">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h4 class="text-sm font-semibold mb-2">Dictionnaire langage familier</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                                Ajouter glossaire d'abréviations et expressions dans les instructions
+                            </p>
+                            <span class="badge badge-success">Phase 1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 15: Opportunité Chat - Partie 2 -->
+        <div class="slide" data-slide="15">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">OPPORTUNITÉ CHAT — PARTIE 2</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Impact et roadmap d'optimisation</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- Scénario conservateur -->
+                    <div class="glass-panel border border-gold">
+                        <h3 class="text-xl font-bold text-gold mb-4">🎯 Objectif conservateur : 35%</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Progression</div>
+                                <div class="text-3xl font-bold text-gold mb-2">10.5% → 35%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 35%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card bg-gold bg-opacity-10">
+                                <div class="text-xs text-gray-400 mb-1">Tickets automatisés additionnels</div>
+                                <div class="text-3xl font-bold text-gold">+51 tickets/mois</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Temps économisé</div>
+                                <div class="text-3xl font-bold text-gold">+13h/mois</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Délai de réalisation</div>
+                                <div class="text-2xl font-bold text-gold">2-4 semaines</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scénario optimiste -->
+                    <div class="glass-panel">
+                        <h3 class="text-xl font-bold text-green-400 mb-4">🚀 Objectif optimiste : 45%</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Progression</div>
+                                <div class="text-3xl font-bold text-green-400 mb-2">10.5% → 45%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, #22C55E, #4ADE80);"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Tickets automatisés additionnels</div>
+                                <div class="text-3xl font-bold text-green-400">+72 tickets/mois</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Temps économisé</div>
+                                <div class="text-3xl font-bold text-green-400">+18h/mois</div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Délai de réalisation</div>
+                                <div class="text-2xl font-bold text-green-400">4-8 semaines</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1">
+                    <h3 class="text-xl font-bold text-gold mb-4">📅 Roadmap Chat en 4 étapes</h3>
+                    <div class="grid grid-cols-4 gap-3">
+                        <div class="glass-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-xl mx-auto mb-3">1</div>
+                            <h4 class="text-sm font-semibold mb-2">Semaine 1-2</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                Créer instructions Chat dédiées + tests
+                            </p>
+                            <span class="badge badge-success">Quick Win</span>
+                        </div>
+
+                        <div class="glass-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-xl mx-auto mb-3">2</div>
+                            <h4 class="text-sm font-semibold mb-2">Semaine 3</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                Ajouter glossaire langage familier
+                            </p>
+                            <span class="badge badge-success">Quick Win</span>
+                        </div>
+
+                        <div class="glass-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-xl mx-auto mb-3">3</div>
+                            <h4 class="text-sm font-semibold mb-2">Semaine 4-5</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                Monitoring et ajustements basés données réelles
+                            </p>
+                            <span class="badge badge-info">Optimisation</span>
+                        </div>
+
+                        <div class="glass-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold text-xl mx-auto mb-3">4</div>
+                            <h4 class="text-sm font-semibold mb-2">Semaine 6-8</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                Fine-tuning et validation objectif 35-45%
+                            </p>
+                            <span class="badge badge-gold">Validation</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-gold bg-opacity-10 rounded-lg border-l-4 border-gold">
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            <strong class="text-gold">💡 Stratégie recommandée :</strong> Viser l'objectif conservateur (35%) 
+                            comme minimum viable, puis itérer vers 45% selon les résultats. Cette approche réduit les risques 
+                            tout en maximisant les gains rapides.
+                        </p>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 16: Roadmap -->
+        <div class="slide" data-slide="16">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">ROADMAP STRATÉGIQUE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Plan d'action en 3 phases pour atteindre 50% d'automatisation</p>
+                </div>
+
+                <div class="glass-panel flex-1 overflow-auto">
+                    <table style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>PHASE</th>
+                                <th>DURÉE</th>
+                                <th>ACTIONS CLÉS</th>
+                                <th class="text-center">GAIN ESTIMÉ</th>
+                                <th>EFFORT</th>
+                                <th>PRIORITÉ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Phase 1: Quick Wins</strong></td>
+                                <td>2-4 semaines</td>
+                                <td>
+                                    • Instructions Chat dédiées<br/>
+                                    • Enrichissement KB (produits, FAQ)<br/>
+                                    • Optimisation instructions existantes<br/>
+                                    • Clarification proactive<br/>
+                                    • Gestion messages courts<br/>
+                                    • Glossaire langage familier<br/>
+                                    • Templates réponses courantes
+                                </td>
+                                <td class="text-center"><span class="badge badge-success">+10-12%</span></td>
+                                <td><span class="badge badge-success">Faible</span></td>
+                                <td><span class="badge badge-warning">🔥 Critique</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phase 2: Intégrations</strong></td>
+                                <td>6-8 semaines</td>
+                                <td>
+                                    • Connexion API Shopify (actions)<br/>
+                                    • Intégration ShipStation<br/>
+                                    • Workflow annulation/modification<br/>
+                                    • Workflow remboursements<br/>
+                                    • Génération labels retour<br/>
+                                    • Tests et validation<br/>
+                                    • Formation équipe
+                                </td>
+                                <td class="text-center"><span class="badge badge-gold">+8-10%</span></td>
+                                <td><span class="badge badge-warning">Moyen</span></td>
+                                <td><span class="badge badge-gold">⚡ Haute</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phase 3: Optimisation avancée</strong></td>
+                                <td>4-6 semaines</td>
+                                <td>
+                                    • Proactive messaging<br/>
+                                    • Sentiment analysis<br/>
+                                    • A/B testing instructions<br/>
+                                    • Analyse prédictive<br/>
+                                    • Quick Responses automatisées<br/>
+                                    • Monitoring continu<br/>
+                                    • Fine-tuning basé données
+                                </td>
+                                <td class="text-center"><span class="badge badge-info">+3-5%</span></td>
+                                <td><span class="badge badge-warning">Moyen</span></td>
+                                <td><span class="badge badge-info">💡 Moyenne</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>TOTAL</strong></td>
+                                <td><strong>12-18 semaines</strong></td>
+                                <td><strong>Déploiement progressif et itératif</strong></td>
+                                <td class="text-center"><span class="badge badge-gold">+21-27%</span></td>
+                                <td colspan="2"><strong>Objectif : 50%+ d'automatisation</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-6 grid grid-cols-3 gap-4">
+                    <div class="glass-card text-center border border-gold">
+                        <div class="text-sm text-gray-400 mb-1">État actuel</div>
+                        <div class="text-3xl font-bold text-gold">37.3%</div>
+                    </div>
+                    <div class="glass-card text-center border-2 border-gold">
+                        <div class="text-sm text-gray-400 mb-1">Objectif cible</div>
+                        <div class="text-3xl font-bold text-gold">50%</div>
+                    </div>
+                    <div class="glass-card text-center border border-gold">
+                        <div class="text-sm text-gray-400 mb-1">Potentiel max</div>
+                        <div class="text-3xl font-bold text-green-400">58-64%</div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 17: Phase 1 Quick Wins -->
+        <div class="slide" data-slide="17">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">PHASE 1 — QUICK WINS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Actions immédiates (2-4 semaines) • Gain estimé : +10-12%</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 flex-1">
+                    <!-- Quick Win 1 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">1</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Instructions Chat-spécifiques</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Créer section dédiée avec ton conversationnel, réponses courtes (2-3 phrases), 
+                                    approche réactive vs Email formel.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 1-2</span>
+                                    <span class="badge badge-info">+3-4%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 2 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">2</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Enrichissement KB Produits</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Ajouter fiches détaillées personnalisation, matériaux, tailles, délais fabrication, 
+                                    options gravure.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 1-3</span>
+                                    <span class="badge badge-info">+2-3%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 3 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">3</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">FAQ Retours & Échanges</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Procédures complètes : délais, conditions, étapes, exceptions (articles personnalisés), 
+                                    politique satisfaction.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 2</span>
+                                    <span class="badge badge-info">+1-2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 4 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">4</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Glossaire Langage Familier</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Ajouter dans instructions : abréviations courantes, expressions typiques Chat, 
+                                    traduction intentions ("cc" = "Bonjour").
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 2</span>
+                                    <span class="badge badge-info">+1-2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 5 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">5</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Clarification Proactive</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Enseigner à l'Agent à demander infos manquantes (# commande, email client, détails) 
+                                    avant de transférer.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 3</span>
+                                    <span class="badge badge-info">+2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 6 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">6</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Instructions Suivi Livraison</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Détailler procédures par région/transporteur, délais typiques, gestion retards, 
+                                    contact transporteurs.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 3</span>
+                                    <span class="badge badge-info">+1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Win 7 -->
+                    <div class="glass-card">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gold bg-opacity-20 flex items-center justify-center text-gold font-bold flex-shrink-0">7</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold text-gold mb-1">Templates Cas Courants</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                                    Créer réponses pré-formatées pour : disponibilité produit, délais livraison standard, 
+                                    statut commande en attente.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="badge badge-success">Semaine 4</span>
+                                    <span class="badge badge-info">+1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="glass-panel border-2 border-gold">
+                        <h3 class="text-lg font-bold text-gold mb-3">📊 Impact Phase 1</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Gain automatisation</span>
+                                <span class="text-2xl font-bold text-gold">+10-12%</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Tickets additionnels/mois</span>
+                                <span class="text-2xl font-bold text-gold">+35-42</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Temps économisé</span>
+                                <span class="text-2xl font-bold text-gold">+9-11h/mois</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Effort requis</span>
+                                <span class="badge badge-success">Faible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 18: Phase 2 -->
+        <div class="slide" data-slide="18">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">PHASE 2 — INTÉGRATIONS & ACTIONS</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Automatisation des actions système (6-8 semaines) • Gain estimé : +8-10%</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- Shopify Integration -->
+                    <div class="glass-panel">
+                        <h3 class="text-xl font-bold text-gold mb-4">
+                            <i class="fas fa-shopping-cart mr-2"></i> Intégration Shopify
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="glass-card">
+                                <h4 class="text-sm font-semibold mb-2">🎯 Capacités à ajouter</h4>
+                                <ul class="text-xs text-gray-400 space-y-1 ml-4">
+                                    <li>• Annulation commande (si non expédiée)</li>
+                                    <li>• Modification adresse (fenêtre 2h)</li>
+                                    <li>• Mise à jour quantité/produits</li>
+                                    <li>• Initiation remboursements</li>
+                                    <li>• Lecture statut temps réel</li>
+                                </ul>
+                            </div>
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Impact estimé</div>
+                                <div class="text-2xl font-bold text-gold">+5-6%</div>
+                                <div class="text-xs text-gray-400 mt-1">~145 demandes modif/annulation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ShipStation Integration -->
+                    <div class="glass-panel">
+                        <h3 class="text-xl font-bold text-gold mb-4">
+                            <i class="fas fa-shipping-fast mr-2"></i> Intégration ShipStation
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="glass-card">
+                                <h4 class="text-sm font-semibold mb-2">🎯 Capacités à ajouter</h4>
+                                <ul class="text-xs text-gray-400 space-y-1 ml-4">
+                                    <li>• Génération labels retour automatique</li>
+                                    <li>• Tracking détaillé en temps réel</li>
+                                    <li>• Mise à jour statut expédition</li>
+                                    <li>• Gestion incidents livraison</li>
+                                    <li>• Redirection colis (si possible)</li>
+                                </ul>
+                            </div>
+                            <div class="glass-card">
+                                <div class="text-xs text-gray-400 mb-1">Impact estimé</div>
+                                <div class="text-2xl font-bold text-gold">+2-3%</div>
+                                <div class="text-xs text-gray-400 mt-1">~73 demandes retour/échange</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel mb-4">
+                    <h3 class="text-xl font-bold text-gold mb-4">🛠 Workflow d'implémentation</h3>
+                    <div class="grid grid-cols-4 gap-3">
+                        <div class="glass-card text-center">
+                            <div class="text-3xl mb-2">1️⃣</div>
+                            <h4 class="text-sm font-semibold mb-1">Semaine 1-2</h4>
+                            <p class="text-xs text-gray-400">Configuration API Gorgias → Shopify (read/write)</p>
+                        </div>
+                        <div class="glass-card text-center">
+                            <div class="text-3xl mb-2">2️⃣</div>
+                            <h4 class="text-sm font-semibold mb-1">Semaine 3-4</h4>
+                            <p class="text-xs text-gray-400">Développement workflows actions + validation sécurité</p>
+                        </div>
+                        <div class="glass-card text-center">
+                            <div class="text-3xl mb-2">3️⃣</div>
+                            <h4 class="text-sm font-semibold mb-1">Semaine 5-6</h4>
+                            <p class="text-xs text-gray-400">Tests pilote (10% traffic) + ajustements</p>
+                        </div>
+                        <div class="glass-card text-center">
+                            <div class="text-3xl mb-2">4️⃣</div>
+                            <h4 class="text-sm font-semibold mb-1">Semaine 7-8</h4>
+                            <p class="text-xs text-gray-400">Déploiement complet + formation équipe + monitoring</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-1">Effort technique</div>
+                        <div class="text-2xl font-bold text-gold">Moyen</div>
+                        <div class="text-xs text-gray-400 mt-1">Support dev requis</div>
+                    </div>
+                    <div class="glass-card text-center border border-gold">
+                        <div class="text-sm text-gray-400 mb-1">Gain automatisation</div>
+                        <div class="text-2xl font-bold text-gold">+8-10%</div>
+                        <div class="text-xs text-gray-400 mt-1">+28-35 tickets/mois</div>
+                    </div>
+                    <div class="glass-card text-center">
+                        <div class="text-sm text-gray-400 mb-1">Délai</div>
+                        <div class="text-2xl font-bold text-gold">6-8 sem</div>
+                        <div class="text-xs text-gray-400 mt-1">Après Phase 1</div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 19: Phase 3 -->
+        <div class="slide" data-slide="19">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold mb-2">PHASE 3 — OPTIMISATION AVANCÉE</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-2">Intelligence et amélioration continue (4-6 semaines) • Gain estimé : +3-5%</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <!-- Feature 1 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">Proactive Messaging</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Messages automatiques selon comportement : commande en attente, relance panier, 
+                            suivi proactif livraison.
+                        </p>
+                        <span class="badge badge-info">+1-2%</span>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">Sentiment Analysis</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Détection émotions clients pour escalade intelligente (frustration, urgence) 
+                            et adaptation du ton.
+                        </p>
+                        <span class="badge badge-info">+0.5-1%</span>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">A/B Testing</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Tests systématiques de variations d'instructions, tonalité, structure 
+                            pour optimiser taux résolution.
+                        </p>
+                        <span class="badge badge-info">+1-1.5%</span>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">Quick Responses</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Création templates automatisés pour top 20 questions les plus fréquentes 
+                            avec personnalisation dynamique.
+                        </p>
+                        <span class="badge badge-info">+0.5%</span>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">Analyse Prédictive</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Identification patterns récurrents, prévision pics de demandes, 
+                            recommandations proactives d'optimisation.
+                        </p>
+                        <span class="badge badge-info">Impact indirect</span>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="glass-card text-center">
+                        <div class="icon-circle mx-auto mb-3">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gold mb-2">Monitoring Continu</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-3">
+                            Dashboard temps réel KPIs automatisation, alertes anomalies, 
+                            rapports mensuels insights actionnables.
+                        </p>
+                        <span class="badge badge-info">Maintenance</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3 class="text-xl font-bold text-gold mb-4">📊 Répartition par canal (Phase 3)</h3>
+                    <table style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>CANAL</th>
+                                <th class="text-center">ÉTAT ACTUEL</th>
+                                <th class="text-center">APRÈS PHASE 1</th>
+                                <th class="text-center">APRÈS PHASE 2</th>
+                                <th class="text-center">APRÈS PHASE 3</th>
+                                <th class="text-center">GAIN TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td class="text-center">44.7%</td>
+                                <td class="text-center">48-50%</td>
+                                <td class="text-center">55-58%</td>
+                                <td class="text-center">58-62%</td>
+                                <td class="text-center"><span class="badge badge-success">+13-17%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chat</strong></td>
+                                <td class="text-center">10.5%</td>
+                                <td class="text-center">30-35%</td>
+                                <td class="text-center">38-42%</td>
+                                <td class="text-center">42-48%</td>
+                                <td class="text-center"><span class="badge badge-success">+32-38%</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>GLOBAL</strong></td>
+                                <td class="text-center"><strong>37.3%</strong></td>
+                                <td class="text-center"><strong>47-49%</strong></td>
+                                <td class="text-center"><strong>53-56%</strong></td>
+                                <td class="text-center"><strong>56-62%</strong></td>
+                                <td class="text-center"><span class="badge badge-gold">+19-25%</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+        <!-- Slide 21: Prochaines étapes (this is slide 20 in our sequence since we skipped original slide 20) -->
+        <div class="slide" data-slide="20">
+            <div class="flex flex-col h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-2">PROCHAINES ÉTAPES</h2>
+                    <div class="w-24 h-1 bg-gold mx-auto"></div>
+                    <p class="text-sm text-gray-400 mt-3">Actions immédiates pour démarrer l'optimisation</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 flex-1">
+                    <!-- Semaine 1 -->
+                    <div class="glass-panel">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="text-5xl font-bold text-gold">1</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gold">Semaine 1</h3>
+                                <p class="text-sm text-gray-400">Préparation & audit</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Valider roadmap avec l'équipe</div>
+                                    <p class="text-xs text-gray-400">Aligner stakeholders, confirmer priorités et ressources</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Audit complet KB actuelle</div>
+                                    <p class="text-xs text-gray-400">Identifier gaps, contenus obsolètes, informations manquantes</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Analyser top 50 tickets transférés</div>
+                                    <p class="text-xs text-gray-400">Deep dive sur raisons précises, patterns, quick wins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Semaine 2 -->
+                    <div class="glass-panel">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="text-5xl font-bold text-gold">2</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gold">Semaine 2</h3>
+                                <p class="text-sm text-gray-400">Implémentation Quick Wins</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Créer instructions Chat dédiées</div>
+                                    <p class="text-xs text-gray-400">Ton conversationnel, réponses courtes, exemples concrets</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Enrichir KB (10 articles prioritaires)</div>
+                                    <p class="text-xs text-gray-400">Personnalisation, retours, FAQ produits les plus demandés</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Ajouter glossaire langage familier</div>
+                                    <p class="text-xs text-gray-400">Abréviations, expressions courantes, mapping intentions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Semaine 3 -->
+                    <div class="glass-panel">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="text-5xl font-bold text-gold">3</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gold">Semaine 3</h3>
+                                <p class="text-sm text-gray-400">Tests & optimisation</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Tests pilote sur 20% du traffic Chat</div>
+                                    <p class="text-xs text-gray-400">Mesurer impact, collecter feedback, identifier ajustements</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Monitoring KPIs quotidiens</div>
+                                    <p class="text-xs text-gray-400">Taux auto, temps réponse, satisfaction, raisons transferts</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Ajustements basés données réelles</div>
+                                    <p class="text-xs text-gray-400">Itérer sur instructions, KB, exemples selon résultats</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Semaine 4 -->
+                    <div class="glass-panel border-2 border-gold">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="text-5xl font-bold text-gold">4</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gold">Semaine 4</h3>
+                                <p class="text-sm text-gray-400">Déploiement & planification Phase 2</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Déploiement complet Phase 1</div>
+                                    <p class="text-xs text-gray-400">100% du traffic, formation équipe, documentation</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Validation gains (objectif +10-12%)</div>
+                                    <p class="text-xs text-gray-400">Mesure impact réel, célébration quick wins</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-gold flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-check text-xs text-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold mb-1">Planification Phase 2 (intégrations)</div>
+                                    <p class="text-xs text-gray-400">Specs techniques Shopify/ShipStation, timeline, ressources</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 glass-panel p-6 border-2 border-gold">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gold mb-2">🎯 Objectif Mois 1</h3>
+                            <p class="text-sm text-gray-400">Atteindre 47-49% d'automatisation via Phase 1</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-5xl font-bold text-gold mb-2">37.3% → 47%</div>
+                            <div class="text-sm text-green-400">+10 points en 4 semaines</div>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="https://www.genspark.ai/api/files/s/3RjP0YcC" alt="Nébuleuse Bijoux" class="logo-watermark">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+            <span>Précédent</span>
+        </button>
+
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">20</span>
+        </div>
+
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+            <span>Suivant</span>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 20;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+
+            // Hide all slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Show current slide
+            const activeSlide = document.querySelector(`[data-slide="${currentSlide}"]`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+
+            // Update counter
+            document.getElementById('currentSlide').textContent = currentSlide;
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = (currentSlide === 1);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (event.key === 'ArrowRight') {
+                changeSlide(1);
+            } else if (event.key === 'Home') {
+                currentSlide = 1;
+                showSlide(currentSlide);
+            } else if (event.key === 'End') {
+                currentSlide = totalSlides;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>

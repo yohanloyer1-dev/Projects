@@ -1,0 +1,26 @@
+{
+  "skill_name": "notion-content-extraction",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "extract_playbook_with_links",
+      "prompt": "Extract the Notion document at https://www.notion.so/1d81ae2178f5809b89efd4eebebaaaf0 (Success AI Agent Optimization Playbook) to a complete Markdown file. Ensure all sections, subsections, links (including Calendly booking links with UTM parameters, ChatGPT GPT tool links, Periscope/HEX/Loom dashboard links), and content are captured with 100% fidelity. Document any issues found during extraction.",
+      "expected_output": "Complete Markdown extraction with: all sections preserved with exact names, all 25+ links captured with full URLs and parameters, no fabricated content, verification report showing completeness check passed",
+      "files": []
+    },
+    {
+      "id": 2,
+      "eval_name": "verify_against_audit_checklist",
+      "prompt": "When extracting a Notion document, create and follow a pre-extraction checklist. Extract the AI Agent Playbook (https://www.notion.so/2461ae2178f5804fae7fe627d2355ed0), first listing every section you see, then systematically extracting each section. After extraction, verify your checklist is complete - document which sections were extracted and confirm no sections were missed.",
+      "expected_output": "Pre-extraction checklist listing all sections, systematic section-by-section extraction, post-extraction verification showing 100% of sections were captured, clear documentation of extraction process",
+      "files": []
+    },
+    {
+      "id": 3,
+      "eval_name": "identify_extraction_errors",
+      "prompt": "You are given an INCOMPLETE and INCORRECT extraction of the Success AI Agent Optimization Playbook that contains: (1) fabricated content ('Key Questions to Ask During Audit' that doesn't exist in Notion), (2) missing sections (Auditing Accounts Success Dashboards missing), (3) missing links (Calendly, ChatGPT tools not captured). Using the bulletproof extraction skill, identify all errors, explain what was missing, and document how the extraction process would have prevented these errors.",
+      "expected_output": "Complete error analysis identifying: fabricated sections, missing sections with exact names, missing links with URLs, explanation of how verification checklist would have caught each error, clear explanation of correct extraction process",
+      "files": []
+    }
+  ]
+}

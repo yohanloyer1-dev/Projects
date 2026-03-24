@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Audit Discovery</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 2.5fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 40px;
+        }
+
+        .logo-section {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        #stepIndicator {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .step:hover {
+            background: #e2e8f0;
+        }
+
+        .step.active {
+            background: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .step.completed {
+            color: #10b981;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .step.active .step-number {
+            background: white;
+            color: #3b82f6;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .section-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .section-heading {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1a202c;
+            font-size: 14px;
+        }
+
+        label strong {
+            color: #ef4444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .radio-item:hover,
+        .checkbox-item:hover {
+            background: #f7fafc;
+        }
+
+        .radio-item input,
+        .checkbox-item input {
+            cursor: pointer;
+        }
+
+        .completion-screen {
+            display: none;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        .completion-screen.active {
+            display: block;
+        }
+
+        .check-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .completion-text {
+            font-size: 18px;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        .completion-subtitle {
+            font-size: 16px;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: left;
+            margin-bottom: 24px;
+            color: #1a202c;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            margin: 10px 0 0 20px;
+            list-style: disc;
+        }
+
+        .completion-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 12px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #1a202c;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #cbd5e0;
+        }
+
+        .support-link {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            z-index: 999;
+        }
+
+        .support-link:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .support-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .support-modal.active {
+            display: flex;
+        }
+
+        .support-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .support-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .support-text {
+            color: #718096;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .support-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 16px;
+        }
+
+        .support-textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .support-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .form-container {
+                padding: 24px;
+            }
+
+            .completion-actions {
+                flex-direction: column;
+            }
+
+            .completion-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="two-column">
+            <div class="sidebar">
+                <div class="logo-section">
+                    <div class="logo">📋</div>
+                    <div class="tagline">Discovery Form</div>
+                </div>
+                <div id="stepIndicator"></div>
+                <button type="button" class="btn-primary" onclick="loadDemoData()" style="width: 100%; margin-top: 20px; padding: 10px; font-size: 13px;">📝 Test with Demo Data</button>
+            </div>
+
+            <div class="form-container">
+                <form id="discoveryForm" class="discovery-form">
+                    <!-- Section 1 -->
+                    <div class="section active" data-section="1">
+                        <div class="section-icon">👤</div>
+                        <div class="section-heading">Your Information</div>
+
+                        <div class="form-group">
+                            <label>Business Name <strong>*</strong></label>
+                            <input type="text" id="businessName" name="businessName" placeholder="Your business name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contact Name <strong>*</strong></label>
+                            <input type="text" id="contactName" name="contactName" placeholder="Your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email <strong>*</strong></label>
+                            <input type="email" id="contactEmail" name="email" placeholder="your@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Business Model</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="businessModel" value="ecommerce">
+                                    E-commerce/Shopify
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="businessModel" value="saas">
+                                    SaaS/Software
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="businessModel" value="service">
+                                    Service-Based
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="businessModel" value="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="section" data-section="2">
+                        <div class="section-icon">⚙️</div>
+                        <div class="section-heading">Current Setup</div>
+
+                        <div class="form-group">
+                            <label>How long have you used Gorgias?</label>
+                            <input type="text" id="gorgiasDuration" name="gorgiasDuration" placeholder="e.g., 6 months, 1 year">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monthly Ticket Volume</label>
+                            <input type="text" id="monthlyTickets" name="monthlyTickets" placeholder="e.g., 5000, 10000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monthly Gorgias Cost</label>
+                            <input type="text" id="monthlyCost" name="monthlyCost" placeholder="e.g., $2000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Do you currently outsource support?</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="outsourced" value="no">
+                                    No, in-house only
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="outsourced" value="yes">
+                                    Yes, partially or fully
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="outsourcedNameGroup" style="display:none;">
+                            <label>Outsourcing Company Name</label>
+                            <input type="text" id="outsourcedName" name="outsourcedName" placeholder="e.g., Zendesk, One Pilot">
+                        </div>
+                    </div>
+
+                    <!-- Section 3 -->
+                    <div class="section" data-section="3">
+                        <div class="section-icon">💻</div>
+                        <div class="section-heading">Technology</div>
+
+                        <div class="form-group">
+                            <label>Store Platform</label>
+                            <select id="storePlatform" name="storePlatform">
+                                <option value="">Select platform</option>
+                                <option value="shopify">Shopify</option>
+                                <option value="woocommerce">WooCommerce</option>
+                                <option value="magento">Magento</option>
+                                <option value="custom">Custom</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Integration</label>
+                            <select id="emailIntegration" name="emailIntegration">
+                                <option value="">Select email service</option>
+                                <option value="gmail">Gmail</option>
+                                <option value="outlook">Outlook</option>
+                                <option value="custom">Custom Domain</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Live Chat Deployed?</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="chatDeployed" value="yes">
+                                    Yes
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="chatDeployed" value="no">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Help Center?</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="helpCenter" value="yes">
+                                    Yes
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="helpCenter" value="no">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <div class="section" data-section="4">
+                        <div class="section-icon">📋</div>
+                        <div class="section-heading">Business Policies</div>
+
+                        <div class="form-group">
+                            <label>Return Window (days)</label>
+                            <input type="text" id="returnWindow" name="returnWindow" placeholder="e.g., 30, 60">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Who covers return shipping?</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="returnShipping" value="customer">
+                                    Customer
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="returnShipping" value="business">
+                                    Business
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="returnShipping" value="varies">
+                                    Varies
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Shipping Carriers Used</label>
+                            <input type="text" id="carriers" name="carriers" placeholder="e.g., DHL, UPS, FedEx">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Brand Tone of Voice</label>
+                            <input type="text" id="toneOfVoice" name="toneOfVoice" placeholder="e.g., Friendly, Professional, Luxury">
+                        </div>
+                    </div>
+
+                    <!-- Section 5 -->
+                    <div class="section" data-section="5">
+                        <div class="section-icon">🎯</div>
+                        <div class="section-heading">Automation Goals</div>
+
+                        <div class="form-group">
+                            <label>Estimated Current Automation %</label>
+                            <input type="text" id="estimatedAutomation" name="estimatedAutomation" placeholder="e.g., 30, 50">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Target Automation %</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="automationTarget" value="40">
+                                    40%
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="automationTarget" value="60">
+                                    60%
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="automationTarget" value="80">
+                                    80%
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="automationTarget" value="90+">
+                                    90%+
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>First Month Win</label>
+                            <textarea id="firstMonthWin" name="firstMonthWin" placeholder="What would success look like?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Main Concerns</label>
+                            <textarea id="concerns" name="concerns" placeholder="Any worries about AI automation?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 6 -->
+                    <div class="section" data-section="6">
+                        <div class="section-icon">📅</div>
+                        <div class="section-heading">Timeline & Details</div>
+
+                        <div class="form-group">
+                            <label>Timeline</label>
+                            <input type="text" id="timeline" name="timeline" placeholder="e.g., ASAP, within 2 months">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Decision Maker</label>
+                            <input type="text" id="decisionMaker" name="decisionMaker" placeholder="e.g., You, CEO, VP of Ops">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Can Export 60 Days of Ticket Data?</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="canExportData" value="yes">
+                                    Yes
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="canExportData" value="no">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Preferred Communication Channel</label>
+                            <select id="communicationChannel" name="communicationChannel">
+                                <option value="">Select channel</option>
+                                <option value="email">Email</option>
+                                <option value="slack">Slack</option>
+                                <option value="zoom">Zoom Calls</option>
+                                <option value="phone">Phone</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 7 -->
+                    <div class="section" data-section="7">
+                        <div class="section-icon">✨</div>
+                        <div class="section-heading">Almost Done!</div>
+
+                        <div class="form-group">
+                            <label>Anything Else?</label>
+                            <textarea id="additionalInfo" name="additionalInfo" placeholder="Any other info we should know?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>How did you hear about us?</label>
+                            <input type="text" id="referralSource" name="referralSource" placeholder="Referral, Google, LinkedIn, etc.">
+                        </div>
+                    </div>
+
+                    <!-- Completion -->
+                    <div class="completion-screen" id="completionScreen">
+                        <div class="check-icon">✅</div>
+                        <div class="completion-title">Perfect! 🎉</div>
+                        <div class="completion-text"><strong>We've received your discovery form.</strong></div>
+                        <div class="completion-subtitle">We'll be in touch soon!</div>
+                        <div class="info-box" style="text-align: left;">
+                            📧 Confirmation sent to <strong id="successEmail"></strong>
+                            <br><br>
+                            <strong>What happens next:</strong>
+                            <ul>
+                                <li>We'll review your responses (usually within 24 hours)</li>
+                                <li>You'll receive a personalized audit summary</li>
+                                <li>We'll schedule a brief strategy call if it's a fit</li>
+                            </ul>
+                        </div>
+                        <div class="completion-actions">
+                            <button type="button" class="btn-primary" onclick="downloadPDF()">📄 Download as PDF</button>
+                            <button type="button" class="btn-secondary" onclick="location.reload()">🔄 Submit Another</button>
+                        </div>
+                    </div>
+
+                    <div class="form-footer" id="formFooter">
+                        <button type="button" class="btn-secondary" id="prevBtn" onclick="prevSection()" style="display:none;">← Back</button>
+                        <button type="button" class="btn-primary" id="nextBtn" onclick="nextSection()">Next →</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Button -->
+    <div class="support-link" onclick="openSupport()">💬</div>
+
+    <!-- Support Modal -->
+    <div class="support-modal" id="supportModal">
+        <div class="support-content">
+            <div class="support-title">Report an Issue</div>
+            <div class="support-text">
+                Having trouble with the form? Let us know what's wrong and we'll help you out.
+            </div>
+            <form id="supportForm">
+                <textarea class="support-textarea" id="supportMessage" placeholder="Describe the issue you're experiencing..." required></textarea>
+                <div class="support-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeSupport()">Cancel</button>
+                    <button type="submit" class="btn-primary">Send Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 7;
+        const FORMSPREE_ID = 'xnjbolaz';
+
+        // Initialize step indicator
+        function initSteps() {
+            const indicator = document.getElementById('stepIndicator');
+            const stepTitles = [
+                'Your Information',
+                'Current Setup',
+                'Technology',
+                'Business Policies',
+                'Automation Goals',
+                'Timeline & Details',
+                'Almost Done'
+            ];
+
+            stepTitles.forEach((title, idx) => {
+                const div = document.createElement('div');
+                div.className = 'step';
+                div.id = `step-${idx + 1}`;
+                div.innerHTML = `
+                    <div class="step-number">${idx + 1}</div>
+                    <div>${title}</div>
+                `;
+                div.onclick = () => goToSection(idx + 1);
+                indicator.appendChild(div);
+            });
+
+            updateSteps();
+            updateEmailDisplay();
+        }
+
+        function updateSteps() {
+            for (let i = 1; i <= totalSections; i++) {
+                const step = document.getElementById(`step-${i}`);
+                step.classList.remove('active', 'completed');
+                if (i < currentSection) step.classList.add('completed');
+                if (i === currentSection) step.classList.add('active');
+            }
+        }
+
+        function updateEmailDisplay() {
+            const email = document.getElementById('contactEmail').value || 'your@email.com';
+            document.getElementById('emailDisplay').textContent = email;
+        }
+
+        document.getElementById('contactEmail')?.addEventListener('change', updateEmailDisplay);
+        document.querySelectorAll('input[name="outsourced"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('outsourcedNameGroup').style.display = this.value === 'yes' ? 'block' : 'none';
+            });
+        });
+
+        function updateUI() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((sec, idx) => {
+                sec.classList.remove('active');
+                if (idx + 1 === currentSection) sec.classList.add('active');
+            });
+
+            document.getElementById('prevBtn').style.display = currentSection === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').textContent = currentSection === totalSections ? '✅ Submit' : 'Next →';
+            updateSteps();
+        }
+
+        function goToSection(n) {
+            currentSection = n;
+            updateUI();
+            window.scrollTo(0, 0);
+        }
+
+        function nextSection() {
+            if (currentSection === totalSections) {
+                submitForm();
+            } else {
+                currentSection++;
+                updateUI();
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 1) {
+                currentSection--;
+                updateUI();
+            }
+        }
+
+        function submitForm() {
+            const businessName = document.getElementById('businessName').value;
+            const contactEmail = document.getElementById('contactEmail').value;
+            const contactName = document.getElementById('contactName').value;
+
+            if (!businessName || !contactEmail || !contactName) {
+                showError('⚠️ Please fill in required fields (marked with *)');
+                return;
+            }
+
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').textContent = '⏳ Sending...';
+
+            // Submit to Formspree via HTML form
+            const form = document.getElementById('discoveryForm');
+            form.action = `https://formspree.io/f/${FORMSPREE_ID}`;
+            form.method = 'POST';
+
+            // Add hidden fields
+            const hidden = document.createElement('div');
+            hidden.innerHTML = `
+                <input type="hidden" name="_replyto" value="${contactEmail}">
+                <input type="hidden" name="_subject" value="Discovery Form - ${businessName}">
+            `;
+            form.appendChild(hidden);
+
+            // Show success immediately
+            setTimeout(() => {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById('completionScreen').classList.add('active');
+                document.getElementById('successEmail').textContent = contactEmail;
+                document.getElementById('formFooter').style.display = 'none';
+                triggerConfetti();
+            }, 100);
+
+            // Submit form
+            form.submit();
+        }
+
+        function loadDemoData() {
+            document.getElementById('businessName').value = 'Demo Jewelry Store';
+            document.getElementById('contactName').value = 'Jane Smith';
+            document.getElementById('contactEmail').value = 'yohan.loyer1@gmail.com';
+            document.querySelector('input[value="ecommerce"]').checked = true;
+            document.getElementById('gorgiasDuration').value = '6 months';
+            document.getElementById('monthlyTickets').value = '5000';
+            document.getElementById('monthlyCost').value = '$12,000';
+            document.querySelector('input[name="outsourced"][value="yes"]').checked = true;
+            document.getElementById('outsourcedNameGroup').style.display = 'block';
+            document.getElementById('outsourcedName').value = 'One Pilot';
+            document.getElementById('storePlatform').value = 'shopify';
+            document.getElementById('emailIntegration').value = 'gmail';
+            document.querySelector('input[name="chatDeployed"][value="no"]').checked = true;
+            document.querySelector('input[name="helpCenter"][value="yes"]').checked = true;
+            document.getElementById('returnWindow').value = '30';
+            document.querySelector('input[name="returnShipping"][value="business"]').checked = true;
+            document.getElementById('carriers').value = 'DHL, UPS';
+            document.getElementById('toneOfVoice').value = 'Luxury';
+            document.getElementById('estimatedAutomation').value = '30';
+            document.querySelector('input[name="automationTarget"][value="40"]').checked = true;
+            document.getElementById('firstMonthWin').value = 'Automate order status responses';
+            document.getElementById('concerns').value = 'Brand voice consistency';
+            document.getElementById('timeline').value = 'Within 2 months';
+            document.getElementById('decisionMaker').value = 'CEO';
+            document.querySelector('input[name="canExportData"][value="yes"]').checked = true;
+            document.getElementById('communicationChannel').value = 'email';
+            document.getElementById('additionalInfo').value = 'Looking forward to working together!';
+            document.getElementById('referralSource').value = 'LinkedIn';
+            updateEmailDisplay();
+            goToSection(1);
+            showSuccess('Demo data loaded! Fill out the form and click Submit.');
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('discoveryForm');
+            const opt = {
+                margin: 10,
+                filename: `Discovery_Form_${new Date().toISOString().slice(0,10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // 🎉 Confetti celebration function
+        function triggerConfetti() {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'confetti-canvas';
+            canvas.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 9999;
+            `;
+            document.body.appendChild(canvas);
+
+            confetti.create(canvas, { resize: true, useWorker: false })({
+                particleCount: 750,
+                spread: 100,
+                origin: { y: 0.3 },
+                colors: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6']
+            });
+
+            // Multiple waves of confetti
+            setTimeout(() => {
+                confetti.create(canvas, { resize: true, useWorker: false })({
+                    particleCount: 500,
+                    spread: 150,
+                    origin: { y: 0.5 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6']
+                });
+            }, 500);
+        }
+
+        // Success notification
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease-out;
+            `;
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 4000);
+        }
+
+        // Error display function
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ef4444;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                max-width: 400px;
+            `;
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 4000);
+        }
+
+        function openSupport() {
+            document.getElementById('supportModal').classList.add('active');
+        }
+
+        function closeSupport() {
+            document.getElementById('supportModal').classList.remove('active');
+            document.getElementById('supportMessage').value = '';
+        }
+
+        // Support form submission
+        document.getElementById('supportForm').onsubmit = function(e) {
+            e.preventDefault();
+            const message = document.getElementById('supportMessage').value;
+            if (!message) {
+                showError('Please describe the issue');
+                return;
+            }
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Sending...';
+
+            const email = document.getElementById('contactEmail').value || 'customer@example.com';
+            const businessName = document.getElementById('businessName').value || 'Not filled';
+
+            // Create a temporary form to submit
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = `https://formspree.io/f/${FORMSPREE_ID}`;
+            tempForm.innerHTML = `
+                <input type="hidden" name="_replyto" value="${email}">
+                <input type="hidden" name="_subject" value="[ERROR REPORT] ${businessName}">
+                <input type="hidden" name="message" value="${message}">
+            `;
+            document.body.appendChild(tempForm);
+
+            // Show success immediately
+            showSuccess('✅ Issue reported! We\'ll look into it shortly.');
+            closeSupport();
+
+            // Submit form
+            tempForm.submit();
+            tempForm.remove();
+        };
+
+        // Initialize
+        initSteps();
+        updateUI();
+    </script>
+</body>
+</html>

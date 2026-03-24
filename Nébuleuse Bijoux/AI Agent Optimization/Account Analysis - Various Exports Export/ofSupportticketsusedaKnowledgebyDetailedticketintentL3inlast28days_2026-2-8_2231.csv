@@ -1,0 +1,198 @@
+ticket_intent,ticket_intent_detail,ai_agent_tickets_28d,share_of_tickets_28d,success_rate_28d,perc_AI_tickets_used_knowledge_28d
+Order:Status,General Order Status Inquiries,117,0.09263657957244656,0.6153846153846154,0.9743589743589743
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,67,0.05304829770387965,0.16417910447761194,0.9701492537313433
+Exchange:Status,Exchange Status Updates,56,0.04433887569279493,0.0,0.5892857142857143
+Shipping:Delay,Delayed Orders Awaiting Delivery,42,0.0332541567695962,0.5238095238095238,1.0
+Product:Quality Issues,Jewelry Defects and Breakages,40,0.03167062549485352,0.275,0.825
+Order:Damaged,Requests for replacement or refund of damaged jewelry,40,0.03167062549485352,0.075,0.675
+Return:Status,Delayed Return Processing,34,0.026920031670625493,0.0,0.14705882352941177
+Exchange:Request,Exchange Due to Defective or Mismatched Items,34,0.026920031670625493,0.20588235294117646,0.7352941176470589
+Order:Missing Item,Missing Earrings and Piercings,31,0.02454473475851148,0.12903225806451613,0.9032258064516129
+Product:Quality Issues,Earring Closure Malfunctions,31,0.02454473475851148,0.45161290322580644,0.8709677419354839
+Warranty:Claim,Warranty claims for defective jewelry products,25,0.01979414093428345,0.32,0.92
+Order:Missing Item,General Missing Items,25,0.01979414093428345,0.08,1.0
+Order:Edit,Change or add items in order,22,0.01741884402216944,0.18181818181818182,0.6818181818181818
+Shipping:Change Address,Address corrections before shipment,22,0.01741884402216944,0.4090909090909091,1.0
+Product:Availability,Jewelry Restock Inquiries,20,0.01583531274742676,0.8,1.0
+Order:Status,Order Not Received After Shipping,20,0.01583531274742676,0.4,0.95
+Product:Quality Issues,Jewelry Discoloration Issues,20,0.01583531274742676,0.4,0.7
+Order:Damaged,Earring Replacement Requests,17,0.013460015835312747,0.058823529411764705,0.7647058823529411
+Order:Payment,Payment adjustments and refunds issues,15,0.011876484560570071,0.06666666666666667,0.6
+Return:Status,Unreceived Refund After Returning Item,15,0.011876484560570071,0.0,0.06666666666666667
+Product:Availability,Replacement Parts for Jewelry,14,0.011084718923198733,0.35714285714285715,0.9285714285714286
+Product:Availability,Stock Availability Queries,12,0.009501187648456057,0.4166666666666667,0.8333333333333334
+Account:Other,Fidelity Points and Account Status Issues,12,0.009501187648456057,0.0,1.0
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,12,0.009501187648456057,0.0,0.9166666666666666
+Return:Request,Return Process Issues,12,0.009501187648456057,0.0,0.16666666666666666
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,11,0.00870942201108472,0.36363636363636365,0.7272727272727273
+Warranty:Claim,Warranty Claims with Defective Clasps,11,0.00870942201108472,0.09090909090909091,1.0
+Order:Wrong Item,Other,11,0.00870942201108472,0.0,0.9090909090909091
+Return:Request,Standard Product Return Requests,10,0.00791765637371338,0.3,0.3
+Promotion & Discount:Issue,Discount Redemption Errors,10,0.00791765637371338,0.3,0.6
+Order:Edit,Correcting personal information in orders,10,0.00791765637371338,0.8,0.7
+Return:Status,Return Shipment and Processing Issues,10,0.00791765637371338,0.3,0.4
+Order:Status,Delayed order shipment status with tracking issues,10,0.00791765637371338,0.6,1.0
+Return:Status,Delayed Refund After Return,10,0.00791765637371338,0.0,0.0
+Shipping:Delivered Not Received,Returned Orders to Sender,9,0.007125890736342043,0.1111111111111111,1.0
+Product:Quality Issues,Piercing jewelry decoration detachment,9,0.007125890736342043,0.4444444444444444,1.0
+Warranty:Claim,Warranty oxidation discoloration claims,8,0.006334125098970704,0.375,0.875
+Exchange:Request,Size Change Requests for Delivered Items,8,0.006334125098970704,0.5,1.0
+Order:Refund,Refund Requests for Delivery Delays and Issues,8,0.006334125098970704,0.0,0.375
+Order:Status,Other,7,0.0055423594615993665,0.42857142857142855,0.8571428571428571
+Warranty:Claim,Warranty claims missing jewelry parts,7,0.0055423594615993665,0.7142857142857143,1.0
+Account:Other,Other,7,0.0055423594615993665,0.14285714285714285,0.8571428571428571
+Promotion & Discount:Issue,Loyalty Points and Promo Code Conflicts,7,0.0055423594615993665,0.14285714285714285,0.8571428571428571
+Shipping:Other,Reshipment requests after failed delivery attempts,7,0.0055423594615993665,0.14285714285714285,1.0
+Warranty:Claim,Warranty Process and Compensation Requests,6,0.004750593824228029,0.16666666666666666,1.0
+Order:Payment,Payment Processing Failures,6,0.004750593824228029,0.0,1.0
+Promotion & Discount:Issue,Promotion Code Activation Failures,6,0.004750593824228029,0.3333333333333333,1.0
+Promotion & Discount:Information,Clarifications on Discount Offers and Promotions,6,0.004750593824228029,0.5,1.0
+Order:Refund,Unreceived Refund,6,0.004750593824228029,0.0,0.3333333333333333
+Warranty:Claim,Warranty Claims with Defect Documentation,6,0.004750593824228029,0.0,1.0
+Return:Information,Return Process Details,5,0.00395882818685669,0.0,0.4
+Exchange:Request,Exchange Processing Errors,5,0.00395882818685669,0.0,0.8
+Warranty:Claim,Other,5,0.00395882818685669,0.2,1.0
+Account:Other,Fidelity Points Reinstatement Requests,5,0.00395882818685669,0.2,1.0
+Order:Status,Missing Order Confirmation Emails,5,0.00395882818685669,0.0,1.0
+Feedback:Other,Other,5,0.00395882818685669,0.2,0.4
+Warranty:Claim,Warranty claim assistance and troubleshooting,5,0.00395882818685669,0.2,1.0
+Exchange:Request,Other,5,0.00395882818685669,0.4,1.0
+Product:Quality Issues,Rapid Tarnishing of Jewelry,5,0.00395882818685669,0.2,0.2
+Return:Status,Delayed Exchange Processing After Return,4,0.003167062549485352,0.0,0.5
+Product:Quality Issues,Defective Jewelry Issues,4,0.003167062549485352,0.25,1.0
+Order:Placement,Order Placement Failures,4,0.003167062549485352,0.0,0.75
+Return:Status,Other,4,0.003167062549485352,0.0,0.0
+Promotion & Discount:Issue,Other,4,0.003167062549485352,0.25,1.0
+Order:Missing Item,Missing Loyalty Reward Items,4,0.003167062549485352,0.0,1.0
+Product:Details,Product Material and Supplier Information,4,0.003167062549485352,0.5,1.0
+Product:Quality Issues,Decorative piercing jewelry detachment,4,0.003167062549485352,0.0,1.0
+Order:Edit,Modifying order items or gift packaging,4,0.003167062549485352,0.5,0.5
+Other:Other,Other,4,0.003167062549485352,0.25,0.75
+Shipping:Change Address,Address change confirmation requests,4,0.003167062549485352,0.75,1.0
+Promotion & Discount:Issue,First Order Discount Missing,4,0.003167062549485352,0.75,1.0
+Return:Request,Defective Product Returns,4,0.003167062549485352,0.25,0.75
+Product:Other,Gift Card Availability,4,0.003167062549485352,0.5,1.0
+Return:Request,Return Requests Due to Size Issues,4,0.003167062549485352,0.0,0.0
+Product:Customization,Other,4,0.003167062549485352,1.0,0.75
+Return:Status,Verification of Refund Amounts,4,0.003167062549485352,0.0,0.25
+Product:Quality Issues,Faulty Piercing Fasteners,3,0.0023752969121140144,0.3333333333333333,1.0
+Product:Quality Issues,Piercing Healing Complications,3,0.0023752969121140144,0.3333333333333333,0.6666666666666666
+Marketing:Collaboration,Other,3,0.0023752969121140144,0.0,0.6666666666666666
+Product:Quality Issues,Piercing jewelry loss and replacement requests,3,0.0023752969121140144,1.0,1.0
+Account:Deletion,Other,3,0.0023752969121140144,0.0,0.6666666666666666
+Warranty:Claim,Warranty claims with detailed defect documentation,3,0.0023752969121140144,0.3333333333333333,0.3333333333333333
+Order:Missing Item,Other,3,0.0023752969121140144,0.0,1.0
+Order:Placement,Gift Card Order Issues,3,0.0023752969121140144,0.0,1.0
+Shipping:Change Address,Incorrect address causing delivery issues,3,0.0023752969121140144,0.0,1.0
+Order:Cancel,Cancel order to reorder with discount,3,0.0023752969121140144,0.0,1.0
+Order:Other,Invoice Requests for Orders,3,0.0023752969121140144,0.0,0.6666666666666666
+Promotion & Discount:Issue,Promotional Code Email Issues,3,0.0023752969121140144,0.3333333333333333,0.6666666666666666
+Shipping:Delivered Not Received,Request reshipment for missing parcels,3,0.0023752969121140144,0.0,1.0
+Order:Status,Order Shipment Delays,3,0.0023752969121140144,0.0,1.0
+Promotion & Discount:Information,Active Promotional Code Requests,3,0.0023752969121140144,0.3333333333333333,1.0
+Shipping:Delivered Not Received,Other,3,0.0023752969121140144,0.0,0.6666666666666666
+Shipping:Information,Unavailable Shipping Countries,3,0.0023752969121140144,1.0,1.0
+Promotion & Discount:Issue,Referral Discount Issues,3,0.0023752969121140144,0.0,0.6666666666666666
+Shipping:Delay,Sorting Center Delivery Delays,3,0.0023752969121140144,0.3333333333333333,1.0
+Product:Details,Product Size and Pairing Clarification,2,0.001583531274742676,0.5,0.0
+Shipping:Other,Other,2,0.001583531274742676,0.0,1.0
+Product:Other,Request Replacement Jewelry Parts,2,0.001583531274742676,1.0,1.0
+Warranty:Claim,Warranty claim process and replacements,2,0.001583531274742676,0.0,1.0
+Order:Refund,Other,2,0.001583531274742676,0.0,0.0
+Product:Quality Issues,Jewelry Component Failures,2,0.001583531274742676,0.5,0.5
+Product:Details,Piercing Compatibility Materials and Procedures,2,0.001583531274742676,0.5,1.0
+Product:Details,Other,2,0.001583531274742676,1.0,0.5
+Order:Other,Gift card email delivery and free gift confirmation,2,0.001583531274742676,0.0,1.0
+Order:Missing Item,Missing Reversible Clasp,2,0.001583531274742676,0.5,1.0
+Order:Placement,Other,2,0.001583531274742676,0.0,0.5
+Warranty:Information,Other,2,0.001583531274742676,0.5,1.0
+Order:Placement,Order Price Discrepancies and Assistance,2,0.001583531274742676,0.5,0.5
+Order:Payment,Other,2,0.001583531274742676,0.5,1.0
+Product:Details,Earring Identification,2,0.001583531274742676,0.5,0.0
+Order:Refund,Refund Requests for Tariffs and Missing Packages,2,0.001583531274742676,0.0,0.5
+Promotion & Discount:Issue,Birthday Discount Code Issues,2,0.001583531274742676,0.5,1.0
+Warranty:Claim,Warranty Claims Multiple Defect Types,2,0.001583531274742676,0.5,1.0
+Product:Usage,Piercing jewelry compatibility with accessories and activities,2,0.001583531274742676,1.0,1.0
+Order:Cancel,Cancel order requests before shipment,2,0.001583531274742676,0.0,1.0
+Product:Details,Earring Pairing and Sizing Inquiries,2,0.001583531274742676,1.0,1.0
+Order:Refund,Refund requests for damaged or defective jewelry,2,0.001583531274742676,0.0,0.5
+Warranty:Claim,Warranty Claims General Defects,2,0.001583531274742676,0.5,1.0
+Warranty:Information,Jewelry warranty claim and coverage details,2,0.001583531274742676,0.5,1.0
+Product:Quality Issues,Piercing Jewelry Damage and Replacement Requests,2,0.001583531274742676,0.5,1.0
+Shipping:Delivered Not Received,Missing Delivery Notices,2,0.001583531274742676,0.5,1.0
+Marketing:Unsubscribe,Other,2,0.001583531274742676,0.0,0.0
+Product:Usage,Piercing compatibility and wearing advice,2,0.001583531274742676,0.5,0.5
+Other:Other,Affiliate Program Payment Process Questions,2,0.001583531274742676,0.0,0.5
+Feedback:Positive,Other,2,0.001583531274742676,0.0,0.5
+Order:Refund,Partial Refund Issues,1,7.91765637371338E-4,0.0,0.0
+Exchange:Status,Other,1,7.91765637371338E-4,0.0,0.0
+Shipping:Delay,Other,1,7.91765637371338E-4,0.0,1.0
+Order:Payment,Customs fees payment clarification,1,7.91765637371338E-4,0.0,1.0
+Product:Quality Issues,Jewelry Malfunction And Defect Reports,1,7.91765637371338E-4,1.0,1.0
+Exchange:Other,Other,1,7.91765637371338E-4,0.0,1.0
+Other:Other,General Customer Service Response Requests,1,7.91765637371338E-4,1.0,1.0
+Product:Quality Issues,Other,1,7.91765637371338E-4,1.0,0.0
+Account:Other,Account Purchase History Transfer Requests,1,7.91765637371338E-4,0.0,1.0
+Order:Status,Unreceived Replacement Orders,1,7.91765637371338E-4,0.0,1.0
+Product:Quality Issues,Piercing Implant Issues,1,7.91765637371338E-4,0.0,1.0
+Warranty:Information,Warranty coverage for jewelry defects,1,7.91765637371338E-4,1.0,1.0
+Order:Payment,PayPal payment method availability,1,7.91765637371338E-4,0.0,1.0
+Product:Details,Piercing Types Materials Healing and Procedure Details,1,7.91765637371338E-4,0.0,0.0
+Shipping:Information,Delivery Timeframe Requests,1,7.91765637371338E-4,1.0,1.0
+Product:Quality Issues,Fitting Issues with Piercing Jewelry,1,7.91765637371338E-4,1.0,1.0
+Order:Refund,Refund Requests for Incomplete Orders and Nonreceipt,1,7.91765637371338E-4,0.0,0.0
+Wholesale:Information,Wholesale account setup and order conditions,1,7.91765637371338E-4,0.0,1.0
+Other:Other,Job and internship applications,1,7.91765637371338E-4,0.0,0.0
+Return:Request,Return for Exchange Requests,1,7.91765637371338E-4,0.0,1.0
+Return:Other,Other,1,7.91765637371338E-4,0.0,1.0
+Warranty:Claim,Warranty claim process feedback and follow up,1,7.91765637371338E-4,0.0,0.0
+Account:Update,Updating Account Information,1,7.91765637371338E-4,0.0,0.0
+Product:Usage,Piercing Jewelry Attachment Methods,1,7.91765637371338E-4,1.0,1.0
+Subscription:Information,Other,1,7.91765637371338E-4,0.0,1.0
+Exchange:Status,Refund for Size Exchange Orders,1,7.91765637371338E-4,0.0,0.0
+Product:Quality Issues,Piercing inflammation and healing issues,1,7.91765637371338E-4,1.0,1.0
+Account:Login,Password Reset Email Not Received,1,7.91765637371338E-4,0.0,1.0
+Promotion & Discount:Information,Referral Program Reward Availability,1,7.91765637371338E-4,0.0,1.0
+Account:Other,Affiliate Commission Payment Status,1,7.91765637371338E-4,0.0,1.0
+Promotion & Discount:Information,Combining Loyalty and Seasonal Discounts,1,7.91765637371338E-4,0.0,1.0
+Exchange:Request,Exchange After Return Received,1,7.91765637371338E-4,0.0,0.0
+Product:Details,Earring Composition and Size Clarification,1,7.91765637371338E-4,0.0,0.0
+Account:Update,Adding Birthdate to Loyalty Program,1,7.91765637371338E-4,0.0,1.0
+Product:Usage,Other,1,7.91765637371338E-4,0.0,1.0
+Return:Request,Other,1,7.91765637371338E-4,0.0,0.0
+Promotion & Discount:Issue,Loyalty Points Redemption Technical Issues,1,7.91765637371338E-4,0.0,1.0
+Order:Damaged,Other,1,7.91765637371338E-4,0.0,1.0
+Order:Refund,Refund requests for order cancellations and exchanges,1,7.91765637371338E-4,0.0,1.0
+Order:Other,Duplicate invoice requests,1,7.91765637371338E-4,0.0,0.0
+Shipping:Information,Other,1,7.91765637371338E-4,0.0,1.0
+Product:Availability,Other,1,7.91765637371338E-4,1.0,1.0
+Marketing:Advertising,Other,1,7.91765637371338E-4,0.0,0.0
+Promotion & Discount:Issue,Loyalty Reward Redemption Failures,1,7.91765637371338E-4,0.0,1.0
+Order:Other,Other,1,7.91765637371338E-4,1.0,1.0
+Order:Other,Exchange and return process issues,1,7.91765637371338E-4,0.0,1.0
+Product:Details,Piercing Procedure and Allergies,1,7.91765637371338E-4,1.0,1.0
+Other:Other,Parental consent for child piercing,1,7.91765637371338E-4,1.0,1.0
+Order:Edit,Modifying product quantities or selections,1,7.91765637371338E-4,0.0,1.0
+Product:Other,Jewelry Product General Queries,1,7.91765637371338E-4,1.0,1.0
+Shipping:Change Address,Other,1,7.91765637371338E-4,0.0,1.0
+Order:Cancel,Cancel orders placed by mistake,1,7.91765637371338E-4,0.0,1.0
+Order:Missing Item,Received Empty Package,1,7.91765637371338E-4,0.0,1.0
+Order:Refund,Failed Delivery Refund Requests,1,7.91765637371338E-4,0.0,1.0
+Other:Other,Piercing Appointments For Minors With Parental Consent,1,7.91765637371338E-4,1.0,1.0
+Wholesale:Information,Other,1,7.91765637371338E-4,1.0,0.0
+Account:Login,Other,1,7.91765637371338E-4,0.0,0.0
+Account:Other,Fidelity Points Usage Issues,1,7.91765637371338E-4,0.0,1.0
+Exchange:Status,Exchange Item Shipment Concerns,1,7.91765637371338E-4,0.0,1.0
+Order:Edit,Other,1,7.91765637371338E-4,0.0,1.0
+Promotion & Discount:Information,Loyalty Program Discounts,1,7.91765637371338E-4,1.0,1.0
+Other:Other,Non-specific Greetings or Requests,1,7.91765637371338E-4,0.0,0.0
+Order:Edit,Adding codes or messages to orders,1,7.91765637371338E-4,0.0,0.0
+Promotion & Discount:Issue,Loyalty Points Deduction Issues,1,7.91765637371338E-4,0.0,1.0
+Promotion & Discount:Information,First Order Discount Code Requests,1,7.91765637371338E-4,0.0,1.0
+Account:Other,Fidelity Points Redemption Issues,1,7.91765637371338E-4,0.0,1.0
+Product:Usage,Piercing Jewelry Positioning,1,7.91765637371338E-4,0.0,1.0
+Warranty:Claim,Warranty Coverage and Process Clarifications,1,7.91765637371338E-4,1.0,1.0
+Product:Details,Material and Size Compatibility for Piercings,1,7.91765637371338E-4,1.0,1.0
+Other:Other,Affiliate program payment inquiries,1,7.91765637371338E-4,0.0,1.0
+Exchange:Request,Exchange for Unwanted Gift Items,1,7.91765637371338E-4,1.0,1.0
+Order:Status,E-Gift Card Delivery Delays,1,7.91765637371338E-4,1.0,1.0

@@ -1,0 +1,270 @@
+{
+  "name": "YouTube Summarizer + Content Ideas (Gemini)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "YouTube Video Summarizer",
+        "formDescription": "Enter a YouTube URL to get AI summary and content ideas",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "YouTube URL",
+              "fieldType": "text",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Submit YouTube URL",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.1,
+      "position": [240, 300],
+      "webhookId": "youtube-summarizer"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.youtube.com/watch?v={{ $json['YouTube URL'].split('v=')[1]?.split('&')[0] || $json['YouTube URL'].split('youtu.be/')[1]?.split('?')[0] }}",
+        "options": {}
+      },
+      "name": "Get YouTube Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract video ID from URL\nconst youtubeUrl = $input.item.json['YouTube URL'];\nlet videoId = '';\n\nif (youtubeUrl.includes('v=')) {\n  videoId = youtubeUrl.split('v=')[1].split('&')[0];\n} else if (youtubeUrl.includes('youtu.be/')) {\n  videoId = youtubeUrl.split('youtu.be/')[1].split('?')[0];\n}\n\n// Build transcript API URL (using YouTube's auto-generated captions)\nconst transcriptUrl = `https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`;\n\nreturn {\n  json: {\n    videoId: videoId,\n    transcriptUrl: transcriptUrl,\n    originalUrl: youtubeUrl\n  }\n};"
+      },
+      "name": "Extract Video ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.transcriptUrl }}",
+        "options": {}
+      },
+      "name": "Get Transcript",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse XML transcript and extract text\nconst xmlData = $input.item.json;\nlet transcriptText = '';\n\nif (typeof xmlData === 'string') {\n  // Simple XML parsing - extract text between tags\n  const textMatches = xmlData.match(/<text[^>]*>([^<]*)<\\/text>/g) || [];\n  transcriptText = textMatches\n    .map(match => {\n      const text = match.replace(/<text[^>]*>/, '').replace(/<\\/text>/, '');\n      // Decode HTML entities\n      return text\n        .replace(/&amp;/g, '&')\n        .replace(/&lt;/g, '<')\n        .replace(/&gt;/g, '>')\n        .replace(/&quot;/g, '\"')\n        .replace(/&#39;/g, \"'\");\n    })\n    .join(' ');\n}\n\n// Limit to first 4000 characters to avoid token limits\nconst shortTranscript = transcriptText.substring(0, 4000);\n\nreturn {\n  json: {\n    fullTranscript: transcriptText,\n    shortTranscript: shortTranscript,\n    videoId: $('Extract Video ID').item.json.videoId,\n    originalUrl: $('Extract Video ID').item.json.originalUrl\n  }\n};"
+      },
+      "name": "Parse Transcript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://routellm.abacus.ai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer s2_8ecdc6832cb94ac599ea14ab55b0a928"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ {\n  \"model\": \"gemini-2.0-flash-exp\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a YouTube content analyzer. Provide: 1) A concise 3-sentence summary, 2) 5 key takeaways as bullet points, 3) 3 content ideas inspired by this video.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze this YouTube video transcript and provide insights:\\n\\n\" + $json.shortTranscript\n    }\n  ]\n} }}",
+        "options": {}
+      },
+      "name": "Analyze with Gemini (Abacus AI)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "video_url",
+              "type": "string",
+              "value": "={{ $('Parse Transcript').item.json.originalUrl }}"
+            },
+            {
+              "id": "2",
+              "name": "video_id",
+              "type": "string",
+              "value": "={{ $('Parse Transcript').item.json.videoId }}"
+            },
+            {
+              "id": "3",
+              "name": "transcript_preview",
+              "type": "string",
+              "value": "={{ $('Parse Transcript').item.json.shortTranscript.substring(0, 200) + '...' }}"
+            },
+            {
+              "id": "4",
+              "name": "ai_summary",
+              "type": "string",
+              "value": "={{ $json.choices?.[0]?.message?.content || 'Summary failed' }}"
+            },
+            {
+              "id": "5",
+              "name": "processed_at",
+              "type": "string",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Final Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.processed_at }}",
+            "Video URL": "={{ $json.video_url }}",
+            "Video ID": "={{ $json.video_id }}",
+            "Transcript Preview": "={{ $json.transcript_preview }}",
+            "AI Analysis": "={{ $json.ai_summary }}"
+          }
+        },
+        "options": {}
+      },
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": true,\n  \"video_url\": $json.video_url,\n  \"summary\": $json.ai_summary\n} }}",
+        "options": {}
+      },
+      "name": "Return Results",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2000, 300]
+    }
+  ],
+  "connections": {
+    "Submit YouTube URL": {
+      "main": [
+        [
+          {
+            "node": "Get YouTube Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get YouTube Page": {
+      "main": [
+        [
+          {
+            "node": "Extract Video ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Video ID": {
+      "main": [
+        [
+          {
+            "node": "Get Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Transcript": {
+      "main": [
+        [
+          {
+            "node": "Parse Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Transcript": {
+      "main": [
+        [
+          {
+            "node": "Analyze with Gemini (Abacus AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze with Gemini (Abacus AI)": {
+      "main": [
+        [
+          {
+            "node": "Format Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Final Output": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Return Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

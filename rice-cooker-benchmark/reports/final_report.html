@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Cooker Benchmark - Final Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .winner {
+            border-left: 5px solid #27ae60;
+            background: linear-gradient(to right, #f0fff4, white);
+        }
+        .safe {
+            border-left: 5px solid #3498db;
+        }
+        .warning {
+            border-left: 5px solid #e74c3c;
+            background: #fef5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .price {
+            font-size: 1.4em;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .tag-safe {
+            background: #d4edda;
+            color: #155724;
+        }
+        .tag-best {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .tag-value {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .comparison-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .comparison-card.recommended {
+            border: 3px solid #27ae60;
+            position: relative;
+        }
+        .comparison-card.recommended::before {
+            content: "★ RECOMMENDED";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .comparison-card h4 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        .comparison-card .price {
+            font-size: 1.8em;
+            margin: 15px 0;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .check {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .cross {
+            color: #e74c3c;
+        }
+        .neutral {
+            color: #f39c12;
+        }
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .pros h5, .cons h5 {
+            margin-bottom: 10px;
+        }
+        .pros h5 {
+            color: #27ae60;
+        }
+        .cons h5 {
+            color: #e74c3c;
+        }
+        .pros ul, .cons ul {
+            padding-left: 20px;
+        }
+        .pros li, .cons li {
+            margin-bottom: 5px;
+        }
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .summary-box h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            margin-top: 0;
+        }
+        .buy-button {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .buy-button:hover {
+            background: #219a52;
+        }
+        .material-comparison {
+            margin: 30px 0;
+        }
+        .material-comparison table th:first-child {
+            width: 30%;
+        }
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🍚 Rice Cooker Benchmark Report</h1>
+    <p><strong>Prepared for:</strong> Yohan (Family of 3, Greece) | <strong>Date:</strong> January 2026</p>
+    <p><strong>Priority:</strong> Health/Safety → Reliability → Features → Value</p>
+
+    <div class="summary-box">
+        <h2>🏆 Executive Summary</h2>
+        <p style="font-size: 1.2em; margin-bottom: 20px;">After researching 20+ products across 16+ retailers, filtering for <strong>safe materials only</strong> (ceramic or stainless steel), here is my recommendation:</p>
+        <h3 style="color: #fff; margin-bottom: 10px;">Winner: Yum Asia Sakura</h3>
+        <p class="price" style="color: #fff;">€191.90 delivered to Greece</p>
+        <p>Certified BPA/PTFE/PFAS-free ceramic • 1.5L capacity • 24h keep warm • Award-winning</p>
+    </div>
+
+    <h2>🔬 Material Safety: Ceramic vs Stainless Steel</h2>
+
+    <div class="card">
+        <div class="material-comparison">
+            <table>
+                <tr>
+                    <th>Factor</th>
+                    <th>Stainless Steel</th>
+                    <th>Certified Ceramic</th>
+                </tr>
+                <tr>
+                    <td><strong>Overall Safety</strong></td>
+                    <td><span class="check">✅ SAFEST</span> - No coatings at all</td>
+                    <td><span class="check">✅ SAFE</span> - PFAS-free when certified</td>
+                </tr>
+                <tr>
+                    <td><strong>Coating concerns</strong></td>
+                    <td><span class="check">✅</span> None - nothing to flake off</td>
+                    <td><span class="neutral">⚠️</span> Can wear after 2-5 years</td>
+                </tr>
+                <tr>
+                    <td><strong>Chemical leaching</strong></td>
+                    <td><span class="neutral">⚠️</span> Minimal nickel (only with acidic foods)</td>
+                    <td><span class="check">✅</span> None when intact</td>
+                </tr>
+                <tr>
+                    <td><strong>Rice sticking</strong></td>
+                    <td><span class="cross">❌</span> Rice can stick more</td>
+                    <td><span class="check">✅</span> Non-stick surface</td>
+                </tr>
+                <tr>
+                    <td><strong>Durability</strong></td>
+                    <td><span class="check">✅</span> Lasts decades</td>
+                    <td><span class="neutral">⚠️</span> 2-5 years typical</td>
+                </tr>
+                <tr>
+                    <td><strong>Research available</strong></td>
+                    <td><span class="check">✅</span> Decades of studies</td>
+                    <td><span class="neutral">⚠️</span> Newer, less long-term data</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Bottom Line</h3>
+        <p><strong>Stainless steel is technically safest</strong> (no coatings), but <strong>certified ceramic from reputable brands is also very safe</strong> and makes better rice (non-stick). For rice cooking specifically, certified ceramic is the practical choice.</p>
+    </div>
+
+    <h2>🎯 Detailed Comparison: Top 3 Finalists</h2>
+
+    <div class="comparison-grid">
+        <!-- Sakura -->
+        <div class="comparison-card recommended">
+            <h4>Yum Asia Sakura</h4>
+            <span class="tag tag-best">BEST OVERALL</span>
+            <span class="tag tag-safe">SAFE CERAMIC</span>
+            <p class="price">€191.90</p>
+            <p style="color: #666; font-size: 0.9em;">€154.90 + €37 shipping</p>
+
+            <ul class="feature-list">
+                <li><span>Capacity</span><strong>1.5L (8 cups)</strong></li>
+                <li><span>Inner Pot</span><strong>5-layer ceramic</strong></li>
+                <li><span>Safety Cert</span><span class="check">BPA/PTFE/PFAS-free ✓</span></li>
+                <li><span>Keep Warm</span><strong>24 hours</strong></li>
+                <li><span>Programs</span><strong>12</strong></li>
+                <li><span>Technology</span><strong>Fuzzy Logic</strong></li>
+                <li><span>Warranty</span><strong>2 years</strong></li>
+                <li><span>Ships to Greece</span><span class="check">Yes ✓</span></li>
+            </ul>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Pros</h5>
+                    <ul>
+                        <li>Perfect size for family of 3</li>
+                        <li>Certified safe materials</li>
+                        <li>24h keep warm (essential with toddler)</li>
+                        <li>Award-winning rice quality</li>
+                        <li>Direct shipping to Greece</li>
+                        <li>No customs fees (EU)</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Cons</h5>
+                    <ul>
+                        <li>Higher price point</li>
+                        <li>Ceramic may wear in 3-5 years</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="https://yum-asia.com/eu/product/sakura-advanced-fuzzy-logic-ceramic-rice-cooker/" class="buy-button" target="_blank">Buy Now →</a>
+        </div>
+
+        <!-- Kumo -->
+        <div class="comparison-card">
+            <h4>Yum Asia Kumo</h4>
+            <span class="tag tag-value">BEST VALUE</span>
+            <span class="tag tag-safe">SAFE CERAMIC</span>
+            <p class="price">€126.90</p>
+            <p style="color: #666; font-size: 0.9em;">€89.90 + €37 shipping</p>
+
+            <ul class="feature-list">
+                <li><span>Capacity</span><strong>1.0L (5.5 cups)</strong></li>
+                <li><span>Inner Pot</span><strong>5-layer ceramic</strong></li>
+                <li><span>Safety Cert</span><span class="check">BPA/PTFE/PFAS-free ✓</span></li>
+                <li><span>Keep Warm</span><strong>24 hours</strong></li>
+                <li><span>Programs</span><strong>8</strong></li>
+                <li><span>Technology</span><strong>Fuzzy Logic</strong></li>
+                <li><span>Warranty</span><strong>2 years</strong></li>
+                <li><span>Ships to Greece</span><span class="check">Yes ✓</span></li>
+            </ul>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Pros</h5>
+                    <ul>
+                        <li>€65 cheaper than Sakura</li>
+                        <li>Same safe ceramic coating</li>
+                        <li>YumCarb reduces carbs 25%</li>
+                        <li>Still fits family of 3</li>
+                        <li>Same warranty & shipping</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Cons</h5>
+                    <ul>
+                        <li>Smaller capacity (tight for meal prep)</li>
+                        <li>Fewer programs (8 vs 12)</li>
+                        <li>Less room for growth</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="https://yum-asia.com/eu/product/kumo-yumcarb-advanced-fuzzy-logic-ceramic-rice-cooker/" class="buy-button" target="_blank">Buy Now →</a>
+        </div>
+
+        <!-- Instant Pot -->
+        <div class="comparison-card">
+            <h4>Instant Pot Duo</h4>
+            <span class="tag tag-safe">SAFEST MATERIAL</span>
+            <p class="price">€115-145</p>
+            <p style="color: #666; font-size: 0.9em;">Check Amazon.de for Greece shipping</p>
+
+            <ul class="feature-list">
+                <li><span>Capacity</span><strong>5.7L</strong></li>
+                <li><span>Inner Pot</span><strong>Stainless Steel 18/8</strong></li>
+                <li><span>Safety Cert</span><span class="check">No coatings at all ✓</span></li>
+                <li><span>Keep Warm</span><strong>6 hours</strong></li>
+                <li><span>Programs</span><strong>13+</strong></li>
+                <li><span>Technology</span><strong>Pressure/Multi</strong></li>
+                <li><span>Warranty</span><strong>1-2 years</strong></li>
+                <li><span>Ships to Greece</span><span class="neutral">Check ⚠️</span></li>
+            </ul>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Pros</h5>
+                    <ul>
+                        <li>SAFEST - pure stainless steel</li>
+                        <li>Multi-cooker versatility</li>
+                        <li>Pressure cooker function</li>
+                        <li>Lower price</li>
+                        <li>Pot lasts forever</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Cons</h5>
+                    <ul>
+                        <li>Not specialized for rice</li>
+                        <li>Rice can stick to steel</li>
+                        <li>No fuzzy logic for rice</li>
+                        <li>Only 6h keep warm</li>
+                        <li>May not ship to Greece</li>
+                        <li>Large/bulky</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="https://www.amazon.de/s?k=instant+pot+duo" class="buy-button" target="_blank" style="background: #3498db;">Check Amazon.de →</a>
+        </div>
+    </div>
+
+    <h2>📊 Head-to-Head Comparison Table</h2>
+
+    <div class="card">
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>🏆 Sakura</th>
+                <th>💰 Kumo</th>
+                <th>🛡️ Instant Pot</th>
+            </tr>
+            <tr>
+                <td><strong>Price (to Greece)</strong></td>
+                <td>€191.90</td>
+                <td>€126.90</td>
+                <td>€115-145</td>
+            </tr>
+            <tr>
+                <td><strong>Material Safety</strong></td>
+                <td><span class="check">✅✅✅</span> Certified Ceramic</td>
+                <td><span class="check">✅✅✅</span> Certified Ceramic</td>
+                <td><span class="check">✅✅✅✅</span> Stainless Steel</td>
+            </tr>
+            <tr>
+                <td><strong>Capacity</strong></td>
+                <td>1.5L (8 cups) <span class="check">✓ Best</span></td>
+                <td>1.0L (5.5 cups)</td>
+                <td>5.7L (too big)</td>
+            </tr>
+            <tr>
+                <td><strong>Keep Warm</strong></td>
+                <td>24 hours <span class="check">✓ Best</span></td>
+                <td>24 hours <span class="check">✓ Best</span></td>
+                <td>6 hours</td>
+            </tr>
+            <tr>
+                <td><strong>Rice Quality</strong></td>
+                <td><span class="check">✅✅✅</span> Fuzzy Logic</td>
+                <td><span class="check">✅✅✅</span> Fuzzy Logic</td>
+                <td><span class="neutral">⚠️</span> Basic</td>
+            </tr>
+            <tr>
+                <td><strong>Non-Stick</strong></td>
+                <td><span class="check">✅</span> Ceramic</td>
+                <td><span class="check">✅</span> Ceramic</td>
+                <td><span class="cross">❌</span> Rice sticks</td>
+            </tr>
+            <tr>
+                <td><strong>Ships to Greece</strong></td>
+                <td><span class="check">✅</span> Direct, 3-5 days</td>
+                <td><span class="check">✅</span> Direct, 3-5 days</td>
+                <td><span class="neutral">⚠️</span> Check availability</td>
+            </tr>
+            <tr>
+                <td><strong>Customs Fees</strong></td>
+                <td><span class="check">✅</span> None (EU)</td>
+                <td><span class="check">✅</span> None (EU)</td>
+                <td><span class="check">✅</span> None (EU)</td>
+            </tr>
+            <tr>
+                <td><strong>Versatility</strong></td>
+                <td>12 programs</td>
+                <td>8 programs</td>
+                <td>13+ programs <span class="check">✓ Best</span></td>
+            </tr>
+            <tr>
+                <td><strong>Best For</strong></td>
+                <td>Family rice cooking</td>
+                <td>Budget + small family</td>
+                <td>Multi-purpose cooking</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>🎯 My Final Recommendation</h2>
+
+    <div class="card winner">
+        <h3>For Your Situation: Yum Asia Sakura</h3>
+        <p class="price">€191.90 delivered</p>
+
+        <p style="margin: 20px 0; font-size: 1.1em;">Given your priorities (health-conscious new parent, family of 3 in Greece, need for flexibility with keep-warm), the <strong>Sakura</strong> is the clear winner:</p>
+
+        <ul style="margin: 20px 0; padding-left: 20px;">
+            <li><strong>Safety:</strong> Certified BPA/PTFE/PFAS-free ceramic - critical with a toddler</li>
+            <li><strong>Size:</strong> 1.5L is perfect for family of 3 + leftovers for meal prep</li>
+            <li><strong>Keep Warm:</strong> 24 hours - essential flexibility when life is unpredictable with a young child</li>
+            <li><strong>Ease:</strong> Ships direct to Greece, no customs, arrives in 3-5 days</li>
+            <li><strong>Quality:</strong> Award-winning rice quality with fuzzy logic</li>
+            <li><strong>Budget:</strong> €192 is within your €150-200 flexible budget</li>
+        </ul>
+
+        <h4>Why Not Kumo?</h4>
+        <p>The €65 savings is tempting, but the 1.0L capacity is tight for a family of 3 + any meal prep. You'll outgrow it. The Sakura's 1.5L gives you room.</p>
+
+        <h4>Why Not Instant Pot?</h4>
+        <p>Safest material (stainless steel), but not designed for rice. Rice can stick, only 6h keep warm, and you'd need to check if it ships to Greece. It's a multi-cooker, not a rice specialist.</p>
+
+        <a href="https://yum-asia.com/eu/product/sakura-advanced-fuzzy-logic-ceramic-rice-cooker/" class="buy-button" target="_blank" style="font-size: 1.2em; padding: 15px 30px;">Buy Yum Asia Sakura →</a>
+    </div>
+
+    <h2>❌ Products Removed (Non-Safe Materials)</h2>
+
+    <div class="card warning">
+        <p>These products were eliminated because they use standard non-stick/Teflon/aluminum coatings:</p>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Reason Removed</th>
+            </tr>
+            <tr><td>Cuckoo CR-0675FW</td><td>Non-stick aluminum coating</td></tr>
+            <tr><td>Zojirushi NL-GAQ series</td><td>Teflon/Sumiflon inner pot</td></tr>
+            <tr><td>Hendi 240410</td><td>Aluminum with non-stick coating</td></tr>
+            <tr><td>Sencor SRM 3150SS</td><td>Standard non-stick coating</td></tr>
+            <tr><td>Russell Hobbs models</td><td>Non-stick aluminum</td></tr>
+            <tr><td>Black+Decker BXRC1800E</td><td>Non-stick aluminum</td></tr>
+            <tr><td>Xiaomi models</td><td>Non-stick aluminum</td></tr>
+            <tr><td>Cecotec RiceFusion</td><td>Non-stick + quality issues</td></tr>
+        </table>
+    </div>
+
+    <h2>📚 Sources</h2>
+    <div class="card">
+        <ul style="padding-left: 20px;">
+            <li><a href="https://www.consumerreports.org/home-garden/cookware/best-frying-pans-if-you-want-to-avoid-pfas-chemicals-a1006253549/" target="_blank">Consumer Reports - PFAS in Cookware</a></li>
+            <li><a href="https://ceramics.org/ceramic-tech-today/ceramic-coated-cookware-safety/" target="_blank">American Ceramic Society - Ceramic Cookware Safety</a></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4284091/" target="_blank">PMC - Stainless Steel Leaching Study</a></li>
+            <li><a href="https://mamavation.com/food/non-toxic-rice-cookers.html" target="_blank">Mamavation - Non-Toxic Rice Cookers</a></li>
+            <li><a href="https://yum-asia.com/eu/" target="_blank">Yum Asia EU Official Store</a></li>
+        </ul>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #666;">
+        <p>Report generated January 2026 | Research conducted across 16+ retailers, 20+ products analyzed</p>
+    </footer>
+</body>
+</html>

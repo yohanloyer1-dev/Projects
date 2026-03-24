@@ -1,0 +1,22 @@
+brand,model,price_eur,capacity_liters,power_watts,inner_pot_material,certifications,keep_warm_hours,cooking_programs,user_rating,ships_to_greece,shipping_cost_eur,total_cost_eur,source,notes,safety_score,reliability_score,features_score,value_score,total_score,tier
+Yum Asia,Kumo YumCarb,89.90,1.0,500,Ceramic 5-layer 2mm Ninja coating,"BPA/PTFE/PFAS-free",24,8,4.5,Yes,37,126.90,yum-asia.com/eu,Ceramic certified safe - YumCarb reduces carbs 25%,40,22,18,12,92,S
+Yum Asia,Sakura,154.90,1.5,500,Ceramic 5-layer 2mm Ninja coating,"BPA/PTFE/PFAS-free",24,12,4.6,Yes,37,191.90,yum-asia.com/eu,Award-winning multi-function ceramic bowl,40,23,20,10,93,S
+Yum Asia,Bamboo IH,199.90,1.5,1100,Ceramic 3mm Joubu coating,"BPA/PTFE/PFAS-free",24,11,4.7,Yes,37,236.90,yum-asia.com/eu,Induction heating premium model - best tech,40,25,20,8,93,S
+Zojirushi,NL-GAQ18,426.90,1.8,680,Teflon/Sumiflon 1.5mm,None listed,12,11,4.6,Yes,37,463.90,yum-asia.com/eu,Made in Japan - premium brand but Teflon coating,15,25,18,5,63,B
+Zojirushi,NL-GAQ10/18,385-416,1.0-1.8,680,Teflon/Sumiflon,None listed,12,11,4.6,Yes,0,385-416,zojirushi.gr,Official Greek store - premium price - Teflon inner pot,15,25,18,3,61,B
+Cuckoo,CR-0675FW,229 USD (~197),1.08,700,Non-stick aluminum,None listed,12,13,4.5,Yes,0 (free),197,eBay,Korean brand 220V EU plug - ships from Korea - non-stick coating,15,22,18,12,67,B
+Cuckoo,CR-0365FR,117 USD (~100),0.54,425,Non-stick aluminum,None listed,12,9,4.4,Yes,0 (free),100,eBay,3-cup smaller model - good for 2-3 people - non-stick,15,22,15,15,67,B
+Hendi,240410,55-65,1.8,700,Aluminum non-stick,CE,Yes,2,5.0,Yes,0,55-65,skroutz.gr,HoReCa professional brand - durable - standard non-stick,15,20,10,18,63,B
+Reishunger,Ceramic 1.2L,35-50,1.2,500,Ceramic 3-layer coating,PFOA-free claimed,8,2,4.3,Yes,~15,50-65,amazon.de,German brand - affordable ceramic - mixed durability reviews,25,15,10,18,68,A
+Ariete,2904 Vintage,70-85,1.8 (3.5 total),700,Ceramic non-stick,CE,24,5,4.2,Yes,~20,90-105,amazon.de/it,Italian design - ceramic coating - slow cooker combo,25,18,15,15,73,A
+Russell Hobbs,27030,25-35,1.2,300,Non-stick aluminum,CE,Yes,2,4.6,Yes,0,25-35,bestprice.gr,Budget option - some reports of early shutoff issues,10,12,8,18,48,C
+Black+Decker,BXRC1800E,36-45,1.8,700,Non-stick aluminum,CE,Yes,2,4.2,Yes,0,36-45,bestprice.gr,Budget brand - mixed durability reviews - coating issues reported,10,10,8,15,43,C
+Tristar,RK-6127,30-40,1.5,500,Non-stick aluminum,CE,Yes,2,4.4,Yes,0,30-40,coolblue.nl,Netherlands brand - decent budget option,10,15,8,18,51,C
+Sencor,SRM 3150SS,70-85,1.8,700,Non-stick stainless exterior,CE,6,11,4.3,Yes,0,70-85,bestprice.gr,Czech brand - good features - standard non-stick inner,15,18,15,15,63,B
+Xiaomi,BHR7919EU,38-60,3.0,710,Non-stick aluminum,CE,12,Multiple,4.9,Yes,0,38-60,plaisio.gr,Smart features BUT app issues - 1 hour cook time - Chinese setup problems,10,12,12,15,49,C
+Nedis,KARC110AL,25-30,1.0,400,Non-stick aluminum,CE,Yes,2,4.0,Yes,0,25-30,bestprice.gr,Basic budget - too small for family of 3,10,12,6,15,43,C
+Gastroback,42518 Pro,80-100,5.0,700,Non-stick aluminum,CE,Yes,Multiple,4.0,Likely,~20,100-120,amazon.de,German brand - durability concerns in reviews,15,15,12,12,54,C
+Buffalo,Classic SS,120-150,1.0-1.8,500,Stainless steel clad,Food-grade SS,Yes,2,4.3,Unknown,~30,150-180,amazon.com,Stainless steel inner pot - may need import,35,20,10,10,75,A
+Instant Pot,Duo 5.7L,100-130,5.7,1000,Stainless steel 18/8,Food-grade SS,6,13,4.7,Likely,~15,115-145,amazon.de,Multi-cooker - SS inner pot - versatile but not rice-specialist,35,22,18,12,87,A
+Panasonic,SR-THB185W,150-200,1.8,IH,Non-stick,Made in Japan,Yes,Multiple,4.5,Via import,~40,190-240,wafuu.com,Japanese quality - 220V export model - import required,20,23,15,8,66,B
+Tiger,JKT-F10W,200-280,1.0,IH,Clay pot coating,Made in Japan,Yes,Multiple,4.6,Via import,~50,250-330,amazon.com,Premium Japanese IH - 220V version - high import costs,25,25,18,5,73,A

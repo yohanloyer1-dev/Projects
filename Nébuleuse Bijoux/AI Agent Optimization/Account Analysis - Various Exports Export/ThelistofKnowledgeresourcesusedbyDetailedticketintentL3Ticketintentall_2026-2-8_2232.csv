@@ -1,0 +1,604 @@
+ticket_intent,ticket_intent_detail,knowledge_type,knowledge_id,knowledge_title,nb_tickets_used_in_28d
+Order:Status,General Order Status Inquiries,guidance,6031952,When a shopper reaches out about order issues or shipping issues,78
+Order:Status,General Order Status Inquiries,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,30
+Order:Status,General Order Status Inquiries,guidance,5868648,When a shopper asks about shipping costs/delivery times,19
+Order:Status,General Order Status Inquiries,external_snippet,4440596,How soon will my order be shipped?,13
+Order:Status,General Order Status Inquiries,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,11
+Order:Status,General Order Status Inquiries,external_snippet,4440727,Where can I find information about my order status?,8
+Order:Status,General Order Status Inquiries,external_snippet,4440648,How long does it take to receive my order?,6
+Order:Status,General Order Status Inquiries,external_snippet,4440535,How long does it take to receive my order?,5
+Order:Status,General Order Status Inquiries,external_snippet,4440711,How do I follow my order?,5
+Order:Status,General Order Status Inquiries,external_snippet,4440608,Where can I find information on tracking my order?,3
+Order:Status,General Order Status Inquiries,external_snippet,10387001,How can I track my package?,3
+Order:Status,General Order Status Inquiries,external_snippet,10386901,What is the return and refund policy?,2
+Order:Status,General Order Status Inquiries,external_snippet,4440579,How can I follow my order or return it?,2
+Order:Status,General Order Status Inquiries,guidance,6130658,If a shopper asks about returns,2
+Order:Status,General Order Status Inquiries,external_snippet,10386907,What should I do if I haven't received my package?,1
+Order:Status,General Order Status Inquiries,external_snippet,4440805,How can I follow my order from Nebulae?,1
+Order:Status,General Order Status Inquiries,external_snippet,4440537,Where does my order ship from?,1
+Order:Status,General Order Status Inquiries,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Order:Status,General Order Status Inquiries,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Status,General Order Status Inquiries,guidance,6124682,When a shopper asks about the gift card,1
+Order:Wrong Item,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,10
+Order:Status,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,5
+Exchange:Request,Other,guidance,7323168,When a shopper asks about exchanges,4
+Order:Wrong Item,Other,guidance,7323168,When a shopper asks about exchanges,4
+Order:Missing Item,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,3
+Promotion & Discount:Issue,Other,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",3
+Account:Other,Other,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,3
+Warranty:Claim,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,3
+Product:Customization,Other,guidance,6124682,When a shopper asks about the gift card,2
+Order:Wrong Item,Other,external_snippet,10386939,What is the return policy for Nébuleuse jewelry?,2
+Warranty:Information,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Account:Other,Other,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,2
+Order:Status,Other,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Shipping:Other,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Account:Deletion,Other,guidance,7253294,"When a shopper asks to create, edit, suppress or merge accounts",2
+Account:Other,Other,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),2
+Warranty:Claim,Other,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,2
+Marketing:Collaboration,Other,external_snippet,10386951,What is the 'Ambassador Program'?,2
+Shipping:Information,Other,external_snippet,10386919,What is the shipping policy for Nébuleuse Bijoux?,1
+Marketing:Collaboration,Other,external_snippet,4440561,How to join the ambassador program?,1
+Return:Other,Other,guidance,6130658,If a shopper asks about returns,1
+Warranty:Information,Other,external_snippet,4440567,What is your warranty policy?,1
+Shipping:Information,Other,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Other:Other,Other,external_snippet,10387003,What is the policy regarding piercing services?,1
+Exchange:Request,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Shipping:Delivered Not Received,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Placement,Other,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Other:Other,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Other:Other,Other,guidance,5951753,When a shopper asks about stores and physical points of sale,1
+Promotion & Discount:Issue,Other,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Account:Other,Other,guidance,5950617,"Affiliation/Ambassador program (PART 1) - Joining, Benefits & Referral Links",1
+Order:Status,Other,external_snippet,4440608,Where can I find information on tracking my order?,1
+Product:Details,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Wrong Item,Other,guidance,6130658,If a shopper asks about returns,1
+Shipping:Delivered Not Received,Other,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Product:Customization,Other,external_snippet,10386917,What are the standard bar lengths for piercings?,1
+Order:Wrong Item,Other,external_snippet,10386901,What is the return and refund policy?,1
+Order:Damaged,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Feedback:Other,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Marketing:Collaboration,Other,guidance,5950617,"Affiliation/Ambassador program (PART 1) - Joining, Benefits & Referral Links",1
+Order:Payment,Other,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Promotion & Discount:Issue,Other,guidance,6124682,When a shopper asks about the gift card,1
+Warranty:Claim,Other,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Shipping:Change Address,Other,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Order:Payment,Other,guidance,6124682,When a shopper asks about the gift card,1
+Order:Wrong Item,Other,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Feedback:Positive,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Usage,Other,guidance,6124682,When a shopper asks about the gift card,1
+Promotion & Discount:Issue,Other,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Product:Availability,Other,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Account:Other,Other,external_snippet,10386949,What is the 'Cosmic Club' loyalty program?,1
+Feedback:Other,Other,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Other,Other,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Other:Other,Other,external_snippet,4440774,Are there any piercings considered impossible to perform?,1
+Subscription:Information,Other,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Subscription:Information,Other,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),1
+Shipping:Information,Other,external_snippet,4440537,Where does my order ship from?,1
+Exchange:Request,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Account:Other,Other,guidance,6124682,When a shopper asks about the gift card,1
+Shipping:Delay,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Exchange:Other,Other,guidance,7323168,When a shopper asks about exchanges,1
+Marketing:Collaboration,Other,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,1
+Order:Edit,Other,guidance,7323168,When a shopper asks about exchanges,1
+Order:Other,Other,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Order:Damaged,Other,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Wrong Item,Other,external_snippet,10386909,Can I exchange an item?,1
+Account:Other,Other,external_snippet,10386951,What is the 'Ambassador Program'?,1
+Other:Other,Other,external_snippet,4440772,Can you get multiple piercings done in one session?,1
+Other:Other,Other,external_snippet,10386961,How many piercings can I get at once?,1
+Order:Edit,Other,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Exchange:Request,Other,external_snippet,10386901,What is the return and refund policy?,1
+Other:Other,Other,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Warranty:Claim,Other,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Order:Payment,Other,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Status,Other,external_snippet,4440596,How soon will my order be shipped?,1
+Exchange:Request,Other,guidance,6130658,If a shopper asks about returns,1
+Product:Details,Other,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Order:Other,Other,external_snippet,10386941,How long does shipping take for Nébuleuse orders?,1
+Shipping:Information,Other,guidance,6143503,If a shopper asks a question you don't know the answer to,1
+Marketing:Collaboration,Other,external_snippet,4440565,How to submit a collaboration with Nébuleuse jewelry?,1
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,guidance,6031952,When a shopper reaches out about order issues or shipping issues,63
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,external_snippet,10386907,What should I do if I haven't received my package?,8
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,5
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,external_snippet,10386993,Can I choose my shipping country?,1
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,external_snippet,6143905,Why do you sell your jewelry individually and not in pairs?,1
+Shipping:Delivered Not Received,Packages Marked Delivered Not Received,external_snippet,4440608,Where can I find information on tracking my order?,1
+Shipping:Delay,Delayed Orders Awaiting Delivery,guidance,6031952,When a shopper reaches out about order issues or shipping issues,38
+Shipping:Delay,Delayed Orders Awaiting Delivery,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,7
+Shipping:Delay,Delayed Orders Awaiting Delivery,guidance,5868648,When a shopper asks about shipping costs/delivery times,6
+Shipping:Delay,Delayed Orders Awaiting Delivery,external_snippet,10387001,How can I track my package?,3
+Shipping:Delay,Delayed Orders Awaiting Delivery,external_snippet,4440648,How long does it take to receive my order?,2
+Shipping:Delay,Delayed Orders Awaiting Delivery,external_snippet,4440598,Can delivery times be extended?,1
+Shipping:Delay,Delayed Orders Awaiting Delivery,external_snippet,10386907,What should I do if I haven't received my package?,1
+Shipping:Delay,Delayed Orders Awaiting Delivery,external_snippet,4440596,How soon will my order be shipped?,1
+Product:Quality Issues,Jewelry Defects and Breakages,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,27
+Product:Quality Issues,Jewelry Defects and Breakages,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,11
+Product:Quality Issues,Jewelry Defects and Breakages,external_snippet,4440567,What is your warranty policy?,10
+Product:Quality Issues,Jewelry Defects and Breakages,external_snippet,4440569,How can I make a warranty request?,3
+Product:Quality Issues,Jewelry Defects and Breakages,guidance,6031952,When a shopper reaches out about order issues or shipping issues,3
+Product:Quality Issues,Jewelry Defects and Breakages,external_snippet,4440525,What materials are used for Nébuleuse Bijoux jewelry?,1
+Order:Damaged,Requests for replacement or refund of damaged jewelry,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,23
+Order:Damaged,Requests for replacement or refund of damaged jewelry,guidance,6031952,When a shopper reaches out about order issues or shipping issues,12
+Order:Damaged,Requests for replacement or refund of damaged jewelry,external_snippet,4440567,What is your warranty policy?,8
+Order:Damaged,Requests for replacement or refund of damaged jewelry,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,4
+Order:Damaged,Requests for replacement or refund of damaged jewelry,guidance,7323168,When a shopper asks about exchanges,4
+Order:Damaged,Requests for replacement or refund of damaged jewelry,external_snippet,4440569,How can I make a warranty request?,2
+Order:Damaged,Requests for replacement or refund of damaged jewelry,external_snippet,10386909,Can I exchange an item?,1
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,7323168,When a shopper asks about exchanges,19
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,14
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,6031952,When a shopper reaches out about order issues or shipping issues,4
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,6130658,If a shopper asks about returns,2
+Exchange:Request,Exchange Due to Defective or Mismatched Items,external_snippet,4440567,What is your warranty policy?,2
+Exchange:Request,Exchange Due to Defective or Mismatched Items,external_snippet,10386909,Can I exchange an item?,2
+Exchange:Request,Exchange Due to Defective or Mismatched Items,external_snippet,10386947,Can I return or exchange an online order in a Nébuleuse store?,2
+Exchange:Request,Exchange Due to Defective or Mismatched Items,external_snippet,4440670,Can I return a defective jewel in store?,1
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Exchange:Request,Exchange Due to Defective or Mismatched Items,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Exchange:Status,Exchange Status Updates,guidance,6031952,When a shopper reaches out about order issues or shipping issues,23
+Exchange:Status,Exchange Status Updates,guidance,7323168,When a shopper asks about exchanges,15
+Exchange:Status,Exchange Status Updates,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,3
+Exchange:Status,Exchange Status Updates,guidance,6130658,If a shopper asks about returns,2
+Exchange:Status,Exchange Status Updates,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Exchange:Status,Exchange Status Updates,external_snippet,4440608,Where can I find information on tracking my order?,1
+Exchange:Status,Exchange Status Updates,external_snippet,4440727,Where can I find information about my order status?,1
+Warranty:Claim,Warranty claims for defective jewelry products,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,22
+Warranty:Claim,Warranty claims for defective jewelry products,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,9
+Warranty:Claim,Warranty claims for defective jewelry products,external_snippet,4440567,What is your warranty policy?,8
+Warranty:Claim,Warranty claims for defective jewelry products,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,2
+Warranty:Claim,Warranty claims for defective jewelry products,external_snippet,10386901,What is the return and refund policy?,1
+Warranty:Claim,Warranty claims for defective jewelry products,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Warranty:Claim,Warranty claims for defective jewelry products,guidance,7323168,When a shopper asks about exchanges,1
+Warranty:Claim,Warranty claims for defective jewelry products,external_snippet,4440569,How can I make a warranty request?,1
+Product:Quality Issues,Jewelry Discoloration Issues,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,10
+Product:Quality Issues,Jewelry Discoloration Issues,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,9
+Product:Quality Issues,Jewelry Discoloration Issues,guidance,5868704,When a shopper asks about taking care of the jewelry,7
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,4440567,What is your warranty policy?,7
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,10386933,How should I care for my Nébuleuse jewelry?,2
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,4440525,What materials are used for Nébuleuse Bijoux jewelry?,2
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,4440795,What types of materials are used in Nebulae jewelry?,1
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,10386955,What is the aftercare process for a piercing?,1
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,10386929,What is the general customer feedback on Nébuleuse Bijoux products?,1
+Product:Quality Issues,Jewelry Discoloration Issues,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,10386953,What materials are used for piercings?,1
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,10386983,How should I care for my piercing after getting it done?,1
+Product:Quality Issues,Jewelry Discoloration Issues,external_snippet,4440697,Are product colors displayed accurately on the website?,1
+Shipping:Change Address,Address corrections before shipment,guidance,6031952,When a shopper reaches out about order issues or shipping issues,18
+Shipping:Change Address,Address corrections before shipment,external_snippet,4440652,"I got the wrong delivery address, what should I do?",7
+Shipping:Change Address,Address corrections before shipment,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,5
+Shipping:Change Address,Address corrections before shipment,external_snippet,4440541,"I got the wrong delivery address, what should I do?",3
+Shipping:Change Address,Address corrections before shipment,external_snippet,10386907,What should I do if I haven't received my package?,1
+Shipping:Change Address,Address corrections before shipment,external_snippet,4440567,What is your warranty policy?,1
+Shipping:Change Address,Address corrections before shipment,guidance,7323168,When a shopper asks about exchanges,1
+Shipping:Change Address,Address corrections before shipment,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Quality Issues,Earring Closure Malfunctions,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,27
+Order:Missing Item,Missing Earrings and Piercings,guidance,6031952,When a shopper reaches out about order issues or shipping issues,20
+Order:Missing Item,Missing Earrings and Piercings,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,6
+Order:Missing Item,Missing Earrings and Piercings,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,5
+Product:Quality Issues,Earring Closure Malfunctions,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,2
+Product:Quality Issues,Earring Closure Malfunctions,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Order:Missing Item,Missing Earrings and Piercings,guidance,6130658,If a shopper asks about returns,1
+Order:Missing Item,Missing Earrings and Piercings,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Missing Item,Missing Earrings and Piercings,external_snippet,6143905,Why do you sell your jewelry individually and not in pairs?,1
+Product:Quality Issues,Earring Closure Malfunctions,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Product:Quality Issues,Earring Closure Malfunctions,guidance,7323168,When a shopper asks about exchanges,1
+Product:Quality Issues,Earring Closure Malfunctions,external_snippet,4440567,What is your warranty policy?,1
+Product:Quality Issues,Earring Closure Malfunctions,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Order:Missing Item,Missing Earrings and Piercings,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Product:Quality Issues,Earring Closure Malfunctions,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Missing Item,Missing Earrings and Piercings,external_snippet,4440658,Why do you sell jewelry pieces individually rather than in pairs?,1
+Order:Status,Order Not Received After Shipping,guidance,6031952,When a shopper reaches out about order issues or shipping issues,16
+Order:Status,Order Not Received After Shipping,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,8
+Order:Status,Order Not Received After Shipping,guidance,5868648,When a shopper asks about shipping costs/delivery times,5
+Order:Status,Order Not Received After Shipping,external_snippet,10386907,What should I do if I haven't received my package?,2
+Order:Status,Order Not Received After Shipping,external_snippet,10387001,How can I track my package?,2
+Order:Status,Order Not Received After Shipping,external_snippet,4440535,How long does it take to receive my order?,1
+Order:Status,Order Not Received After Shipping,external_snippet,4440805,How can I follow my order from Nebulae?,1
+Order:Missing Item,General Missing Items,guidance,6031952,When a shopper reaches out about order issues or shipping issues,21
+Order:Missing Item,General Missing Items,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,3
+Order:Missing Item,General Missing Items,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Order:Missing Item,General Missing Items,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,1
+Order:Missing Item,General Missing Items,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Order:Missing Item,General Missing Items,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Missing Item,General Missing Items,guidance,5868704,When a shopper asks about taking care of the jewelry,1
+Order:Damaged,Earring Replacement Requests,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,12
+Order:Damaged,Earring Replacement Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,7
+Order:Damaged,Earring Replacement Requests,external_snippet,4440567,What is your warranty policy?,5
+Order:Damaged,Earring Replacement Requests,guidance,7323168,When a shopper asks about exchanges,1
+Order:Damaged,Earring Replacement Requests,external_snippet,4440664,"I am not satisfied with my order, what can I do?",1
+Order:Damaged,Earring Replacement Requests,external_snippet,4440553,"I am not satisfied with my order, what can I do?",1
+Order:Damaged,Earring Replacement Requests,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Warranty:Claim,Warranty oxidation discoloration claims,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,7
+Warranty:Claim,Warranty oxidation discoloration claims,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,6
+Warranty:Claim,Warranty oxidation discoloration claims,external_snippet,4440567,What is your warranty policy?,3
+Warranty:Claim,Warranty oxidation discoloration claims,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,2
+Warranty:Claim,Warranty oxidation discoloration claims,guidance,5868704,When a shopper asks about taking care of the jewelry,2
+Warranty:Claim,Warranty oxidation discoloration claims,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Warranty:Claim,Warranty oxidation discoloration claims,external_snippet,4440569,How can I make a warranty request?,1
+Warranty:Claim,Warranty oxidation discoloration claims,guidance,7323168,When a shopper asks about exchanges,1
+Warranty:Claim,Warranty oxidation discoloration claims,external_snippet,4440795,What types of materials are used in Nebulae jewelry?,1
+Product:Availability,Jewelry Restock Inquiries,guidance,7321695,When a shopper asks when a product will be back in stock,20
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,6
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,6
+Product:Quality Issues,Piercing jewelry decoration detachment,external_snippet,10386929,What is the general customer feedback on Nébuleuse Bijoux products?,2
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Product:Quality Issues,Piercing jewelry decoration detachment,external_snippet,4440567,What is your warranty policy?,2
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Product:Quality Issues,Piercing jewelry decoration detachment,external_snippet,10386953,What materials are used for piercings?,1
+Product:Quality Issues,Piercing jewelry decoration detachment,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Product:Quality Issues,Piercing jewelry decoration detachment,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,1
+Product:Availability,Jewelry Restock Inquiries,external_snippet,6143907,Can I put a piercing on my earlobe?,1
+Product:Availability,Jewelry Restock Inquiries,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Product:Availability,Jewelry Restock Inquiries,guidance,6124682,When a shopper asks about the gift card,1
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,9
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",4
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,external_snippet,10386991,What happens to my loyalty points if I return an order?,3
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),3
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Promotion & Discount:Issue,Loyalty Points Redemption Issues,external_snippet,10386989,How are points converted into discounts?,1
+Account:Other,Fidelity Points and Account Status Issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,7
+Account:Other,Fidelity Points and Account Status Issues,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),7
+Account:Other,Fidelity Points and Account Status Issues,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),2
+Account:Other,Fidelity Points and Account Status Issues,external_snippet,10386991,What happens to my loyalty points if I return an order?,2
+Account:Other,Fidelity Points and Account Status Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Account:Other,Fidelity Points and Account Status Issues,guidance,6124682,When a shopper asks about the gift card,1
+Warranty:Claim,Warranty Claims with Defective Clasps,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,11
+Warranty:Claim,Warranty Claims with Defective Clasps,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,3
+Warranty:Claim,Warranty Claims with Defective Clasps,external_snippet,4440567,What is your warranty policy?,2
+Warranty:Claim,Warranty Claims with Defective Clasps,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Warranty:Claim,Warranty Claims with Defective Clasps,external_snippet,4440569,How can I make a warranty request?,1
+Warranty:Claim,Warranty Claims with Defective Clasps,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Warranty:Claim,Warranty Claims with Defective Clasps,external_snippet,4440660,Is your site secure?,1
+Order:Edit,Change or add items in order,guidance,6031952,When a shopper reaches out about order issues or shipping issues,13
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,7
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,5
+Order:Edit,Change or add items in order,guidance,7323168,When a shopper asks about exchanges,3
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,3
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,external_snippet,4440567,What is your warranty policy?,3
+Order:Edit,Change or add items in order,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Order:Edit,Change or add items in order,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Order:Edit,Change or add items in order,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Warranty:Claim,Warranty claims defective clasps and manufacturing faults,external_snippet,4440569,How can I make a warranty request?,1
+Product:Availability,Replacement Parts for Jewelry,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,10
+Product:Availability,Replacement Parts for Jewelry,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,3
+Product:Availability,Replacement Parts for Jewelry,external_snippet,10386953,What materials are used for piercings?,1
+Product:Availability,Replacement Parts for Jewelry,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Product:Availability,Replacement Parts for Jewelry,guidance,6143503,If a shopper asks a question you don't know the answer to,1
+Product:Availability,Replacement Parts for Jewelry,guidance,7323168,When a shopper asks about exchanges,1
+Order:Status,Delayed order shipment status with tracking issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,9
+Product:Availability,Stock Availability Queries,guidance,7321695,When a shopper asks when a product will be back in stock,7
+Order:Status,Delayed order shipment status with tracking issues,guidance,5868648,When a shopper asks about shipping costs/delivery times,2
+Order:Status,Delayed order shipment status with tracking issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Product:Availability,Stock Availability Queries,external_snippet,6143907,Can I put a piercing on my earlobe?,2
+Product:Availability,Stock Availability Queries,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Product:Availability,Stock Availability Queries,external_snippet,10386905,How can I get a discount on my order?,1
+Product:Availability,Stock Availability Queries,guidance,6124682,When a shopper asks about the gift card,1
+Product:Availability,Stock Availability Queries,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Order:Status,Delayed order shipment status with tracking issues,external_snippet,4440598,Can delivery times be extended?,1
+Product:Availability,Stock Availability Queries,guidance,5951753,When a shopper asks about stores and physical points of sale,1
+Product:Availability,Stock Availability Queries,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Product:Availability,Stock Availability Queries,external_snippet,10386981,What are the size guidelines for ear piercings?,1
+Order:Status,Delayed order shipment status with tracking issues,external_snippet,4440608,Where can I find information on tracking my order?,1
+Order:Status,Delayed order shipment status with tracking issues,external_snippet,10386907,What should I do if I haven't received my package?,1
+Warranty:Claim,Warranty Claims with Defect Documentation,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,6
+Promotion & Discount:Issue,Discount Redemption Errors,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",4
+Warranty:Claim,Warranty Claims with Defect Documentation,external_snippet,4440567,What is your warranty policy?,3
+Warranty:Claim,Warranty Claims with Defect Documentation,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,3
+Promotion & Discount:Issue,Discount Redemption Errors,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Warranty:Claim,Warranty Claims with Defect Documentation,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,10386895,Do you offer free delivery?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,4440689,Where is free delivery applicable?,1
+Warranty:Claim,Warranty Claims with Defect Documentation,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,4440715,What is the free delivery policy?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,10386891,Is there a free shipping offer?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,4440799,What delivery options are available for orders from Nebulae?,1
+Promotion & Discount:Issue,Discount Redemption Errors,external_snippet,10386989,How are points converted into discounts?,1
+Promotion & Discount:Issue,Discount Redemption Errors,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Order:Payment,Payment adjustments and refunds issues,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,3
+Order:Payment,Payment adjustments and refunds issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",3
+Order:Payment,Payment adjustments and refunds issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Order:Payment,Payment adjustments and refunds issues,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,2
+Order:Payment,Payment adjustments and refunds issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Order:Payment,Payment adjustments and refunds issues,guidance,6124682,When a shopper asks about the gift card,1
+Order:Payment,Payment adjustments and refunds issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Exchange:Request,Size Change Requests for Delivered Items,guidance,7323168,When a shopper asks about exchanges,7
+Promotion & Discount:Issue,Loyalty Points and Promo Code Conflicts,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",5
+Promotion & Discount:Issue,Loyalty Points and Promo Code Conflicts,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,5
+Return:Status,Delayed Return Processing,guidance,6130658,If a shopper asks about returns,5
+Return:Status,Delayed Return Processing,guidance,7323168,When a shopper asks about exchanges,2
+Exchange:Request,Size Change Requests for Delivered Items,guidance,6130658,If a shopper asks about returns,1
+Promotion & Discount:Issue,Loyalty Points and Promo Code Conflicts,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Return:Status,Delayed Return Processing,external_snippet,4440729,Where can I initiate a return?,1
+Exchange:Request,Size Change Requests for Delivered Items,external_snippet,4440555,How to return an item?,1
+Return:Status,Delayed Return Processing,external_snippet,4440713,How do I make a return?,1
+Exchange:Request,Size Change Requests for Delivered Items,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Exchange:Request,Size Change Requests for Delivered Items,external_snippet,4440557,Can I make my return or exchange of my online order in the Nébuleuse store?,1
+Exchange:Request,Size Change Requests for Delivered Items,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Return:Status,Delayed Return Processing,external_snippet,4440555,How to return an item?,1
+Return:Status,Delayed Return Processing,external_snippet,10386901,What is the return and refund policy?,1
+Return:Status,Delayed Return Processing,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Promotion & Discount:Issue,Loyalty Points and Promo Code Conflicts,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),1
+Warranty:Claim,Warranty claims missing jewelry parts,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,5
+Exchange:Request,Exchange Processing Errors,guidance,7323168,When a shopper asks about exchanges,4
+Product:Details,Product Material and Supplier Information,external_snippet,4440795,What types of materials are used in Nebulae jewelry?,3
+Order:Missing Item,Missing Loyalty Reward Items,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,3
+Exchange:Request,Exchange Processing Errors,external_snippet,10386947,Can I return or exchange an online order in a Nébuleuse store?,3
+Product:Details,Product Material and Supplier Information,external_snippet,10386935,Does Nébuleuse jewelry contain nickel?,2
+Warranty:Claim,Warranty claims missing jewelry parts,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,2
+Warranty:Claim,Warranty claims missing jewelry parts,external_snippet,4440567,What is your warranty policy?,2
+Exchange:Request,Exchange Processing Errors,guidance,6130658,If a shopper asks about returns,2
+Order:Missing Item,Missing Loyalty Reward Items,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Product:Details,Product Material and Supplier Information,external_snippet,10387005,What materials are used for the jewelry?,2
+Order:Missing Item,Missing Loyalty Reward Items,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Product:Details,Product Material and Supplier Information,external_snippet,4440831,Can customers personalize their Nébuleuse jewelry?,1
+Order:Missing Item,Missing Loyalty Reward Items,guidance,6130658,If a shopper asks about returns,1
+Product:Details,Product Material and Supplier Information,external_snippet,4440529,Where are Nébuleuse Bijoux jewelry items manufactured?,1
+Order:Missing Item,Missing Loyalty Reward Items,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Warranty:Claim,Warranty claims missing jewelry parts,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Exchange:Request,Exchange Processing Errors,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Details,Product Material and Supplier Information,external_snippet,10386931,What materials are Nébuleuse jewelry made from?,1
+Order:Missing Item,Missing Loyalty Reward Items,guidance,7323168,When a shopper asks about exchanges,1
+Product:Details,Product Material and Supplier Information,external_snippet,6143903,Do your earrings contain nickel? I often have allergic reactions.,1
+Order:Missing Item,Missing Loyalty Reward Items,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),1
+Warranty:Claim,Warranty claims missing jewelry parts,external_snippet,4440569,How can I make a warranty request?,1
+Exchange:Request,Exchange Processing Errors,external_snippet,4440557,Can I make my return or exchange of my online order in the Nébuleuse store?,1
+Order:Missing Item,Missing Loyalty Reward Items,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Shipping:Delivered Not Received,Returned Orders to Sender,guidance,6031952,When a shopper reaches out about order issues or shipping issues,9
+Shipping:Other,Reshipment requests after failed delivery attempts,guidance,6031952,When a shopper reaches out about order issues or shipping issues,7
+Order:Status,Missing Order Confirmation Emails,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,5
+Order:Status,Missing Order Confirmation Emails,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,4
+Order:Edit,Correcting personal information in orders,guidance,6031952,When a shopper reaches out about order issues or shipping issues,3
+Order:Edit,Correcting personal information in orders,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,3
+Shipping:Other,Reshipment requests after failed delivery attempts,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,3
+Order:Status,Missing Order Confirmation Emails,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Edit,Correcting personal information in orders,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Edit,Correcting personal information in orders,external_snippet,4440541,"I got the wrong delivery address, what should I do?",1
+Order:Edit,Correcting personal information in orders,guidance,6124682,When a shopper asks about the gift card,1
+Shipping:Delivered Not Received,Returned Orders to Sender,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Order:Edit,Correcting personal information in orders,external_snippet,4440652,"I got the wrong delivery address, what should I do?",1
+Warranty:Claim,Warranty claim assistance and troubleshooting,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,4
+Return:Request,Standard Product Return Requests,guidance,6130658,If a shopper asks about returns,3
+Warranty:Claim,Warranty claim assistance and troubleshooting,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Warranty:Claim,Warranty claim assistance and troubleshooting,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Return:Request,Standard Product Return Requests,external_snippet,4440729,Where can I initiate a return?,1
+Warranty:Claim,Warranty claim assistance and troubleshooting,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Warranty:Claim,Warranty claim assistance and troubleshooting,external_snippet,4440567,What is your warranty policy?,1
+Return:Request,Standard Product Return Requests,external_snippet,4440666,How to return an article?,1
+Return:Request,Standard Product Return Requests,external_snippet,4440610,Where can I return an item?,1
+Return:Request,Standard Product Return Requests,external_snippet,4440557,Can I make my return or exchange of my online order in the Nébuleuse store?,1
+Return:Request,Standard Product Return Requests,external_snippet,10386947,Can I return or exchange an online order in a Nébuleuse store?,1
+Return:Request,Standard Product Return Requests,external_snippet,4440713,How do I make a return?,1
+Warranty:Claim,Warranty claim assistance and troubleshooting,guidance,7323168,When a shopper asks about exchanges,1
+Product:Quality Issues,Decorative piercing jewelry detachment,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,4
+Warranty:Claim,Warranty Process and Compensation Requests,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,4
+Order:Payment,Payment Processing Failures,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,3
+Product:Quality Issues,Defective Jewelry Issues,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,3
+Promotion & Discount:Issue,First Order Discount Missing,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",3
+Product:Quality Issues,Decorative piercing jewelry detachment,external_snippet,4440567,What is your warranty policy?,3
+Shipping:Change Address,Incorrect address causing delivery issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,3
+Promotion & Discount:Issue,First Order Discount Missing,external_snippet,10386905,How can I get a discount on my order?,3
+Shipping:Change Address,Incorrect address causing delivery issues,external_snippet,4440541,"I got the wrong delivery address, what should I do?",2
+Shipping:Change Address,Incorrect address causing delivery issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Return:Request,Defective Product Returns,guidance,6130658,If a shopper asks about returns,2
+Return:Request,Defective Product Returns,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Product:Quality Issues,Defective Jewelry Issues,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,2
+Shipping:Change Address,Incorrect address causing delivery issues,external_snippet,4440652,"I got the wrong delivery address, what should I do?",1
+Warranty:Claim,Warranty Process and Compensation Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Warranty:Claim,Warranty Process and Compensation Requests,external_snippet,4440567,What is your warranty policy?,1
+Promotion & Discount:Issue,First Order Discount Missing,external_snippet,6143905,Why do you sell your jewelry individually and not in pairs?,1
+Return:Request,Defective Product Returns,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Return:Request,Defective Product Returns,external_snippet,10386947,Can I return or exchange an online order in a Nébuleuse store?,1
+Warranty:Claim,Warranty Process and Compensation Requests,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Payment,Payment Processing Failures,external_snippet,4440662,What are the available payment modes?,1
+Order:Payment,Payment Processing Failures,external_snippet,4440707,What should I do if my order appears to be fraudulent?,1
+Product:Quality Issues,Defective Jewelry Issues,guidance,7323168,When a shopper asks about exchanges,1
+Promotion & Discount:Issue,First Order Discount Missing,external_snippet,10386996,What are the benefits of subscribing to the newsletter?,1
+Return:Request,Defective Product Returns,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Quality Issues,Defective Jewelry Issues,guidance,5868704,When a shopper asks about taking care of the jewelry,1
+Order:Payment,Payment Processing Failures,external_snippet,4440551,What are the available payment modes?,1
+Product:Quality Issues,Defective Jewelry Issues,external_snippet,4440567,What is your warranty policy?,1
+Return:Request,Defective Product Returns,external_snippet,10386939,What is the return policy for Nébuleuse jewelry?,1
+Order:Payment,Payment Processing Failures,external_snippet,4440549,Is your site secure?,1
+Order:Payment,Payment Processing Failures,guidance,6124682,When a shopper asks about the gift card,1
+Warranty:Claim,Warranty Process and Compensation Requests,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Product:Quality Issues,Decorative piercing jewelry detachment,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Promotion & Discount:Issue,Promotion Code Activation Failures,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",5
+Promotion & Discount:Information,Clarifications on Discount Offers and Promotions,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",3
+Account:Other,Fidelity Points Reinstatement Requests,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),2
+Promotion & Discount:Information,Clarifications on Discount Offers and Promotions,guidance,6124682,When a shopper asks about the gift card,2
+Account:Other,Fidelity Points Reinstatement Requests,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,2
+Account:Other,Fidelity Points Reinstatement Requests,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),2
+Promotion & Discount:Issue,Promotion Code Activation Failures,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,guidance,5868704,When a shopper asks about taking care of the jewelry,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,4440654,Can I keep my Nébuleuse jewelry in the shower or while at the beach?,1
+Promotion & Discount:Information,Clarifications on Discount Offers and Promotions,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,10386917,What are the standard bar lengths for piercings?,1
+Account:Other,Fidelity Points Reinstatement Requests,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,10386937,Can I wear my Nébuleuse jewelry in the shower or at the beach?,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,10386981,What are the size guidelines for ear piercings?,1
+Promotion & Discount:Information,Clarifications on Discount Offers and Promotions,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,6143901,Can I wear my jewelry in the shower or at the beach?,1
+Product:Usage,Piercing jewelry compatibility with accessories and activities,external_snippet,10386933,How should I care for my Nébuleuse jewelry?,1
+Promotion & Discount:Issue,Promotion Code Activation Failures,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Quality Issues,Faulty Piercing Fasteners,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,3
+Product:Details,Earring Pairing and Sizing Inquiries,external_snippet,4440658,Why do you sell jewelry pieces individually rather than in pairs?,2
+Product:Details,Earring Pairing and Sizing Inquiries,external_snippet,4440547,Why do you sell pieces individually rather than in pairs?,2
+Product:Quality Issues,Faulty Piercing Fasteners,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,2
+Product:Details,Earring Pairing and Sizing Inquiries,external_snippet,6143905,Why do you sell your jewelry individually and not in pairs?,2
+Warranty:Claim,Warranty Claims Multiple Defect Types,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Product:Quality Issues,Faulty Piercing Fasteners,external_snippet,4440567,What is your warranty policy?,1
+Warranty:Claim,Warranty Claims Multiple Defect Types,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,1
+Warranty:Claim,Warranty Claims Multiple Defect Types,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Warranty:Claim,Warranty Claims Multiple Defect Types,external_snippet,4440567,What is your warranty policy?,1
+Warranty:Claim,Warranty Claims Multiple Defect Types,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Return:Status,Return Shipment and Processing Issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,4
+Product:Other,Gift Card Availability,guidance,6124682,When a shopper asks about the gift card,4
+Order:Refund,Unreceived Refund,guidance,6130658,If a shopper asks about returns,2
+Order:Refund,Refund Requests for Delivery Delays and Issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Promotion & Discount:Issue,Promotional Code Email Issues,external_snippet,10386996,What are the benefits of subscribing to the newsletter?,2
+Promotion & Discount:Issue,Promotional Code Email Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Order:Refund,Refund Requests for Delivery Delays and Issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Order:Payment,PayPal payment method availability,external_snippet,4440551,What are the available payment modes?,1
+Return:Request,Return Process Issues,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Payment,PayPal payment method availability,external_snippet,4440602,What payment methods do you accept?,1
+Order:Refund,Unreceived Refund,external_snippet,4440727,Where can I find information about my order status?,1
+Order:Refund,Unreceived Refund,guidance,7323168,When a shopper asks about exchanges,1
+Return:Request,Return Process Issues,guidance,6130658,If a shopper asks about returns,1
+Return:Request,Return Process Issues,external_snippet,4440610,Where can I return an item?,1
+Return:Request,Return Process Issues,external_snippet,4440666,How to return an article?,1
+Product:Usage,Piercing compatibility and wearing advice,external_snippet,4440772,Can you get multiple piercings done in one session?,1
+Order:Payment,PayPal payment method availability,external_snippet,4440707,What should I do if my order appears to be fraudulent?,1
+Product:Other,Gift Card Availability,external_snippet,10386927,What payment methods does Nébuleuse Bijoux accept?,1
+Order:Payment,PayPal payment method availability,external_snippet,4440575,What payment methods do you accept?,1
+Return:Request,Return Process Issues,external_snippet,10386947,Can I return or exchange an online order in a Nébuleuse store?,1
+Order:Refund,Unreceived Refund,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Order:Payment,PayPal payment method availability,external_snippet,4440662,What are the available payment modes?,1
+Order:Refund,Refund Requests for Delivery Delays and Issues,guidance,5868648,When a shopper asks about shipping costs/delivery times,1
+Return:Status,Return Shipment and Processing Issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Promotion & Discount:Issue,Promotional Code Email Issues,external_snippet,10386905,How can I get a discount on my order?,1
+Product:Usage,Piercing compatibility and wearing advice,external_snippet,10386881,What is EARFINITY® jewelry?,1
+Product:Usage,Piercing compatibility and wearing advice,external_snippet,6143907,Can I put a piercing on my earlobe?,1
+Product:Usage,Piercing compatibility and wearing advice,external_snippet,4440831,Can customers personalize their Nébuleuse jewelry?,1
+Product:Usage,Piercing compatibility and wearing advice,external_snippet,4440829,What distinguishes Nébuleuse's approach to piercing?,1
+Shipping:Delay,Sorting Center Delivery Delays,guidance,6031952,When a shopper reaches out about order issues or shipping issues,3
+Product:Quality Issues,Piercing jewelry loss and replacement requests,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,3
+Product:Quality Issues,Piercing Jewelry Damage and Replacement Requests,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Warranty:Information,Jewelry warranty claim and coverage details,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Warranty:Claim,Warranty Claims General Defects,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,2
+Warranty:Claim,Warranty Claims General Defects,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,2
+Shipping:Change Address,Address change confirmation requests,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,2
+Shipping:Delay,Sorting Center Delivery Delays,external_snippet,10387001,How can I track my package?,1
+Product:Quality Issues,Piercing jewelry loss and replacement requests,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Quality Issues,Piercing Jewelry Damage and Replacement Requests,external_snippet,10386953,What materials are used for piercings?,1
+Account:Other,Fidelity Points Usage Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Account:Other,Fidelity Points Usage Issues,guidance,7253294,"When a shopper asks to create, edit, suppress or merge accounts",1
+Order:Other,Exchange and return process issues,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Account:Other,Fidelity Points Usage Issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Order:Other,Exchange and return process issues,guidance,6130658,If a shopper asks about returns,1
+Warranty:Information,Jewelry warranty claim and coverage details,external_snippet,10386899,What is the warranty policy for Nebuleuse Bijoux?,1
+Account:Other,Fidelity Points Usage Issues,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Order:Other,Exchange and return process issues,external_snippet,10386901,What is the return and refund policy?,1
+Shipping:Change Address,Address change confirmation requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Shipping:Change Address,Address change confirmation requests,guidance,5898604,When a shopper asks about the Loyalty Program (PART 1),1
+Warranty:Information,Jewelry warranty claim and coverage details,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Product:Quality Issues,Piercing Jewelry Damage and Replacement Requests,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Order:Other,Exchange and return process issues,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Order:Placement,Gift Card Order Issues,guidance,6124682,When a shopper asks about the gift card,3
+Shipping:Information,Unavailable Shipping Countries,guidance,5868648,When a shopper asks about shipping costs/delivery times,3
+Order:Cancel,Cancel order to reorder with discount,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Return:Status,Delayed Exchange Processing After Return,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Promotion & Discount:Information,Active Promotional Code Requests,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Order:Other,Gift card email delivery and free gift confirmation,guidance,6124682,When a shopper asks about the gift card,2
+Return:Information,Return Process Details,guidance,6130658,If a shopper asks about returns,2
+Shipping:Delivered Not Received,Missing Delivery Notices,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Shipping:Delivered Not Received,Request reshipment for missing parcels,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Order:Status,Order Shipment Delays,guidance,6031952,When a shopper reaches out about order issues or shipping issues,2
+Product:Quality Issues,Rapid Tarnishing of Jewelry,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,1
+Order:Status,Order Shipment Delays,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Product:Quality Issues,Piercing inflammation and healing issues,external_snippet,10386955,What is the aftercare process for a piercing?,1
+Order:Placement,Order Placement Failures,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Account:Update,Adding Birthdate to Loyalty Program,guidance,7253294,"When a shopper asks to create, edit, suppress or merge accounts",1
+Order:Other,Gift card email delivery and free gift confirmation,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Product:Quality Issues,Piercing inflammation and healing issues,external_snippet,10387003,What is the policy regarding piercing services?,1
+Shipping:Delivered Not Received,Request reshipment for missing parcels,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Account:Update,Adding Birthdate to Loyalty Program,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Promotion & Discount:Information,Active Promotional Code Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Return:Status,Delayed Exchange Processing After Return,guidance,7323168,When a shopper asks about exchanges,1
+Account:Update,Adding Birthdate to Loyalty Program,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Warranty:Claim,Warranty claim process and replacements,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Other,Jewelry Product General Queries,external_snippet,10386933,How should I care for my Nébuleuse jewelry?,1
+Product:Other,Jewelry Product General Queries,guidance,8622672,When a shopper reports having a piece of jewellery which blackens or oxidizes,1
+Product:Quality Issues,Piercing Healing Complications,external_snippet,10387003,What is the policy regarding piercing services?,1
+Product:Quality Issues,Rapid Tarnishing of Jewelry,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Quality Issues,Rapid Tarnishing of Jewelry,external_snippet,4440567,What is your warranty policy?,1
+Product:Quality Issues,Piercing inflammation and healing issues,external_snippet,10386975,"What should I do if my piercing is red, swollen, or painful?",1
+Product:Quality Issues,Piercing Healing Complications,guidance,7323168,When a shopper asks about exchanges,1
+Shipping:Delivered Not Received,Missing Delivery Notices,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Warranty:Claim,Warranty claim process and replacements,guidance,7323168,When a shopper asks about exchanges,1
+Return:Information,Return Process Details,external_snippet,10386901,What is the return and refund policy?,1
+Order:Placement,Order Placement Failures,guidance,6124682,When a shopper asks about the gift card,1
+Order:Placement,Order Placement Failures,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Product:Quality Issues,Piercing Healing Complications,external_snippet,10386975,"What should I do if my piercing is red, swollen, or painful?",1
+Warranty:Claim,Warranty claim process and replacements,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Other,Jewelry Product General Queries,guidance,5868704,When a shopper asks about taking care of the jewelry,1
+Order:Cancel,Cancel order to reorder with discount,external_snippet,10386991,What happens to my loyalty points if I return an order?,1
+Promotion & Discount:Issue,Referral Discount Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Promotion & Discount:Issue,Birthday Discount Code Issues,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",2
+Order:Cancel,Cancel order requests before shipment,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Placement,Order Price Discrepancies and Assistance,external_snippet,4440658,Why do you sell jewelry pieces individually rather than in pairs?,1
+Order:Edit,Modifying order items or gift packaging,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Refund,Refund requests for order cancellations and exchanges,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Wholesale:Information,Wholesale account setup and order conditions,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Refund,Refund requests for damaged or defective jewelry,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Refund,Failed Delivery Refund Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Other:Other,Affiliate Program Payment Process Questions,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,1
+Product:Quality Issues,Jewelry Component Failures,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Other,Request Replacement Jewelry Parts,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Refund,Refund requests for order cancellations and exchanges,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Order:Other,Invoice Requests for Orders,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Details,Piercing Procedure and Allergies,external_snippet,10387003,What is the policy regarding piercing services?,1
+Exchange:Request,Exchange for Unwanted Gift Items,guidance,7323168,When a shopper asks about exchanges,1
+Other:Other,Piercing Appointments For Minors With Parental Consent,external_snippet,4440559,Can minors get pierced?,1
+Product:Details,Piercing Compatibility Materials and Procedures,external_snippet,10386881,What is EARFINITY® jewelry?,1
+Product:Details,Material and Size Compatibility for Piercings,external_snippet,6143907,Can I put a piercing on my earlobe?,1
+Order:Missing Item,Received Empty Package,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Product:Details,Material and Size Compatibility for Piercings,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Other:Other,Affiliate Program Payment Process Questions,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Wholesale:Information,Wholesale account setup and order conditions,guidance,8470471,When a shopper asks about submitting an application or working with us,1
+Product:Other,Request Replacement Jewelry Parts,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Product:Quality Issues,Jewelry Component Failures,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Product:Details,Piercing Procedure and Allergies,external_snippet,10386959,Can minors get piercings?,1
+Order:Refund,Failed Delivery Refund Requests,external_snippet,10386907,What should I do if I haven't received my package?,1
+Order:Cancel,Cancel order requests before shipment,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),1
+Exchange:Request,Exchange for Unwanted Gift Items,external_snippet,4440567,What is your warranty policy?,1
+Order:Other,Invoice Requests for Orders,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Account:Login,Password Reset Email Not Received,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Order:Edit,Modifying order items or gift packaging,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Order:Refund,Refund requests for damaged or defective jewelry,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Missing Item,Missing Reversible Clasp,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Other:Other,Piercing Appointments For Minors With Parental Consent,external_snippet,10386959,Can minors get piercings?,1
+Warranty:Claim,Warranty claims with detailed defect documentation,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Return:Status,Unreceived Refund After Returning Item,guidance,6130658,If a shopper asks about returns,1
+Order:Missing Item,Missing Reversible Clasp,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Product:Details,Piercing Compatibility Materials and Procedures,external_snippet,6143907,Can I put a piercing on my earlobe?,1
+Account:Login,Password Reset Email Not Received,guidance,7253294,"When a shopper asks to create, edit, suppress or merge accounts",1
+Order:Missing Item,Received Empty Package,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Placement,Order Price Discrepancies and Assistance,external_snippet,6143905,Why do you sell your jewelry individually and not in pairs?,1
+Warranty:Claim,Warranty claims with detailed defect documentation,external_snippet,4440567,What is your warranty policy?,1
+Return:Status,Unreceived Refund After Returning Item,external_snippet,10386901,What is the return and refund policy?,1
+Promotion & Discount:Issue,Loyalty Reward Redemption Failures,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Other:Other,Affiliate program payment inquiries,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,1
+Promotion & Discount:Issue,Loyalty Points Deduction Issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Shipping:Information,Delivery Timeframe Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Warranty:Claim,Warranty Coverage and Process Clarifications,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Order:Status,Unreceived Replacement Orders,guidance,8556849,(NEW) When a shopper ask where her order is or a WISMO question,1
+Account:Other,Account Purchase History Transfer Requests,guidance,7253294,"When a shopper asks to create, edit, suppress or merge accounts",1
+Order:Edit,Modifying product quantities or selections,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Cancel,Cancel orders placed by mistake,guidance,8515638,When the shopper reaches out to confirm if their order or payment went through,1
+Other:Other,Parental consent for child piercing,external_snippet,10386959,Can minors get piercings?,1
+Promotion & Discount:Information,Referral Program Reward Availability,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Promotion & Discount:Issue,Loyalty Points Redemption Technical Issues,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Order:Payment,Customs fees payment clarification,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Warranty:Information,Warranty coverage for jewelry defects,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Exchange:Status,Exchange Item Shipment Concerns,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Order:Refund,Refund Requests for Tariffs and Missing Packages,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Product:Usage,Piercing Jewelry Positioning,external_snippet,4440829,What distinguishes Nébuleuse's approach to piercing?,1
+Return:Status,Verification of Refund Amounts,guidance,6130658,If a shopper asks about returns,1
+Account:Other,Affiliate Commission Payment Status,guidance,5950621,Affiliation/ambassador program (PART 2) - Commissions & Technical Support,1
+Other:Other,General Customer Service Response Requests,guidance,7321695,When a shopper asks when a product will be back in stock,1
+Promotion & Discount:Information,First Order Discount Code Requests,guidance,10159872,"When a shopper asks about current promotions, discounts, or special offers (New)",1
+Product:Usage,Piercing Jewelry Attachment Methods,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Order:Status,E-Gift Card Delivery Delays,guidance,6124682,When a shopper asks about the gift card,1
+Product:Quality Issues,Jewelry Malfunction And Defect Reports,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Product:Quality Issues,Fitting Issues with Piercing Jewelry,guidance,6300270,When a shopper has a malfunctioning product or asks about the warranty,1
+Promotion & Discount:Information,Loyalty Program Discounts,guidance,5898606,When a shopper asks about using/spending Loyalty Points online or in-store or if they have issues using the points,1
+Product:Quality Issues,Piercing Implant Issues,guidance,8988116,When shopper reports losing a piece of jewelry or a clasp,1
+Promotion & Discount:Information,Combining Loyalty and Seasonal Discounts,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Return:Request,Return for Exchange Requests,guidance,6031952,When a shopper reaches out about order issues or shipping issues,1
+Account:Other,Fidelity Points Redemption Issues,guidance,5946922,When a shopper asks about the Loyalty Program (PART 2),1

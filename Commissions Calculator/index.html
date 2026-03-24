@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commission Calculator — Gorgias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── Variables ─────────────────────────────────── */
+:root {
+  --coral:   #FF9780;
+  --rose:    #FFD2C9;
+  --ginger:  #FFEAE6;
+  --blush:   #FEF4F3;
+  --black:   #1A1E23;
+  --smoke:   #E4DFDB;
+  --fog:     #EDEBE8;
+  --white:   #FFFFFF;
+  --muted:   #9A9490;
+  --mid:     #6B6560;
+  --shadow:  0 1px 4px rgba(0,0,0,.08), 0 2px 12px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.10), 0 1px 4px rgba(0,0,0,.05);
+  --radius:  14px;
+  --radius-sm: 8px;
+  --trans:   0.15s ease;
+}
+
+/* ─── Reset ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--fog);
+  color: var(--black);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type=number] { -moz-appearance: textfield; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ─── Page ──────────────────────────────────────── */
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 72px; }
+
+/* ─── Header ────────────────────────────────────── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--smoke);
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo svg { height: 28px; width: auto; flex-shrink: 0; }
+.wordmark { font-size: 20px; font-weight: 700; letter-spacing: -.5px; color: var(--black); }
+.header-tag {
+  font-size: 12px; font-weight: 600; color: #A84800;
+  background: var(--ginger); padding: 4px 14px; border-radius: 20px;
+  border: 1px solid var(--rose);
+}
+
+/* ─── App Layout ────────────────────────────────── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .results-sidebar { order: -1; }
+}
+
+/* ─── Controls Bar ──────────────────────────────── */
+.controls-bar {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.mode-toggle {
+  display: flex; background: var(--smoke); border-radius: 9px; padding: 3px; flex-shrink: 0;
+}
+.mode-btn {
+  padding: 7px 20px; border: none; border-radius: 7px;
+  font-size: 13px; font-weight: 600; background: transparent; color: var(--muted);
+  transition: all var(--trans);
+}
+.mode-btn.active {
+  background: var(--black); color: var(--white);
+  box-shadow: 0 1px 6px rgba(0,0,0,.25);
+}
+.ctrl-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 8px; border: 1.5px solid var(--smoke);
+  background: var(--white); font-size: 12px; font-weight: 600; color: var(--mid);
+  transition: all var(--trans);
+}
+.ctrl-btn:hover { border-color: var(--coral); color: var(--black); }
+.ctrl-btn.active { border-color: var(--coral); color: var(--coral); background: var(--blush); }
+.ctrl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.mode-desc { font-size: 12px; font-weight: 500; color: var(--mid); margin-left: 4px; flex: 1; min-width: 100%; margin-top: 3px; }
+
+/* ─── Info Panel ────────────────────────────────── */
+.info-panel {
+  background: var(--white); border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 16px; border: 1px solid #E8E4DF;
+  box-shadow: var(--shadow);
+  display: none;
+}
+.info-panel.open { display: block; }
+.info-panel-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+.tier-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tier-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); padding: 4px 10px 8px 0; border-bottom: 1px solid var(--smoke); }
+.tier-table td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--fog); vertical-align: middle; }
+.tier-table tr:last-child td { border-bottom: none; }
+.tier-swatch { display: inline-flex; align-items: center; gap: 7px; }
+.tier-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.t0 { background: #C4BFB9; }
+.t1 { background: #F5C842; }
+.t2 { background: #F5A020; }
+.t3 { background: var(--coral); }
+.t4 { background: #D63C10; }
+.tier-note { font-size: 11px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--smoke); }
+
+/* ─── Settings Panel ────────────────────────────── */
+.settings-panel {
+  background: var(--white); border-radius: var(--radius); padding: 24px;
+  margin-bottom: 16px; border: 1px solid #E8E4DF;
+  box-shadow: var(--shadow);
+  display: none;
+}
+.settings-panel.open { display: block; }
+.sp-section { margin-bottom: 18px; }
+.sp-section:last-child { margin-bottom: 0; }
+.sp-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 12px; padding: 3px 0 3px 10px; border-left: 2.5px solid var(--coral); }
+.sp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 10px; }
+.sp-field { display: flex; flex-direction: column; gap: 5px; }
+.sp-field label { font-size: 12px; font-weight: 500; color: var(--black); }
+.sp-input {
+  padding: 9px 12px; border: 1.5px solid #DEDAD6; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: var(--black); background: var(--white);
+  font-family: inherit; transition: all var(--trans);
+}
+.sp-input:focus { outline: none; border-color: var(--coral); background: var(--white); }
+select.sp-input { cursor: pointer; height: 40px; }
+.sp-divider { height: 1px; background: var(--fog); margin: 20px 0; }
+
+/* ─── Cards ─────────────────────────────────────── */
+.card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 0; box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,.06);
+  overflow: hidden;
+}
+.card-body { padding: 18px 22px 22px; }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+}
+.card-new .card-header { background: var(--ginger); border-bottom: 1px solid var(--rose); }
+.card-inf .card-header { background: #EEF1FF; border-bottom: 1px solid #C9D1FF; }
+.card-title { font-size: 14px; font-weight: 700; color: var(--black); display: flex; align-items: center; gap: 8px; }
+.card-quota { font-size: 12px; color: var(--muted); font-weight: 500; }
+.card-quota strong { color: var(--mid); }
+.pill { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; letter-spacing: .2px; }
+.pill-new { background: rgba(255,151,128,.2); color: #A84800; border: 1px solid var(--rose); }
+.pill-inf { background: #DDE2FF; color: #3451B2; border: 1px solid #C9D1FF; }
+.inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 680px) { .inputs-grid { grid-template-columns: 1fr; } }
+
+/* ─── Field Rows ────────────────────────────────── */
+.field-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.field-info { width: 124px; flex-shrink: 0; }
+.field-name { font-size: 13px; font-weight: 500; color: var(--black); display: block; }
+.field-meta { font-size: 11px; color: var(--muted); }
+.field-input-group {
+  flex: 1; display: flex; align-items: center;
+  border: 1.5px solid var(--smoke); border-radius: 10px;
+  background: var(--fog); height: 42px; overflow: hidden;
+  transition: border-color var(--trans), background var(--trans);
+}
+.field-input-group:focus-within { border-color: var(--coral); background: var(--white); }
+.field-prefix {
+  padding: 0 10px; font-size: 14px; color: #BBB6B0;
+  border-right: 1.5px solid var(--smoke); height: 100%;
+  display: flex; align-items: center; flex-shrink: 0;
+  transition: border-color var(--trans);
+}
+.field-input-group:focus-within .field-prefix { border-color: #F4C5BA; }
+.field-input {
+  flex: 1; border: none; background: transparent;
+  padding: 0 10px; font-size: 14px; font-weight: 500;
+  color: var(--black); height: 100%; font-family: inherit;
+  min-width: 0;
+}
+.field-input:focus { outline: none; }
+.field-input::placeholder { color: #CCC9C5; font-weight: 400; }
+.field-chip {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+  white-space: nowrap; min-width: 40px; text-align: center; flex-shrink: 0;
+}
+.chip-0 { background: var(--smoke); color: var(--muted); }
+.chip-1 { background: #FFF3CD; color: #8A5F00; }
+.chip-2 { background: #FFE4B2; color: #7A3300; }
+.chip-3 { background: #FFD0C8; color: #B02000; }
+
+/* ─── Card Footer ───────────────────────────────── */
+.card-footer { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--smoke); }
+.cf-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.cf-label { color: var(--muted); font-weight: 500; }
+.cf-val { font-weight: 700; color: var(--black); }
+.cap-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: #3451B2; background: #E8EEFF;
+  padding: 4px 10px; border-radius: 20px; margin-top: 10px; font-weight: 500;
+}
+
+/* ─── Quarterly Tables ──────────────────────────── */
+.q-table-wrap { overflow-x: auto; }
+.q-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.q-table th {
+  font-size: 11px; font-weight: 600; color: var(--muted); text-align: right;
+  padding: 4px 6px 10px; letter-spacing: .2px;
+}
+.q-table th:first-child { text-align: left; padding-left: 0; }
+.q-table td { padding: 4px 4px; vertical-align: middle; }
+.q-table td:first-child { padding-left: 0; padding-right: 8px; white-space: nowrap; }
+.qt-name { font-weight: 600; font-size: 12px; color: var(--black); display: block; }
+.qt-meta { font-size: 10px; color: var(--muted); }
+.q-cell { position: relative; }
+.q-sym { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #BBB6B0; pointer-events: none; }
+.q-in {
+  width: 100%; padding: 7px 7px 7px 22px; border: 1.5px solid var(--smoke);
+  border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--black);
+  background: var(--fog); text-align: right; font-family: inherit;
+  transition: all var(--trans);
+}
+.q-in:focus { outline: none; border-color: var(--coral); background: var(--white); }
+.q-in::placeholder { color: #CCC9C5; font-weight: 400; }
+/* Output rows in table */
+.q-sep td { padding-top: 10px; }
+.q-sep td:first-child { border-top: none; }
+.q-out-row { background: var(--fog); }
+.q-out-row td { padding: 5px 4px; }
+.q-out-row td:first-child { font-size: 11px; font-weight: 600; color: var(--muted); padding-left: 0; border-radius: 6px 0 0 6px; }
+.q-val { font-size: 12px; font-weight: 600; color: var(--black); text-align: right; padding: 5px 8px; background: var(--fog); }
+.q-att-val { font-size: 12px; font-weight: 700; text-align: right; padding: 5px 8px; }
+.q-comm-val { font-size: 13px; font-weight: 700; color: var(--black); text-align: right; padding: 5px 8px; }
+.q-table-footer { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--smoke); flex-wrap: wrap; }
+.qtf-item { font-size: 12px; color: var(--mid); }
+.qtf-item strong { color: var(--black); font-weight: 700; }
+
+/* ─── Results Sidebar ───────────────────────────── */
+.results-sidebar { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Hero card */
+.sb-hero {
+  background: linear-gradient(135deg, #1A1E23 0%, #252B33 100%);
+  border-radius: var(--radius); padding: 24px;
+  color: var(--white); border: 1px solid rgba(255,255,255,.06);
+}
+.sb-period { font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; opacity: .5; margin-bottom: 8px; }
+.sb-total { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; line-height: 1; margin-bottom: 4px; }
+.sb-total-desc { font-size: 12px; opacity: .45; margin-bottom: 18px; }
+.sb-ote-label { display: flex; justify-content: space-between; font-size: 11px; opacity: .55; margin-bottom: 6px; }
+.sb-ote-pct { font-weight: 700; opacity: 1 !important; font-size: 12px; }
+.sb-ote-track {
+  height: 6px; border-radius: 6px; background: rgba(255,255,255,.1);
+  position: relative; overflow: hidden;
+}
+.sb-ote-fill {
+  height: 100%; border-radius: 6px; background: var(--coral);
+  transition: width .4s ease; max-width: 100%;
+}
+
+/* Breakdown card */
+.sb-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 18px 20px; box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,.04);
+}
+.sb-card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); margin-bottom: 14px; padding-left: 10px; border-left: 2.5px solid var(--coral); }
+.sb-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.sb-row + .sb-row { border-top: 1px solid var(--fog); }
+.sb-row-key { font-size: 13px; color: var(--mid); font-weight: 500; }
+.sb-row-val { font-size: 14px; font-weight: 700; color: var(--black); }
+.sb-row-accent .sb-row-val { color: var(--coral); }
+.sb-divider { height: 1px; background: var(--smoke); margin: 10px 0; }
+.sb-total-row .sb-row-key { font-weight: 700; color: var(--black); font-size: 14px; }
+.sb-total-row .sb-row-val { font-size: 18px; }
+.sb-usd-block { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--smoke); }
+.sb-usd-total { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+.sb-usd-amount { font-size: 20px; font-weight: 800; color: var(--black); letter-spacing: -.5px; margin-bottom: 10px; }
+.sb-sub-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; color: var(--mid); }
+.sb-sub-row + .sb-sub-row { border-top: 1px solid var(--fog); }
+.sb-sub-row span:last-child { font-weight: 600; color: var(--black); }
+
+/* Attainment card */
+.att-block { margin-bottom: 16px; }
+.att-block:last-child { margin-bottom: 0; }
+.att-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.att-name { font-size: 13px; font-weight: 600; color: var(--black); display: flex; align-items: center; gap: 6px; }
+.att-pct { font-size: 14px; font-weight: 800; color: var(--black); }
+
+/* Tier bar */
+.tier-bar-wrap { position: relative; }
+.tier-bar-track {
+  height: 10px; border-radius: 6px; background: var(--smoke);
+  position: relative; overflow: hidden;
+}
+.tier-bar-fill { height: 100%; border-radius: 6px; transition: width .45s ease, background .3s ease; }
+.tier-bar-markers { position: relative; height: 0; }
+.tier-bar-marker {
+  position: absolute; top: -11px; width: 2px; height: 12px;
+  background: var(--fog); border-radius: 1px;
+  transform: translateX(-50%);
+}
+.tier-bar-ticks {
+  position: relative; margin-top: 5px; height: 14px; font-size: 10px; color: var(--muted);
+}
+.tier-bar-ticks span {
+  position: absolute; transform: translateX(-50%); white-space: nowrap;
+}
+.tier-bar-ticks span:first-child { transform: none; left: 0 !important; }
+.tier-bar-ticks span:last-child { transform: none; right: 0 !important; left: auto !important; }
+
+/* Quarterly per-month breakdown */
+.sb-month-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 2px; }
+.sb-month-cell { background: var(--fog); border-radius: 8px; padding: 8px 10px; }
+.sb-mc-label { font-size: 10px; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
+.sb-mc-val { font-size: 14px; font-weight: 700; color: var(--black); }
+.sb-mc-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+/* Empty state */
+.sb-empty { text-align: center; padding: 10px 0 6px; }
+.sb-empty-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* Tabular numbers */
+.sb-total, .sb-row-val, .sb-usd-amount, .att-pct, .cf-val,
+.q-val, .q-att-val, .q-comm-val, .qtf-item strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Commission EUR highlighted */
+.sb-row-accent .sb-row-val { color: var(--coral); font-size: 16px; }
+
+/* Transitions on number changes */
+.sb-total { transition: opacity .15s ease; }
+
+/* Net / Gross toggle (inside hero) */
+.sb-net-toggle {
+  display: flex; background: rgba(255,255,255,.12); border-radius: 7px; padding: 2px;
+}
+.sb-net-btn {
+  padding: 4px 11px; border: none; border-radius: 5px;
+  font-size: 11px; font-weight: 600; background: transparent; color: rgba(255,255,255,.5);
+  cursor: pointer; font-family: inherit; transition: all var(--trans);
+}
+.sb-net-btn.active { background: var(--coral); color: var(--white); }
+
+/* Net deduction rows */
+.sb-deduct-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+.sb-deduct-row + .sb-deduct-row { border-top: 1px solid var(--fog); }
+.sb-deduct-key { font-size: 12px; color: var(--muted); font-weight: 500; }
+.sb-deduct-val { font-size: 12px; font-weight: 600; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ─── Header ─── -->
+<header class="header">
+  <div class="logo">
+    <svg viewBox="0 0 76 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M73.8889 80.3922H69.0802C68.6697 80.3922 68.2593 80.2749 67.9074 80.0404L56.6481 72.1237C56.2963 71.8891 55.8858 71.7718 55.4753 71.7718H9.32407C4.16358 71.7132 0 67.5496 0 62.4478V9.84592C0 4.68543 4.16358 0.521851 9.32407 0.521851H49.142C54.3025 0.521851 58.466 4.68543 58.466 9.84592V14.5959C58.466 15.7101 59.4043 16.6484 60.5185 16.6484H66.6759C71.8364 16.6484 76 20.812 76 25.9725V78.3397C75.9414 79.4539 75.0031 80.3922 73.8889 80.3922ZM9.44136 64.3243H57.8796C58.2901 64.3243 58.7006 64.4416 59.0525 64.6762L66.5586 69.9539C67.3796 70.5404 68.5525 69.9539 68.5525 68.8984V26.0897C68.5525 24.9756 67.6142 24.0373 66.5 24.0373H60.4599C59.3457 24.0373 58.4074 24.9756 58.4074 26.0897V53.5928C58.4074 54.707 57.4691 55.6453 56.3549 55.6453H19.5278C18.4136 55.6453 17.4753 54.707 17.4753 53.5928V18.7009C17.4753 17.5867 18.4136 16.6484 19.5278 16.6484H49.0247C50.1389 16.6484 51.0772 15.7101 51.0772 14.5959V9.96321C51.0772 8.84901 50.1389 7.91074 49.0247 7.91074H9.44136C8.32716 7.91074 7.38889 8.84901 7.38889 9.96321V62.2718C7.38889 63.4447 8.26852 64.3243 9.44136 64.3243ZM25.8611 48.1978H50.0216C50.608 48.1978 51.0185 47.7286 51.0185 47.2009V25.0342C51.0185 24.4478 50.5494 24.0373 50.0216 24.0373H25.8611C25.2747 24.0373 24.8642 24.5064 24.8642 25.0342V47.2009C24.8642 47.7873 25.3333 48.1978 25.8611 48.1978Z" fill="#1A1E23"/>
+    </svg>
+    <span class="wordmark">gorgias</span>
+  </div>
+  <span class="header-tag">Commission Calculator</span>
+</header>
+
+<!-- ─── App Layout ─── -->
+<div class="app-layout">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div class="left-panel">
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-monthly" onclick="setMode('monthly')">Monthly</button>
+        <button class="mode-btn" id="btn-quarterly" onclick="setMode('quarterly')">Quarterly</button>
+      </div>
+      <button class="ctrl-btn" id="info-btn" onclick="toggleInfo()">
+        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        How it works
+      </button>
+      <button class="ctrl-btn" id="settings-btn" onclick="toggleSettings()">
+        <svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+        Settings
+      </button>
+      <span class="mode-desc" id="mode-desc">Each month calculated independently against monthly quota</span>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel" id="info-panel">
+      <div class="info-panel-title">Commission Rate Structure</div>
+      <table class="tier-table">
+        <thead><tr>
+          <th>Attainment</th><th>Rate</th><th>Multiplier</th><th>Applies to</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="tier-swatch"><span class="tier-dot t0"></span>0 – 100%</span></td><td>3.47%</td><td>Base</td><td>New ARR + Influenced</td></tr>
+          <tr><td><span class="tier-swatch"><span class="tier-dot t1"></span>101 – 125%</span></td><td>5.21%</td><td>1.5×</td><td>New ARR + Influenced</td></tr>
+          <tr><td><span class="tier-swatch"><span class="tier-dot t2"></span>126 – 150%</span></td><td>6.94%</td><td>2×</td><td>New ARR + Influenced</td></tr>
+          <tr><td><span class="tier-swatch"><span class="tier-dot t3"></span>151 – 200%</span></td><td>8.68%</td><td>2.5×</td><td>New ARR only</td></tr>
+          <tr><td><span class="tier-swatch"><span class="tier-dot t4"></span>201%+</span></td><td>10.41%</td><td>3×</td><td>New ARR only</td></tr>
+        </tbody>
+      </table>
+      <div class="tier-note">Each rate applies only to the portion of ARR that falls within that bucket (progressive, not retroactive). Influenced ARR is capped at 150% of quarterly quota. Final commission = New ARR commission + Influenced commission. The 70/30 split is embedded in the rates (2.43% vs 1.04%).</div>
+      <div class="info-panel-title" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--smoke)">Customising the Calculator</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px">Click <strong>Settings ⚙</strong> to personalise the calculator for your plan:</p>
+      <ul style="font-size:12px;color:var(--mid);line-height:1.9;padding-left:18px">
+        <li><strong>Quotas</strong> — update your monthly New ARR and Influenced ARR quotas</li>
+        <li><strong>Salary &amp; OTE</strong> — set your base salary and variable OTE to see accurate total-package numbers</li>
+        <li><strong>Commission Rates</strong> — adjust the tier percentages (Base, Tier 1–4) if your plan changes</li>
+        <li><strong>Output Currency</strong> — choose EUR, GBP, or USD; update the exchange rates and all results refresh instantly</li>
+      </ul>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settings-panel">
+      <div class="sp-section">
+        <div class="sp-label">Quotas & Compensation</div>
+        <div class="sp-grid">
+          <div class="sp-field"><label>Monthly New ARR Quota ($)</label><input class="sp-input" id="s-new-quota" type="number" value="65000" oninput="recalc()"></div>
+          <div class="sp-field"><label>Monthly Influenced Quota ($)</label><input class="sp-input" id="s-inf-quota" type="number" value="65000" oninput="recalc()"></div>
+          <div class="sp-field"><label>Annual Base Salary (€)</label><input class="sp-input" id="s-base-eur" type="number" value="83819" oninput="recalc()"></div>
+          <div class="sp-field"><label>Annual Variable OTE (€)</label><input class="sp-input" id="s-ote-eur" type="number" value="27079" oninput="recalc()"></div>
+        </div>
+      </div>
+      <div class="sp-divider"></div>
+      <div class="sp-section">
+        <div class="sp-label">Commission Rates (%)</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">New ARR</div>
+        <div class="sp-grid">
+          <div class="sp-field"><label>Base (0–100%)</label><input class="sp-input" id="s-r0" type="number" step="0.01" value="2.43" oninput="recalc()"></div>
+          <div class="sp-field"><label>Tier 1 (101–125%)</label><input class="sp-input" id="s-r1" type="number" step="0.01" value="3.645" oninput="recalc()"></div>
+          <div class="sp-field"><label>Tier 2 (126–150%)</label><input class="sp-input" id="s-r2" type="number" step="0.01" value="4.86" oninput="recalc()"></div>
+          <div class="sp-field"><label>Tier 3 (151–200%)</label><input class="sp-input" id="s-r3" type="number" step="0.01" value="6.075" oninput="recalc()"></div>
+          <div class="sp-field"><label>Tier 4 (201%+)</label><input class="sp-input" id="s-r4" type="number" step="0.01" value="7.29" oninput="recalc()"></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:12px;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Influenced ARR</div>
+        <div class="sp-grid">
+          <div class="sp-field"><label>Base rate (flat, capped at 150%)</label><input class="sp-input" id="s-inf-rate" type="number" step="0.01" value="1.04" oninput="recalc()"></div>
+        </div>
+      </div>
+      <div class="sp-divider"></div>
+      <div class="sp-section">
+        <div class="sp-label">Currency &amp; Exchange Rates</div>
+        <div class="sp-grid">
+          <div class="sp-field">
+            <label>Output Currency</label>
+            <select class="sp-input" id="s-currency" onchange="onCurrencyChange()">
+              <option value="EUR">Euro (€)</option>
+              <option value="GBP">British Pound (£)</option>
+              <option value="USD">US Dollar ($)</option>
+            </select>
+          </div>
+          <div class="sp-field"><label>1 USD = ? EUR</label><input class="sp-input" id="s-fx" type="number" step="0.0001" value="0.9250" oninput="recalc()"></div>
+          <div class="sp-field"><label>1 USD = ? GBP</label><input class="sp-input" id="s-fx-gbp" type="number" step="0.0001" value="0.7468" oninput="recalc()"></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">Rates as of March 9, 2026. Update as needed — results refresh instantly.</div>
+      </div>
+      <div class="sp-divider"></div>
+      <div class="sp-section">
+        <div class="sp-label">French Tax Estimation</div>
+        <div class="sp-grid">
+          <div class="sp-field">
+            <label>Fiscal Parts (parts fiscales)</label>
+            <select class="sp-input" id="s-fiscal-parts" onchange="recalc()">
+              <option value="1">1 — Single (célibataire)</option>
+              <option value="1.5">1.5 — Single parent, 1 child</option>
+              <option value="2">2 — Couple / PACS</option>
+              <option value="2.5" selected>2.5 — Couple + 1 child</option>
+              <option value="3">3 — Couple + 2 children</option>
+              <option value="3.5">3.5 — Couple + 3 children</option>
+              <option value="4">4 — Couple + 4+ children</option>
+            </select>
+          </div>
+          <div class="sp-field">
+            <label>Other annual income (€)</label>
+            <input class="sp-input" id="s-other-income" type="number" value="0" oninput="recalc()" placeholder="0">
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Based on 2026 French income tax brackets (quotient familial + plafonnement). Tax estimated from annual run-rate — actual PAS rate is set by the DGFiP based on prior year income.</div>
+      </div>
+    </div>
+
+    <!-- ─── MONTHLY MODE ─── -->
+    <div id="view-monthly">
+      <div class="inputs-grid">
+
+        <!-- New ARR -->
+        <div class="card card-new">
+          <div class="card-header">
+            <span class="card-title">New ARR <span class="pill pill-new">2.43%</span></span>
+            <span class="card-quota">Quota: <strong>$<span id="m-new-quota-disp">65,000</span>/mo</strong></span>
+          </div>
+          <div class="card-body">
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Annual Deals</span><span class="field-meta">1.2× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-n-annual" type="number" placeholder="e.g. 30,000" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-n-annual">—</span>
+          </div>
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Monthly Deals</span><span class="field-meta">0.9× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-n-monthly" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-n-monthly">—</span>
+          </div>
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Managed Services</span><span class="field-meta">1.3× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-n-managed" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-n-managed">—</span>
+          </div>
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">One-time Fees</span><span class="field-meta">5% flat, no quota</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-n-onetime" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0">5%</span>
+          </div>
+          <div class="card-footer">
+            <div class="cf-row">
+              <span class="cf-label">Adjusted ARR</span>
+              <span class="cf-val" id="m-n-adj">$0</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Influenced ARR -->
+        <div class="card card-inf">
+          <div class="card-header">
+            <span class="card-title">Influenced ARR <span class="pill pill-inf">1.04%</span></span>
+            <span class="card-quota">Quota: <strong>$<span id="m-inf-quota-disp">27,857</span>/mo</strong></span>
+          </div>
+          <div class="card-body">
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Annual Deals</span><span class="field-meta">1.2× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-i-annual" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-i-annual">—</span>
+          </div>
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Monthly Deals</span><span class="field-meta">0.9× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-i-monthly" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-i-monthly">—</span>
+          </div>
+          <div class="field-row">
+            <div class="field-info"><span class="field-name">Managed Services</span><span class="field-meta">1.3× quota credit</span></div>
+            <div class="field-input-group"><span class="field-prefix">$</span><input class="field-input" id="m-i-managed" type="number" placeholder="0" oninput="recalc()"></div>
+            <span class="field-chip chip-0" id="c-m-i-managed">—</span>
+          </div>
+          <span class="cap-badge" style="margin-top:4px">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 2v6l3 3" stroke="#3451B2" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="8" r="6.5" stroke="#3451B2" stroke-width="1.5"/></svg>
+            Capped at 150% of quota
+          </span>
+          <div class="card-footer">
+            <div class="cf-row">
+              <span class="cf-label">Adjusted ARR</span>
+              <span class="cf-val" id="m-i-adj">$0</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div><!-- /inputs-grid -->
+    </div><!-- /view-monthly -->
+
+    <!-- ─── QUARTERLY MODE ─── -->
+    <div id="view-quarterly" style="display:none">
+      <div class="inputs-grid">
+
+        <!-- New ARR Quarterly -->
+        <div class="card card-new">
+          <div class="card-header">
+            <span class="card-title">New ARR <span class="pill pill-new">2.43%</span></span>
+            <span class="card-quota">Quota: <strong>$<span id="q-new-quota-disp">195,000</span>/qtr</strong></span>
+          </div>
+          <div class="card-body">
+          <div class="q-table-wrap">
+            <table class="q-table">
+              <thead><tr>
+                <th>Deal Type</th><th>Month 1</th><th>Month 2</th><th>Month 3</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="qt-name">Annual</span><span class="qt-meta">1.2×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-annual-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-annual-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-annual-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr>
+                  <td><span class="qt-name">Monthly</span><span class="qt-meta">0.9×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-monthly-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-monthly-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-monthly-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr>
+                  <td><span class="qt-name">Managed Svc</span><span class="qt-meta">1.3×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-managed-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-managed-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-managed-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr>
+                  <td><span class="qt-name">One-time</span><span class="qt-meta">5% flat</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-onetime-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-onetime-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-n-onetime-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr class="q-sep"><td colspan="4" style="padding:0"></td></tr>
+                <tr class="q-out-row">
+                  <td>Adjusted ARR</td>
+                  <td><div class="q-val" id="q-n-adj-1">$0</div></td>
+                  <td><div class="q-val" id="q-n-adj-2">$0</div></td>
+                  <td><div class="q-val" id="q-n-adj-3">$0</div></td>
+                </tr>
+                <tr class="q-out-row">
+                  <td>Attainment (cumul.)</td>
+                  <td><div class="q-att-val" id="q-n-att-1">0%</div></td>
+                  <td><div class="q-att-val" id="q-n-att-2">0%</div></td>
+                  <td><div class="q-att-val" id="q-n-att-3">0%</div></td>
+                </tr>
+                <tr class="q-out-row">
+                  <td>Commission Earned</td>
+                  <td><div class="q-comm-val" id="q-n-comm-1">$0</div></td>
+                  <td><div class="q-comm-val" id="q-n-comm-2">$0</div></td>
+                  <td><div class="q-comm-val" id="q-n-comm-3">$0</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="q-table-footer">
+            <div class="qtf-item">Total Adjusted ARR: <strong id="q-n-total-adj">$0</strong></div>
+            <div class="qtf-item">Quarterly Attainment: <strong id="q-n-total-att">0%</strong></div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Influenced ARR Quarterly -->
+        <div class="card card-inf">
+          <div class="card-header">
+            <span class="card-title">Influenced ARR <span class="pill pill-inf">1.04%</span></span>
+            <span class="card-quota">Quota: <strong>$<span id="q-inf-quota-disp">83,571</span>/qtr</strong></span>
+          </div>
+          <div class="card-body">
+          <div class="q-table-wrap">
+            <table class="q-table">
+              <thead><tr>
+                <th>Deal Type</th><th>Month 1</th><th>Month 2</th><th>Month 3</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="qt-name">Annual</span><span class="qt-meta">1.2×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-annual-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-annual-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-annual-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr>
+                  <td><span class="qt-name">Monthly</span><span class="qt-meta">0.9×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-monthly-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-monthly-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-monthly-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr>
+                  <td><span class="qt-name">Managed Svc</span><span class="qt-meta">1.3×</span></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-managed-1" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-managed-2" type="number" placeholder="0" oninput="recalc()"></div></td>
+                  <td><div class="q-cell"><span class="q-sym">$</span><input class="q-in" id="q-i-managed-3" type="number" placeholder="0" oninput="recalc()"></div></td>
+                </tr>
+                <tr class="q-sep"><td colspan="4" style="padding:0"></td></tr>
+                <tr class="q-out-row">
+                  <td>Adjusted ARR</td>
+                  <td><div class="q-val" id="q-i-adj-1">$0</div></td>
+                  <td><div class="q-val" id="q-i-adj-2">$0</div></td>
+                  <td><div class="q-val" id="q-i-adj-3">$0</div></td>
+                </tr>
+                <tr class="q-out-row">
+                  <td>Attainment (cumul.)</td>
+                  <td><div class="q-att-val" id="q-i-att-1">0%</div></td>
+                  <td><div class="q-att-val" id="q-i-att-2">0%</div></td>
+                  <td><div class="q-att-val" id="q-i-att-3">0%</div></td>
+                </tr>
+                <tr class="q-out-row">
+                  <td>Commission Earned</td>
+                  <td><div class="q-comm-val" id="q-i-comm-1">$0</div></td>
+                  <td><div class="q-comm-val" id="q-i-comm-2">$0</div></td>
+                  <td><div class="q-comm-val" id="q-i-comm-3">$0</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="cap-badge" style="margin-top:10px;display:inline-flex">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 2v6l3 3" stroke="#3451B2" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="8" r="6.5" stroke="#3451B2" stroke-width="1.5"/></svg>
+            Capped at 150% — max $<span id="q-inf-cap">125,357</span>
+          </span>
+          <div class="q-table-footer">
+            <div class="qtf-item">Total Adjusted ARR: <strong id="q-i-total-adj">$0</strong></div>
+            <div class="qtf-item">Quarterly Attainment: <strong id="q-i-total-att">0%</strong></div>
+          </div>
+          </div>
+        </div>
+
+      </div><!-- /inputs-grid -->
+    </div><!-- /view-quarterly -->
+
+  </div><!-- /left-panel -->
+
+  <!-- ═══ RIGHT SIDEBAR ═══ -->
+  <aside class="results-sidebar">
+
+    <!-- Hero: Total Salary -->
+    <div class="sb-hero">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="sb-period" id="sb-period">This Month</div>
+        <div class="sb-net-toggle">
+          <button class="sb-net-btn active" id="net-btn" onclick="setNetMode(true)">Net</button>
+          <button class="sb-net-btn" id="gross-btn" onclick="setNetMode(false)">Gross</button>
+        </div>
+      </div>
+      <div class="sb-total" id="sb-total-package">€6,985</div>
+      <div class="sb-total-desc" id="sb-total-desc">Est. net salary (base + commission)</div>
+      <div class="sb-ote-label">
+        <span>Variable OTE Progress</span>
+        <span class="sb-ote-pct" id="sb-ote-pct">0%</span>
+      </div>
+      <div class="sb-ote-track">
+        <div class="sb-ote-fill" id="sb-ote-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Salary Breakdown -->
+    <div class="sb-card">
+      <div class="sb-card-label">Earnings Breakdown</div>
+      <div class="sb-row">
+        <span class="sb-row-key">Base salary</span>
+        <span class="sb-row-val" id="sb-base-salary">€6,985</span>
+      </div>
+      <div class="sb-row sb-row-accent">
+        <span class="sb-row-key" id="sb-comm-label">Commission (€)</span>
+        <span class="sb-row-val" id="sb-comm-eur">€0</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-row sb-total-row">
+        <span class="sb-row-key">Total Salary</span>
+        <span class="sb-row-val" id="sb-total-row">€6,985</span>
+      </div>
+
+      <!-- Net deductions section (shown in net mode) -->
+      <div id="sb-net-section" style="display:none">
+        <div class="sb-divider"></div>
+        <div class="sb-deduct-row">
+          <span class="sb-deduct-key">Social charges</span>
+          <span class="sb-deduct-val" id="sb-social-deduct">-€0</span>
+        </div>
+        <div class="sb-deduct-row">
+          <span class="sb-deduct-key">Est. income tax (PAS)</span>
+          <span class="sb-deduct-val" id="sb-tax-deduct">-€0</span>
+        </div>
+        <div class="sb-divider"></div>
+        <div class="sb-row sb-total-row">
+          <span class="sb-row-key" style="color:var(--coral)">Net Total Salary</span>
+          <span class="sb-row-val" id="sb-net-total-row" style="color:var(--coral)">€0</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">Est. from annual run-rate · 2026 French brackets · PAS rate set yearly by DGFiP</div>
+      </div>
+
+      <!-- USD commission detail -->
+      <div class="sb-usd-block">
+        <div class="sb-usd-total">Commission (USD)</div>
+        <div class="sb-usd-amount" id="sb-total-usd">$0</div>
+        <div class="sb-sub-row"><span>New ARR (2.43%)</span><span id="sb-new-weighted">$0</span></div>
+        <div class="sb-sub-row"><span>Influenced ARR (1.04%)</span><span id="sb-inf-weighted">$0</span></div>
+        <div class="sb-sub-row"><span>One-time fees (5%)</span><span id="sb-ot-comm">$0</span></div>
+      </div>
+
+      <div id="sb-empty" class="sb-empty" style="display:none">
+        <div class="sb-empty-text">Enter your deal amounts on the left<br>to see your commission</div>
+      </div>
+    </div>
+
+    <!-- Quota Attainment -->
+    <div class="sb-card">
+      <div class="sb-card-label">Quota Attainment</div>
+      <div class="att-block">
+        <div class="att-header">
+          <span class="att-name">New ARR <span class="pill pill-new" id="sb-new-quota-pill">$65,000</span></span>
+          <span class="att-pct" id="sb-new-att-pct">0%</span>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar-track"><div class="tier-bar-fill" id="sb-new-bar-fill"></div></div>
+          <div class="tier-bar-markers" id="sb-new-bar-markers"></div>
+          <div class="tier-bar-ticks" id="sb-new-bar-ticks"></div>
+        </div>
+      </div>
+      <div class="att-block">
+        <div class="att-header">
+          <span class="att-name">Influenced ARR <span class="pill pill-inf" id="sb-inf-quota-pill">$65,000</span></span>
+          <span class="att-pct" id="sb-inf-att-pct">0%</span>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar-track"><div class="tier-bar-fill" id="sb-inf-bar-fill"></div></div>
+          <div class="tier-bar-markers" id="sb-inf-bar-markers"></div>
+          <div class="tier-bar-ticks" id="sb-inf-bar-ticks"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quarterly Per-Month (hidden in monthly mode) -->
+    <div class="sb-card" id="sb-qtr-breakdown" style="display:none">
+      <div class="sb-card-label">Monthly Commission Earned</div>
+      <div class="sb-month-grid">
+        <div class="sb-month-cell"><div class="sb-mc-label">Month 1</div><div class="sb-mc-val" id="sb-m1-comm">$0</div><div class="sb-mc-sub">weighted</div></div>
+        <div class="sb-month-cell"><div class="sb-mc-label">Month 2</div><div class="sb-mc-val" id="sb-m2-comm">$0</div><div class="sb-mc-sub">weighted</div></div>
+        <div class="sb-month-cell"><div class="sb-mc-label">Month 3</div><div class="sb-mc-val" id="sb-m3-comm">$0</div><div class="sb-mc-sub">weighted</div></div>
+      </div>
+    </div>
+
+  </aside><!-- /results-sidebar -->
+
+</div><!-- /app-layout -->
+</div><!-- /page -->
+
+<script>
+'use strict';
+
+let MODE = 'monthly';
+let NET_MODE = true;        // Default: show net figures
+let SALARY_CURRENCY = 'EUR'; // Tracks what currency the salary fields are displaying
+
+/* ─── Helpers ─── */
+const $ = id => document.getElementById(id);
+const v = id => parseFloat($(id)?.value) || 0;
+const fmtD = n => '$' + Math.round(n).toLocaleString('en-US');
+const fmtE = n => '€' + Math.round(n).toLocaleString('fr-FR');
+const fmtLocal = (n, currency) => {
+  const sym = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+  return sym + Math.round(n).toLocaleString('en-US');
+};
+const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
+
+function getSettings() {
+  const currEl = document.getElementById('s-currency');
+  const fpEl   = document.getElementById('s-fiscal-parts');
+  const currency = currEl ? currEl.value : 'EUR';
+  const fx    = v('s-fx') > 0 ? v('s-fx') : 0.9250;
+  const fxGBP = v('s-fx-gbp') || 0.7468;
+
+  // Salary fields are shown in SALARY_CURRENCY — convert back to EUR for all calculations
+  const rawBase = v('s-base-eur');
+  const rawOTE  = v('s-ote-eur');
+  let baseEUR, oteEUR;
+  if (SALARY_CURRENCY === 'GBP') {
+    baseEUR = rawBase / fxGBP * fx;
+    oteEUR  = rawOTE  / fxGBP * fx;
+  } else if (SALARY_CURRENCY === 'USD') {
+    baseEUR = rawBase * fx;
+    oteEUR  = rawOTE  * fx;
+  } else {
+    baseEUR = rawBase;
+    oteEUR  = rawOTE;
+  }
+
+  return {
+    newQuotaM: v('s-new-quota'), infQuotaM: v('s-inf-quota'),
+    baseEUR, oteEUR,
+    fx, fxGBP,
+    currency,
+    fiscalParts: fpEl ? (parseFloat(fpEl.value) || 2.5) : 2.5,
+    otherIncome: v('s-other-income') || 0,
+    rates: [v('s-r0'), v('s-r1'), v('s-r2'), v('s-r3'), v('s-r4')],
+    infRates: (() => { const r = v('s-inf-rate') || 1.04; return [r, r * 1.5, r * 2.0]; })()
+  };
+}
+
+/* ─── French Social Charges — CADRE, SYNTEC / IDCC 1486, 2026 ─── */
+// Rates derived from legal texts; PMSS from Jan 2026 payslip (€4,005/mo)
+const PMSS = 4005;           // Plafond Mensuel Sécurité Sociale 2026
+const EMPLOYER_HEALTH = 180; // Typical employer complementary health benefit (imposable)
+
+function computeSocialCharges(grossMonthlyEUR) {
+  const T1 = Math.min(grossMonthlyEUR, PMSS);
+  const T2 = Math.max(0, grossMonthlyEUR - PMSS);
+  const ssPlaf    = 0.0690  * T1;            // Retraite SS plafonnée
+  const complT1   = 0.0415  * T1;            // AGIRC-ARRCO Tranche 1
+  const complT2   = 0.0986  * T2;            // AGIRC-ARRCO Tranche 2
+  const ssDepl    = 0.0040  * grossMonthlyEUR; // Retraite SS déplafonnée
+  const apec      = 0.00024 * grossMonthlyEUR; // APEC (cadres only)
+  const csgDed    = 0.0680  * grossMonthlyEUR; // CSG déductible
+  const csgNonDed = 0.0290  * grossMonthlyEUR; // CSG/CRDS non-déductible
+  const total     = ssPlaf + complT1 + complT2 + ssDepl + apec + csgDed + csgNonDed;
+  const deductible = total - csgNonDed; // csgNonDed is NOT income-tax deductible
+  return { total, deductible, csgNonDed };
+}
+
+/* ─── French Income Tax (Impôt sur le Revenu) — 2026 brackets ─── */
+// Brackets for 2025 income (Finance Act 2025, +1.8% inflation adjustment)
+function computeAnnualIncomeTax(annualNetImposable, fiscalParts) {
+  const BRACKETS = [
+    [11497, 0], [29315, 0.11], [83823, 0.30], [180294, 0.41], [Infinity, 0.45]
+  ];
+  const PLAFOND_DEMI_PART = 1759; // Max tax reduction per extra half-part vs 2 parts
+
+  function taxAt(income, parts) {
+    const q = income / parts;
+    let t = 0, prev = 0;
+    for (const [limit, rate] of BRACKETS) {
+      if (q <= prev) break;
+      t += (Math.min(q, limit) - prev) * rate;
+      prev = limit;
+    }
+    return Math.max(0, t * parts);
+  }
+
+  let tax = taxAt(annualNetImposable, fiscalParts);
+
+  // Plafonnement du quotient familial (applies above 2 parts)
+  if (fiscalParts > 2) {
+    const taxWith2     = taxAt(annualNetImposable, 2);
+    const extraHalves  = (fiscalParts - 2) * 2;
+    const maxBenefit   = extraHalves * PLAFOND_DEMI_PART;
+    if (taxWith2 - tax > maxBenefit) tax = taxWith2 - maxBenefit;
+  }
+
+  return Math.max(0, tax);
+}
+
+/* ─── Net take-home computation ─── */
+function computeNet(basePeriodEUR, commEUR, fiscalParts, otherAnnualIncomeEUR, isQtr) {
+  const totalGrossEUR  = basePeriodEUR + commEUR;
+  const social         = computeSocialCharges(totalGrossEUR);
+  const netAfterSocial = totalGrossEUR - social.total;
+
+  // Annualise for income tax estimate
+  const periods = isQtr ? 4 : 12;
+
+  // Net imposable = gross - deductible charges + CSG non-ded + employer health benefit
+  // Scaled to annual then add other income (treated as additional net imposable)
+  const annualNetImposable =
+    (totalGrossEUR - social.deductible + social.csgNonDed + EMPLOYER_HEALTH) * periods
+    + otherAnnualIncomeEUR;
+
+  const annualTax = computeAnnualIncomeTax(annualNetImposable, fiscalParts);
+  const periodTax = annualTax / periods;
+
+  return {
+    socialCharges: social.total,
+    periodTax,
+    netTotal: netAfterSocial - periodTax
+  };
+}
+
+/* ─── Progressive commission for a cumulative range ─── */
+function calcRange(cumStart, cumEnd, quota, isInfluenced, rates) {
+  if (isInfluenced) cumEnd = Math.min(cumEnd, quota * 1.5);
+  cumStart = Math.max(0, cumStart); cumEnd = Math.max(0, cumEnd);
+  if (cumEnd <= cumStart) return 0;
+  const tiers = [
+    [0, quota, rates[0]], [quota, quota*1.25, rates[1]], [quota*1.25, quota*1.5, rates[2]]
+  ];
+  if (!isInfluenced) {
+    tiers.push([quota*1.5, quota*2, rates[3]], [quota*2, Infinity, rates[4]]);
+  }
+  let comm = 0;
+  for (const [lo, hi, r] of tiers) {
+    const s = Math.max(cumStart, lo), e = Math.min(cumEnd, hi);
+    if (e > s) comm += (e - s) * r / 100;
+  }
+  return comm;
+}
+
+function adjARR(annual, monthly, managed) {
+  return (annual||0)*1.2 + (monthly||0)*0.9 + (managed||0)*1.3;
+}
+
+/* ─── Tier chip color ─── */
+function chipClass(pct) {
+  if (pct <= 0) return 'chip-0';
+  if (pct <= 100) return 'chip-0';
+  if (pct <= 125) return 'chip-1';
+  if (pct <= 150) return 'chip-2';
+  return 'chip-3';
+}
+function setChip(id, pct) {
+  const el = $(id); if (!el) return;
+  el.className = 'field-chip ' + chipClass(pct);
+  el.textContent = pct > 0 ? pct.toFixed(0)+'%' : '—';
+}
+
+/* ─── Tier bar color ─── */
+function tierColor(pct) {
+  if (pct < 100) return '#FF9780';
+  if (pct < 125) return '#F5C842';
+  if (pct < 150) return '#F5A020';
+  return '#D63C10';
+}
+
+/* ─── Render a tier progress bar ─── */
+function renderBar(fillId, markersId, ticksId, pct, isInfluenced) {
+  const MAX = 200;
+  const fillEl = $(fillId);
+  const markersEl = $(markersId);
+  const ticksEl = $(ticksId);
+  if (!fillEl) return;
+
+  const fillPct = Math.min(pct, MAX) / MAX * 100;
+  fillEl.style.width = fillPct + '%';
+  fillEl.style.background = tierColor(pct);
+
+  // Markers at 100%, 125%, 150% (and 200% is the end)
+  const milestones = isInfluenced ? [100, 125, 150] : [100, 125, 150, 200];
+  if (markersEl) {
+    markersEl.innerHTML = milestones.slice(0,-1).map(m =>
+      `<div class="tier-bar-marker" style="left:${m/MAX*100}%"></div>`
+    ).join('');
+  }
+  if (ticksEl) {
+    const allTicks = isInfluenced
+      ? [[0,'0%'],[100,'100%'],[125,'125%'],[150,'150%']]
+      : [[0,'0%'],[100,'100%'],[125,'125%'],[150,'150%'],[200,'200%']];
+    ticksEl.innerHTML = allTicks.map(([val, label]) =>
+      `<span style="left:${val/MAX*100}%">${label}</span>`
+    ).join('');
+  }
+}
+
+/* ─── Update sidebar ─── */
+function updateSidebar(totalUSD, newWeighted, infWeighted, otComm,
+                        newAtt, infAtt, basePeriodEUR, otePeriodEUR, monthlyRes, s) {
+  const isQtr   = MODE === 'quarterly';
+  const currency = s.currency;
+  const safeFx  = s.fx > 0 ? s.fx : 0.9250;
+  const fxLocal = currency === 'EUR' ? safeFx : currency === 'GBP' ? s.fxGBP : 1;
+  const sym     = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+
+  // ── Gross figures in local currency ──
+  const totalLocal   = totalUSD * fxLocal;
+  const baseLocal    = currency === 'EUR' ? basePeriodEUR : (basePeriodEUR / safeFx) * fxLocal;
+  const oteLocal     = currency === 'EUR' ? otePeriodEUR  : (otePeriodEUR  / safeFx) * fxLocal;
+  const packageLocal = baseLocal + totalLocal;
+  const otePct       = oteLocal > 0 ? Math.min((totalLocal / oteLocal) * 100, 150) : 0;
+
+  // ── Net figures (computed in EUR, then converted) ──
+  const commEUR     = totalUSD * safeFx;
+  const netData     = computeNet(basePeriodEUR, commEUR, s.fiscalParts, s.otherIncome, isQtr);
+  // Conversion factor: 1 EUR → local currency
+  const localPerEUR = currency === 'EUR' ? 1 : currency === 'GBP' ? s.fxGBP / safeFx : 1 / safeFx;
+  const socialLocal = netData.socialCharges * localPerEUR;
+  const taxLocal    = netData.periodTax     * localPerEUR;
+  const netTotalLoc = netData.netTotal      * localPerEUR;
+
+  // ── Hero: show net or gross ──
+  const heroVal = NET_MODE ? netTotalLoc : packageLocal;
+  set('sb-period', isQtr ? 'This Quarter' : 'This Month');
+  set('sb-total-package', fmtLocal(heroVal, currency));
+  const descEl = $('sb-total-desc');
+  if (descEl) descEl.textContent = NET_MODE
+    ? 'Est. net salary (after French deductions)'
+    : 'Gross earnings (base + commission)';
+
+  set('sb-ote-pct', otePct.toFixed(0) + '%');
+  const oFill = $('sb-ote-fill');
+  if (oFill) oFill.style.width = Math.min(otePct, 100) + '%';
+
+  // ── Breakdown (always gross) ──
+  set('sb-base-salary', fmtLocal(baseLocal, currency));
+  set('sb-comm-label', `Commission (${sym})`);
+  set('sb-comm-eur',   fmtLocal(totalLocal, currency));
+  set('sb-total-row',  fmtLocal(packageLocal, currency));
+  set('sb-total-usd',  fmtD(totalUSD));
+  set('sb-new-weighted', fmtD(newWeighted));
+  set('sb-inf-weighted', fmtD(infWeighted));
+  set('sb-ot-comm',    fmtD(otComm));
+
+  // ── Net deductions section ──
+  const netSection = $('sb-net-section');
+  if (netSection) netSection.style.display = NET_MODE ? '' : 'none';
+  if (NET_MODE) {
+    set('sb-social-deduct',  '−' + fmtLocal(socialLocal, currency));
+    set('sb-tax-deduct',     '−' + fmtLocal(taxLocal,    currency));
+    set('sb-net-total-row',  fmtLocal(netTotalLoc, currency));
+  }
+
+  // ── Empty state ──
+  const isEmpty = totalUSD === 0;
+  const emptyEl = $('sb-empty'); if (emptyEl) emptyEl.style.display = isEmpty ? '' : 'none';
+
+  // ── Attainment bars ──
+  const periodLabel = isQtr ? '/qtr' : '/mo';
+  const newQ = isQtr ? s.newQuotaM * 3 : s.newQuotaM;
+  const infQ = isQtr ? s.infQuotaM * 3 : s.infQuotaM;
+  set('sb-new-quota-pill', '$' + Math.round(newQ).toLocaleString('en-US') + periodLabel);
+  set('sb-inf-quota-pill', '$' + Math.round(infQ).toLocaleString('en-US') + periodLabel);
+  set('sb-new-att-pct', newAtt.toFixed(1) + '%');
+  set('sb-inf-att-pct', Math.min(infAtt, 150).toFixed(1) + '%');
+  const newAttEl = $('sb-new-att-pct');
+  const infAttEl = $('sb-inf-att-pct');
+  if (newAttEl) newAttEl.style.color = tierColor(newAtt);
+  if (infAttEl) infAttEl.style.color = tierColor(infAtt);
+
+  renderBar('sb-new-bar-fill', 'sb-new-bar-markers', 'sb-new-bar-ticks', newAtt, false);
+  renderBar('sb-inf-bar-fill', 'sb-inf-bar-markers', 'sb-inf-bar-ticks', infAtt, true);
+
+  // ── Quarterly per-month breakdown ──
+  const qBreak = $('sb-qtr-breakdown');
+  if (qBreak) qBreak.style.display = isQtr ? '' : 'none';
+  if (isQtr && monthlyRes) {
+    monthlyRes.forEach((res, i) => {
+      set(`sb-m${i+1}-comm`, fmtD(res.weighted));
+    });
+  }
+}
+
+/* ─── Monthly Calc ─── */
+function calcMonthly(s) {
+  const nQ = s.newQuotaM, iQ = s.infQuotaM;
+
+  const nAnn=v('m-n-annual'), nMon=v('m-n-monthly'), nMan=v('m-n-managed'), nOT=v('m-n-onetime');
+  const iAnn=v('m-i-annual'), iMon=v('m-i-monthly'), iMan=v('m-i-managed');
+
+  const nAdj = adjARR(nAnn, nMon, nMan);
+  const iAdj = adjARR(iAnn, iMon, iMan);
+  const nAtt = nQ > 0 ? nAdj/nQ*100 : 0;
+  const iAtt = iQ > 0 ? Math.min(iAdj/iQ*100, 150) : 0;
+
+  // Per-deal chips
+  setChip('c-m-n-annual',  nQ>0 ? (nAnn*1.2)/nQ*100 : 0);
+  setChip('c-m-n-monthly', nQ>0 ? (nMon*0.9)/nQ*100 : 0);
+  setChip('c-m-n-managed', nQ>0 ? (nMan*1.3)/nQ*100 : 0);
+  setChip('c-m-i-annual',  iQ>0 ? (iAnn*1.2)/iQ*100 : 0);
+  setChip('c-m-i-monthly', iQ>0 ? (iMon*0.9)/iQ*100 : 0);
+  setChip('c-m-i-managed', iQ>0 ? (iMan*1.3)/iQ*100 : 0);
+
+  set('m-n-adj', fmtD(nAdj));
+  set('m-i-adj', fmtD(iAdj));
+
+  const newComm  = calcRange(0, nAdj, nQ, false, s.rates);
+  const infComm  = calcRange(0, iAdj, iQ, true,  s.infRates);
+  const otComm   = nOT * 0.05;
+  const newW     = newComm;
+  const infW     = infComm;
+  const totalUSD = newW + infW + otComm;
+
+  updateSidebar(totalUSD, newW, infW, otComm,
+    nAtt, iAtt, s.baseEUR/12, s.oteEUR/12, null, s);
+}
+
+/* ─── Quarterly Calc ─── */
+function calcQuarterly(s) {
+  const nQ = s.newQuotaM * 3;
+  const iQ = s.infQuotaM * 3;
+
+  const months = [1,2,3].map(m => ({
+    nAdj: adjARR(v(`q-n-annual-${m}`), v(`q-n-monthly-${m}`), v(`q-n-managed-${m}`)),
+    iAdj: adjARR(v(`q-i-annual-${m}`), v(`q-i-monthly-${m}`), v(`q-i-managed-${m}`)),
+    nOT: v(`q-n-onetime-${m}`)
+  }));
+
+  let cumNew=0, cumInf=0, cumInfCapped=0;
+  let totalNewComm=0, totalInfComm=0, totalOTComm=0;
+  const monthlyRes = [];
+
+  months.forEach((m, idx) => {
+    const prevNew=cumNew, prevIC=cumInfCapped;
+    cumNew += m.nAdj; cumInf += m.iAdj;
+    cumInfCapped = Math.min(cumInf, iQ*1.5);
+    const nAtt = nQ>0 ? cumNew/nQ*100 : 0;
+    const iAtt = iQ>0 ? Math.min(cumInf/iQ*100, 150) : 0;
+    const nC = calcRange(prevNew, cumNew, nQ, false, s.rates);
+    const iC = calcRange(prevIC, cumInfCapped, iQ, true, s.infRates);
+    const oC = m.nOT * 0.05;
+    totalNewComm += nC; totalInfComm += iC; totalOTComm += oC;
+    monthlyRes.push({ newComm:nC, infComm:iC, otComm:oC, weighted:nC*0.7+iC*0.3+oC });
+
+    const i = idx+1;
+    set(`q-n-adj-${i}`,  fmtD(m.nAdj));
+    set(`q-i-adj-${i}`,  fmtD(m.iAdj));
+    set(`q-n-att-${i}`,  nAtt.toFixed(1)+'%');
+    set(`q-i-att-${i}`,  iAtt.toFixed(1)+'%');
+    set(`q-n-comm-${i}`, fmtD(nC));
+    set(`q-i-comm-${i}`, fmtD(iC));
+    const nEl=$(`q-n-att-${i}`), iEl=$(`q-i-att-${i}`);
+    if(nEl) nEl.style.color = tierColor(nAtt);
+    if(iEl) iEl.style.color = tierColor(iAtt);
+  });
+
+  const totalNewAdj = months.reduce((a,m)=>a+m.nAdj, 0);
+  const totalInfAdj = months.reduce((a,m)=>a+m.iAdj, 0);
+  const nTotalAtt = nQ>0 ? totalNewAdj/nQ*100 : 0;
+  const iTotalAtt = iQ>0 ? Math.min(totalInfAdj/iQ*100, 150) : 0;
+
+  set('q-n-total-adj', fmtD(totalNewAdj));
+  set('q-i-total-adj', fmtD(totalInfAdj));
+  set('q-n-total-att', nTotalAtt.toFixed(1)+'%');
+  set('q-i-total-att', iTotalAtt.toFixed(1)+'%');
+  set('q-new-quota-disp', nQ.toLocaleString('en-US'));
+  set('q-inf-quota-disp', Math.round(iQ).toLocaleString('en-US'));
+  set('q-inf-cap', Math.round(iQ*1.5).toLocaleString('en-US'));
+
+  const newW = totalNewComm, infW = totalInfComm;
+  const totalUSD = newW + infW + totalOTComm;
+
+  updateSidebar(totalUSD, newW, infW, totalOTComm,
+    nTotalAtt, iTotalAtt, s.baseEUR/4, s.oteEUR/4, monthlyRes, s);
+}
+
+/* ─── Quota displays ─── */
+function updateQuotaDisplays(s) {
+  set('m-new-quota-disp', s.newQuotaM.toLocaleString('en-US'));
+  set('m-inf-quota-disp', Math.round(s.infQuotaM).toLocaleString('en-US'));
+}
+
+function recalc() {
+  const s = getSettings();
+  updateQuotaDisplays(s);
+  if (MODE==='monthly') calcMonthly(s); else calcQuarterly(s);
+}
+
+function setMode(mode) {
+  MODE = mode;
+  $('btn-monthly').classList.toggle('active', mode==='monthly');
+  $('btn-quarterly').classList.toggle('active', mode==='quarterly');
+  $('view-monthly').style.display  = mode==='monthly'  ? '' : 'none';
+  $('view-quarterly').style.display = mode==='quarterly' ? '' : 'none';
+  set('mode-desc', mode==='monthly'
+    ? 'Each month calculated independently against monthly quota'
+    : 'Cumulative quarterly attainment — accelerators calculated progressively across 3 months');
+  recalc();
+}
+
+function toggleInfo() {
+  const panel = $('info-panel');
+  const btn = $('info-btn');
+  const isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+}
+
+function toggleSettings() {
+  const panel = $('settings-panel');
+  const btn = $('settings-btn');
+  const isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+}
+
+function setNetMode(isNet) {
+  NET_MODE = isNet;
+  const netBtn   = $('net-btn');
+  const grossBtn = $('gross-btn');
+  if (netBtn)   netBtn.classList.toggle('active', isNet);
+  if (grossBtn) grossBtn.classList.toggle('active', !isNet);
+  recalc();
+}
+
+function onCurrencyChange() {
+  const newCurrency = document.getElementById('s-currency').value;
+  if (newCurrency === SALARY_CURRENCY) { recalc(); return; }
+
+  const fx    = v('s-fx') > 0 ? v('s-fx') : 0.9250;
+  const fxGBP = v('s-fx-gbp') || 0.7468;
+
+  const rawBase = parseFloat(document.getElementById('s-base-eur').value) || 0;
+  const rawOTE  = parseFloat(document.getElementById('s-ote-eur').value)  || 0;
+
+  // Step 1: Convert current displayed values → EUR
+  let baseEUR, oteEUR;
+  if (SALARY_CURRENCY === 'GBP') {
+    baseEUR = rawBase / fxGBP * fx;
+    oteEUR  = rawOTE  / fxGBP * fx;
+  } else if (SALARY_CURRENCY === 'USD') {
+    baseEUR = rawBase * fx;
+    oteEUR  = rawOTE  * fx;
+  } else {
+    baseEUR = rawBase;
+    oteEUR  = rawOTE;
+  }
+
+  // Step 2: Convert EUR → new display currency
+  let newBase, newOTE, sym;
+  if (newCurrency === 'GBP') {
+    newBase = baseEUR / fx * fxGBP;
+    newOTE  = oteEUR  / fx * fxGBP;
+    sym = '£';
+  } else if (newCurrency === 'USD') {
+    newBase = baseEUR / fx;
+    newOTE  = oteEUR  / fx;
+    sym = '$';
+  } else {
+    newBase = baseEUR;
+    newOTE  = oteEUR;
+    sym = '€';
+  }
+
+  // Step 3: Update field values and labels
+  document.getElementById('s-base-eur').value = Math.round(newBase);
+  document.getElementById('s-ote-eur').value  = Math.round(newOTE);
+  document.getElementById('s-base-eur').closest('.sp-field').querySelector('label').textContent
+    = `Annual Base Salary (${sym})`;
+  document.getElementById('s-ote-eur').closest('.sp-field').querySelector('label').textContent
+    = `Annual Variable OTE (${sym})`;
+
+  SALARY_CURRENCY = newCurrency;
+  recalc();
+}
+
+// Init
+recalc();
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{
+  "name": "Reddit Ideas Miner (Abacus AI Enhanced)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 400],
+      "name": "Start Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "search",
+        "subreddit": "startups",
+        "keyword": "AI",
+        "sort": "top",
+        "limit": 10
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [460, 400],
+      "name": "Search Reddit for AI Posts"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://routellm.abacus.ai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer s2_8ecdc6832cb94ac599ea14ab55b0a928"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ {\n  \"model\": \"grok-beta\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a startup idea analyzer. Analyze Reddit posts and extract: 1) Problem being discussed, 2) Potential startup solution, 3) Market size indicator, 4) Confidence score (1-10). Format as JSON with keys: problem, solution, market_size, confidence_score, reasoning.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Title: \" + $json.title + \"\\n\\nContent: \" + ($json.selftext || $json.url) + \"\\n\\nUpvotes: \" + $json.score + \"\\nComments: \" + $json.num_comments\n    }\n  ]\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 400],
+      "name": "Analyze with Grok (Abacus AI)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI response and structure data\nconst aiResponse = $input.item.json.choices?.[0]?.message?.content || '{}';\nconst redditData = $('Search Reddit for AI Posts').item.json;\n\nlet analysis;\ntry {\n  // Try to parse JSON from AI response\n  const jsonMatch = aiResponse.match(/\\{[\\s\\S]*\\}/);\n  if (jsonMatch) {\n    analysis = JSON.parse(jsonMatch[0]);\n  } else {\n    analysis = {\n      problem: \"Parse failed\",\n      solution: aiResponse.substring(0, 200),\n      market_size: \"Unknown\",\n      confidence_score: 0,\n      reasoning: \"Could not parse JSON\"\n    };\n  }\n} catch (e) {\n  analysis = {\n    problem: \"Error\",\n    solution: aiResponse,\n    market_size: \"Unknown\",\n    confidence_score: 0,\n    reasoning: e.message\n  };\n}\n\nreturn {\n  json: {\n    post_title: redditData.title,\n    post_url: `https://reddit.com${redditData.permalink}`,\n    subreddit: redditData.subreddit,\n    upvotes: redditData.score,\n    comments: redditData.num_comments,\n    problem: analysis.problem,\n    solution: analysis.solution,\n    market_size: analysis.market_size,\n    confidence_score: analysis.confidence_score,\n    reasoning: analysis.reasoning,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400],
+      "name": "Parse & Structure Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.confidence_score }}",
+              "operation": "larger",
+              "value2": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 400],
+      "name": "Filter High-Confidence Ideas"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Subreddit": "={{ $json.subreddit }}",
+            "Title": "={{ $json.post_title }}",
+            "URL": "={{ $json.post_url }}",
+            "Upvotes": "={{ $json.upvotes }}",
+            "Comments": "={{ $json.comments }}",
+            "Problem": "={{ $json.problem }}",
+            "Solution": "={{ $json.solution }}",
+            "Market Size": "={{ $json.market_size }}",
+            "Score": "={{ $json.confidence_score }}",
+            "Reasoning": "={{ $json.reasoning }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1340, 300],
+      "name": "Save Good Ideas to Sheets"
+    }
+  ],
+  "connections": {
+    "Start Workflow": {
+      "main": [[{"node": "Search Reddit for AI Posts", "type": "main", "index": 0}]]
+    },
+    "Search Reddit for AI Posts": {
+      "main": [[{"node": "Analyze with Grok (Abacus AI)", "type": "main", "index": 0}]]
+    },
+    "Analyze with Grok (Abacus AI)": {
+      "main": [[{"node": "Parse & Structure Data", "type": "main", "index": 0}]]
+    },
+    "Parse & Structure Data": {
+      "main": [[{"node": "Filter High-Confidence Ideas", "type": "main", "index": 0}]]
+    },
+    "Filter High-Confidence Ideas": {
+      "main": [[{"node": "Save Good Ideas to Sheets", "type": "main", "index": 0}], []]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

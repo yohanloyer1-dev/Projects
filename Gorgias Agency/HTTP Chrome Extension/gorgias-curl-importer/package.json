@@ -1,0 +1,16 @@
+{
+  "name": "gorgias-bulk-action-creator",
+  "version": "1.0.0",
+  "description": "Bulk create Gorgias AI Agent actions via API",
+  "main": "create-actions.js",
+  "type": "module",
+  "scripts": {
+    "setup": "node setup.js",
+    "start": "node create-actions.js",
+    "csv": "node csv-to-actions.js"
+  },
+  "dependencies": {
+    "ulid": "^2.3.0",
+    "axios": "^1.6.5"
+  }
+}

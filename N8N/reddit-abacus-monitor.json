@@ -1,0 +1,183 @@
+{
+  "name": "Reddit Monitor + Abacus AI Analyzer",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "search",
+        "subreddit": "technology",
+        "keyword": "AI",
+        "limit": 5
+      },
+      "name": "Search Reddit Posts",
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://routellm.abacus.ai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer s2_8ecdc6832cb94ac599ea14ab55b0a928"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ {\n  \"model\": \"grok-beta\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a Reddit sentiment analyzer. Analyze posts and provide: 1) Sentiment (positive/negative/neutral), 2) Key topics, 3) One sentence summary.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Title: \" + $json.title + \"\\n\\nContent: \" + ($json.selftext || 'No text content') + \"\\n\\nScore: \" + $json.score + \" upvotes\"\n    }\n  ]\n} }}",
+        "options": {}
+      },
+      "name": "Analyze with Grok (Abacus AI)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "post_title",
+              "type": "string",
+              "value": "={{ $('Search Reddit Posts').item.json.title }}"
+            },
+            {
+              "id": "2",
+              "name": "post_url",
+              "type": "string",
+              "value": "=https://reddit.com{{ $('Search Reddit Posts').item.json.permalink }}"
+            },
+            {
+              "id": "3",
+              "name": "subreddit",
+              "type": "string",
+              "value": "={{ $('Search Reddit Posts').item.json.subreddit }}"
+            },
+            {
+              "id": "4",
+              "name": "upvotes",
+              "type": "number",
+              "value": "={{ $('Search Reddit Posts').item.json.score }}"
+            },
+            {
+              "id": "5",
+              "name": "ai_analysis",
+              "type": "string",
+              "value": "={{ $json.choices?.[0]?.message?.content || 'Analysis failed' }}"
+            },
+            {
+              "id": "6",
+              "name": "timestamp",
+              "type": "string",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Subreddit": "={{ $json.subreddit }}",
+            "Title": "={{ $json.post_title }}",
+            "URL": "={{ $json.post_url }}",
+            "Upvotes": "={{ $json.upvotes }}",
+            "AI Analysis": "={{ $json.ai_analysis }}"
+          }
+        },
+        "options": {}
+      },
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Search Reddit Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Reddit Posts": {
+      "main": [
+        [
+          {
+            "node": "Analyze with Grok (Abacus AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze with Grok (Abacus AI)": {
+      "main": [
+        [
+          {
+            "node": "Format Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Results": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

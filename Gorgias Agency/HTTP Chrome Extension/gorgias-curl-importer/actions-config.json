@@ -1,0 +1,39 @@
+{
+  "actions": [
+    {
+      "name": "Check Order Status",
+      "description": "Fetches the current status of a customer's order from the order management system",
+      "requestName": "Get Order Status",
+      "url": "https://api.example.com/orders/{order_id}",
+      "method": "GET",
+      "headers": {
+        "authorization": "Bearer YOUR_API_KEY"
+      },
+      "requiresConfirmation": false
+    },
+    {
+      "name": "Update Customer Address",
+      "description": "Updates the shipping address for a customer in the system",
+      "requestName": "Update Address",
+      "url": "https://api.example.com/customers/{customer_id}/address",
+      "method": "PUT",
+      "headers": {
+        "authorization": "Bearer YOUR_API_KEY",
+        "content-type": "application/json"
+      },
+      "requiresConfirmation": true
+    },
+    {
+      "name": "Apply Discount Code",
+      "description": "Applies a discount code to a customer's order",
+      "requestName": "Apply Discount",
+      "url": "https://api.example.com/orders/{order_id}/discount",
+      "method": "POST",
+      "headers": {
+        "authorization": "Bearer YOUR_API_KEY",
+        "content-type": "application/json"
+      },
+      "requiresConfirmation": false
+    }
+  ]
+}
