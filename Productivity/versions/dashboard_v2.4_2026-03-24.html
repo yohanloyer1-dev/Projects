@@ -93,16 +93,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .streak-motivate{font-size:11px;color:var(--t3);font-style:italic}
 .streak-motivate em{color:var(--pink);font-style:normal}
 
-/* MICRO-WIN COUNTER */
-.wins-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);margin:4px 0}
-.wins-num{font-family:var(--fd);font-weight:800;font-size:28px;line-height:1;letter-spacing:-1px;color:var(--t3);transition:color .4s,text-shadow .4s}
-.wins-num.has-wins{color:var(--green);text-shadow:0 0 18px rgba(61,184,118,.35);animation:winPop .4s cubic-bezier(.4,0,.2,1) both}
-@keyframes winPop{0%{transform:scale(1)}40%{transform:scale(1.25)}70%{transform:scale(.92)}100%{transform:scale(1)}}
-.wins-info{display:flex;flex-direction:column;gap:1px}
-.wins-label{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase}
-.wins-sub{font-family:var(--fm);font-size:9px;color:var(--t3);opacity:.6}
-.wins-sub.has-wins{color:var(--green);opacity:.8}
-
 /* LEVEL CARD */
 .level-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px}
 .level-card::before{content:'';position:absolute;top:-40px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(245,166,35,.1) 0%,transparent 70%);pointer-events:none}
@@ -167,10 +157,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sh-ct{font-family:var(--fm);font-size:10px;color:var(--t3);white-space:nowrap}
 
 /* GRIDS */
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
 .g2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px}
-.g1{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
 
 /* PROJECT CARD */
 .pc{background:var(--s1);border:1px solid var(--b1);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s;animation:fuUp .4s ease both}
@@ -541,36 +530,6 @@ body:not(.vivid) .particle { display:none!important; }
 .panic-pick-btn{background:var(--s3);border:1px solid var(--b2);color:var(--tx);padding:6px 10px;font-size:10px;border-radius:6px;cursor:pointer;transition:all .15s;font-family:var(--fm);font-weight:500}
 .panic-pick-btn:hover{background:var(--s4);border-color:var(--b3)}
 
-/* ── QUICK-ADD BUTTON + MODAL ──────────────────────────────── */
-.qa-fab{position:fixed;bottom:28px;right:28px;width:52px;height:52px;border-radius:50%;background:var(--green);border:none;color:#fff;font-size:26px;line-height:1;cursor:pointer;z-index:700;box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0 rgba(61,184,118,.4);transition:transform .15s,box-shadow .15s;display:flex;align-items:center;justify-content:center}
-.qa-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.5),0 0 0 8px rgba(61,184,118,.12)}
-.qa-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:750;animation:fd .2s ease both}
-.qa-backdrop.open{display:block}
-.qa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:min(480px,92vw);background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:24px;z-index:760;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.qa-modal.open{display:block;animation:fuUp .25s cubic-bezier(.4,0,.2,1) both}
-.qa-title{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.3px;margin-bottom:20px}
-.qa-field{margin-bottom:14px}
-.qa-label{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;display:block}
-.qa-input{width:100%;background:var(--s3);border:1px solid var(--b2);border-radius:7px;color:var(--t1);font-family:var(--fb);font-size:13px;padding:10px 12px;outline:none;transition:border-color .15s}
-.qa-input:focus{border-color:var(--green)}
-.qa-input::placeholder{color:var(--t3)}
-.qa-select{width:100%;background:var(--s3);border:1px solid var(--b2);border-radius:7px;color:var(--t1);font-family:var(--fb);font-size:13px;padding:10px 12px;outline:none;cursor:pointer;appearance:none;transition:border-color .15s}
-.qa-select:focus{border-color:var(--green)}
-.qa-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.qa-urgency-btns{display:flex;gap:8px}
-.qa-urg-btn{flex:1;padding:8px;border-radius:6px;border:1px solid var(--b2);background:var(--s3);color:var(--t3);font-family:var(--fm);font-size:10px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .15s;text-align:center}
-.qa-urg-btn:hover{border-color:var(--b3);color:var(--t2)}
-.qa-urg-btn.sel-urgent{background:var(--red-d);color:var(--red);border-color:rgba(217,95,75,.3)}
-.qa-urg-btn.sel-important{background:var(--amber-d);color:var(--amber);border-color:rgba(232,169,58,.3)}
-.qa-urg-btn.sel-normal{background:var(--blue-d);color:var(--blue);border-color:rgba(91,155,214,.2)}
-.qa-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-.qa-cancel{background:transparent;border:1px solid var(--b2);color:var(--t3);font-family:var(--fm);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;border-radius:7px;cursor:pointer;transition:all .15s}
-.qa-cancel:hover{border-color:var(--b3);color:var(--t2)}
-.qa-submit{background:var(--green);border:none;color:#fff;font-family:var(--fm);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:9px 22px;border-radius:7px;cursor:pointer;transition:all .15s}
-.qa-submit:hover{background:#228a52;transform:translateY(-1px)}
-.qa-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.tbadge.bq{background:rgba(61,184,118,.12);color:var(--green);border:1px solid rgba(61,184,118,.2)}
-
 /* ── FOCUS OVERLAY ─────────────────────────────────────────── */
 .focus-overlay{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;z-index:800;padding:40px}
 .focus-overlay.active{display:flex;animation:fd .3s ease both}
@@ -609,7 +568,6 @@ body:not(.vivid) .particle { display:none!important; }
     <div class="tb-sub">Operations Dashboard</div>
   </div>
   <div class="tb-r">
-    <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
     <button class="calm-btn" id="calmBtn" onclick="toggleCalm()">Calm</button>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <div class="dc" id="dateChip">—</div>
@@ -633,13 +591,6 @@ body:not(.vivid) .particle { display:none!important; }
         <div class="streak-label">Day Streak</div>
       </div>
       <div class="streak-flame">🔥</div>
-    </div>
-    <div class="wins-row">
-      <div class="wins-num" id="winsNum">0</div>
-      <div class="wins-info">
-        <div class="wins-label">Wins today</div>
-        <div class="wins-sub" id="winsSub">Complete a task to start</div>
-      </div>
     </div>
     <div class="streak-dots" id="streakDots"></div>
     <div class="streak-motivate" id="streakMotivate">Complete a task today to start your streak.</div>
@@ -783,14 +734,14 @@ body:not(.vivid) .particle { display:none!important; }
         <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 30 min</span></div>
         <div class="bi-why">Flagged as urgent with no prior activity. Real estate admin blocks are typically time-sensitive. Gather the documents — I can help you prepare a checklist.</div>
       </div>
-      <div class="bi" onclick="goToTask('pay-axon', 'personal')" style="cursor:pointer">
+      <div class="bi" onclick="goToTask('pay-didier', 'personal')" style="cursor:pointer">
         <div class="bi-rank"><div class="rn r2">2</div> DO TODAY</div>
-        <div class="bi-name">Pay Axon investment</div>
+        <div class="bi-name">Pay Didier Degrandi</div>
         <div class="bi-proj">💰 Admin & Finance</div>
         <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 10 min</span></div>
-        <div class="bi-why">Urgent investment transfer sitting open. Financial commitments carry relationship risk the longer they're delayed. Fast to execute — just needs action.</div>
+        <div class="bi-why">Urgent payment sitting open. Financial commitments carry relationship risk the longer they're delayed. Fast to execute — just needs action.</div>
       </div>
-      <div class="bi" onclick="goToTask('baback-checklist', 'freelance')" style="cursor:pointer">
+      <div class="bi" onclick="goToTask('share-baback', 'freelance')" style="cursor:pointer">
         <div class="bi-rank"><div class="rn r3">3</div> HIGH VALUE</div>
         <div class="bi-name">Share Baback Integration Checklist</div>
         <div class="bi-proj">💎 Nébuleuse Bijoux</div>
@@ -833,6 +784,50 @@ body:not(.vivid) .particle { display:none!important; }
     <button class="filter-btn" data-filter="quick" onclick="toggleTaskFilter(this, 'quick')">Quick (≤15min)</button>
   </div>
 
+  <!-- URGENT ROW -->
+  <div class="sh"><div class="sh-lbl" style="color:var(--red)">🚨 Urgent</div><div class="sh-line" style="background:var(--red-d)"></div><div class="sh-ct" style="color:var(--red)">act today</div></div>
+  <div class="g4">
+    <div class="pc">
+      <div class="pc-acc" style="background:var(--red)"></div>
+      <div class="pc-head"><div><div class="pc-title">Pay Didier Degrandi</div><div class="pc-sub">Finance · today</div></div><span class="pill p-urg">Urgent</span></div>
+      <div class="tl" data-section="urgent-didier">
+        <div class="t urg" data-id="pay-didier" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Pay Didier Degrandi</span><span class="td">Invoice due</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
+        <div class="note-panel" data-for="pay-didier"></div>
+      </div>
+    </div>
+    <div class="pc">
+      <div class="pc-acc" style="background:var(--red)"></div>
+      <div class="pc-head"><div><div class="pc-title">Pay Axon investment</div><div class="pc-sub">Finance · today</div></div><span class="pill p-urg">Urgent</span></div>
+      <div class="tl" data-section="urgent-axon">
+        <div class="t urg" data-id="pay-axon" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Pay Axon investment</span><span class="td">Investment transfer</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
+        <div class="note-panel" data-for="pay-axon"></div>
+      </div>
+    </div>
+    <div class="pc">
+      <div class="pc-acc" style="background:var(--red)"></div>
+      <div class="pc-head"><div><div class="pc-title">Real Estate</div><div class="pc-sub">Documents · immediate</div></div><span class="pill p-urg">Urgent</span></div>
+      <div class="tl" data-section="urgent-realestate">
+        <div class="t urg" data-id="docs-credit" data-xp="8" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Gather docs Crédit Coopératif</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="t urg" data-id="cancel-bp" data-xp="7" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Cancel BP account</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="docs-credit"></div>
+      </div>
+    </div>
+    <div class="pc">
+      <div class="pc-acc" style="background:var(--red)"></div>
+      <div class="pc-head"><div><div class="pc-title">Benefiz Amélia</div><div class="pc-sub">Health · immediate</div></div><span class="pill p-urg">Urgent</span></div>
+      <div class="tl" data-section="urgent-benefiz">
+        <div class="t urg" data-id="benefiz-amelia" data-xp="15" data-project="Health"><div class="chk"></div><div class="tb"><span class="tn">Benefiz Amélia</span><span class="td">Action needed — urgent</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="benefiz-amelia"></div>
+
+        <div class="t urg" data-id="cancel-super" data-xp="5" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Cancel super.com account</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="cancel-super"></div>
+
+        <div class="t urg" data-id="book-flight-amsterdam" data-xp="5" data-project="Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Amsterdam</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="book-flight-amsterdam"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- STRATEGY & VISION -->
   <div class="sh"><div class="sh-lbl">Strategy & Vision</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -871,8 +866,6 @@ body:not(.vivid) .particle { display:none!important; }
       <div class="pc-acc" style="background:var(--amber)"></div>
       <div class="pc-head"><div><div class="pc-title">Tax & Declarations</div><div class="pc-sub">FR + NL · time sensitive</div></div><span class="pill p-per">Personal</span></div>
       <div class="tl">
-        <div class="t urg" data-id="pay-axon" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Pay Axon investment</span><span class="td">Investment transfer · urgent</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
-        <div class="note-panel" data-for="pay-axon"></div>
         <div class="t hi cl" data-id="decl-ae" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclaration auto-entrepreneur</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
         <div class="note-panel" data-for="decl-ae"></div>
         <div class="t hi" data-id="decl-nl" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclaration impôts Netherlands</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
@@ -934,15 +927,14 @@ body:not(.vivid) .particle { display:none!important; }
 
   <!-- REAL ESTATE + JAPAN -->
   <div class="sh"><div class="sh-lbl">Real Estate & Travel</div><div class="sh-line"></div></div>
-  <div class="g2">
+  <div class="g3">
     <div class="pc">
       <div class="pc-acc" style="background:var(--cyan)"></div>
       <div class="pc-head"><div><div class="pc-title">Real Estate</div><div class="pc-sub">Crédit Coopératif</div></div><span class="pill p-per">Personal</span></div>
       <div class="tl">
         <div class="t urg" data-id="docs-credit" data-xp="8" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Gather docs Crédit Coopératif</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
-        <div class="note-panel" data-for="docs-credit"></div>
         <div class="t urg" data-id="cancel-bp" data-xp="7" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Cancel BP account</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
-        <div class="note-panel" data-for="cancel-bp"></div>
+        <div class="note-panel" data-for="docs-credit-re"></div>
       </div>
     </div>
     <div class="pc">
@@ -968,21 +960,16 @@ body:not(.vivid) .particle { display:none!important; }
     </div>
   </div>
 
-  <!-- TECH & ACCOUNTS (standalone full-width) -->
-  <div class="sh"><div class="sh-lbl">Tech & Accounts</div><div class="sh-line"></div></div>
-  <div class="g1">
+  <!-- TECH & NETWORK -->
+  <div class="sh"><div class="sh-lbl">Tech & Network</div><div class="sh-line"></div></div>
+  <div class="g2">
     <div class="pc">
       <div class="pc-acc" style="background:var(--blue)"></div>
-      <div class="pc-head"><div><div class="pc-title">Tech & Accounts</div><div class="pc-sub">Photos · crypto · apps · Granola</div></div><span class="pill p-per">Personal</span></div>
+      <div class="pc-head"><div><div class="pc-title">Tech & Accounts</div><div class="pc-sub">Photos · crypto · apps</div></div><span class="pill p-per">Personal</span></div>
       <div class="tl">
-        <div class="t" data-id="granola-connect-claude" data-xp="15" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Connect Granola to Claude</span><span class="td">Integrate Granola meeting notes with Claude</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bb">Session</span></div>
-        <div class="note-panel" data-for="granola-connect-claude"></div>
-        <div class="t" data-id="granola-review-tasks" data-xp="20" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Review Granola notes (last few weeks) → extract work tasks</span><span class="td">Go through all recent transcripts and build a structured list of action items</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bb">Session</span></div>
-        <div class="note-panel" data-for="granola-review-tasks"></div>
         <div class="t" data-id="transfer-photos" data-xp="3" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Transfer photos from iPhone</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="transfer-photos"></div>
         <div class="t" data-id="hide-albums" data-xp="2" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Hide private albums</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="hide-albums"></div>
+        <div class="note-panel" data-for="photos-iphone"></div>
         <div class="t" data-id="phantom-mobile" data-xp="5" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Connecter Phantom mobile → desktop</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="phantom-mobile"></div>
         <div class="t" data-id="crypto-check" data-xp="5" data-project="Tech"><div class="chk"></div><div class="tb"><span class="tn">Check Cummies + Akash + Trustswap</span></div><button class="note-btn" title="Add note">📝</button></div>
@@ -993,11 +980,6 @@ body:not(.vivid) .particle { display:none!important; }
         <div class="note-panel" data-for="gorgias-photos"></div>
       </div>
     </div>
-  </div>
-
-  <!-- NETWORK & OTHERS -->
-  <div class="sh"><div class="sh-lbl">Network & Others</div><div class="sh-line"></div></div>
-  <div class="g2">
     <div class="pc">
       <div class="pc-acc" style="background:var(--pink)"></div>
       <div class="pc-head"><div><div class="pc-title">Network & Others</div><div class="pc-sub">Follow-ups · ideas</div></div><span class="pill p-per">Personal</span></div>
@@ -1116,16 +1098,6 @@ body:not(.vivid) .particle { display:none!important; }
       <div class="tl">
         <div class="t" data-id="shoptalk-followup" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Shoptalk follow ups — Plantmade</span><span class="td">Work contacts met at conference</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="shoptalk-followup"></div>
-        <div class="t" data-id="german-logos-deck" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Add German logos to partner deck — Nikos Media &amp; Latori</span><span class="td">Update partner deck with German partner logos</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="german-logos-deck"></div>
-        <div class="t" data-id="latori-customer-list" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Review Latori's customer list</span><span class="td">Go through Latori's list of customers</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="latori-customer-list"></div>
-        <div class="t" data-id="followup-marvya" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Follow up with Marvya</span><span class="td">Reach out / respond to Marvya</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="followup-marvya"></div>
-        <div class="t" data-id="matt-supreme-yuma-parfum" data-xp="15" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Get back to Matt — Supreme, Yuma, Parfum de Marly</span><span class="td">Reply to Matt re: these three accounts</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="matt-supreme-yuma-parfum"></div>
-        <div class="t" data-id="managed-services-playbook" data-xp="15" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Review v1 managed services playbook → send to Nick</span><span class="td">Read through v1, give feedback, and send to Nick</span></div><button class="note-btn" title="Add note">📝</button></div>
-        <div class="note-panel" data-for="managed-services-playbook"></div>
       </div>
     </div>
   </div>
@@ -1239,66 +1211,6 @@ body:not(.vivid) .particle { display:none!important; }
 
 </div><!-- /shell -->
 
-<!-- QUICK-ADD TASK -->
-<button class="qa-fab" id="qaFab" onclick="openQuickAdd()" title="Quick-add a task (saves to queue for Claude to sync)">+</button>
-<div class="qa-backdrop" id="qaBackdrop" onclick="closeQuickAdd()"></div>
-<div class="qa-modal" id="qaModal">
-  <div class="qa-title">➕ Quick-add task</div>
-  <div class="qa-field">
-    <label class="qa-label">Task title *</label>
-    <input class="qa-input" id="qaTitle" type="text" placeholder="What needs to be done?" autocomplete="off" />
-  </div>
-  <div class="qa-field">
-    <label class="qa-label">Priority</label>
-    <div class="qa-urgency-btns">
-      <button class="qa-urg-btn" data-val="urgent" onclick="selectUrgency(this)">🔴 Urgent</button>
-      <button class="qa-urg-btn" data-val="important" onclick="selectUrgency(this)">🟡 Important</button>
-      <button class="qa-urg-btn sel-normal" data-val="normal" onclick="selectUrgency(this)">⚪ Normal</button>
-    </div>
-  </div>
-  <div class="qa-row">
-    <div class="qa-field">
-      <label class="qa-label">Project</label>
-      <select class="qa-select" id="qaProject">
-        <option value="">— Unassigned —</option>
-        <option value="Strategy">Strategy</option>
-        <option value="Tech">Tech &amp; Accounts</option>
-        <option value="Admin &amp; Finance">Admin &amp; Finance</option>
-        <option value="Health">Health</option>
-        <option value="Real Estate">Real Estate</option>
-        <option value="Japan Trip">Japan Trip</option>
-        <option value="Travel">Travel &amp; Errands</option>
-        <option value="Network">Network &amp; Others</option>
-        <option value="Nébuleuse">Nébuleuse Bijoux</option>
-        <option value="Accessory Partners">Accessory Partners</option>
-        <option value="Agency">Gorgias Agency</option>
-        <option value="Gorgias Role">Gorgias Day Job</option>
-        <option value="LinkedIn">LinkedIn</option>
-        <option value="Bots">Bots &amp; Automation</option>
-      </select>
-    </div>
-    <div class="qa-field">
-      <label class="qa-label">Estimate</label>
-      <select class="qa-select" id="qaEstimate">
-        <option value="">— Optional —</option>
-        <option value="5min">5 min</option>
-        <option value="15min">15 min</option>
-        <option value="30min">30 min</option>
-        <option value="1h">1 hour</option>
-        <option value="2h+">2+ hours</option>
-      </select>
-    </div>
-  </div>
-  <div class="qa-field">
-    <label class="qa-label">Deadline (optional)</label>
-    <input class="qa-input" id="qaDeadline" type="date" style="color-scheme:dark" />
-  </div>
-  <div class="qa-actions">
-    <button class="qa-cancel" onclick="closeQuickAdd()">Cancel</button>
-    <button class="qa-submit" id="qaSubmit" onclick="submitQuickAdd()">Add task →</button>
-  </div>
-</div>
-
 <!-- FOCUS OVERLAY -->
 <div class="focus-overlay" id="focusOverlay">
   <div class="fo-header">
@@ -1350,51 +1262,6 @@ const S = {
   sessionDone: 0
 };
 
-// ── PRE-SEEDED DEADLINES ───────────────────────────────────────
-// Known deadlines from TASKS.md — only set if not already customised by user.
-// Update these dates when tasks change. Format: 'YYYY-MM-DD'
-const PRE_DEADLINES = {
-  'flights-japan':    '2026-03-25', // URGENT — deadline Wednesday (today)
-  'baback-checklist': '2026-04-30', // Nébuleuse Apr 30 target
-  'pay-axon':         '2026-03-25', // Urgent payment — treat as today
-  'docs-credit':      '2026-03-28', // Urgent real estate — this week
-  'cancel-bp':        '2026-03-28', // Urgent real estate — this week
-};
-Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
-  if (!S.deadlines[id]) S.deadlines[id] = date;
-});
-save(); // persist the seeded deadlines immediately
-
-// ── PRE-COMPLETED TASKS (marked done outside session) ──────────
-const PRE_DONE = [
-  { n: 'Pay Didier Degrandi', p: 'Admin & Finance', xp: 15, id: 'pay-didier' }
-];
-PRE_DONE.forEach(pd => {
-  if (!S.done.find(d => d.n === pd.n)) {
-    S.done.push({ n: pd.n, p: pd.p, xp: pd.xp, t: Date.now(), id: pd.id });
-  }
-});
-
-// ── STALE DONE CLEANUP ─────────────────────────────────────────
-// Remove any done entries that have no id (name-only, legacy) AND whose
-// name still exists as an active task in the DOM. This fixes tasks that
-// were accidentally marked done in a previous session due to name collisions.
-// Runs after DOMContentLoaded so elements are available.
-document.addEventListener('DOMContentLoaded', () => {
-  const activeTasks = new Set(
-    Array.from(document.querySelectorAll('.t[data-id]'))
-      .map(t => t.querySelector('.tn')?.textContent?.trim())
-      .filter(Boolean)
-  );
-  const before = S.done.length;
-  // Keep: entries with an id (ID-matched, reliable), OR name-only entries
-  // whose task no longer exists in the DOM (truly completed/removed tasks)
-  S.done = S.done.filter(d => d.id || !activeTasks.has(d.n));
-  if (S.done.length !== before) save();
-});
-
-save();
-
 const LEVELS = [
   {l:1,  name:'Apprentice Operator',  icon:'🌱', pill:'APPRENTICE',  sub:'Build your foundation',         min:0,    max:100},
   {l:2,  name:'Junior Operator',      icon:'⚙️', pill:'JUNIOR',      sub:'Getting traction',              min:100,  max:250},
@@ -1427,143 +1294,17 @@ function save() {
   localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
 }
 
-// ── SESSION EXPORT ────────────────────────
-// Generates a structured markdown summary for pasting to Claude at session start.
-// Includes: completed tasks, notes, quick-add queue, stats.
-// Claude reads this and syncs TASKS.md to match.
-function exportSession() {
-  const today = new Date().toDateString();
-  const todayStr = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
-  const lvl = getLvl(S.xp);
-
-  // Tasks completed TODAY (by timestamp)
-  const todayDone = S.done.filter(d => d.t && new Date(d.t).toDateString() === today);
-  // All completed tasks (full history)
-  const allDone = S.done;
-
-  // Notes (non-empty only)
-  const noteEntries = Object.entries(S.notes).filter(([id, note]) => note && note.trim());
-
-  // Quick-add queue (tasks added from dashboard, not yet in TASKS.md)
-  const quickQueue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
-
-  // Deadlines set in dashboard
-  const deadlineEntries = Object.entries(S.deadlines).filter(([id]) => {
-    // Only include deadlines for tasks still active
-    const el = document.querySelector(`.t[data-id="${id}"]`);
-    return el && !el.classList.contains('done-t');
-  });
-
-  const lines = [];
-  lines.push(`# YL/OPS Dashboard Export`);
-  lines.push(`**Date:** ${todayStr}  |  **Streak:** ${S.streak} days  |  **XP:** ${S.xp} (${lvl.name})  |  **Level:** ${lvl.l}`);
-  lines.push('');
-
-  // Section 1: Completed today
-  lines.push('## ✅ Completed this session');
-  if (todayDone.length === 0) {
-    lines.push('_No tasks completed today yet._');
-  } else {
-    todayDone.forEach(d => {
-      const time = d.t ? new Date(d.t).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '—';
-      lines.push(`- [x] **${d.n}** (${d.p || '—'}) · +${d.xp} XP · ${time}`);
-    });
-  }
-  lines.push('');
-
-  // Section 2: Quick-add queue (new tasks to add to TASKS.md + dashboard)
-  lines.push('## ➕ New tasks to add (from dashboard quick-add)');
-  if (quickQueue.length === 0) {
-    lines.push('_No new tasks added this session._');
-  } else {
-    quickQueue.forEach(t => {
-      const urgStr = t.urgency === 'urgent' ? '[!]' : t.urgency === 'important' ? '[>]' : '[ ]';
-      const deadline = t.deadline ? ` · Due: ${t.deadline}` : '';
-      lines.push(`- ${urgStr} **${t.title}** · Project: ${t.project || 'Unassigned'}${deadline}`);
-    });
-    lines.push('');
-    lines.push('_→ Claude: please add these to TASKS.md and dashboard.html_');
-  }
-  lines.push('');
-
-  // Section 3: Notes added/updated
-  lines.push('## 📝 Task notes (for context)');
-  if (noteEntries.length === 0) {
-    lines.push('_No notes saved._');
-  } else {
-    noteEntries.forEach(([id, note]) => {
-      const taskEl = document.querySelector(`.t[data-id="${id}"] .tn`);
-      const taskName = taskEl ? taskEl.textContent.trim() : id;
-      lines.push(`**${taskName}** (\`${id}\`):`);
-      lines.push(`> ${note.replace(/\n/g, '\n> ')}`);
-      lines.push('');
-    });
-  }
-
-  // Section 4: All-time completed (for TASKS.md sync)
-  lines.push('## 📦 All completed tasks (full history)');
-  lines.push('_Use this to sync [x] status in TASKS.md if out of date:_');
-  if (allDone.length === 0) {
-    lines.push('_None yet._');
-  } else {
-    allDone.forEach(d => {
-      const dateStr = d.t ? new Date(d.t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : 'previous session';
-      lines.push(`- [x] **${d.n}** (${d.p || '—'}) · ${dateStr}`);
-    });
-  }
-  lines.push('');
-
-  // Section 5: Deadlines tracked in dashboard
-  if (deadlineEntries.length > 0) {
-    lines.push('## 📅 Deadlines set in dashboard');
-    deadlineEntries.forEach(([id, dl]) => {
-      const taskEl = document.querySelector(`.t[data-id="${id}"] .tn`);
-      const taskName = taskEl ? taskEl.textContent.trim() : id;
-      lines.push(`- **${taskName}**: ${dl}`);
-    });
-    lines.push('');
-  }
-
-  lines.push('---');
-  lines.push('_Paste this to Claude at the start of your next session. Claude will sync TASKS.md and add any quick-add tasks to the dashboard._');
-
-  const text = lines.join('\n');
-
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('exportBtn');
-    const orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
-    btn.style.color = 'var(--green)';
-    btn.style.borderColor = 'rgba(61,220,132,.25)';
-    setTimeout(() => {
-      btn.textContent = orig;
-      btn.style.color = '';
-      btn.style.borderColor = '';
-    }, 2000);
-    showToast('Session export copied to clipboard', 0);
-  }).catch(() => {
-    // Fallback: open a text area with the content
-    const win = window.open('', '_blank', 'width=600,height=500');
-    win.document.write(`<pre style="font-family:monospace;font-size:12px;padding:20px;white-space:pre-wrap">${text.replace(/</g,'&lt;')}</pre>`);
-    win.document.close();
-    showToast('Clipboard blocked — opened in new tab', 0);
-  });
-}
-
 function getLvl(xp) {
   for (let i=LEVELS.length-1;i>=0;i--) if (xp>=LEVELS[i].min) return LEVELS[i];
   return LEVELS[0];
 }
 
 // ── STREAK ────────────────────────────────
-// Called ONLY on task completion — never on page load.
-// Advances streak if last completion was yesterday (chain continues),
-// resets to 1 if gap > 1 day, no-ops if already completed today.
 function checkStreak() {
   const today = new Date().toDateString();
-  if (S.lastDay === today) return; // already earned streak today
-  const yest = new Date(Date.now() - 86400000).toDateString();
-  S.streak = (S.lastDay === yest) ? S.streak + 1 : 1;
+  if (S.lastDay===today) return;
+  const yest = new Date(Date.now()-86400000).toDateString();
+  S.streak = (S.lastDay===yest) ? S.streak+1 : 1;
   S.lastDay = today;
   save();
 }
@@ -1639,11 +1380,10 @@ function refreshCardVisibility() {
     const allDone = Array.from(tasks).every(t => t.classList.contains('done-t'));
     card.style.display = allDone ? 'none' : '';
   });
-  // Also hide section headers (.sh) if every .pc in the following grid is hidden
-  const GRID_CLASSES = ['g4', 'g3', 'g2', 'g1'];
+  // Also hide section headers (.sh) if every .pc in the following .g4/.g3 is hidden
   document.querySelectorAll('.sh').forEach(sh => {
     const sibling = sh.nextElementSibling;
-    if (!sibling || !GRID_CLASSES.some(c => sibling.classList.contains(c))) return;
+    if (!sibling || (!sibling.classList.contains('g4') && !sibling.classList.contains('g3'))) return;
     const visible = Array.from(sibling.querySelectorAll('.pc')).some(c => c.style.display !== 'none');
     sh.style.display = visible ? '' : 'none';
     sibling.style.display = visible ? '' : 'none';
@@ -1669,30 +1409,6 @@ function updateUI() {
   const sessionCompleted = document.querySelectorAll('#logList .log-item').length;
   document.getElementById('doneStat').textContent  = sessionCompleted;
   document.getElementById('doneCt').textContent    = sessionCompleted;
-
-  // Micro-win counter — hero element in streak card
-  const winsEl  = document.getElementById('winsNum');
-  const subEl   = document.getElementById('winsSub');
-  if (winsEl) {
-    winsEl.textContent = sessionCompleted;
-    if (sessionCompleted === 0) {
-      winsEl.classList.remove('has-wins');
-      subEl.textContent = 'Complete a task to start';
-      subEl.classList.remove('has-wins');
-    } else {
-      const prev = +winsEl.dataset.prev || 0;
-      if (sessionCompleted !== prev) {
-        // Retrigger animation on new win
-        winsEl.classList.remove('has-wins');
-        void winsEl.offsetWidth; // reflow to restart animation
-        winsEl.classList.add('has-wins');
-      }
-      winsEl.dataset.prev = sessionCompleted;
-      const winMessages = ['', 'First win! Keep going 💪', '2 wins — you\'re rolling 🔥', '3 wins! On fire ⚡', '4 wins — crushing it 🚀', '5 wins! Legendary session 🏆'];
-      subEl.textContent = sessionCompleted < winMessages.length ? winMessages[sessionCompleted] : `${sessionCompleted} wins — legendary! 🌟`;
-      subEl.classList.add('has-wins');
-    }
-  }
 }
 
 // ── PERSONAL PROGRESS ─────────────────────
@@ -1963,12 +1679,10 @@ function bind(){
     const nm = t.querySelector('.tn')?.textContent;
     const taskId = t.dataset.id;
 
-    // Restore done state — match by ID first, fall back to name only if no ID
-    const isDone = taskId
-      ? S.done.find(d => d.id === taskId)
-      : (nm && S.done.find(d => d.n === nm && !d.id));
-    if(isDone){
+    // Restore done state
+    if(nm && S.done.find(d=>d.n===nm)){
       t.classList.add('done-t');
+      
       const c=t.querySelector('.chk');
       c.textContent='✓';c.style.background='var(--green-d)';c.style.color='var(--green)';c.style.borderColor='transparent';
     }
@@ -2354,28 +2068,9 @@ function goToTask(taskId, tab) {
   setTimeout(()=>{
     const el = document.querySelector(`.t[data-id="${taskId}"]`);
     if(!el) return;
-    // If task is hidden (done-t from stale localStorage), unhide it
-    if(el.classList.contains('done-t')) {
-      el.classList.remove('done-t');
-      const c = el.querySelector('.chk');
-      if(c){ c.textContent=''; c.style.background=''; c.style.color=''; c.style.borderColor=''; }
-      S.done = S.done.filter(d => d.id !== taskId && d.n !== el.querySelector('.tn')?.textContent);
-      save();
-    }
-    // If parent card is hidden, show it
-    const card = el.closest('.pc');
-    if(card && card.style.display === 'none') card.style.display = '';
-    // Scroll and flash
-    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.scrollIntoView({behavior:'smooth',block:'center'});
     el.classList.add('flash');
-    setTimeout(()=>el.classList.remove('flash'), 1300);
-    // Pulse the card border
-    if(card) {
-      card.style.transition = 'box-shadow 0.15s, border-color 0.15s';
-      card.style.boxShadow = '0 0 0 2px var(--blue)';
-      card.style.borderColor = 'var(--blue)';
-      setTimeout(()=>{ card.style.boxShadow = ''; card.style.borderColor = ''; }, 1400);
-    }
+    setTimeout(()=>el.classList.remove('flash'),1300);
   }, 150);
 }
 
@@ -2548,241 +2243,11 @@ function _startFocusTimer() {
   }, 1000);
 }
 
-// ── QUICK-ADD ─────────────────────────────
-let qaSelectedUrgency = 'normal';
-
-function openQuickAdd() {
-  document.getElementById('qaBackdrop').classList.add('open');
-  document.getElementById('qaModal').classList.add('open');
-  setTimeout(() => document.getElementById('qaTitle').focus(), 100);
-}
-
-function closeQuickAdd() {
-  document.getElementById('qaBackdrop').classList.remove('open');
-  document.getElementById('qaModal').classList.remove('open');
-  // Reset form
-  document.getElementById('qaTitle').value = '';
-  document.getElementById('qaProject').value = '';
-  document.getElementById('qaEstimate').value = '';
-  document.getElementById('qaDeadline').value = '';
-  qaSelectedUrgency = 'normal';
-  document.querySelectorAll('.qa-urg-btn').forEach(b => {
-    b.className = 'qa-urg-btn' + (b.dataset.val === 'normal' ? ' sel-normal' : '');
-  });
-}
-
-function selectUrgency(btn) {
-  qaSelectedUrgency = btn.dataset.val;
-  document.querySelectorAll('.qa-urg-btn').forEach(b => {
-    b.className = 'qa-urg-btn';
-    if (b.dataset.val === qaSelectedUrgency) b.classList.add('sel-' + qaSelectedUrgency);
-  });
-}
-
-function submitQuickAdd() {
-  const title = document.getElementById('qaTitle').value.trim();
-  if (!title) {
-    document.getElementById('qaTitle').focus();
-    document.getElementById('qaTitle').style.borderColor = 'var(--red)';
-    setTimeout(() => document.getElementById('qaTitle').style.borderColor = '', 1500);
-    return;
-  }
-
-  const project   = document.getElementById('qaProject').value;
-  const estimate  = document.getElementById('qaEstimate').value;
-  const deadline  = document.getElementById('qaDeadline').value;
-  const urgency   = qaSelectedUrgency;
-  const id        = 'qa-' + Date.now();
-  const timestamp = Date.now();
-
-  // 1. Save to quick-add queue in localStorage
-  const queue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
-  queue.push({ id, title, project, urgency, estimate, deadline, timestamp });
-  localStorage.setItem('yl_quickadd', JSON.stringify(queue));
-
-  // 2. Inject task card into the DOM immediately so it's interactive
-  injectQuickAddTask({ id, title, project, urgency, estimate, deadline });
-
-  // 3. Save deadline to S.deadlines if provided
-  if (deadline) {
-    S.deadlines[id] = deadline;
-    save();
-  }
-
-  closeQuickAdd();
-  showToast('Task added — will sync to TASKS.md on next Claude session', 0);
-}
-
-function injectQuickAddTask(task) {
-  const { id, title, project, urgency, estimate, deadline } = task;
-
-  // Determine which view to inject into based on project
-  const proProjects = ['Gorgias Role', 'LinkedIn'];
-  const freelanceProjects = ['Nébuleuse', 'Accessory Partners', 'Agency'];
-  let targetView = 'view-personal';
-  if (proProjects.includes(project)) targetView = 'view-pro';
-  else if (freelanceProjects.includes(project)) targetView = 'view-freelance';
-
-  // Find or create a "Quick-add" card in the target view
-  let qaCard = document.getElementById('qa-card-' + targetView);
-  if (!qaCard) {
-    // Create a new section + card
-    const view = document.getElementById(targetView);
-    const sh = document.createElement('div');
-    sh.className = 'sh';
-    sh.id = 'qa-sh-' + targetView;
-    sh.innerHTML = '<div class="sh-lbl" style="color:var(--green)">⚡ Quick-added</div><div class="sh-line"></div><div class="sh-ct" style="color:var(--green)">sync with Claude →</div>';
-    const grid = document.createElement('div');
-    grid.className = 'g1';
-    grid.id = 'qa-grid-' + targetView;
-    qaCard = document.createElement('div');
-    qaCard.className = 'pc';
-    qaCard.id = 'qa-card-' + targetView;
-    qaCard.innerHTML = `
-      <div class="pc-acc" style="background:var(--green)"></div>
-      <div class="pc-head"><div><div class="pc-title">Quick-added tasks</div><div class="pc-sub">Will sync to TASKS.md at next session</div></div><span class="pill p-act">New</span></div>
-      <div class="tl" id="qa-tl-${targetView}"></div>`;
-    grid.appendChild(qaCard);
-    view.insertBefore(grid, view.firstChild);
-    view.insertBefore(sh, grid);
-  }
-
-  const tl = document.getElementById('qa-tl-' + targetView);
-
-  // Build urgency class
-  const urgClass = urgency === 'urgent' ? ' urg' : urgency === 'important' ? ' hi' : '';
-
-  // Build estimate badge
-  const estimateBadge = estimate ? `<span class="tbadge" style="background:rgba(91,155,214,.1);color:var(--blue);border:1px solid rgba(91,155,214,.18)">⏱ ${estimate}</span>` : '';
-
-  // Build deadline badge
-  let deadlineBadge = '';
-  if (deadline) {
-    const dl = new Date(deadline + 'T00:00:00');
-    const today = new Date(); today.setHours(0,0,0,0);
-    const diff = Math.round((dl - today) / 86400000);
-    const dlColor = diff <= 0 ? 'var(--red)' : diff <= 2 ? 'var(--orange)' : diff <= 7 ? 'var(--amber)' : 'var(--t3)';
-    const dlText = diff < 0 ? `${Math.abs(diff)}d overdue` : diff === 0 ? 'today' : `${diff}d`;
-    deadlineBadge = `<span class="tbadge" style="background:transparent;color:${dlColor};border:1px solid ${dlColor};opacity:.85">📅 ${dlText}</span>`;
-  }
-
-  const taskEl = document.createElement('div');
-  taskEl.className = `t${urgClass}`;
-  taskEl.dataset.id = id;
-  taskEl.dataset.xp = '10';
-  taskEl.dataset.project = project || 'Quick-add';
-  taskEl.innerHTML = `
-    <div class="chk"></div>
-    <div class="tb"><span class="tn">${title}</span></div>
-    <button class="note-btn" title="Add note">📝</button>
-    <span class="tbadge bq">⚡ New</span>
-    ${estimateBadge}${deadlineBadge}`;
-
-  const notePanel = document.createElement('div');
-  notePanel.className = 'note-panel';
-  notePanel.dataset.for = id;
-
-  tl.appendChild(taskEl);
-  tl.appendChild(notePanel);
-
-  // Bind the new task (checkbox, note, link behaviors)
-  bindSingleTask(taskEl);
-  updateCounts();
-}
-
-// Bind a single newly-created task element (subset of bind() for dynamically added tasks)
-function bindSingleTask(t) {
-  const nm     = t.querySelector('.tn')?.textContent;
-  const taskId = t.dataset.id;
-
-  // Check if it was previously completed (unlikely for new tasks but handle gracefully)
-  const isDone = taskId ? S.done.find(d => d.id === taskId) : null;
-  if (isDone) {
-    t.classList.add('done-t');
-    const c = t.querySelector('.chk');
-    c.textContent='✓'; c.style.background='var(--green-d)'; c.style.color='var(--green)'; c.style.borderColor='transparent';
-  }
-
-  // Note button
-  const noteBtn = t.querySelector('.note-btn');
-  const notePanel = t.parentElement?.querySelector(`.note-panel[data-for="${taskId}"]`);
-  if (noteBtn && notePanel) {
-    noteBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const isOpen = notePanel.classList.contains('open');
-      document.querySelectorAll('.note-panel.open').forEach(p => { if(p!==notePanel) p.classList.remove('open'); });
-      if (!isOpen) { initNotePanel(notePanel, taskId); notePanel.classList.add('open'); }
-      else notePanel.classList.remove('open');
-    });
-    if (S.notes[taskId]) noteBtn.classList.add('has-note');
-  }
-
-  // Checkbox click (reuse the same completion logic as main bind())
-  t.addEventListener('click', e => {
-    if (e.target.closest('.note-btn') || e.target.closest('.note-panel') || e.target.closest('.link-btn')) return;
-    if (t.classList.contains('done-t')) return;
-    const xp2 = +(t.dataset.xp) || 10;
-    const nm2 = t.querySelector('.tn')?.textContent?.trim() || '';
-    const proj = t.dataset.project || '';
-    const taskId2 = t.dataset.id;
-    const chkEl = t.querySelector('.chk');
-
-    t.classList.add('completing');
-    chkEl.textContent = '✓';
-    chkEl.style.background = 'var(--green-d)';
-    chkEl.style.color = 'var(--green)';
-    chkEl.style.borderColor = 'transparent';
-    const r = t.getBoundingClientRect();
-    burst(r.left + r.width/2, r.top + r.height/2 + window.scrollY);
-
-    setTimeout(() => {
-      t.classList.remove('completing');
-      t.classList.add('done-t');
-    }, 200);
-
-    S.xp += xp2; S.sessionDone++;
-    S.done.push({ n: nm2, p: proj, xp: xp2, t: Date.now(), id: taskId2 });
-    checkStreak(); save(); updateUI(); updateCounts();
-    addLog(nm2, proj, xp2, taskId2);
-    showToast(nm2, xp2);
-    celebrate(nm2, xp2);
-  });
-
-  // Deadline badge (same as main bind)
-  bindDeadline(t);
-}
-
-// Re-inject any quick-add tasks from queue on page load (so they survive refresh)
-function restoreQuickAddTasks() {
-  const queue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
-  // Only inject tasks that aren't already marked done
-  queue.forEach(task => {
-    if (!S.done.find(d => d.id === task.id)) {
-      injectQuickAddTask(task);
-    }
-  });
-}
-
-// Keyboard shortcut: press 'N' to open quick-add (when not in an input)
-document.addEventListener('keydown', e => {
-  if (e.key === 'n' || e.key === 'N') {
-    const active = document.activeElement;
-    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) return;
-    if (document.getElementById('qaModal').classList.contains('open')) return;
-    openQuickAdd();
-  }
-  if (e.key === 'Escape') {
-    if (document.getElementById('qaModal').classList.contains('open')) closeQuickAdd();
-  }
-});
-
 // ── DATE ──────────────────────────────────
 document.getElementById('dateChip').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}).toUpperCase();
 
 // ── INIT ──────────────────────────────────
-// Note: checkStreak() is intentionally NOT called here.
-// The streak only advances when a task is completed, not on page load.
-updateUI(); bind(); updateCounts(); restoreQuickAddTasks();
+checkStreak(); updateUI(); bind(); updateCounts();
 
 // Pre-populate known notes
 if(!S.notes['polymarket-bot']) {

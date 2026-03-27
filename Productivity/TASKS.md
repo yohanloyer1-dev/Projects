@@ -11,6 +11,10 @@
 - [ ] **Create a vision board/tasks app** — Base44 + Claude (dedicated session)
 - [ ] **Create my "Network Pokedex"** — Personal CRM / contact tracker concept
 
+### 🔌 Tools & Integrations
+- [ ] **Connect Granola to Claude** — Integrate Granola meeting notes with Claude 🤖
+- [ ] **Review Granola notes (last few weeks) → extract work tasks** — Go through all recent transcripts and build a structured list of work-related action items 🤖
+
 ### 📊 Dashboard & Productivity System
 - [~] **Dashboard v2.4** — ✅ Live. Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, celebration animations
 - [_] **Set up GitHub repo for all Projects** — Back up everything. `git init` in Projects folder, push to private repo. Required before computer failure happens.
@@ -85,6 +89,11 @@
 
 ### Follow-ups
 - [ ] **Shoptalk follow ups — Plantmade** — Follow up with Plantmade contact met at Shoptalk
+- [ ] **Add German logos to partner deck — Nikos Media & Latori** — Update the partner deck with German partner logos
+- [ ] **Review Latori's customer list** — Go through Latori's list of customers
+- [ ] **Follow up with Marvya** — Reach out / respond to Marvya
+- [ ] **Get back to Matt — Supreme, Yuma, Parfum de Marly** — Reply to Matt re: these three accounts
+- [ ] **Review v1 managed services playbook → send to Nick** — Read through v1, give feedback, and send to Nick
 
 ---
 
