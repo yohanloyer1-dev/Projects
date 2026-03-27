@@ -88,6 +88,7 @@
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
 
 ### Follow-ups
+- [!] **Send follow-up email to LTVPlus team** — URGENT — send the follow-up email
 - [ ] **Shoptalk follow ups — Plantmade** — Follow up with Plantmade contact met at Shoptalk
 - [ ] **Add German logos to partner deck — Nikos Media & Latori** — Update the partner deck with German partner logos
 - [ ] **Review Latori's customer list** — Go through Latori's list of customers
