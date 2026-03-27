@@ -17,8 +17,8 @@
 
 ### 📊 Dashboard & Productivity System
 - [~] **Dashboard v2.4** — ✅ Live. Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, celebration animations
-- [_] **Set up GitHub repo for all Projects** — Back up everything. `git init` in Projects folder, push to private repo. Required before computer failure happens.
-- [_] **Deploy dashboard to Netlify from GitHub** — Once GitHub is set up, auto-deploy dashboard. Gives permanent URL across all devices.
+- [x] **Set up GitHub repo for all Projects** — ✅ Done. Private repo at github.com/yohanloyer1-dev/Projects, fully backed up as of 2026-03-27.
+- [ ] **Deploy dashboard to Netlify from GitHub** — Auto-deploy dashboard from GitHub. Gives permanent URL across all devices.
 - [_] **Build WhatsApp agent via Kapso** — Get Kapso number → connect to n8n → Claude API → responds to texts + voice notes, updates TASKS.md. Replaces Telegram plan.
 - [_] **Build voice notes workflow in n8n** — Now targeting WhatsApp via Kapso (not Telegram). Kapso → Whisper transcription → inbox.md → Claude responds 🤖
 
