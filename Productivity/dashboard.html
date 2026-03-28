@@ -146,8 +146,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sl{font-size:11px;color:var(--t2)}
 .ss{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:2px}
 
+/* SEARCH BAR */
+.search-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:10px;animation:fd .4s ease .14s both}
+.search-bar input{flex:1;background:transparent;border:none;outline:none;font-family:var(--fm);font-size:11px;color:var(--t1);letter-spacing:.02em}
+.search-bar input::placeholder{color:var(--t3)}
+.search-bar .search-icon{font-size:12px;color:var(--t3);flex-shrink:0}
+.search-bar .search-clear{font-size:11px;color:var(--t3);cursor:pointer;flex-shrink:0;padding:2px 6px;border-radius:4px;transition:all .15s;display:none}
+.search-bar .search-clear:hover{color:var(--t1);background:var(--b1)}
+.search-bar.has-query .search-clear{display:block}
+.search-results-count{font-family:var(--fm);font-size:10px;color:var(--t3);flex-shrink:0}
+.t.search-hidden{display:none!important}
+.t.search-match{background:var(--amber-d)!important;border-color:rgba(232,169,58,.2)!important}
+
 /* NAV TABS */
-.nav-tabs{display:flex;gap:4px;margin-bottom:22px;padding:4px;background:var(--s1);border:1px solid var(--b1);border-radius:10px;animation:fd .4s ease .12s both}
+.nav-tabs{display:flex;gap:4px;margin-bottom:12px;padding:4px;background:var(--s1);border:1px solid var(--b1);border-radius:10px;animation:fd .4s ease .12s both}
 .tab{flex:1;padding:9px 0;text-align:center;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);border-radius:7px;transition:all .2s;user-select:none;position:relative}
 .tab:hover{color:var(--t2);background:var(--s2)}
 .tab.active{color:var(--t1);background:var(--s3);box-shadow:0 1px 3px rgba(0,0,0,.4)}
@@ -612,7 +624,6 @@ body:not(.vivid) .particle { display:none!important; }
     <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
     <button class="calm-btn" id="exportStateBtn" onclick="exportState()" title="Export full dashboard state (XP, streak, tasks) — use to transfer to another device">💾 Save State</button>
     <button class="calm-btn" id="importStateBtn" onclick="openImportModal()" title="Import dashboard state from another device">📥 Load State</button>
-    <button class="calm-btn" id="calmBtn" onclick="toggleCalm()">Calm</button>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <div class="dc" id="dateChip">—</div>
   </div>
@@ -724,7 +735,7 @@ body:not(.vivid) .particle { display:none!important; }
       <div class="dtn-label">Do This Now</div>
       <div class="dtn-status" id="dtnStatus"></div>
     </div>
-    <div class="dtn-task" id="dtnTask">Loading…</div>
+    <div class="dtn-task" id="dtnTask" style="cursor:pointer" title="Click to find this task in the list" onclick="dtnScrollToTask()">Loading…</div>
     <div class="dtn-bottom-row">
       <button class="dtn-done" id="dtnDoneBtn" onclick="dtnComplete()">✓ Done</button>
       <button class="dtn-skip" onclick="dtnSkip()">Skip →</button>
@@ -766,6 +777,14 @@ body:not(.vivid) .particle { display:none!important; }
   <div class="tab" onclick="sv('pro')" id="tab-pro">📊 Professional <span class="tc" id="tc-pro">—</span></div>
   <div class="tab" onclick="sv('claude')" id="tab-claude">🤖 Claude Tasks <span class="tc" id="tc-claude">6</span></div>
   <div class="tab" onclick="sv('done')" id="tab-done">✅ Done <span class="tc" id="tc-done">0</span></div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-bar" id="searchBar">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="searchInput" placeholder="Search tasks… (press / to focus)" autocomplete="off" oninput="handleSearch(this.value)" onkeydown="if(event.key==='Escape'){clearSearch();this.blur()}" />
+  <span class="search-results-count" id="searchCount"></span>
+  <span class="search-clear" onclick="clearSearch()">✕ Clear</span>
 </div>
 
 <!-- ══════════════════════════════════ -->
@@ -2884,24 +2903,85 @@ document.querySelectorAll('#lvlLegend .ll-row').forEach((row,i)=>{
   if(i+1===curLvl.l) row.classList.add('ll-cur');
 });
 
-// ── CALM / VIVID TOGGLE ────────────────────
-// Calm is default. Vivid is the opt-in toggle.
-function toggleCalm() {
-  const isVivid = document.body.classList.toggle('vivid');
-  const btn = document.getElementById('calmBtn');
-  btn.textContent = isVivid ? 'Calm' : 'Calm';
-  btn.classList.toggle('active', !isVivid); // active = calm (default)
-  localStorage.setItem('yl_vivid', isVivid ? '1' : '0');
+// ── VIVID MODE — always on ────────────────────
+// Vivid is the permanent default. Calm is removed.
+document.body.classList.add('vivid');
+
+// ── TASK SEARCH ────────────────────────────────
+let _searchActive = false;
+
+function handleSearch(query) {
+  const bar = document.getElementById('searchBar');
+  const countEl = document.getElementById('searchCount');
+  const q = query.trim().toLowerCase();
+
+  if (!q) {
+    clearSearch();
+    return;
+  }
+
+  _searchActive = true;
+  bar.classList.add('has-query');
+
+  // Show all views while searching so we can find tasks across tabs
+  const allTasks = Array.from(document.querySelectorAll('.t'));
+  let matchCount = 0;
+
+  allTasks.forEach(t => {
+    const name = (t.querySelector('.tn') || {}).textContent || '';
+    const proj = t.dataset.project || '';
+    const matches = name.toLowerCase().includes(q) || proj.toLowerCase().includes(q);
+    t.classList.toggle('search-hidden', !matches);
+    t.classList.toggle('search-match', matches);
+    if (matches) matchCount++;
+  });
+
+  countEl.textContent = matchCount ? `${matchCount} task${matchCount > 1 ? 's' : ''}` : 'No results';
+
+  // Switch to the tab that has the most matches (or first match)
+  if (matchCount > 0) {
+    const firstMatch = document.querySelector('.t.search-match');
+    if (firstMatch) {
+      const view = firstMatch.closest('.view');
+      if (view) {
+        const viewId = view.id.replace('view-', '');
+        sv(viewId);
+        setTimeout(() => firstMatch.scrollIntoView({behavior:'smooth', block:'center'}), 150);
+      }
+    }
+  }
 }
-// On load: vivid only if user explicitly opted in
-if (localStorage.getItem('yl_vivid') === '1') {
-  document.body.classList.add('vivid');
-  const cb = document.getElementById('calmBtn');
-  if (cb) cb.classList.remove('active');
-} else {
-  // Default: calm mode active
-  const cb = document.getElementById('calmBtn');
-  if (cb) cb.classList.add('active');
+
+function clearSearch() {
+  const bar = document.getElementById('searchBar');
+  const input = document.getElementById('searchInput');
+  const countEl = document.getElementById('searchCount');
+  _searchActive = false;
+  bar.classList.remove('has-query');
+  input.value = '';
+  countEl.textContent = '';
+  document.querySelectorAll('.t.search-hidden, .t.search-match').forEach(t => {
+    t.classList.remove('search-hidden', 'search-match');
+  });
+}
+
+// Press / to focus search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+
+// ── DTN SCROLL TO TASK ──────────────────────────
+function dtnScrollToTask() {
+  const task = dtnGetTopTask();
+  if (!task) return;
+  const id = task.dataset.id;
+  const view = task.closest('.view');
+  if (!view) return;
+  const viewId = view.id.replace('view-', '');
+  goToTask(id, viewId);
 }
 
 // ── DO THIS NOW ────────────────────────────
