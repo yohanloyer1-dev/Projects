@@ -47,6 +47,8 @@
 ### 🏡 Real Estate
 - [!] **Gather docs Crédit Coopératif** — URGENT
 - [!] **Cancel BP account** — URGENT
+- [ ] **Sign Loan Insurance** — Sign loan insurance documents
+- [ ] **Negotiate NL document translation** — Negotiate translation of Netherlands documents
 
 ### ✈️ Japan Trip
 - [!] **Book flights Japan** — URGENT — deadline Wednesday
