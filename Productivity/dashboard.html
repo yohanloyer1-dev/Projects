@@ -32,6 +32,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 .shell{max-width:1440px;margin:0 auto;padding:0 28px 100px}
 
+/* STATE SYNC BANNER */
+.sync-banner{display:none;align-items:center;gap:12px;padding:10px 16px;border-radius:10px;margin-bottom:14px;font-family:var(--fm);font-size:11px;animation:fd .3s ease both}
+.sync-banner.show{display:flex}
+.sync-banner.load{background:rgba(91,155,214,.1);border:1px solid rgba(91,155,214,.25);color:var(--blue)}
+.sync-banner.save{background:rgba(232,169,58,.08);border:1px solid rgba(232,169,58,.2);color:var(--amber)}
+.sync-banner-icon{font-size:16px;flex-shrink:0}
+.sync-banner-text{flex:1;line-height:1.4}
+.sync-banner-text strong{display:block;margin-bottom:2px}
+.sync-banner-btn{background:var(--blue);color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;flex-shrink:0;transition:opacity .15s;letter-spacing:.04em}
+.sync-banner.save .sync-banner-btn{background:var(--amber)}
+.sync-banner-btn:hover{opacity:.85}
+.sync-banner-dismiss{color:var(--t3);cursor:pointer;font-size:12px;flex-shrink:0;padding:4px;transition:color .15s}
+.sync-banner-dismiss:hover{color:var(--t1)}
+
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--b1);margin-bottom:20px;animation:fd .4s ease both}
 .tb-l{display:flex;align-items:baseline;gap:14px}
@@ -752,6 +766,26 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="stat cp"><div class="sn">Apr 30</div><div class="sl">Next deadline</div><div class="ss">Nébuleuse 50% target</div></div>
   <div class="stat cb"><div class="sn">2</div><div class="sl">Auto-syncs</div><div class="ss">Notion + Help Center</div></div>
   <div class="stat cpr"><div class="sn">€1,002</div><div class="sl">Freelance MRR</div><div class="ss">€450 + $600 · Target: ~€1,500</div></div>
+</div>
+
+<!-- STATE SYNC BANNER -->
+<div class="sync-banner load" id="syncBannerLoad">
+  <span class="sync-banner-icon">📥</span>
+  <div class="sync-banner-text">
+    <strong>No progress data found — here's how to load your state</strong>
+    1. Open your local dashboard in Chrome (not Cowork) · 2. Click 💾 Save State — copies a JSON blob to your clipboard · 3. Come back here, click Load State below → paste the JSON → hit Load. Your XP, streak and completed tasks will be restored.
+  </div>
+  <button class="sync-banner-btn" onclick="openImportModal();document.getElementById('syncBannerLoad').classList.remove('show')">Load State →</button>
+  <span class="sync-banner-dismiss" onclick="dismissBanner('load')" title="Dismiss">✕</span>
+</div>
+<div class="sync-banner save" id="syncBannerSave">
+  <span class="sync-banner-icon">💾</span>
+  <div class="sync-banner-text">
+    <strong>You've completed tasks — sync to Netlify before closing</strong>
+    Click Save State → your progress is copied to clipboard · Open yohan-productivity-dashboard.netlify.app in any browser · Click 📥 Load State → paste → Load. Done — both versions are now in sync.
+  </div>
+  <button class="sync-banner-btn" onclick="exportState();dismissBanner('save')">Save State →</button>
+  <span class="sync-banner-dismiss" onclick="dismissBanner('save')" title="Dismiss">✕</span>
 </div>
 
 <!-- NAV TABS -->
@@ -3133,6 +3167,36 @@ dtnRender();
 // Re-render when tasks are completed
 const _origUpdateUI = updateUI;
 updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); };
+
+// ── STATE SYNC BANNERS ─────────────────────────────────────────
+(function initSyncBanners() {
+  const isNetlify = window.location.hostname.includes('netlify.app');
+  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost';
+  const hasState = !!localStorage.getItem('yl_state');
+  const dismissedLoad = sessionStorage.getItem('banner_load_dismissed');
+  const dismissedSave = sessionStorage.getItem('banner_save_dismissed');
+
+  // On Netlify with no state → show Load banner
+  if (isNetlify && !hasState && !dismissedLoad) {
+    document.getElementById('syncBannerLoad').classList.add('show');
+  }
+
+  // On local file: show Save banner after completing tasks (checked periodically)
+  if (isLocal) {
+    let _lastDone = S.done.length;
+    setInterval(() => {
+      if (S.done.length > _lastDone && !sessionStorage.getItem('banner_save_dismissed')) {
+        document.getElementById('syncBannerSave').classList.add('show');
+        _lastDone = S.done.length;
+      }
+    }, 8000); // check every 8 seconds
+  }
+})();
+
+function dismissBanner(type) {
+  sessionStorage.setItem('banner_' + type + '_dismissed', '1');
+  document.getElementById('syncBanner' + type.charAt(0).toUpperCase() + type.slice(1)).classList.remove('show');
+}
 
 // ── PANIC BUTTON ──────────────────────────
 const QUICK_TASK_NAMES = [
