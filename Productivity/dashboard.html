@@ -1460,6 +1460,17 @@ const STREAKS = [
   [30, '30-day streak. <em>This is who you are now.</em>'],
 ];
 
+// ── GITHUB GIST CLOUD SYNC ────────────────────────────────────
+// Token stored in localStorage under 'yl_gist_token' — never in the file.
+// Gist ID stored in localStorage under 'yl_gist_id' after first creation.
+// On save(): pushes state to Gist (debounced 2s).
+// On load: pulls from Gist first, falls back to localStorage if offline/no token.
+let _gistSaveTimer = null;
+function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
+function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
+function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
+function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
+
 function save() {
   localStorage.setItem('yl_xp',       S.xp);
   localStorage.setItem('yl_streak',   S.streak);
@@ -1595,18 +1606,6 @@ function exportSession() {
   });
 }
 
-// ── GITHUB GIST CLOUD SYNC ────────────────────────────────────
-// Token stored in localStorage under 'yl_gist_token' — never in the file.
-// Gist ID stored in localStorage under 'yl_gist_id' after first creation.
-// On save(): pushes state to Gist (debounced 2s).
-// On load: pulls from Gist first, falls back to localStorage if offline/no token.
-
-const GIST_FILENAME = 'yl-dashboard-state.json';
-let _gistSaveTimer = null;
-
-function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
-function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
-function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 
 function gistSetStatus(state) {
   const el = document.getElementById('gistStatus');
@@ -1678,10 +1677,6 @@ async function gistPush() {
   }
 }
 
-function gistSchedulePush() {
-  clearTimeout(_gistSaveTimer);
-  _gistSaveTimer = setTimeout(gistPush, 2000);
-}
 
 async function gistPull() {
   const token = gistGetToken();
