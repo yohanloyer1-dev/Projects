@@ -610,6 +610,8 @@ body:not(.vivid) .particle { display:none!important; }
   </div>
   <div class="tb-r">
     <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
+    <button class="calm-btn" id="exportStateBtn" onclick="exportState()" title="Export full dashboard state (XP, streak, tasks) — use to transfer to another device">💾 Save State</button>
+    <button class="calm-btn" id="importStateBtn" onclick="openImportModal()" title="Import dashboard state from another device">📥 Load State</button>
     <button class="calm-btn" id="calmBtn" onclick="toggleCalm()">Calm</button>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <div class="dc" id="dateChip">—</div>
@@ -1301,6 +1303,21 @@ body:not(.vivid) .particle { display:none!important; }
   </div>
 </div>
 
+<!-- IMPORT STATE MODAL -->
+<div class="qa-backdrop" id="importBackdrop" onclick="closeImportModal()"></div>
+<div class="qa-modal" id="importModal">
+  <div class="qa-title">📥 Load State</div>
+  <div class="qa-field">
+    <label class="qa-label">Paste your exported state below</label>
+    <textarea class="qa-input" id="importStateText" rows="8" placeholder="Paste the JSON state here..." style="resize:vertical;font-family:var(--fm);font-size:11px;line-height:1.5"></textarea>
+  </div>
+  <div style="font-family:var(--fm);font-size:10px;color:var(--t3);margin-bottom:14px">⚠️ This will overwrite your current progress on this device.</div>
+  <div class="qa-actions">
+    <button class="qa-cancel" onclick="closeImportModal()">Cancel</button>
+    <button class="qa-submit" onclick="importState()">Load State →</button>
+  </div>
+</div>
+
 <!-- FOCUS OVERLAY -->
 <div class="focus-overlay" id="focusOverlay">
   <div class="fo-header">
@@ -1550,6 +1567,59 @@ function exportSession() {
     win.document.close();
     showToast('Clipboard blocked — opened in new tab', 0);
   });
+}
+
+// ── STATE EXPORT / IMPORT ─────────────────────────────────────
+function exportState() {
+  const state = {
+    yl_state: localStorage.getItem('yl_state'),
+    yl_quickadd: localStorage.getItem('yl_quickadd'),
+    yl_deadlines: localStorage.getItem('yl_deadlines'),
+    yl_calm: localStorage.getItem('yl_calm'),
+    exported_at: new Date().toISOString()
+  };
+  const json = JSON.stringify(state, null, 2);
+  navigator.clipboard.writeText(json).then(() => {
+    const btn = document.getElementById('exportStateBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+    showToast('State copied — paste into Load State on another device', 0);
+  }).catch(() => {
+    const win = window.open('', '_blank', 'width=600,height=500');
+    win.document.write(`<pre style="font-family:monospace;font-size:12px;padding:20px;white-space:pre-wrap;background:#111;color:#ccc">${json.replace(/</g,'&lt;')}</pre>`);
+    win.document.close();
+  });
+}
+
+function openImportModal() {
+  document.getElementById('importBackdrop').classList.add('open');
+  document.getElementById('importModal').classList.add('open');
+  document.getElementById('importStateText').value = '';
+  setTimeout(() => document.getElementById('importStateText').focus(), 100);
+}
+
+function closeImportModal() {
+  document.getElementById('importBackdrop').classList.remove('open');
+  document.getElementById('importModal').classList.remove('open');
+}
+
+function importState() {
+  const raw = document.getElementById('importStateText').value.trim();
+  if (!raw) { showToast('Nothing to import', 0); return; }
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.yl_state) localStorage.setItem('yl_state', parsed.yl_state);
+    if (parsed.yl_quickadd) localStorage.setItem('yl_quickadd', parsed.yl_quickadd);
+    if (parsed.yl_deadlines) localStorage.setItem('yl_deadlines', parsed.yl_deadlines);
+    if (parsed.yl_calm !== undefined && parsed.yl_calm !== null) localStorage.setItem('yl_calm', parsed.yl_calm);
+    closeImportModal();
+    showToast('State loaded — reloading dashboard…', 0);
+    setTimeout(() => location.reload(), 1200);
+  } catch(e) {
+    showToast('Invalid JSON — make sure you copied the full state', 0);
+  }
 }
 
 function getLvl(xp) {
