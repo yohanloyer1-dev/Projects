@@ -1381,6 +1381,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 
 <script>
+// ── CONSTANTS (must be first — used by save() before full Gist block) ──────
+const GIST_FILENAME = 'yl-dashboard-state.json';
+
 // ── STATE ──────────────────────────────────
 const S = {
   xp:    +localStorage.getItem('yl_xp')     || 0,
@@ -1465,7 +1468,7 @@ const STREAKS = [
 // Gist ID stored in localStorage under 'yl_gist_id' after first creation.
 // On save(): pushes state to Gist (debounced 2s).
 // On load: pulls from Gist first, falls back to localStorage if offline/no token.
-const GIST_FILENAME = 'yl-dashboard-state.json';
+// (GIST_FILENAME declared at top of script to avoid const hoisting issues)
 let _gistSaveTimer = null;
 function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
 function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
