@@ -8,27 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Deep warm charcoal — calm by default */
+  /* Deep warm charcoal */
   --bg:#111009; --s1:#1a1814; --s2:#1f1d19; --s3:#25221d; --s4:#2b2822;
   --b1:#2e2b25; --b2:#38342d; --b3:#443f37;
-  --t1:#c8c2b8; --t2:#6e6a62; --t3:#4e4a44; --t4:#302d28;
+  --t1:#ede8df; --t2:#8a8378; --t3:#524e47; --t4:#302d28;
 
-  /* Muted warm accents — calm default */
-  --green:#557a66;  --green-g:rgba(85,122,102,.08);  --green-d:rgba(85,122,102,.06);
-  --amber:#7a7264;  --amber-g:rgba(122,114,100,.08);  --amber-d:rgba(122,114,100,.07);
-  --blue:#556878;   --blue-d:rgba(85,104,120,.07);
-  --pink:#7a6870;   --pink-d:rgba(122,104,112,.07);
-  --purple:#6a5f7a; --purple-d:rgba(106,95,122,.07);
-  --red:#7a6e6a;    --red-d:rgba(122,110,106,.07);
-  --cyan:#3a7878;   --cyan-d:rgba(58,120,120,.07);
-  --orange:#7a6050;
-
-  --fd:'Syne',sans-serif; --fm:'DM Mono',monospace; --fb:'DM Sans',sans-serif;
-}
-
-/* ── VIVID MODE (opt-in) ───────────────────────────────────── */
-body.vivid {
-  --t1:#ede8df; --t2:#8a8378; --t3:#524e47;
+  /* Vivid accents — always on */
   --green:#3db876;  --green-g:rgba(61,184,118,.14); --green-d:rgba(61,184,118,.07);
   --amber:#e8a93a;  --amber-g:rgba(232,169,58,.14); --amber-d:rgba(232,169,58,.07);
   --blue:#5b9bd6;   --blue-d:rgba(91,155,214,.08);
@@ -37,6 +22,8 @@ body.vivid {
   --red:#d95f4b;    --red-d:rgba(217,95,75,.08);
   --cyan:#3ab8b8;   --cyan-d:rgba(58,184,184,.07);
   --orange:#e07840;
+
+  --fd:'Syne',sans-serif; --fm:'DM Mono',monospace; --fb:'DM Sans',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -488,8 +475,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ct-copy:hover{background:rgba(245,166,35,.15)}
 .ct-copy.copied{color:var(--green);background:var(--green-d);border-color:rgba(61,220,132,.2)}
 
-/* ── CALM MODE (default — no overrides needed, vivid is the toggle) ── */
-body:not(.vivid) .particle { display:none!important; }
 
 /* ── CELEBRATION OVERLAY ──────────────────────────────────── */
 .celebration{position:fixed;inset:0;z-index:9990;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .2s}
