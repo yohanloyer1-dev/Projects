@@ -1376,8 +1376,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </div>
   <div class="fo-intervals">
     <span class="fo-int-lbl">Duration:</span>
+    <button class="fo-int-btn" data-mins="5" onclick="setFocusDuration(5,this)">5 min</button>
+    <button class="fo-int-btn" data-mins="10" onclick="setFocusDuration(10,this)">10 min</button>
     <button class="fo-int-btn" data-mins="15" onclick="setFocusDuration(15,this)">15 min</button>
-    <button class="fo-int-btn active" data-mins="25" onclick="setFocusDuration(25,this)">25 min</button>
+    <button class="fo-int-btn" data-mins="25" onclick="setFocusDuration(25,this)">25 min</button>
+    <button class="fo-int-btn" data-mins="30" onclick="setFocusDuration(30,this)">30 min</button>
     <button class="fo-int-btn" data-mins="45" onclick="setFocusDuration(45,this)">45 min</button>
     <button class="fo-int-btn" data-mins="60" onclick="setFocusDuration(60,this)">60 min</button>
   </div>
