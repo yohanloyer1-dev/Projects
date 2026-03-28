@@ -46,7 +46,7 @@
 
 ### 🏡 Real Estate
 - [!] **Gather docs Crédit Coopératif** — URGENT
-- [!] **Cancel BP account** — URGENT
+- [x] **Cancel BP account** — ✅ Done 28 Mar 2026
 - [ ] **Sign Loan Insurance** — Sign loan insurance documents
 - [ ] **Negotiate NL document translation** — Negotiate translation of Netherlands documents
 
@@ -90,7 +90,7 @@
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
 
 ### Follow-ups
-- [!] **Send follow-up email to LTVPlus team** — URGENT — send the follow-up email
+- [x] **Send follow-up email to LTVPlus team** — ✅ Done 27 Mar 2026
 - [ ] **Shoptalk follow ups — Plantmade** — Follow up with Plantmade contact met at Shoptalk
 - [ ] **Add German logos to partner deck — Nikos Media & Latori** — Update the partner deck with German partner logos
 - [ ] **Review Latori's customer list** — Go through Latori's list of customers
@@ -137,3 +137,5 @@
 - [x] **Set up productivity system** — CLAUDE.md, TASKS.md, memory/, dashboard, scheduled tasks
 - [x] **Set up Nébuleuse Notion auto-sync** — Mon + Fri 9am scheduled task
 - [x] **Set up Gorgias Help Center weekly scraping** — Mondays 9am, new articles only (Phase 1)
+- [x] **Pay Didier Degrandi** — ✅ Done ~week of 23 Mar 2026
+- [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
