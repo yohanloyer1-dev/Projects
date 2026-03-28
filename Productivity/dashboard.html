@@ -1465,6 +1465,7 @@ const STREAKS = [
 // Gist ID stored in localStorage under 'yl_gist_id' after first creation.
 // On save(): pushes state to Gist (debounced 2s).
 // On load: pulls from Gist first, falls back to localStorage if offline/no token.
+const GIST_FILENAME = 'yl-dashboard-state.json';
 let _gistSaveTimer = null;
 function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
 function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
