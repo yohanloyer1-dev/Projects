@@ -56,11 +56,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .tb-r{display:flex;align-items:center;gap:14px}
 
 /* MODE TOGGLE */
-.mode-toggle{display:flex;align-items:center;background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:3px;gap:2px;position:relative}
-.mode-btn{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:5px 13px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;transition:color .18s,background .18s,box-shadow .18s;white-space:nowrap;position:relative;z-index:1}
-.mode-btn.active{color:var(--t1);background:var(--b1);box-shadow:0 1px 4px rgba(0,0,0,.35)}
-.mode-btn#mode-personal.active{color:var(--pink)}
-.mode-btn#mode-work.active{color:var(--blue)}
+.mode-toggle{display:flex;align-items:center;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:3px;gap:2px}
+.mode-btn{font-family:var(--fm);font-size:10px;letter-spacing:.06em;padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;transition:all .18s;white-space:nowrap}
+.mode-btn.active{background:var(--s4);color:var(--t1);box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .mode-btn:hover:not(.active){color:var(--t2)}
 .live{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;color:var(--t3)}
 .ldot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.5s ease infinite}
@@ -822,21 +820,21 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="brief-sub">Ranked by urgency · importance · Claude-ability · days stale</div>
     </div>
     <div class="brief-grid">
-      <div class="bi" onclick="goToTask('docs-credit', 'personal')" style="cursor:pointer" data-mode="personal">
+      <div class="bi" onclick="goToTask('docs-credit', 'personal')" style="cursor:pointer">
         <div class="bi-rank"><div class="rn r1">1</div> TOP PRIORITY</div>
         <div class="bi-name">Gather docs Crédit Coopératif</div>
         <div class="bi-proj">🏡 Real Estate</div>
         <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 30 min</span></div>
         <div class="bi-why">Flagged as urgent with no prior activity. Real estate admin blocks are typically time-sensitive. Gather the documents — I can help you prepare a checklist.</div>
       </div>
-      <div class="bi" onclick="goToTask('pay-axon', 'personal')" style="cursor:pointer" data-mode="personal">
+      <div class="bi" onclick="goToTask('pay-axon', 'personal')" style="cursor:pointer">
         <div class="bi-rank"><div class="rn r2">2</div> DO TODAY</div>
         <div class="bi-name">Pay Axon investment</div>
         <div class="bi-proj">💰 Admin & Finance</div>
         <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 10 min</span></div>
         <div class="bi-why">Urgent investment transfer sitting open. Financial commitments carry relationship risk the longer they're delayed. Fast to execute — just needs action.</div>
       </div>
-      <div class="bi" onclick="goToTask('baback-checklist', 'freelance')" style="cursor:pointer" data-mode="work">
+      <div class="bi" onclick="goToTask('baback-checklist', 'freelance')" style="cursor:pointer">
         <div class="bi-rank"><div class="rn r3">3</div> HIGH VALUE</div>
         <div class="bi-name">Share Baback Integration Checklist</div>
         <div class="bi-proj">💎 Nébuleuse Bijoux</div>
@@ -847,8 +845,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="brief-foot">⚡ Tasks marked <span style="color:var(--blue);margin:0 4px">🤖 Claude: Ready</span> — just say the word and we work on it right now in this session.</div>
   </div>
 
-  <div class="sh" data-mode="work"><div class="sh-lbl">Project Snapshot</div><div class="sh-line"></div></div>
-  <div class="g3" data-mode="work">
+  <div class="sh"><div class="sh-lbl">Project Snapshot</div><div class="sh-line"></div></div>
+  <div class="g3">
     <div class="pc" style="cursor:pointer" onclick="sv('freelance')">
       <div class="pc-acc" style="background:var(--green)"></div>
       <div class="pc-head"><div><div class="pc-title">Nébuleuse Bijoux</div><div class="pc-sub">Apr 30 · 8.1%→50%</div></div><span class="pill p-act">Active</span></div>
@@ -1971,7 +1969,7 @@ function setMode(mode) {
   // Update toggle buttons
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('mode-'+mode).classList.add('active');
-  // Show/hide nav tabs
+  // Show/hide tabs
   const hideTabs = mode === 'personal' ? WORK_TABS : PERSONAL_TABS;
   const showTabs = mode === 'personal' ? PERSONAL_TABS : WORK_TABS;
   hideTabs.forEach(t => {
@@ -1982,13 +1980,6 @@ function setMode(mode) {
     const tab = document.getElementById('tab-'+t);
     if (tab) tab.style.display = '';
   });
-  // Show/hide data-mode elements in Brief (priority cards, project snapshot)
-  document.querySelectorAll('[data-mode]').forEach(el => {
-    el.style.display = el.dataset.mode === mode ? '' : 'none';
-  });
-  // Update topbar subtitle to reflect current mode
-  const sub = document.querySelector('.tb-sub');
-  if (sub) sub.textContent = mode === 'personal' ? 'Personal Dashboard' : 'Work Dashboard';
   // If current view is now hidden, redirect to brief
   const activeTab = document.querySelector('.tab.active');
   const activeId  = activeTab?.id?.replace('tab-','');
@@ -2600,9 +2591,6 @@ function renderLinkRow(taskId, container) {
 
 // ── GO TO TASK ────────────────────────────
 function goToTask(taskId, tab) {
-  // Auto-switch mode if needed so the target tab is visible
-  if (WORK_TABS.includes(tab))     setMode('work');
-  else if (PERSONAL_TABS.includes(tab)) setMode('personal');
   sv(tab);
   setTimeout(()=>{
     const el = document.querySelector(`.t[data-id="${taskId}"]`);
