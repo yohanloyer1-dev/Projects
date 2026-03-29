@@ -348,8 +348,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Task gets a subtle left border tint when deadline is near */
 .t.dl-warn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber);border-radius:0 2px 2px 0}
 .t.dl-crit::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);border-radius:0 2px 2px 0}
-/* Deadline date picker popup — appended to body to escape overflow:hidden containers */
-.dl-picker{position:fixed;z-index:9000;background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:12px 14px;min-width:200px;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none;flex-direction:column;gap:8px}
+/* Deadline date picker popup */
+.dl-picker{position:absolute;right:0;top:calc(100% + 4px);z-index:3000;background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:12px 14px;min-width:200px;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none;flex-direction:column;gap:8px}
 .dl-picker.open{display:flex;animation:fd .15s ease both}
 .dl-picker-title{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
 .dl-quick{display:flex;flex-wrap:wrap;gap:5px}
@@ -821,8 +821,28 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="brief-hl">Today's Top Priorities <span class="brief-tag">CLAUDE AI BRIEF</span></div>
       <div class="brief-sub">Ranked by urgency · importance · Claude-ability · days stale</div>
     </div>
-    <div class="brief-grid" id="briefGrid">
-      <!-- dynamically rendered by renderBrief() -->
+    <div class="brief-grid">
+      <div class="bi" onclick="goToTask('docs-credit', 'personal')" style="cursor:pointer" data-mode="personal">
+        <div class="bi-rank"><div class="rn r1">1</div> TOP PRIORITY</div>
+        <div class="bi-name">Gather docs Crédit Coopératif</div>
+        <div class="bi-proj">🏡 Real Estate</div>
+        <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 30 min</span></div>
+        <div class="bi-why">Flagged as urgent with no prior activity. Real estate admin blocks are typically time-sensitive. Gather the documents — I can help you prepare a checklist.</div>
+      </div>
+      <div class="bi" onclick="goToTask('pay-axon', 'personal')" style="cursor:pointer" data-mode="personal">
+        <div class="bi-rank"><div class="rn r2">2</div> DO TODAY</div>
+        <div class="bi-name">Pay Axon investment</div>
+        <div class="bi-proj">💰 Admin & Finance</div>
+        <div class="bi-scores"><span class="sc sc-u">🔴 Urgent</span><span class="sc sc-t">⚡ 10 min</span></div>
+        <div class="bi-why">Urgent investment transfer sitting open. Financial commitments carry relationship risk the longer they're delayed. Fast to execute — just needs action.</div>
+      </div>
+      <div class="bi" onclick="goToTask('baback-checklist', 'freelance')" style="cursor:pointer" data-mode="work">
+        <div class="bi-rank"><div class="rn r3">3</div> HIGH VALUE</div>
+        <div class="bi-name">Share Baback Integration Checklist</div>
+        <div class="bi-proj">💎 Nébuleuse Bijoux</div>
+        <div class="bi-scores"><span class="sc sc-u">🟡 Deadline</span><span class="sc sc-c">🤖 Ready</span><span class="sc sc-t">⚡ 15 min</span></div>
+        <div class="bi-why">Checklist built, Apr 30 deadline looming. This single send unlocks <em>+45–52%</em> automation — the highest-leverage action for the account.</div>
+      </div>
     </div>
     <div class="brief-foot">⚡ Tasks marked <span style="color:var(--blue);margin:0 4px">🤖 Claude: Ready</span> — just say the word and we work on it right now in this session.</div>
   </div>
@@ -1418,8 +1438,10 @@ const S = {
 // Known deadlines from TASKS.md — only set if not already customised by user.
 // Update these dates when tasks change. Format: 'YYYY-MM-DD'
 const PRE_DEADLINES = {
+  'flights-japan':    '2026-03-25', // URGENT — deadline Wednesday (today)
   'baback-checklist': '2026-04-30', // Nébuleuse Apr 30 target
   'pay-axon':         '2026-03-25', // Urgent payment — treat as today
+  'docs-credit':      '2026-03-28', // Urgent real estate — this week
 };
 Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
   if (!S.deadlines[id]) S.deadlines[id] = date;
@@ -1430,9 +1452,8 @@ save(); // persist the seeded deadlines immediately
 const PRE_DONE = [
   { n: 'Pay Didier Degrandi',               p: 'Admin & Finance', xp: 15, id: 'pay-didier',       t: new Date('2026-03-23T10:00:00').getTime() },
   { n: 'Send follow-up email to LTVPlus team', p: 'Gorgias Role', xp: 10, id: 'ltvplus-followup', t: new Date('2026-03-27T10:00:00').getTime() },
-  { n: 'Cancel BP account',                 p: 'Real Estate',     xp: 10, id: 'cancel-bp',                   t: new Date('2026-03-28T10:00:00').getTime() },
-  { n: 'Negotiate NL document translation', p: 'Real Estate',     xp: 10, id: 'negotiate-nl-translation',    t: new Date('2026-03-28T10:00:00').getTime() },
-  { n: 'Gather docs Crédit Coopératif',     p: 'Real Estate',     xp: 8,  id: 'docs-credit',                 t: new Date('2026-03-29T10:00:00').getTime() }
+  { n: 'Cancel BP account',                 p: 'Real Estate',     xp: 10, id: 'cancel-bp',        t: new Date('2026-03-28T10:00:00').getTime() },
+  { n: 'Negotiate NL document translation', p: 'Real Estate',     xp: 10, id: 'negotiate-nl-translation', t: new Date('2026-03-28T10:00:00').getTime() }
 ];
 PRE_DONE.forEach(pd => {
   if (!S.done.find(d => d.n === pd.n)) {
@@ -1456,9 +1477,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // whose task no longer exists in the DOM (truly completed/removed tasks)
   S.done = S.done.filter(d => d.id || !activeTasks.has(d.n));
   if (S.done.length !== before) save();
-  // Init mode toggle + render dynamic brief
+  // Init mode toggle
   initMode();
-  renderBrief();
 });
 
 save();
@@ -2006,103 +2026,6 @@ function initMode() {
   setMode(saved);
 }
 
-// ── DYNAMIC BRIEF ─────────────────────────
-// Scores every undone task and renders the top 3 in the Brief grid.
-// Runs on load and whenever a task is marked done/undone.
-function renderBrief() {
-  const grid = document.getElementById('briefGrid');
-  if (!grid) return;
-
-  const mode = localStorage.getItem('yl_mode') || 'personal';
-  const doneIds = new Set(S.done.map(d => d.id).filter(Boolean));
-  const doneNames = new Set(S.done.map(d => d.n).filter(Boolean));
-
-  // Determine which views are relevant for current mode
-  const modeViews = mode === 'personal' ? ['view-personal'] : ['view-freelance', 'view-pro'];
-  // Always include both for picking — Brief shows all, but tag data-mode correctly
-  const allViews = ['view-personal', 'view-freelance', 'view-pro'];
-
-  const candidates = [];
-
-  allViews.forEach(viewId => {
-    const view = document.getElementById(viewId);
-    if (!view) return;
-    const taskMode = (viewId === 'view-personal') ? 'personal' : 'work';
-    const tab = viewId === 'view-personal' ? 'personal' : (viewId === 'view-freelance' ? 'freelance' : 'pro');
-
-    view.querySelectorAll('.t[data-id]').forEach(el => {
-      const id = el.dataset.id;
-      const name = el.querySelector('.tn')?.textContent?.trim() || '';
-      const project = el.dataset.project || '';
-      const xp = parseInt(el.dataset.xp || '5');
-
-      // Skip if done
-      if (doneIds.has(id) || doneNames.has(name)) return;
-      if (el.classList.contains('done-t')) return;
-
-      // Score: urgency (50), hi-priority (30), has deadline (20), claude-ready (10), xp (1 per point)
-      let score = 0;
-      let isUrgent = false, hasDl = false, isClaude = false, isHi = false;
-
-      if (el.classList.contains('urg')) { score += 50; isUrgent = true; }
-      if (el.classList.contains('hi'))  { score += 30; isHi = true; }
-      if (el.classList.contains('cl'))  { score += 10; isClaude = true; }
-      score += xp;
-
-      // Deadline scoring
-      const dl = S.deadlines?.[id];
-      if (dl) {
-        hasDl = true;
-        const days = Math.ceil((new Date(dl) - new Date()) / 86400000);
-        if (days <= 0)  score += 60;
-        else if (days <= 3)  score += 35;
-        else if (days <= 7)  score += 20;
-        else score += 10;
-      }
-
-      // Project emoji
-      const projEmoji = {
-        'Japan Trip': '✈️', 'Travel': '✈️', 'Admin & Finance': '💰',
-        'Real Estate': '🏡', 'Health': '🏥', 'Strategy': '🧠',
-        'Nébuleuse': '💎', 'Accessory Partners': '🚗', 'Agency': '🏢',
-        'LinkedIn': '💼', 'Gorgias Role': '📊', 'Bots': '🤖',
-        'Network': '🤝', 'Tech': '📱'
-      }[project] || '📋';
-
-      candidates.push({ id, name, project, projEmoji, score, isUrgent, isHi, hasDl, isClaude, tab, taskMode });
-    });
-  });
-
-  // Sort by score descending
-  candidates.sort((a, b) => b.score - a.score);
-
-  // Take top 3
-  const top = candidates.slice(0, 3);
-
-  const rankLabels = ['TOP PRIORITY', 'DO TODAY', 'HIGH VALUE'];
-  const rankClasses = ['r1', 'r2', 'r3'];
-
-  grid.innerHTML = top.map((t, i) => {
-    const scores = [];
-    if (t.isUrgent) scores.push('<span class="sc sc-u">🔴 Urgent</span>');
-    else if (t.hasDl) scores.push('<span class="sc sc-u" style="color:var(--amber)">🟡 Deadline</span>');
-    if (t.isClaude) scores.push('<span class="sc sc-c">🤖 Ready</span>');
-
-    return `
-      <div class="bi" onclick="goToTask('${t.id}','${t.tab}')" style="cursor:pointer" data-mode="${t.taskMode}">
-        <div class="bi-rank"><div class="rn ${rankClasses[i]}">${i+1}</div> ${rankLabels[i]}</div>
-        <div class="bi-name">${t.name}</div>
-        <div class="bi-proj">${t.projEmoji} ${t.project}</div>
-        <div class="bi-scores">${scores.join('')}</div>
-      </div>`;
-  }).join('');
-
-  // Re-apply mode visibility to new elements
-  document.querySelectorAll('#briefGrid [data-mode]').forEach(el => {
-    el.style.display = el.dataset.mode === mode ? '' : 'none';
-  });
-}
-
 // ── PARTICLES ─────────────────────────────
 function burst(x,y) {
   const cols=['#3db876','#e8a93a','#5b9bd6','#d4729a','#a07fd4','#d95f4b','#3ab8b8'];
@@ -2646,27 +2569,17 @@ function bindDeadline(t) {
     if(S.deadlines && S.deadlines[taskId]) {
       dateInput.value = S.deadlines[taskId];
     }
-    // Close any other open pickers
     document.querySelectorAll('.dl-picker.open').forEach(p => { if(p!==picker) p.classList.remove('open'); });
-    // Position picker relative to badge using fixed coords (escapes overflow:hidden)
-    const rect = badge.getBoundingClientRect();
-    const pickerW = 220;
-    let left = rect.right - pickerW;
-    if(left < 8) left = 8;
-    let top = rect.bottom + 6;
-    // If it would overflow viewport bottom, flip above
-    if(top + 200 > window.innerHeight) top = rect.top - 210;
-    picker.style.left = left + 'px';
-    picker.style.top  = top  + 'px';
     picker.classList.toggle('open');
   });
   document.addEventListener('click', () => picker.classList.remove('open'));
 
-  // Insert badge before note-btn; append picker to body (not task) so it escapes overflow:hidden
+  // Insert badge before note-btn, append picker to task
   const noteBtn = t.querySelector('.note-btn');
   if(noteBtn) t.insertBefore(badge, noteBtn);
   else t.appendChild(badge);
-  document.body.appendChild(picker);
+  t.style.position = 'relative';
+  t.appendChild(picker);
 }
 
 // ── LINKS SYSTEM ──────────────────────────

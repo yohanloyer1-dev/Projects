@@ -46,7 +46,7 @@
 - [ ] **Lucis: Zinc Picolinate + Flaxseeds** — Buy supplements from Lucis
 
 ### 🏡 Real Estate
-- [!] **Gather docs Crédit Coopératif** — URGENT
+- [x] **Gather docs Crédit Coopératif** — ✅ Done 29 Mar 2026
 - [x] **Cancel BP account** — ✅ Done 28 Mar 2026
 - [ ] **Sign Loan Insurance** — Sign loan insurance documents
 - [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
