@@ -87,6 +87,12 @@
 
 ## 💼 Professional (Gorgias)
 
+### ✈️ Work Travel
+- [!] **Book flight Amsterdam** — URGENT — book today. Work event.
+- [!] **Book flight Barcelona** — URGENT — book today. Work event.
+- [ ] **Book flight Milano** — Work event.
+- [ ] **Book flight Marseille** — Work event.
+
 ### Role Optimization
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
 

@@ -1132,6 +1132,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="sh"><div class="sh-lbl">Gorgias Day Job</div><div class="sh-line"></div><div class="sh-ct">Partner-sourced + Partner-influenced ARR</div></div>
   <div class="g2">
     <div class="pc">
+      <div class="pc-acc" style="background:var(--cyan)"></div>
+      <div class="pc-head"><div><div class="pc-title">Work Travel</div><div class="pc-sub">Events · partner meetings</div></div><span class="pill" style="background:rgba(58,184,184,.12);color:var(--cyan);border:1px solid rgba(58,184,184,.25)">Gorgias</span></div>
+      <div class="tl">
+        <div class="t urg" data-id="flight-amsterdam" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Amsterdam</span><span class="td">Urgent — book today</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
+        <div class="note-panel" data-for="flight-amsterdam"></div>
+        <div class="t urg" data-id="flight-barcelona" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Barcelona</span><span class="td">Urgent — book today</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
+        <div class="note-panel" data-for="flight-barcelona"></div>
+        <div class="t" data-id="flight-milano" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Milano</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="flight-milano"></div>
+        <div class="t" data-id="flight-marseille" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Marseille</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="flight-marseille"></div>
+      </div>
+    </div>
+    <div class="pc">
       <div class="pc-acc" style="background:var(--blue)"></div>
       <div class="pc-head"><div><div class="pc-title">Role Optimization</div><div class="pc-sub">Tools · processes · strategy</div></div><span class="pill p-act">Active</span></div>
       <div class="nxt" style="background:#0a0f14"><span class="nxt-arr" style="color:var(--blue)">▶</span><span class="nxt-txt" style="color:#7aa3bf">Dedicated session — tools, processes, ARR strategy</span></div>
@@ -1999,6 +2013,8 @@ function setMode(mode) {
   const activeTab = document.querySelector('.tab.active');
   const activeId  = activeTab?.id?.replace('tab-','');
   if (activeId && hideTabs.includes(activeId)) sv('brief');
+  // Re-render brief to reflect mode-appropriate tasks
+  renderBrief();
 }
 
 function initMode() {
@@ -2297,7 +2313,7 @@ function uncompleteTask(taskId, name, xp, logItem) {
   S.done = S.done.filter(d=>d.n!==name);
   S.xp = Math.max(0, S.xp - xp);
   S.sessionDone = Math.max(0, S.sessionDone - 1);
-  save(); updateUI(); updateCounts();
+  save(); updateUI(); updateCounts(); renderBrief();
   showToast(name+' — restored', -xp);
   if(document.getElementById('logList').children.length===0){
     document.getElementById('logList').innerHTML='<div class="log-empty">All restored. Keep going!</div>';
@@ -2410,7 +2426,7 @@ function bind(){
           S.sessionDone = Math.max(0, S.sessionDone - 1);
           const logItem2 = document.querySelector(`.log-item[data-id="${taskId2}"]`);
           if(logItem2) logItem2.remove();
-          save(); updateUI(); updateCounts();
+          save(); updateUI(); updateCounts(); renderBrief();
           showToast(nm2+' — restored', -xp2);
           return;
         }
@@ -3112,6 +3128,7 @@ function bindSingleTask(t) {
     addLog(nm2, proj, xp2, taskId2);
     showToast(nm2, xp2);
     celebrate(nm2, xp2);
+    renderBrief();
   });
 
   // Deadline badge (same as main bind)
