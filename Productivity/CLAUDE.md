@@ -126,12 +126,16 @@ When starting any session in this project, Claude MUST:
 - Multilingual content: EN / FR / ES
 
 ## Dashboard System
-- Location: `Productivity/dashboard.html` — hosted on Netlify (Yohan has account)
-- Current version: v1.1 — see `Productivity/versions/` for history
+- Location: `Productivity/dashboard.html` — auto-deploys to Netlify via GitHub push
+- Current version: v2.5 — see `Productivity/versions/` for history
+- Live URL: https://yohan-productivity-dashboard.netlify.app/dashboard.html
+- Hosting status: ⚠️ Netlify free plan hits monthly bandwidth limit. Resets ~1st of month. Upgrade to Pro ($19/mo) or set up GitHub Pages as backup.
+- GitHub repo: github.com/yohanloyer1-dev/Projects (private). Push to `main` → Netlify auto-deploys.
+- Deploy workflow: Edit dashboard.html → `git add Productivity/dashboard.html` → `git commit` → `git push origin main` → Netlify deploys in ~10s
+- Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Progress data syncs across devices automatically.
+- Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
 - ADHD-optimized variant: planned — research saved at `memory/context/adhd-dashboard-research.md`
-- Features: interactive checkboxes (checkbox-only completion), task notes, task links, status selector (Urgent/Important/In Progress/Waiting/Someday/Normal), streak + level gamification, Claude Tasks tab with session prompts, Done log with date completed
 - Versioning rule: ALWAYS copy current dashboard to `versions/dashboard_vX.X_YYYY-MM-DD.html` before any significant edit
-- Bookmarking: deploy to Netlify for permanent URL (Yohan has account, TBD)
 
 ## Cowork Project Setup
 - Project name: YL / OPS

@@ -44,3 +44,4 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+N8N/ai_agents_az/

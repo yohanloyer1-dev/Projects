@@ -800,7 +800,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="tab urgent-tab" onclick="sv('personal')" id="tab-personal">🏠 Personal <span class="tc" id="tc-personal">—</span></div>
   <div class="tab" onclick="sv('freelance')" id="tab-freelance">💼 Freelance <span class="tc" id="tc-freelance">—</span></div>
   <div class="tab" onclick="sv('pro')" id="tab-pro">📊 Professional <span class="tc" id="tc-pro">—</span></div>
-  <div class="tab" onclick="sv('claude')" id="tab-claude">🤖 Claude Tasks <span class="tc" id="tc-claude">6</span></div>
+  <div class="tab" onclick="sv('claude')" id="tab-claude">🤖 Claude Tasks <span class="tc" id="tc-claude">9</span></div>
   <div class="tab" onclick="sv('done')" id="tab-done">✅ Done <span class="tc" id="tc-done">0</span></div>
 </div>
 
@@ -987,7 +987,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="tl">
         <div class="t urg" data-id="docs-credit" data-xp="8" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Gather docs Crédit Coopératif</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
         <div class="note-panel" data-for="docs-credit"></div>
-        <div class="t urg" data-id="cancel-bp" data-xp="7" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Cancel BP account</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="t" data-id="cancel-bp" data-xp="7" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Cancel BP account</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="cancel-bp"></div>
         <div class="t" data-id="sign-loan-insurance" data-xp="8" data-project="Real Estate"><div class="chk"></div><div class="tb"><span class="tn">Sign Loan Insurance</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="sign-loan-insurance"></div>
@@ -1164,7 +1164,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="pc-acc" style="background:var(--blue)"></div>
       <div class="pc-head"><div><div class="pc-title">Follow-ups</div><div class="pc-sub">Shoptalk · Events · LTVPlus</div></div><span class="pill p-act">Active</span></div>
       <div class="tl">
-        <div class="t urg" data-id="ltvplus-followup" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Send follow-up email to LTVPlus team</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="t" data-id="ltvplus-followup" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Send follow-up email to LTVPlus team</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="ltvplus-followup"></div>
         <div class="t" data-id="shoptalk-followup" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Shoptalk follow ups — Plantmade</span><span class="td">Work contacts met at conference</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="shoptalk-followup"></div>
@@ -1232,14 +1232,38 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
   <div class="claude-task">
     <div class="ct-head">
+      <div class="ct-icon">🏷️</div>
+      <div class="ct-name">Find agency name</div>
+      <div class="ct-proj">Agency · Blocker</div>
+      <span class="ct-status ct-ready">Ready</span>
+    </div>
+    <div class="ct-note">A shortlist of 10 name candidates is ready in memory/projects/agency-name-brainstorm.md. Top picks: Kairo, Reflow, Celio. Review and pick one — then check domain availability.</div>
+    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/agency-name-brainstorm.md. Review my top 3 picks (Kairo, Reflow, Celio) and help me decide. Check domain availability for each (.com, .co, .agency). Run a quick conflict check. Help me make a final decision and update memory/projects/gorgias-agency.md with the chosen name.')">📋 Copy session prompt</button>
+    <a class="ct-start" href="#" onclick="goToTask('agency-name','freelance');return false;">→ Jump to task in Freelance tab</a>
+  </div>
+
+  <div class="claude-task">
+    <div class="ct-head">
       <div class="ct-icon">📦</div>
       <div class="ct-name">Define service packages + pricing</div>
       <div class="ct-proj">Agency</div>
       <span class="ct-status ct-ready">Ready</span>
     </div>
-    <div class="ct-note">Claude can design 3 tiered service packages (Starter / Growth / Enterprise) for the Gorgias agency — with deliverables, pricing anchors, and positioning language in EN/FR.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/gorgias-agency.md. Design 3 productized service packages for the Gorgias agency (name TBD) — Starter, Growth, Enterprise. Each package needs: scope, deliverables, timeline, price anchor, ideal customer profile. Output in EN + FR. Save to Gorgias/agency-packages.md')">📋 Copy session prompt</button>
+    <div class="ct-note">5-package framework is drafted in memory/projects/agency-service-packages.md. Review pricing, adjust numbers, then build the website copy (one page per package, EN + FR).</div>
+    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/agency-service-packages.md and memory/projects/gorgias-agency.md. Review the 5-package framework. Then write the website copy for each package — short, premium, outcome-focused. EN first, then FR. Max 150 words per package. Save to memory/projects/agency-website-copy.md')">📋 Copy session prompt</button>
     <a class="ct-start" href="#" onclick="goToTask('service-packages','freelance');return false;">→ Jump to task in Freelance tab</a>
+  </div>
+
+  <div class="claude-task">
+    <div class="ct-head">
+      <div class="ct-icon">⚡</div>
+      <div class="ct-name">Gorgias role optimisation — quick wins</div>
+      <div class="ct-proj">Professional · Gorgias</div>
+      <span class="ct-status ct-ready">Ready</span>
+    </div>
+    <div class="ct-note">Full analysis is in memory/projects/gorgias-role-optimisation.md. 4 quick wins identified — HubSpot pipeline review, Granola action extraction, Shoptalk follow-up templates, weekly partner pulse.</div>
+    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/gorgias-role-optimisation.md. Start with Quick Win #1: use the HubSpot MCP to pull my current partner pipeline, identify the top 3 stale or at-risk partner deals, and draft follow-up emails for each. Then move to Quick Win #2: use the Granola MCP to extract action items from my last 3 weeks of meetings.')">📋 Copy session prompt</button>
+    <a class="ct-start" href="#" onclick="goToTask('role-brainstorm','pro');return false;">→ Jump to task in Professional tab</a>
   </div>
 
   <div class="claude-task">
@@ -1418,7 +1442,6 @@ const PRE_DEADLINES = {
   'baback-checklist': '2026-04-30', // Nébuleuse Apr 30 target
   'pay-axon':         '2026-03-25', // Urgent payment — treat as today
   'docs-credit':      '2026-03-28', // Urgent real estate — this week
-  'cancel-bp':        '2026-03-28', // Urgent real estate — this week
 };
 Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
   if (!S.deadlines[id]) S.deadlines[id] = date;
@@ -1427,7 +1450,10 @@ save(); // persist the seeded deadlines immediately
 
 // ── PRE-COMPLETED TASKS (marked done outside session) ──────────
 const PRE_DONE = [
-  { n: 'Pay Didier Degrandi', p: 'Admin & Finance', xp: 15, id: 'pay-didier', t: new Date('2026-03-23T10:00:00').getTime() }
+  { n: 'Pay Didier Degrandi',               p: 'Admin & Finance', xp: 15, id: 'pay-didier',       t: new Date('2026-03-23T10:00:00').getTime() },
+  { n: 'Send follow-up email to LTVPlus team', p: 'Gorgias Role', xp: 10, id: 'ltvplus-followup', t: new Date('2026-03-27T10:00:00').getTime() },
+  { n: 'Cancel BP account',                 p: 'Real Estate',     xp: 10, id: 'cancel-bp',        t: new Date('2026-03-28T10:00:00').getTime() },
+  { n: 'Negotiate NL document translation', p: 'Real Estate',     xp: 10, id: 'negotiate-nl-translation', t: new Date('2026-03-28T10:00:00').getTime() }
 ];
 PRE_DONE.forEach(pd => {
   if (!S.done.find(d => d.n === pd.n)) {

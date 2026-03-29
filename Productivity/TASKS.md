@@ -16,9 +16,10 @@
 - [ ] **Review Granola notes (last few weeks) → extract work tasks** — Go through all recent transcripts and build a structured list of work-related action items 🤖
 
 ### 📊 Dashboard & Productivity System
-- [~] **Dashboard v2.4** — ✅ Live. Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, celebration animations
+- [~] **Dashboard v2.5** — ✅ GitHub auto-deploys to Netlify. Features: Personal/Work toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, GitHub Gist cloud sync
 - [x] **Set up GitHub repo for all Projects** — ✅ Done. Private repo at github.com/yohanloyer1-dev/Projects, fully backed up as of 2026-03-27.
-- [ ] **Deploy dashboard to Netlify from GitHub** — Auto-deploy dashboard from GitHub. Gives permanent URL across all devices.
+- [?] **Netlify hosting** — ⚠️ Usage limit hit again (free plan). Resets ~Apr 1. Consider upgrading to Pro ($19/mo) or switching to GitHub Pages (free, no limits). Dashboard code is fine — it's a hosting-only issue.
+- [ ] **Add N8N/ai_agents_az/ to .gitignore** — Run: `echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main` 🤖
 - [_] **Build WhatsApp agent via Kapso** — Get Kapso number → connect to n8n → Claude API → responds to texts + voice notes, updates TASKS.md. Replaces Telegram plan.
 - [_] **Build voice notes workflow in n8n** — Now targeting WhatsApp via Kapso (not Telegram). Kapso → Whisper transcription → inbox.md → Claude responds 🤖
 
@@ -48,7 +49,7 @@
 - [!] **Gather docs Crédit Coopératif** — URGENT
 - [x] **Cancel BP account** — ✅ Done 28 Mar 2026
 - [ ] **Sign Loan Insurance** — Sign loan insurance documents
-- [ ] **Negotiate NL document translation** — Negotiate translation of Netherlands documents
+- [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
 
 ### ✈️ Japan Trip
 - [!] **Book flights Japan** — URGENT — deadline Wednesday
