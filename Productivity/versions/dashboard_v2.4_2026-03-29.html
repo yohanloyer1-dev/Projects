@@ -53,13 +53,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .wm span{color:var(--t3);font-weight:400}
 .tb-div{width:1px;height:12px;background:var(--b2)}
 .tb-sub{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
-.tb-r{display:flex;align-items:center;gap:14px}
-
-/* MODE TOGGLE */
-.mode-toggle{display:flex;align-items:center;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:3px;gap:2px}
-.mode-btn{font-family:var(--fm);font-size:10px;letter-spacing:.06em;padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;transition:all .18s;white-space:nowrap}
-.mode-btn.active{background:var(--s4);color:var(--t1);box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.mode-btn:hover:not(.active){color:var(--t2)}
+.tb-r{display:flex;align-items:center;gap:20px}
 .live{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;color:var(--t3)}
 .ldot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.5s ease infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
@@ -631,10 +625,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="tb-sub">Operations Dashboard</div>
   </div>
   <div class="tb-r">
-    <div class="mode-toggle" id="modeToggle">
-      <button class="mode-btn active" id="mode-personal" onclick="setMode('personal')">🏠 Personal</button>
-      <button class="mode-btn" id="mode-work" onclick="setMode('work')">💼 Work</button>
-    </div>
     <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
     <span class="gist-status" id="gistStatus" title="Cloud sync status">☁️</span>
     <div class="live"><div class="ldot"></div>LIVE</div>
@@ -1449,8 +1439,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // whose task no longer exists in the DOM (truly completed/removed tasks)
   S.done = S.done.filter(d => d.id || !activeTasks.has(d.n));
   if (S.done.length !== before) save();
-  // Init mode toggle
-  initMode();
 });
 
 save();
@@ -1957,38 +1945,6 @@ function sv(v) {
   document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   document.getElementById('tab-'+v).classList.add('active');
-}
-
-// ── MODE TOGGLE (Personal / Work) ─────────
-const PERSONAL_TABS = ['personal'];
-const WORK_TABS     = ['freelance','pro'];
-const SHARED_TABS   = ['brief','claude','done'];
-
-function setMode(mode) {
-  localStorage.setItem('yl_mode', mode);
-  // Update toggle buttons
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('mode-'+mode).classList.add('active');
-  // Show/hide tabs
-  const hideTabs = mode === 'personal' ? WORK_TABS : PERSONAL_TABS;
-  const showTabs = mode === 'personal' ? PERSONAL_TABS : WORK_TABS;
-  hideTabs.forEach(t => {
-    const tab = document.getElementById('tab-'+t);
-    if (tab) tab.style.display = 'none';
-  });
-  showTabs.forEach(t => {
-    const tab = document.getElementById('tab-'+t);
-    if (tab) tab.style.display = '';
-  });
-  // If current view is now hidden, redirect to brief
-  const activeTab = document.querySelector('.tab.active');
-  const activeId  = activeTab?.id?.replace('tab-','');
-  if (activeId && hideTabs.includes(activeId)) sv('brief');
-}
-
-function initMode() {
-  const saved = localStorage.getItem('yl_mode') || 'personal';
-  setMode(saved);
 }
 
 // ── PARTICLES ─────────────────────────────
