@@ -1,0 +1,6 @@
+# Add these lines to /Users/yohanloyer/Projects/.gitignore
+# Run in Terminal:
+#   echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore
+#   cd /Users/yohanloyer/Projects && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main
+
+N8N/ai_agents_az/
