@@ -1,0 +1,106 @@
+{
+  "name": "Daily Briefing → Telegram (9am)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule: 9am Mon-Fri",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "notes": "Runs at 8am UTC = 9am Paris (CET) on weekdays. Adjust for summer time: change to 7am UTC for CEST."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read TASKS.md and extract urgent/important tasks\nconst fs = require('fs');\nconst path = '/data/Productivity/TASKS.md';\n// NOTE: Replace with actual mounted path\n\nlet content = '';\ntry {\n  content = fs.readFileSync(path, 'utf8');\n} catch(e) {\n  return [{ json: { error: e.message, tasks: [] } }];\n}\n\n// Find urgent [!] and important [>] tasks that aren't done [x]\nconst lines = content.split('\\n');\nconst urgent = [];\nconst important = [];\nconst inProgress = [];\n\nlines.forEach(line => {\n  const trimmed = line.trim();\n  if (trimmed.startsWith('- [x]')) return; // skip done tasks\n  \n  if (trimmed.startsWith('- [!]')) {\n    const task = trimmed.replace(/^- \\[!\\]\\s*\\*\\*/, '').replace(/\\*\\*.*$/, '').trim();\n    const full = trimmed.replace(/^- \\[!\\]\\s*/, '').trim();\n    urgent.push(full.substring(0, 60));\n  } else if (trimmed.startsWith('- [>]')) {\n    const full = trimmed.replace(/^- \\[>\\]\\s*/, '').trim();\n    important.push(full.substring(0, 60));\n  } else if (trimmed.startsWith('- [~]')) {\n    const full = trimmed.replace(/^- \\[~\\]\\s*/, '').trim();\n    inProgress.push(full.substring(0, 60));\n  }\n});\n\n// Also check inbox\nlet inboxCount = 0;\ntry {\n  const inboxPath = path.replace('TASKS.md', 'inbox.md');\n  const inbox = fs.readFileSync(inboxPath, 'utf8');\n  inboxCount = (inbox.match(/Status: unread/g) || []).length;\n} catch(e) {}\n\nconst today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });\n\nreturn [{\n  json: {\n    today,\n    urgent: urgent.slice(0, 3),\n    important: important.slice(0, 3),\n    inProgress: inProgress.slice(0, 2),\n    inboxCount\n  }\n}];"
+      },
+      "id": "read-tasks",
+      "name": "Read Tasks from TASKS.md",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the briefing message\nconst { today, urgent, important, inProgress, inboxCount } = $input.first().json;\n\nlet msg = `☀️ *Good morning, Yohan!*\\n_${today}_\\n\\n`;\n\nif (urgent.length > 0) {\n  msg += `🔴 *Urgent*\\n`;\n  urgent.forEach(t => msg += `• ${t}\\n`);\n  msg += '\\n';\n}\n\nif (inProgress.length > 0) {\n  msg += `🔵 *In Progress*\\n`;\n  inProgress.forEach(t => msg += `• ${t}\\n`);\n  msg += '\\n';\n}\n\nif (important.length > 0) {\n  msg += `🟡 *Important*\\n`;\n  important.forEach(t => msg += `• ${t}\\n`);\n  msg += '\\n';\n}\n\nif (inboxCount > 0) {\n  msg += `📥 *${inboxCount} unread voice note${inboxCount > 1 ? 's' : ''} in inbox*\\n\\n`;\n}\n\nmsg += `_Open dashboard: https://yohan-productivity-dashboard.netlify.app/dashboard.html_`;\n\nreturn [{ json: { briefing: msg } }];"
+      },
+      "id": "build-message",
+      "name": "Build Briefing Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.briefing }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-briefing",
+      "name": "Send Morning Briefing",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [900, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "TELEGRAM_CRED_ID",
+          "name": "Telegram Bot"
+        }
+      },
+      "notes": "Replace YOUR_TELEGRAM_CHAT_ID with your actual chat ID. Get it by messaging @userinfobot on Telegram."
+    }
+  ],
+  "connections": {
+    "Schedule: 9am Mon-Fri": {
+      "main": [
+        [
+          {
+            "node": "Read Tasks from TASKS.md",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Tasks from TASKS.md": {
+      "main": [
+        [
+          {
+            "node": "Build Briefing Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Briefing Message": {
+      "main": [
+        [
+          {
+            "node": "Send Morning Briefing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateId": "yl-daily-briefing-telegram"
+  },
+  "tags": ["telegram", "briefing", "schedule", "yohan"]
+}

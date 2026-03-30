@@ -1,0 +1,252 @@
+{
+  "name": "Telegram → Voice Notes → inbox.md",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"],
+        "additionalFields": {}
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "TELEGRAM_CRED_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": [
+            {
+              "id": "has-voice",
+              "leftValue": "={{ $json.message.voice }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-voice",
+      "name": "Filter: Voice Only",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "🎤 Got your voice note! Transcribing...",
+        "additionalFields": {}
+      },
+      "id": "ack-voice",
+      "name": "Acknowledge Receipt",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [680, 180],
+      "credentials": {
+        "telegramApi": {
+          "id": "TELEGRAM_CRED_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.telegram.org/bot{{$credentials.telegramApi.accessToken}}/getFile",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "file_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
+            }
+          ]
+        }
+      },
+      "id": "get-file-path",
+      "name": "Get File Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.telegram.org/file/bot{{$credentials.telegramApi.accessToken}}/{{ $json.result.file_path }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "download-audio",
+      "name": "Download Audio File",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_OPENAI_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "model",
+              "value": "whisper-1"
+            },
+            {
+              "name": "language",
+              "value": "fr"
+            }
+          ]
+        }
+      },
+      "id": "whisper-transcribe",
+      "name": "Whisper Transcription",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300],
+      "notes": "Replace YOUR_OPENAI_API_KEY with your key. Language set to 'fr' for French — change to 'en' or remove for auto-detect."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Append transcription to inbox.md\nconst fs = require('fs');\nconst inboxPath = '/data/Productivity/inbox.md';\n// NOTE: Replace /data/Productivity with the actual mounted path\n// Local Mac: /Users/yohanloyer/Projects/Productivity/inbox.md\n\nconst transcription = $input.first().json.text || '[transcription failed]';\nconst now = new Date();\nconst timestamp = now.toISOString().replace('T', ' ').substring(0, 16);\n\nconst entry = `\\n---\\n**Voice note** — ${timestamp}\\n${transcription}\\n\\nStatus: unread\\n---\\n`;\n\ntry {\n  // Create file if it doesn't exist\n  if (!fs.existsSync(inboxPath)) {\n    fs.writeFileSync(inboxPath, '# Inbox\\n\\nVoice notes from Telegram, processed by Claude at session start.\\n', 'utf8');\n  }\n  fs.appendFileSync(inboxPath, entry, 'utf8');\n  return [{ json: { success: true, transcription, timestamp } }];\n} catch(e) {\n  return [{ json: { success: false, error: e.message, transcription } }];\n}"
+      },
+      "id": "append-inbox",
+      "name": "Append to inbox.md",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=✅ *Transcribed & saved to inbox:*\n\n_{{ $json.transcription }}_\n\nClaude will process this at next session start.",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-confirmation",
+      "name": "Send Confirmation",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1560, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "TELEGRAM_CRED_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter: Voice Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter: Voice Only": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge Receipt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get File Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Path": {
+      "main": [
+        [
+          {
+            "node": "Download Audio File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Audio File": {
+      "main": [
+        [
+          {
+            "node": "Whisper Transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Whisper Transcription": {
+      "main": [
+        [
+          {
+            "node": "Append to inbox.md",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to inbox.md": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateId": "yl-voice-notes-telegram"
+  },
+  "tags": ["telegram", "voice", "inbox", "yohan"]
+}

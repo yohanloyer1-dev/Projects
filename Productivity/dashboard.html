@@ -1143,6 +1143,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="flight-milano"></div>
         <div class="t" data-id="flight-marseille" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book flight Marseille</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="flight-marseille"></div>
+        <div class="t urg" data-id="brex-expenses" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Submit Brex expenses</span><span class="td">Deadline: April 1st</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="brex-expenses"></div>
+        <div class="t" data-id="brex-card-replace" data-xp="5" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Order replacement Brex Card</span><span class="td">Deadline: May 1st</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="brex-card-replace"></div>
       </div>
     </div>
     <div class="pc">
@@ -1172,6 +1176,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="matt-supreme-yuma-parfum"></div>
         <div class="t" data-id="managed-services-playbook" data-xp="15" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Review v1 managed services playbook → send to Nick</span><span class="td">Read through v1, give feedback, and send to Nick</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="managed-services-playbook"></div>
+        <div class="t urg" data-id="linkedin-premium" data-xp="8" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Get LinkedIn Premium subscription</span><span class="td">URGENT — required for prospecting + Sales Navigator</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="linkedin-premium"></div>
+        <div class="t" data-id="account-mapping-bloomreach" data-xp="12" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Account Mapping — Bloomreach</span><span class="td">Map shared accounts with Bloomreach partner</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="account-mapping-bloomreach"></div>
+        <div class="t" data-id="use-holiday-credit" data-xp="5" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Use holiday credit</span><span class="td">Book or apply remaining holiday credit before expiry</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="use-holiday-credit"></div>
       </div>
     </div>
   </div>
@@ -1432,8 +1442,10 @@ const S = {
 // Known deadlines from TASKS.md — only set if not already customised by user.
 // Update these dates when tasks change. Format: 'YYYY-MM-DD'
 const PRE_DEADLINES = {
-  'baback-checklist': '2026-04-30', // Nébuleuse Apr 30 target
-  'pay-axon':         '2026-03-25', // Urgent payment — treat as today
+  'baback-checklist':  '2026-04-30', // Nébuleuse Apr 30 target
+  'pay-axon':          '2026-03-25', // Urgent payment — treat as today
+  'brex-expenses':     '2026-04-01', // Submit Brex expenses — deadline Apr 1
+  'brex-card-replace': '2026-05-01', // Order replacement Brex card
 };
 Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
   if (!S.deadlines[id]) S.deadlines[id] = date;
@@ -1446,7 +1458,8 @@ const PRE_DONE = [
   { n: 'Send follow-up email to LTVPlus team', p: 'Gorgias Role', xp: 10, id: 'ltvplus-followup', t: new Date('2026-03-27T10:00:00').getTime() },
   { n: 'Cancel BP account',                 p: 'Real Estate',     xp: 10, id: 'cancel-bp',                   t: new Date('2026-03-28T10:00:00').getTime() },
   { n: 'Negotiate NL document translation', p: 'Real Estate',     xp: 10, id: 'negotiate-nl-translation',    t: new Date('2026-03-28T10:00:00').getTime() },
-  { n: 'Gather docs Crédit Coopératif',     p: 'Real Estate',     xp: 8,  id: 'docs-credit',                 t: new Date('2026-03-29T10:00:00').getTime() }
+  { n: 'Gather docs Crédit Coopératif',     p: 'Real Estate',     xp: 8,  id: 'docs-credit',                 t: new Date('2026-03-29T10:00:00').getTime() },
+  { n: 'Sign Loan Insurance',              p: 'Real Estate',     xp: 8,  id: 'sign-loan-insurance',           t: new Date('2026-03-30T10:00:00').getTime() }
 ];
 PRE_DONE.forEach(pd => {
   if (!S.done.find(d => d.n === pd.n)) {

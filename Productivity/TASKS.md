@@ -34,6 +34,8 @@
 - [ ] **Certificat AMELI · Appeler la CAF** — Get AMELI certificate + call CAF
 - [ ] **Money back Iceland · Celsius · Coinbase/Stretto** — Recover money from multiple sources
 - [ ] **Order Brex Card · Downgrade N26 · Close SG** — Banking cleanup
+- [!] **Submit Brex expenses** — URGENT — deadline April 1st
+- [ ] **Order replacement Brex Card** — Deadline: May 1st
 
 ### 🏥 Health
 - [!] **Benefiz Amélia** — URGENT — action needed for Amélia
@@ -48,7 +50,7 @@
 ### 🏡 Real Estate
 - [x] **Gather docs Crédit Coopératif** — ✅ Done 29 Mar 2026
 - [x] **Cancel BP account** — ✅ Done 28 Mar 2026
-- [ ] **Sign Loan Insurance** — Sign loan insurance documents
+- [x] **Sign Loan Insurance** — ✅ Done 30 Mar 2026
 - [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
 
 ### ✈️ Japan Trip
@@ -95,6 +97,9 @@
 
 ### Role Optimization
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
+- [!] **Get LinkedIn Premium subscription** — URGENT — required for prospecting + Sales Navigator
+- [ ] **Account Mapping — Bloomreach** — Map shared accounts with Bloomreach partner
+- [ ] **Use holiday credit** — Book or apply remaining holiday credit before expiry
 
 ### Follow-ups
 - [x] **Send follow-up email to LTVPlus team** — ✅ Done 27 Mar 2026
