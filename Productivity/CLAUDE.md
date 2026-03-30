@@ -99,6 +99,38 @@ When starting any session in this project, Claude MUST:
 6. Never assume task status — check TASKS.md first
 7. Always update memory files and TASKS.md when new information is shared
 
+## Auto-Push Protocol (MANDATORY)
+Claude MUST automatically push all changed files to GitHub at the end of every session where files were modified. No manual git push needed from Yohan — ever.
+
+**GitHub token:** stored at `/sessions/affectionate-great-bardeen/mnt/.github_token` (workspace-persisted)
+**Repo:** `yohanloyer1-dev/Projects`
+**Method:** GitHub REST API via curl + python3 (base64 payload in temp file to handle large files)
+
+**Push script pattern:**
+```bash
+TOKEN=$(cat /sessions/affectionate-great-bardeen/mnt/.github_token)
+REPO="yohanloyer1-dev/Projects"
+# For each changed file:
+# 1. GET current SHA from API
+# 2. base64 encode file → write to /tmp/gh_payload.json
+# 3. PUT to /repos/$REPO/contents/$repopath
+```
+
+**After every push, Claude MUST post this confirmation:**
+---
+✅ **Pushed to GitHub & deployed to Netlify**
+Files updated:
+- [list each file and what changed]
+Live at: https://yohan-productivity-dashboard.netlify.app/dashboard.html
+---
+
+**Files to push after any session with changes:**
+- `Productivity/dashboard.html` — always if any task/UI change
+- `Productivity/TASKS.md` — always if any task change
+- `Productivity/CLAUDE.md` — if memory updated
+- `Productivity/memory/**` — if any memory files updated
+- `Productivity/telegram-bot/**` — if workflows updated
+
 ## Dashboard
 - Location: `Productivity/dashboard.html` — open in browser, bookmark for daily use
 - Source of truth for all tasks, statuses, notes, and progress
