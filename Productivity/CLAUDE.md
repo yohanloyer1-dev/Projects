@@ -158,13 +158,13 @@ Live at: https://yohan-productivity-dashboard.netlify.app/dashboard.html
 - Multilingual content: EN / FR / ES
 
 ## Dashboard System
-- Location: `Productivity/dashboard.html` — auto-deploys to Netlify via GitHub push
+- Location: `Productivity/dashboard.html` — source file, pushed to GitHub automatically by Claude
 - Current version: v2.5 — see `Productivity/versions/` for history
-- Live URL: https://yohan-productivity-dashboard.netlify.app/dashboard.html
-- Hosting status: ⚠️ Netlify free plan hits monthly bandwidth limit. Resets ~1st of month. Upgrade to Pro ($19/mo) or set up GitHub Pages as backup.
-- GitHub repo: github.com/yohanloyer1-dev/Projects (private). Push to `main` → Netlify auto-deploys.
-- Deploy workflow: Edit dashboard.html → `git add Productivity/dashboard.html` → `git commit` → `git push origin main` → Netlify deploys in ~10s
-- Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Progress data syncs across devices automatically.
+- **Live URL (primary):** https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html — GitHub Pages, free, no limits, auto-deploys ~30s after every push
+- Old Netlify URL (deprecated — bandwidth limits): https://yohan-productivity-dashboard.netlify.app/dashboard.html
+- GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC). Claude pushes directly via API — no manual git push needed.
+- Deploy workflow: Claude edits files → Claude pushes via GitHub API → GitHub Pages deploys in ~30s → Claude posts confirmation
+- Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Run `localStorage.setItem('yl_gist_token', 'TOKEN')` in browser console once per device. Progress syncs across all devices automatically.
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
 - ADHD-optimized variant: planned — research saved at `memory/context/adhd-dashboard-research.md`
 - Versioning rule: ALWAYS copy current dashboard to `versions/dashboard_vX.X_YYYY-MM-DD.html` before any significant edit
