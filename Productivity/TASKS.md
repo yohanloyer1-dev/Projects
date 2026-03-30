@@ -34,8 +34,6 @@
 - [ ] **Certificat AMELI · Appeler la CAF** — Get AMELI certificate + call CAF
 - [ ] **Money back Iceland · Celsius · Coinbase/Stretto** — Recover money from multiple sources
 - [ ] **Order Brex Card · Downgrade N26 · Close SG** — Banking cleanup
-- [!] **Submit Brex expenses** — URGENT — deadline April 1st
-- [ ] **Order replacement Brex Card** — Deadline: May 1st
 
 ### 🏥 Health
 - [!] **Benefiz Amélia** — URGENT — action needed for Amélia
@@ -89,11 +87,13 @@
 
 ## 💼 Professional (Gorgias)
 
-### ✈️ Work Travel
+### ✈️ Work Travel & Expenses
 - [!] **Book flight Amsterdam** — URGENT — book today. Work event.
 - [!] **Book flight Barcelona** — URGENT — book today. Work event.
 - [ ] **Book flight Milano** — Work event.
 - [ ] **Book flight Marseille** — Work event.
+- [!] **Submit Brex expenses** — URGENT — deadline April 1st
+- [ ] **Order replacement Brex Card** — Deadline: May 1st
 
 ### Role Optimization
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
