@@ -1849,7 +1849,7 @@ function renderStreakDots() {
     // Is this day within the streak?
     if (daysAgo === 0) {
       // Today
-      dot.classList.add(S.streak > 0 ? 'd4' : '');
+      if (S.streak > 0) dot.classList.add('d4');
       dot.classList.add('today-dot');
     } else if (daysAgo > 0 && daysAgo < S.streak) {
       // Filled streak day — intensity based on recency
