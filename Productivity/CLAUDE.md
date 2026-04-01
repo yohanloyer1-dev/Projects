@@ -103,8 +103,10 @@ When starting any session in this project, Claude MUST:
 Claude MUST automatically push all changed files to GitHub at the end of every session where files were modified. No manual git push needed from Yohan — ever.
 
 **GitHub token:** stored at `/sessions/practical-hopeful-einstein/mnt/ OPS/.github_token`
-- If not found at above path, check: `/sessions/*/mnt/.github_token` or ask Yohan to paste it once
-- After each new session, save the token at the OPS path if it's missing
+- Token: `ghp_...` (classic PAT — has BOTH `repo` AND `gist` scope)
+- The `github_pat_...` fine-grained token does NOT have gist scope — do not use for Gist operations
+- If not found at OPS path, ask Yohan to paste token once (he has it)
+- **Gist sync token** (in dashboard browser): set via `localStorage.setItem('yl_gist_token', 'ghp_...')` in browser console once per device. Use the same `ghp_` token.
 **Repo:** `yohanloyer1-dev/Projects`
 **Method:** GitHub REST API via curl + python3 (base64 payload in temp file to handle large files)
 
