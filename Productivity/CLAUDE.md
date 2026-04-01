@@ -102,13 +102,15 @@ When starting any session in this project, Claude MUST:
 ## Auto-Push Protocol (MANDATORY)
 Claude MUST automatically push all changed files to GitHub at the end of every session where files were modified. No manual git push needed from Yohan — ever.
 
-**GitHub token:** stored at `/sessions/affectionate-great-bardeen/mnt/.github_token` (workspace-persisted)
+**GitHub token:** stored at `/sessions/practical-hopeful-einstein/mnt/ OPS/.github_token`
+- If not found at above path, check: `/sessions/*/mnt/.github_token` or ask Yohan to paste it once
+- After each new session, save the token at the OPS path if it's missing
 **Repo:** `yohanloyer1-dev/Projects`
 **Method:** GitHub REST API via curl + python3 (base64 payload in temp file to handle large files)
 
 **Push script pattern:**
 ```bash
-TOKEN=$(cat /sessions/affectionate-great-bardeen/mnt/.github_token)
+TOKEN=$(cat "/sessions/practical-hopeful-einstein/mnt/ OPS/.github_token")
 REPO="yohanloyer1-dev/Projects"
 # For each changed file:
 # 1. GET current SHA from API
@@ -118,10 +120,10 @@ REPO="yohanloyer1-dev/Projects"
 
 **After every push, Claude MUST post this confirmation:**
 ---
-✅ **Pushed to GitHub & deployed to Netlify**
+✅ **Pushed to GitHub**
 Files updated:
 - [list each file and what changed]
-Live at: https://yohan-productivity-dashboard.netlify.app/dashboard.html
+Live at: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
 ---
 
 **Files to push after any session with changes:**
