@@ -92,27 +92,32 @@ Decision OS based on Mandala framework. Full doc: memory/context/ohtani-matrix.m
 ## Session Startup Protocol
 When starting any session in this project, Claude MUST:
 1. Read this file (`Productivity/CLAUDE.md`) fully
+   - If local mount unavailable: fetch from `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
 2. Read `Productivity/TASKS.md` for current task state
+   - If local mount unavailable: fetch from `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
 3. Check `Productivity/inbox.md` if it exists — voice notes and async context from Yohan live here
 4. Read the relevant project memory file based on the session topic (see routing table in root CLAUDE.md)
 5. Confirm what files were read before starting work
 6. Never assume task status — check TASKS.md first
 7. Always update memory files and TASKS.md when new information is shared
+8. **GitHub is always the source of truth** — if local files differ from GitHub, trust GitHub
 
 ## Auto-Push Protocol (MANDATORY)
 Claude MUST automatically push all changed files to GitHub at the end of every session where files were modified. No manual git push needed from Yohan — ever.
 
-**GitHub token:** stored at `/sessions/practical-hopeful-einstein/mnt/ OPS/.github_token`
-- Token: `ghp_...` (classic PAT — has BOTH `repo` AND `gist` scope)
+**GitHub token:** stored in the OPS workspace folder as `.github_token`
+- Find it with: `find /sessions -name ".github_token" 2>/dev/null | head -1`
+- Or read directly: `cat "/sessions/$(ls /sessions | head -1)/mnt/ OPS/.github_token"` — but use the actual mounted OPS path
+- Token type: `ghp_...` (classic PAT — has BOTH `repo` AND `gist` scope)
 - The `github_pat_...` fine-grained token does NOT have gist scope — do not use for Gist operations
-- If not found at OPS path, ask Yohan to paste token once (he has it)
-- **Gist sync token** (in dashboard browser): set via `localStorage.setItem('yl_gist_token', 'ghp_...')` in browser console once per device. Use the same `ghp_` token.
+- If token file not found: ask Yohan to paste it once, then save to OPS folder
+- **Gist sync token** (in dashboard browser): set via `localStorage.setItem('yl_gist_token', 'ghp_...')` in browser console once per device
 **Repo:** `yohanloyer1-dev/Projects`
 **Method:** GitHub REST API via curl + python3 (base64 payload in temp file to handle large files)
 
 **Push script pattern:**
 ```bash
-TOKEN=$(cat "/sessions/practical-hopeful-einstein/mnt/ OPS/.github_token")
+TOKEN=$(find /sessions -name ".github_token" 2>/dev/null | head -1 | xargs cat)
 REPO="yohanloyer1-dev/Projects"
 # For each changed file:
 # 1. GET current SHA from API
@@ -172,6 +177,36 @@ Live at: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
 - ADHD-optimized variant: planned — research saved at `memory/context/adhd-dashboard-research.md`
 - Versioning rule: ALWAYS copy current dashboard to `versions/dashboard_vX.X_YYYY-MM-DD.html` before any significant edit
+
+## GitHub as Primary Source of Truth
+
+**The repo is the system.** Everything lives at `github.com/yohanloyer1-dev/Projects`. The local mount is just a convenience — not required.
+
+### How Claude reads files
+1. **Normal (local mount available):** Read directly from `/sessions/.../mnt/Projects/`
+2. **No local mount / new device / disaster recovery:** Read from GitHub raw URLs via WebFetch:
+   - CLAUDE.md → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
+   - TASKS.md → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
+   - Any file → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/{path}`
+3. Claude always **writes back via GitHub API** — same whether local or remote session
+
+### How Claude writes files
+Always via GitHub REST API (`PUT /repos/yohanloyer1-dev/Projects/contents/{path}`). Token at `/sessions/.../mnt/ OPS/.github_token`. Never requires git CLI or Yohan to touch the terminal.
+
+### Disaster recovery (laptop lost/broken)
+1. On any computer or new Cowork session with no mount:
+   - Claude reads CLAUDE.md + TASKS.md from raw GitHub URLs above
+   - Claude writes via GitHub API — no local clone needed at all
+2. To restore local clone on new machine: `git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects` then mount `~/Projects` in Cowork
+3. Token: ask Yohan — he has it (or check `OPS/.github_token` if mounted)
+
+### Key raw URLs (bookmark these)
+| File | URL |
+|------|-----|
+| CLAUDE.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md |
+| TASKS.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md |
+| dashboard.html (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
+| Repo root | https://github.com/yohanloyer1-dev/Projects |
 
 ## Cowork Project Setup
 - Project name: YL / OPS
