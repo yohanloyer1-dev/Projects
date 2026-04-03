@@ -90,55 +90,54 @@ Decision OS based on Mandala framework. Full doc: memory/context/ohtani-matrix.m
 **Protect Yohan from:** over-diversification, shiny objects, parallel execution, activity without assets.
 
 ## Session Startup Protocol
-When starting any session in this project, Claude MUST:
-1. Read this file (`Productivity/CLAUDE.md`) fully
-   - If local mount unavailable: fetch from `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
-2. Read `Productivity/TASKS.md` for current task state
-   - If local mount unavailable: fetch from `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
-3. Check `Productivity/inbox.md` if it exists — voice notes and async context from Yohan live here
-4. Read the relevant project memory file based on the session topic (see routing table in root CLAUDE.md)
-5. Confirm what files were read before starting work
-6. Never assume task status — check TASKS.md first
-7. Always update memory files and TASKS.md when new information is shared
-8. **GitHub is always the source of truth** — if local files differ from GitHub, trust GitHub
+GitHub is the single source of truth. Local folder is optional convenience — never required.
 
-## Auto-Push Protocol (MANDATORY)
-Claude MUST automatically push all changed files to GitHub at the end of every session where files were modified. No manual git push needed from Yohan — ever.
+When starting any session, Claude MUST:
+1. Read `Productivity/CLAUDE.md`
+   - Local first (if mount available): read from mounted path
+   - Always verify against GitHub: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
+   - If conflict: GitHub wins
+2. Read `Productivity/TASKS.md`
+   - Same rule: local first, GitHub wins on conflict
+   - GitHub raw: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
+3. Check `Productivity/inbox.md` — read if it exists (voice notes from Yohan)
+4. Read relevant project memory file based on session topic (see routing table below)
+5. Confirm in one line what was read, e.g. "Read: CLAUDE.md, TASKS.md ✓ (GitHub)"
+6. Never assume task status — always check TASKS.md first
+7. Update memory and TASKS.md immediately when new info is shared
 
-**GitHub token:** stored in the OPS workspace folder as `.github_token`
-- Find it with: `find /sessions -name ".github_token" 2>/dev/null | head -1`
-- Or read directly: `cat "/sessions/$(ls /sessions | head -1)/mnt/ OPS/.github_token"` — but use the actual mounted OPS path
-- Token type: `ghp_...` (classic PAT — has BOTH `repo` AND `gist` scope)
-- The `github_pat_...` fine-grained token does NOT have gist scope — do not use for Gist operations
-- If token file not found: ask Yohan to paste it once, then save to OPS folder
-- **Gist sync token** (in dashboard browser): set via `localStorage.setItem('yl_gist_token', 'ghp_...')` in browser console once per device
+## GitHub Write Protocol (MANDATORY — every session with file changes)
+Claude writes ALL files directly to GitHub via API. Never write local-only.
+
+**Token:** `find /sessions -name ".github_token" 2>/dev/null | head -1 | xargs cat`
+- Token type: `ghp_...` classic PAT — has both `repo` and `gist` scope
+- If not found: ask Yohan to paste it, save to OPS folder as `.github_token`
+- Gist sync token (dashboard browser): `localStorage.setItem('yl_gist_token', 'ghp_...')` — run once per device
+
 **Repo:** `yohanloyer1-dev/Projects`
-**Method:** GitHub REST API via curl + python3 (base64 payload in temp file to handle large files)
 
-**Push script pattern:**
+**Write pattern (for every changed file):**
 ```bash
 TOKEN=$(find /sessions -name ".github_token" 2>/dev/null | head -1 | xargs cat)
 REPO="yohanloyer1-dev/Projects"
-# For each changed file:
-# 1. GET current SHA from API
-# 2. base64 encode file → write to /tmp/gh_payload.json
-# 3. PUT to /repos/$REPO/contents/$repopath
+# 1. GET current SHA: curl -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/contents/{path}
+# 2. base64 encode content → /tmp/gh_payload.json
+# 3. PUT to https://api.github.com/repos/$REPO/contents/{path}
 ```
 
-**After every push, Claude MUST post this confirmation:**
----
-✅ **Pushed to GitHub**
-Files updated:
-- [list each file and what changed]
-Live at: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
----
-
 **Files to push after any session with changes:**
-- `Productivity/dashboard.html` — always if any task/UI change
-- `Productivity/TASKS.md` — always if any task change
+- `Productivity/dashboard.html` — if any UI or task change
+- `Productivity/TASKS.md` — if any task change
 - `Productivity/CLAUDE.md` — if memory updated
 - `Productivity/memory/**` — if any memory files updated
-- `Productivity/telegram-bot/**` — if workflows updated
+- Any other file Claude edited
+
+**After every push, confirm:**
+```
+✅ Pushed to GitHub
+- [filename] — [what changed]
+Live: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
+```
 
 ## Dashboard
 - Location: `Productivity/dashboard.html` — open in browser, bookmark for daily use
