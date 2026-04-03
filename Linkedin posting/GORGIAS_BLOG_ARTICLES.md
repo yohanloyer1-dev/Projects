@@ -1,5 +1,5 @@
 # Gorgias Blog Article Database
-*436 articles indexed | Sources: sitemap.xml + blog page | March 2026*
+*442 articles indexed | Sources: sitemap.xml + blog page | April 2026*
 *Use as LinkedIn post inspiration — Ctrl+F a keyword to find relevant articles.*
 
 ---
@@ -28,8 +28,9 @@
 - [Zendesk Pricing](https://www.gorgias.com/blog/zendesk-pricing)
 
 ## 🤖 AI, Automation & Self-Service
-*63 articles*
+*64 articles*
 
+- [72 Percent of Gorgias Uses AI](https://www.gorgias.com/blog/72-percent-of-gorgias-uses-ai)
 - [AI Agent Actions](https://www.gorgias.com/blog/ai-agent-actions)
 - [AI Agent Use Cases](https://www.gorgias.com/blog/ai-agent-use-cases)
 - [AI Agent is Getting Smarter](https://www.gorgias.com/blog/ai-agent-is-getting-smarter)
@@ -95,7 +96,7 @@
 - [Why Agencies Should Encourage Clients to Install Automation Apps Like Gorgias](https://www.gorgias.com/blog/why-agencies-should-encourage-clients-to-install-automation-apps-like-gorgias)
 
 ## 💬 Live Chat, Messaging & Omnichannel
-*52 articles*
+*54 articles*
 
 - [11 Shopify Live Chat Support Mistakes to Avoid at All Costs](https://www.gorgias.com/blog/11-shopify-live-chat-support-mistakes-to-avoid-at-all-costs)
 - [3 Examples of Shopify Stores That Increased Sales with Live Chat Campaigns](https://www.gorgias.com/blog/3-examples-of-shopify-stores-that-increased-sales-with-live-chat-campaigns)
@@ -114,6 +115,8 @@
 - [Conversational Commerce](https://www.gorgias.com/blog/conversational-commerce)
 - [Conversational Commerce Benefits](https://www.gorgias.com/blog/conversational-commerce-benefits)
 - [Conversational Commerce Metrics](https://www.gorgias.com/blog/conversational-commerce-metrics)
+- [Conversational Commerce Trends AI Adoption](https://www.gorgias.com/blog/conversational-commerce-trends-ai-adoption)
+- [Conversational Commerce Trends Report](https://www.gorgias.com/blog/conversational-commerce-trends-report)
 - [Conversational Customer Service](https://www.gorgias.com/blog/conversational-customer-service)
 - [Courting the Conscious Consumer Enhancing Customer Experience with Live Chat](https://www.gorgias.com/blog/courting-the-conscious-consumer-enhancing-customer-experience-with-live-chat)
 - [Customer Service Messaging](https://www.gorgias.com/blog/customer-service-messaging)
@@ -238,9 +241,10 @@
 - [Why you Havent Made your First Sale Yet a Brutal Look at Early Stores](https://www.gorgias.com/blog/why-you-havent-made-your-first-sale-yet-a-brutal-look-at-early-stores)
 
 ## 📊 Metrics, Benchmarks & CX Data
-*29 articles*
+*30 articles*
 
 - [Average Response Time](https://www.gorgias.com/blog/average-response-time)
+- [CSAT Survey Questions](https://www.gorgias.com/blog/csat-survey-questions)
 - [Customer Effort Score](https://www.gorgias.com/blog/customer-effort-score)
 - [Customer Service Statistics](https://www.gorgias.com/blog/customer-service-statistics)
 - [Customer Support Metrics](https://www.gorgias.com/blog/customer-support-metrics)
@@ -373,7 +377,7 @@
 - [Thank you Interns](https://www.gorgias.com/blog/thank-you-interns)
 
 ## 🎯 CX Strategy, Best Practices & Psychology
-*108 articles*
+*110 articles*
 
 - [10 Years](https://www.gorgias.com/blog/10-years)
 - [2021 Year in Review](https://www.gorgias.com/blog/2021-year-in-review)
@@ -382,6 +386,7 @@
 - [9 Ecommerce Marketing Strategies for Higher Sales](https://www.gorgias.com/blog/9-ecommerce-marketing-strategies-for-higher-sales)
 - [Angry Customer Email](https://www.gorgias.com/blog/angry-customer-email)
 - [Apps for Ecommerce](https://www.gorgias.com/blog/apps-for-ecommerce)
+- [B2B Customer Service](https://www.gorgias.com/blog/b2b-customer-service)
 - [Beardbrand](https://www.gorgias.com/blog/beardbrand)
 - [Best AI for Customer Support](https://www.gorgias.com/blog/best-ai-for-customer-support)
 - [Brand Voice Examples](https://www.gorgias.com/blog/brand-voice-examples)
@@ -417,6 +422,7 @@
 - [Customer Service Trends](https://www.gorgias.com/blog/customer-service-trends)
 - [Customer Service vs Customer Experience vs Customer Support](https://www.gorgias.com/blog/customer-service-vs-customer-experience-vs-customer-support)
 - [Customer Support Quality](https://www.gorgias.com/blog/customer-support-quality)
+- [Customer Support Software](https://www.gorgias.com/blog/customer-support-software)
 - [Customer Support Tips](https://www.gorgias.com/blog/customer-support-tips)
 - [Ecommerce Blog Content](https://www.gorgias.com/blog/ecommerce-blog-content)
 - [Ecommerce Communities](https://www.gorgias.com/blog/ecommerce-communities)
@@ -485,4 +491,4 @@
 - [Your Guide to Successful Social Commerce Campaigns](https://www.gorgias.com/blog/your-guide-to-successful-social-commerce-campaigns)
 
 ---
-*Total: 436 articles | 11 categories*
+*Total: 442 articles | 11 categories*
