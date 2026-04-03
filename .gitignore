@@ -45,3 +45,6 @@ __pycache__/
 .venv/
 venv/
 N8N/ai_agents_az/
+
+# GitHub token — never commit
+.github_token
