@@ -624,55 +624,61 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ── MOBILE RESPONSIVE ───────────────────────────────────────── */
 @media (max-width: 768px) {
-  .shell{padding:0 14px 80px}
+  .shell{padding:0 12px 80px}
 
-  /* Topbar: stack logo + controls */
-  .topbar{flex-wrap:wrap;gap:10px;padding:14px 0 12px}
+  /* Topbar: logo row + controls row */
+  .topbar{flex-wrap:wrap;gap:8px;padding:12px 0 10px}
+  .tb-l{flex:1}
   .tb-sub{display:none}
-  .tb-r{gap:8px;flex-wrap:wrap}
-  .mode-toggle{order:-1}
+  .tb-r{gap:6px;flex-wrap:wrap;justify-content:flex-end}
   .live{display:none}
   .dc{font-size:9px}
+  .calm-btn{font-size:9px;padding:4px 8px}
 
-  /* Goal bar: single line, smaller text */
+  /* Goal bar */
   .goal{flex-direction:column;align-items:flex-start}
-  .goal-lbl{border-right:none;border-bottom:1px solid var(--b1);height:auto;padding:6px 14px;width:100%}
-  .goal-txt{font-size:11px;padding:8px 14px}
+  .goal-lbl{border-right:none;border-bottom:1px solid var(--b1);height:auto;padding:6px 14px;width:100%;font-size:8px}
+  .goal-txt{font-size:11px;padding:8px 14px;line-height:1.5}
 
   /* Gamification hero: stack vertically */
   .gam-hero{grid-template-columns:1fr;gap:10px}
+  .streak-num,.level-num{font-size:36px}
 
   /* Stats row: 2-col grid */
   .stats-row{grid-template-columns:repeat(2,1fr)}
 
-  /* Grids: collapse all to 1 col */
+  /* Grids: collapse to 1 col */
   .g4,.g3,.g2{grid-template-columns:1fr}
 
-  /* Nav tabs: 2-row wrap, smaller font */
+  /* Nav tabs: wrap into 2 rows of 3 */
   .nav-tabs{flex-wrap:wrap;gap:3px;padding:3px}
-  .tab{flex:1 1 calc(33% - 3px);padding:8px 4px;font-size:9px;min-width:0}
+  .tab{flex:1 1 calc(33% - 3px);padding:8px 4px;font-size:9px;min-width:0;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
   .tab .tc{display:none}
 
-  /* Task rows: tighten padding */
+  /* Task rows */
   .t{padding:8px 10px;gap:6px}
   .tn{font-size:12px}
   .tbadge{display:none}
   .note-btn,.link-btn,.focus-mini-btn{opacity:1}
 
-  /* Sync banner: stack input below text */
+  /* Sync banner: stack vertically */
   .sync-banner{flex-direction:column;align-items:flex-start;gap:8px}
   #gistTokenInput{min-width:0;width:100%}
 
-  /* Section header */
+  /* Section headers */
   .sh{margin-top:16px}
 
-  /* Brief view cards */
+  /* Brief view */
   .brief-grid{grid-template-columns:1fr!important}
-  .brief-header{flex-direction:column;gap:8px;align-items:flex-start}
+  .brief-head{flex-direction:column;gap:6px;align-items:flex-start}
+
+  /* Project cards */
+  .pc-title{font-size:13px}
 
   /* Focus mode */
-  .fo-task-name{font-size:clamp(24px,6vw,40px)}
+  .fo-task-name{font-size:clamp(22px,6vw,38px)}
   .fo-header{flex-wrap:wrap}
+  .focus-overlay{padding:20px 16px}
 }
 </style>
 </head>
@@ -1481,6 +1487,26 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 
 <script>
+// ── SEED INITIAL DATA (runs once if no XP exists yet) ──────────────────────
+// Sets 50 XP and a 9-day streak (Sat+Sun+Mon × 3 weeks back).
+// Streak dots are rendered from S.streak count + S.lastDay.
+// lastDay is set to last Monday so today's first task will extend the streak.
+(function seedInitialData() {
+  if (localStorage.getItem('yl_xp')) return; // already has data, skip
+  localStorage.setItem('yl_xp', '50');
+  localStorage.setItem('yl_streak', '9');
+  // Find the most recent Monday (last completed streak day)
+  const today = new Date();
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    if (d.getDay() === 1) { // Monday
+      localStorage.setItem('yl_day', d.toISOString().slice(0, 10));
+      break;
+    }
+  }
+})();
+
 // ── CONSTANTS (must be first — used by save() before full Gist block) ──────
 const GIST_FILENAME = 'yl-dashboard-state.json';
 let _gistSaveTimer = null; // must be here — save() calls gistSchedulePush() before Gist block
@@ -1815,18 +1841,15 @@ async function gistPush() {
 
 async function gistPull() {
   const token = gistGetToken();
-  if (!token) {
-    // Show setup banner if no token and no local data either
-    if (!localStorage.getItem('yl_xp')) {
-      document.getElementById('syncBannerGist').style.display = '';
+  const gistId = gistGetId();
+
+  // Show banner if no token, OR if token exists but Gist sync was never completed
+  if (!token || !gistId) {
+    document.getElementById('syncBannerGist').style.display = '';
+    if (token && document.getElementById('gistTokenInput')) {
+      document.getElementById('gistTokenInput').value = token;
     }
     gistSetStatus('notoken');
-    return false;
-  }
-  const gistId = gistGetId();
-  if (!gistId) {
-    // No gist yet — nothing to pull, start fresh
-    gistSetStatus('idle');
     return false;
   }
   gistSetStatus('syncing');
