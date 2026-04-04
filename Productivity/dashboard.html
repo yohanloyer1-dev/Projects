@@ -1515,22 +1515,23 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 
 <script>
-// ── SEED INITIAL DATA (runs once if no XP exists yet) ──────────────────────
-// Sets 50 XP and a 9-day streak (Sat+Sun+Mon × 3 weeks back).
-// Streak dots are rendered from S.streak count + S.lastDay.
-// lastDay is set to last Monday so today's first task will extend the streak.
+// ── SEED INITIAL DATA (runs once if XP is genuinely unset or zero) ──────────
+// XP from confirmed completed tasks: 8+8+10+10+10+15 = 61 + ~30 prev session = 91
+// Streak: 9 days (Sat/Sun/Mon × 3 weeks). lastDay = last Monday.
+// Guard: only seeds if yl_xp has never been set to a non-zero value.
 (function seedInitialData() {
-  if (localStorage.getItem('yl_xp')) return; // already has data, skip
-  // XP from completed tasks: Sign Loan Ins(8)+Gather docs(8)+NL translation(10)
-  // +Cancel BP(10)+LTVPlus email(10)+Pay Didier(15) = 61, plus ~30 for 3 prev session tasks
+  const stored = localStorage.getItem('yl_xp');
+  if (stored !== null && +stored > 0) return; // real data exists, skip
+  if (localStorage.getItem('yl_seed_done')) return; // already seeded once
   localStorage.setItem('yl_xp', '91');
   localStorage.setItem('yl_streak', '9');
-  // Find the most recent Monday (last completed streak day)
+  localStorage.setItem('yl_seed_done', '1');
+  // Set lastDay to most recent Monday
   const today = new Date();
   for (let i = 1; i <= 14; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
-    if (d.getDay() === 1) { // Monday
+    if (d.getDay() === 1) {
       localStorage.setItem('yl_day', d.toISOString().slice(0, 10));
       break;
     }
