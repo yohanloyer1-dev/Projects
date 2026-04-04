@@ -1534,6 +1534,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 // ── CONSTANTS (must be first — used by save() before full Gist block) ──────
 const GIST_FILENAME = 'yl-dashboard-state.json';
+// Canonical Gist ID — hardcoded so all devices sync to the same Gist automatically.
+// No per-device setup needed. Token still required separately.
+const CANONICAL_GIST_ID = '3410a8e3253dee00545350a2b745ca2d';
+// Ensure localStorage always has the canonical ID
+if (localStorage.getItem('yl_gist_id') !== CANONICAL_GIST_ID) {
+  localStorage.setItem('yl_gist_id', CANONICAL_GIST_ID);
+}
 let _gistSaveTimer = null; // must be here — save() calls gistSchedulePush() before Gist block
 
 // ── STATE ──────────────────────────────────
@@ -1945,11 +1952,13 @@ async function gistPull() {
     document.getElementById('gistTokenInput').value = token;
   }
 
-  // No token or no gistId — leave banner visible, return
-  if (!token || !gistId) {
+  // No token — leave banner visible so user can paste it
+  if (!token) {
     gistSetStatus('notoken');
     return false;
   }
+  // Has token + canonical gistId always set — hide banner and proceed
+  hideSyncBanner();
   gistSetStatus('syncing');
   try {
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
