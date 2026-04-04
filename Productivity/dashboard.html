@@ -742,7 +742,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <button class="mode-btn" id="mode-work" onclick="setMode('work')">💼 Work</button>
     </div>
     <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
-    <span class="gist-status" id="gistStatus" title="Cloud sync status">☁️</span>
+    <span class="gist-status" id="gistStatus" title="Cloud sync status — tap to reset sync" style="cursor:pointer" onclick="resetAndResync()">☁️</span>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <div class="dc" id="dateChip">—</div>
   </div>
@@ -1639,6 +1639,18 @@ function saveGistToken() {
   localStorage.setItem('yl_gist_token', token);
   document.getElementById('syncBannerGist').style.display = 'none';
   gistPull().then(() => gistPush());
+}
+
+function resetAndResync() {
+  // Clears all local state and reloads so Gist data (or fresh seed) takes over.
+  // Used to fix stale/wrong localStorage on any device.
+  if (!confirm('Reset local data and pull from cloud sync?\n\nThis clears XP, streak and tasks from this device and reloads from your Gist. Your token is kept.')) return;
+  const token = localStorage.getItem('yl_gist_token');
+  const gistId = localStorage.getItem('yl_gist_id');
+  localStorage.clear();
+  if (token) localStorage.setItem('yl_gist_token', token);
+  if (gistId) localStorage.setItem('yl_gist_id', gistId);
+  location.reload();
 }
 function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
