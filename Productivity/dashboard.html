@@ -1717,6 +1717,7 @@ async function syncTaskDoneToGitHub(taskName) {
 }
 
 function save() {
+  const now = new Date().toISOString();
   localStorage.setItem('yl_xp',       S.xp);
   localStorage.setItem('yl_streak',   S.streak);
   localStorage.setItem('yl_day',      S.lastDay);
@@ -1725,6 +1726,7 @@ function save() {
   localStorage.setItem('yl_statuses', JSON.stringify(S.statuses));
   localStorage.setItem('yl_links',     JSON.stringify(S.links));
   localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
+  localStorage.setItem('yl_saved_at', now);
   gistSchedulePush(); // push to cloud after every save (debounced 2s)
 }
 
@@ -1969,11 +1971,10 @@ async function gistPull() {
     const content = data.files?.[GIST_FILENAME]?.content;
     if (!content) { gistSetStatus('idle'); return false; }
     const parsed = JSON.parse(content);
-    // Only overwrite localStorage if Gist data is newer or local is empty
-    const localXp = localStorage.getItem('yl_xp');
-    const gistDone = JSON.parse(parsed.yl_done || '[]');
-    const localDone = JSON.parse(localStorage.getItem('yl_done') || '[]');
-    const gistIsNewer = !localXp || gistDone.length >= localDone.length;
+    // Gist wins if: no local data, OR Gist saved_at is newer than local saved_at
+    const localSavedAt = localStorage.getItem('yl_saved_at') || '0';
+    const gistSavedAt  = parsed.saved_at || '1';
+    const gistIsNewer  = !localStorage.getItem('yl_xp') || gistSavedAt > localSavedAt;
     if (gistIsNewer) {
       if (parsed.yl_xp       != null) localStorage.setItem('yl_xp',       parsed.yl_xp);
       if (parsed.yl_streak   != null) localStorage.setItem('yl_streak',   parsed.yl_streak);
@@ -1984,6 +1985,7 @@ async function gistPull() {
       if (parsed.yl_links    != null) localStorage.setItem('yl_links',    parsed.yl_links);
       if (parsed.yl_quickadd != null) localStorage.setItem('yl_quickadd', parsed.yl_quickadd);
       if (parsed.yl_deadlines!= null) localStorage.setItem('yl_deadlines',parsed.yl_deadlines);
+      if (parsed.saved_at    != null) localStorage.setItem('yl_saved_at', parsed.saved_at);
       hideSyncBanner();
       gistSetStatus('ok');
       setTimeout(() => gistSetStatus('idle'), 3000);
