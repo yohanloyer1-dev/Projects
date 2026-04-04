@@ -675,6 +675,34 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   /* Project cards */
   .pc-title{font-size:13px}
 
+  /* DO THIS NOW strip: stack vertically */
+  .dtn-strip{grid-template-columns:1fr;gap:10px}
+  .dtn-card{grid-column:1/2}
+  .panic-card{grid-column:1/2}
+  .dtn-task{font-size:clamp(22px,5vw,32px)}
+  .dtn-bottom-row{flex-wrap:wrap;gap:8px}
+
+  /* Quick-add modal: bottom sheet on mobile */
+  .qa-modal{
+    top:auto;
+    bottom:0;
+    left:0;
+    right:0;
+    transform:none;
+    width:100%;
+    border-radius:16px 16px 0 0;
+    padding:20px 16px 32px;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .qa-modal.open{animation:qaSlideUp .25s cubic-bezier(.4,0,.2,1) both}
+  @keyframes qaSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .qa-urgency-btns{flex-wrap:wrap}
+  .qa-urg-btn{flex:1 1 calc(33% - 6px);min-width:0;font-size:9px;padding:7px 4px}
+  .qa-row{grid-template-columns:1fr}
+  .qa-actions{justify-content:stretch}
+  .qa-cancel,.qa-submit{flex:1;text-align:center}
+
   /* Focus mode */
   .fo-task-name{font-size:clamp(22px,6vw,38px)}
   .fo-header{flex-wrap:wrap}
@@ -1493,7 +1521,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 // lastDay is set to last Monday so today's first task will extend the streak.
 (function seedInitialData() {
   if (localStorage.getItem('yl_xp')) return; // already has data, skip
-  localStorage.setItem('yl_xp', '50');
+  // XP from completed tasks: Sign Loan Ins(8)+Gather docs(8)+NL translation(10)
+  // +Cancel BP(10)+LTVPlus email(10)+Pay Didier(15) = 61, plus ~30 for 3 prev session tasks
+  localStorage.setItem('yl_xp', '91');
   localStorage.setItem('yl_streak', '9');
   // Find the most recent Monday (last completed streak day)
   const today = new Date();
