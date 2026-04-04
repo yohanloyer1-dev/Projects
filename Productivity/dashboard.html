@@ -713,6 +713,22 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <body>
 <div class="shell">
 
+<!-- GIST SETUP BANNER — at top so always visible on mobile -->
+<div class="sync-banner load" id="syncBannerGist" style="display:none;margin-top:12px">
+  <span class="sync-banner-icon">☁️</span>
+  <div class="sync-banner-text">
+    <strong>Cloud sync not set up</strong>
+    Paste your GitHub token below to sync progress across all devices (Mac, iPhone, etc.)
+    <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+      <input id="gistTokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+        style="flex:1;min-width:200px;background:rgba(255,255,255,0.07);border:1px solid rgba(91,155,214,.35);border-radius:6px;padding:6px 10px;font-family:monospace;font-size:11px;color:var(--t1);outline:none"
+        onkeydown="if(event.key==='Enter')saveGistToken()" />
+      <button onclick="saveGistToken()" style="background:var(--blue);color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap">Save &amp; Sync</button>
+    </div>
+  </div>
+  <span class="sync-banner-dismiss" onclick="document.getElementById('syncBannerGist').style.display='none'" title="Dismiss">✕</span>
+</div>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="tb-l">
@@ -870,22 +886,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="stat cp"><div class="sn">Apr 30</div><div class="sl">Next deadline</div><div class="ss">Nébuleuse 50% target</div></div>
   <div class="stat cb"><div class="sn">2</div><div class="sl">Auto-syncs</div><div class="ss">Notion + Help Center</div></div>
   <div class="stat cpr"><div class="sn">€1,002</div><div class="sl">Freelance MRR</div><div class="ss">€450 + $600 · Target: ~€1,500</div></div>
-</div>
-
-<!-- GIST SETUP BANNER (shown only if no token found) -->
-<div class="sync-banner load" id="syncBannerGist" style="display:none">
-  <span class="sync-banner-icon">☁️</span>
-  <div class="sync-banner-text">
-    <strong>Cloud sync not set up</strong>
-    Paste your GitHub token below to sync progress across all devices (Mac, iPhone, etc.)
-    <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
-      <input id="gistTokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-        style="flex:1;min-width:200px;background:rgba(255,255,255,0.07);border:1px solid rgba(91,155,214,.35);border-radius:6px;padding:6px 10px;font-family:monospace;font-size:11px;color:var(--t1);outline:none"
-        onkeydown="if(event.key==='Enter')saveGistToken()" />
-      <button onclick="saveGistToken()" style="background:var(--blue);color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap">Save &amp; Sync</button>
-    </div>
-  </div>
-  <span class="sync-banner-dismiss" onclick="document.getElementById('syncBannerGist').style.display='none'" title="Dismiss">✕</span>
 </div>
 
 <!-- NAV TABS -->
@@ -1523,19 +1523,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   const stored = localStorage.getItem('yl_xp');
   if (stored !== null && +stored > 0) return; // real data exists, skip
   if (localStorage.getItem('yl_seed_done')) return; // already seeded once
+  // XP: 8+8+10+10+10+15 = 61 today + ~30 for 3 Mar 22 tasks = 91
+  // Streak: 1 day — tasks completed today (Apr 4) and Mar 22, not consecutive
   localStorage.setItem('yl_xp', '91');
-  localStorage.setItem('yl_streak', '9');
+  localStorage.setItem('yl_streak', '1');
   localStorage.setItem('yl_seed_done', '1');
-  // Set lastDay to most recent Monday
+  // lastDay = today so streak shows as active
   const today = new Date();
-  for (let i = 1; i <= 14; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    if (d.getDay() === 1) {
-      localStorage.setItem('yl_day', d.toISOString().slice(0, 10));
-      break;
-    }
-  }
+  localStorage.setItem('yl_day', today.toISOString().slice(0, 10));
 })();
 
 // ── CONSTANTS (must be first — used by save() before full Gist block) ──────
