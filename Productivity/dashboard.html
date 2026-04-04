@@ -621,6 +621,59 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .fo-int-btn{background:var(--s2);border:1px solid var(--b2);color:var(--t3);font-family:var(--fm);font-size:9px;padding:5px 11px;border-radius:4px;cursor:pointer;transition:all .15s}
 .fo-int-btn:hover{color:var(--amber);border-color:rgba(232,169,58,.3)}
 .fo-int-btn.active{background:var(--amber-d);color:var(--amber);border-color:rgba(232,169,58,.35)}
+
+/* ── MOBILE RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .shell{padding:0 14px 80px}
+
+  /* Topbar: stack logo + controls */
+  .topbar{flex-wrap:wrap;gap:10px;padding:14px 0 12px}
+  .tb-sub{display:none}
+  .tb-r{gap:8px;flex-wrap:wrap}
+  .mode-toggle{order:-1}
+  .live{display:none}
+  .dc{font-size:9px}
+
+  /* Goal bar: single line, smaller text */
+  .goal{flex-direction:column;align-items:flex-start}
+  .goal-lbl{border-right:none;border-bottom:1px solid var(--b1);height:auto;padding:6px 14px;width:100%}
+  .goal-txt{font-size:11px;padding:8px 14px}
+
+  /* Gamification hero: stack vertically */
+  .gam-hero{grid-template-columns:1fr;gap:10px}
+
+  /* Stats row: 2-col grid */
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+
+  /* Grids: collapse all to 1 col */
+  .g4,.g3,.g2{grid-template-columns:1fr}
+
+  /* Nav tabs: 2-row wrap, smaller font */
+  .nav-tabs{flex-wrap:wrap;gap:3px;padding:3px}
+  .tab{flex:1 1 calc(33% - 3px);padding:8px 4px;font-size:9px;min-width:0}
+  .tab .tc{display:none}
+
+  /* Task rows: tighten padding */
+  .t{padding:8px 10px;gap:6px}
+  .tn{font-size:12px}
+  .tbadge{display:none}
+  .note-btn,.link-btn,.focus-mini-btn{opacity:1}
+
+  /* Sync banner: stack input below text */
+  .sync-banner{flex-direction:column;align-items:flex-start;gap:8px}
+  #gistTokenInput{min-width:0;width:100%}
+
+  /* Section header */
+  .sh{margin-top:16px}
+
+  /* Brief view cards */
+  .brief-grid{grid-template-columns:1fr!important}
+  .brief-header{flex-direction:column;gap:8px;align-items:flex-start}
+
+  /* Focus mode */
+  .fo-task-name{font-size:clamp(24px,6vw,40px)}
+  .fo-header{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
@@ -790,7 +843,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <span class="sync-banner-icon">☁️</span>
   <div class="sync-banner-text">
     <strong>Cloud sync not set up</strong>
-    Open browser console (Cmd+Option+J) and run: <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;font-family:monospace">localStorage.setItem('yl_gist_token', 'YOUR_TOKEN')</code> — then reload. Your progress will sync automatically across all devices.
+    Paste your GitHub token below to sync progress across all devices (Mac, iPhone, etc.)
+    <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+      <input id="gistTokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+        style="flex:1;min-width:200px;background:rgba(255,255,255,0.07);border:1px solid rgba(91,155,214,.35);border-radius:6px;padding:6px 10px;font-family:monospace;font-size:11px;color:var(--t1);outline:none"
+        onkeydown="if(event.key==='Enter')saveGistToken()" />
+      <button onclick="saveGistToken()" style="background:var(--blue);color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap">Save &amp; Sync</button>
+    </div>
   </div>
   <span class="sync-banner-dismiss" onclick="document.getElementById('syncBannerGist').style.display='none'" title="Dismiss">✕</span>
 </div>
@@ -1520,6 +1579,15 @@ const STREAKS = [
 // (GIST_FILENAME and _gistSaveTimer declared at top of script to avoid TDZ issues)
 function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
 function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
+
+function saveGistToken() {
+  const input = document.getElementById('gistTokenInput');
+  const token = (input?.value || '').trim();
+  if (!token) { input && (input.style.borderColor = 'var(--red)'); return; }
+  localStorage.setItem('yl_gist_token', token);
+  document.getElementById('syncBannerGist').style.display = 'none';
+  gistPull().then(() => gistPush());
+}
 function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
 
