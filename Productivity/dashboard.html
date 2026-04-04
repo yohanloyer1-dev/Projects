@@ -714,7 +714,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <div class="shell">
 
 <!-- GIST SETUP BANNER — visible by default, hidden by JS once sync confirmed -->
-<div class="sync-banner load" id="syncBannerGist" style="margin-top:12px">
+<div class="sync-banner load show" id="syncBannerGist" style="margin-top:12px">
   <span class="sync-banner-icon">☁️</span>
   <div class="sync-banner-text">
     <strong>Cloud sync not set up</strong>
@@ -1950,23 +1950,35 @@ async function gistPull() {
   const gistId = gistGetId();
 
   // Pre-fill token input if token already stored
-  if (token && document.getElementById('gistTokenInput')) {
-    document.getElementById('gistTokenInput').value = token;
-  }
+  const tokenInput = document.getElementById('gistTokenInput');
+  if (tokenInput) tokenInput.value = token || '';
 
   // No token — leave banner visible so user can paste it
   if (!token) {
     gistSetStatus('notoken');
     return false;
   }
-  // Has token + canonical gistId always set — hide banner and proceed
-  hideSyncBanner();
+  // Token exists — update banner text to show we're connecting (not "not set up")
+  const bannerStrong = document.querySelector('#syncBannerGist .sync-banner-text strong');
+  if (bannerStrong) bannerStrong.textContent = 'Connecting to cloud sync…';
+  // Has token + canonical gistId always set — proceed with sync (banner hidden only on success)
   gistSetStatus('syncing');
   try {
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
       headers: { Authorization: `token ${token}` }
     });
-    if (!res.ok) { gistSetStatus('err'); return false; }
+    if (!res.ok) {
+      // 401 = bad token, keep banner visible so user can re-enter
+      if (res.status === 401) {
+        gistSetStatus('notoken');
+        const bannerText = document.querySelector('#syncBannerGist .sync-banner-text strong');
+        if (bannerText) bannerText.textContent = 'Token invalid — re-enter your GitHub token';
+      } else {
+        gistSetStatus('err');
+        hideSyncBanner();
+      }
+      return false;
+    }
     const data = await res.json();
     const content = data.files?.[GIST_FILENAME]?.content;
     if (!content) { gistSetStatus('idle'); return false; }
@@ -2004,9 +2016,8 @@ async function gistPull() {
 // Pull on page load, reload if Gist had newer data
 (async function initGistSync() {
   const reloaded = sessionStorage.getItem('gist_reloaded');
-  // Only skip if we already reloaded AND have a valid gistId (sync is set up)
-  // If no gistId, always run gistPull so the setup banner appears
-  if (reloaded && gistGetId()) { gistSetStatus('idle'); return; }
+  // If already reloaded after a successful sync, we're good — hide banner and stop
+  if (reloaded && gistGetId() && gistGetToken()) { hideSyncBanner(); gistSetStatus('idle'); return; }
   const updated = await gistPull();
   if (updated) {
     sessionStorage.setItem('gist_reloaded', '1');
