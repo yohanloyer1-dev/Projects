@@ -713,12 +713,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <body>
 <div class="shell">
 
-<!-- GIST SETUP BANNER — at top so always visible on mobile -->
-<div class="sync-banner load" id="syncBannerGist" style="display:none;margin-top:12px">
+<!-- GIST SETUP BANNER — visible by default, hidden by JS once sync confirmed -->
+<div class="sync-banner load" id="syncBannerGist" style="margin-top:12px">
   <span class="sync-banner-icon">☁️</span>
   <div class="sync-banner-text">
     <strong>Cloud sync not set up</strong>
-    Paste your GitHub token below to sync progress across all devices (Mac, iPhone, etc.)
+    Paste your GitHub token to sync across all devices. <span style="opacity:.6;font-size:10px">Or <span onclick="resetAndResync()" style="cursor:pointer;text-decoration:underline">reset &amp; resync</span> if streak/XP look wrong.</span>
     <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
       <input id="gistTokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
         style="flex:1;min-width:200px;background:rgba(255,255,255,0.07);border:1px solid rgba(91,155,214,.35);border-radius:6px;padding:6px 10px;font-family:monospace;font-size:11px;color:var(--t1);outline:none"
@@ -726,7 +726,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <button onclick="saveGistToken()" style="background:var(--blue);color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap">Save &amp; Sync</button>
     </div>
   </div>
-  <span class="sync-banner-dismiss" onclick="document.getElementById('syncBannerGist').style.display='none'" title="Dismiss">✕</span>
 </div>
 
 <!-- TOPBAR -->
@@ -1919,6 +1918,7 @@ async function gistPush() {
     if (res.ok) {
       const data = await res.json();
       if (!gistId) gistSetId(data.id);
+      hideSyncBanner();
       gistSetStatus('ok');
       setTimeout(() => gistSetStatus('idle'), 3000);
     } else {
@@ -1932,16 +1932,21 @@ async function gistPush() {
 }
 
 
+function hideSyncBanner() {
+  document.getElementById('syncBannerGist').style.display = 'none';
+}
+
 async function gistPull() {
   const token = gistGetToken();
   const gistId = gistGetId();
 
-  // Show banner if no token, OR if token exists but Gist sync was never completed
+  // Pre-fill token input if token already stored
+  if (token && document.getElementById('gistTokenInput')) {
+    document.getElementById('gistTokenInput').value = token;
+  }
+
+  // No token or no gistId — leave banner visible, return
   if (!token || !gistId) {
-    document.getElementById('syncBannerGist').style.display = '';
-    if (token && document.getElementById('gistTokenInput')) {
-      document.getElementById('gistTokenInput').value = token;
-    }
     gistSetStatus('notoken');
     return false;
   }
@@ -1970,10 +1975,12 @@ async function gistPull() {
       if (parsed.yl_links    != null) localStorage.setItem('yl_links',    parsed.yl_links);
       if (parsed.yl_quickadd != null) localStorage.setItem('yl_quickadd', parsed.yl_quickadd);
       if (parsed.yl_deadlines!= null) localStorage.setItem('yl_deadlines',parsed.yl_deadlines);
+      hideSyncBanner();
       gistSetStatus('ok');
       setTimeout(() => gistSetStatus('idle'), 3000);
       return true; // caller should reload to reflect new state
     }
+    hideSyncBanner();
     gistSetStatus('idle');
     return false;
   } catch(e) {
