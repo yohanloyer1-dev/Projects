@@ -2074,26 +2074,41 @@ function renderStreakDots() {
   const grid = document.createElement('div');
   grid.className = 'sdot-grid';
 
+  // Build a set of date strings (YYYY-MM-DD) that have at least one completed task
+  const activeDays = new Set();
+  S.done.forEach(d => {
+    if (!d.t) return;
+    const ts = typeof d.t === 'number' ? d.t : new Date(d.t).getTime();
+    const dateStr = new Date(ts).toISOString().slice(0, 10);
+    activeDays.add(dateStr);
+  });
+  // Also include lastDay if streak > 0 (covers tasks done before done-list was tracked)
+  if (S.streak > 0 && S.lastDay) activeDays.add(S.lastDay);
+
   for (let i = 0; i < total; i++) {
     const dot = document.createElement('div');
     dot.className = 'sdot';
     const daysAgo = todayIdx - i; // 0 = today, 34 = 5 weeks ago
 
-    // Is this day within the streak?
-    if (daysAgo === 0) {
-      // Today
-      if (S.streak > 0) dot.classList.add('d4');
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - daysAgo);
+    const dateStr = date.toISOString().slice(0, 10);
+
+    const hasActivity = activeDays.has(dateStr);
+    const isToday = daysAgo === 0;
+
+    if (isToday) {
       dot.classList.add('today-dot');
-    } else if (daysAgo > 0 && daysAgo < S.streak) {
-      // Filled streak day — intensity based on recency
-      const recency = 1 - (daysAgo / Math.max(S.streak, 1));
-      if (recency > 0.75) dot.classList.add('d4');
-      else if (recency > 0.5) dot.classList.add('d3');
-      else if (recency > 0.25) dot.classList.add('d2');
+      if (hasActivity) dot.classList.add('d4');
+    } else if (hasActivity) {
+      // Colour by recency: older = lighter
+      if (daysAgo <= 7)  dot.classList.add('d4');
+      else if (daysAgo <= 14) dot.classList.add('d3');
+      else if (daysAgo <= 21) dot.classList.add('d2');
       else dot.classList.add('d1');
     }
-    // Tooltip
-    const date = new Date(Date.now() - daysAgo * 86400000);
+
     dot.title = date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
     grid.appendChild(dot);
   }
