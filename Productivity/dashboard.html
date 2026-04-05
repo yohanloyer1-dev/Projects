@@ -1568,7 +1568,9 @@ const PRE_DEADLINES = {
 Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
   if (!S.deadlines[id]) S.deadlines[id] = date;
 });
-save(); // persist the seeded deadlines immediately
+// Write deadlines directly to localStorage — avoids touching yl_saved_at
+// (a full save() here would stamp a fresh timestamp, making local look newer than the Gist)
+localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
 
 // ── PRE-COMPLETED TASKS (marked done outside session) ──────────
 const PRE_DONE = [
