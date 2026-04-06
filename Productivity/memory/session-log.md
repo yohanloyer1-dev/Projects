@@ -63,117 +63,15 @@
 
 ---
 
-## 2026-04-01 | Gorgias blog DB refresh | Gorgias
-**Session name:** "1 Apr – Gorgias blog db refresh"
-- Refreshed Gorgias Help Center article database. Scheduled task.
-
----
-
-## 2026-04-03 | Nébuleuse Notion sync | Nébuleuse
-**Session name:** "3 Apr – Nebuleuse notion sync"
-- Scheduled Mon/Fri sync of Nébuleuse Bijoux Notion workspace.
-
----
-
-## 2026-04-03 | Fix dashboard bugs + sync to Netlify | Dashboard
+## ~2026-04-03 | Dashboard bug fixes + Netlify sync | Dashboard
 **Session name:** "Fix dashboard bugs and sync state to Netlify"
-- Dashboard bug fixes. Netlify sync. (Netlify later suspended — moved to GitHub Pages.)
-
----
-
-## 2026-04-05 | Nébuleuse Notion sync | Nébuleuse
-**Session name:** "Nebuleuse notion sync"
-- Scheduled Mon/Fri sync of Nébuleuse Bijoux Notion workspace.
-
----
-
-## 2026-04-05 | Gorgias Help Center weekly sync | Gorgias
-**Session name:** "Gorgias helpcenter weekly sync"
-- Scheduled Monday scrape of new Gorgias Help Center articles.
-
----
-
-## 2026-04-05 | Update AI Agent actions knowledge base | Nébuleuse
-**Session name:** "Update AI Agent actions knowledge base"
-- Updated Gorgias AI Agent knowledge base / Guidances for Nébuleuse Bijoux.
-
----
-
-## 2026-04-05 | Invoice generation | Agency
-**Session name:** "Create invoices through Claude instead"
-- Built invoice generation workflow via Claude (create-invoice skill).
-
----
-
-## ~2026-03-30 | Nébuleuse Notion sync | Nébuleuse
-**Session name:** "30 Mar – Nebuleuse notion sync"
-- Scheduled Mon/Fri sync.
-
----
-
-## ~2026-03-30 | Gorgias Help Center weekly sync | Gorgias
-**Session name:** "30 Mar – Gorgias helpcenter weekly sync"
-- Scheduled Monday scrape.
-
----
-
-## ~2026-03-29 | Mortgage loan insurance analysis | Personal
-**Session name:** "Analyze mortgage loan insurance requirements"
-- Analyzed mortgage loan insurance docs. Real estate section in TASKS.md.
+- Dashboard bug fixes. Netlify sync attempted. (Netlify later suspended — moved to GitHub Pages.)
 
 ---
 
 ## ~2026-03-28 | Add tasks to dashboard | Dashboard
 **Session name:** "Add tasks to productivity dashboard"
-- Added tasks to dashboard.html.
-
----
-
-## ~2026-03-27 | Nébuleuse Notion sync | Nébuleuse
-**Session name:** "27 Mar – Nebuleuse notion sync"
-- Scheduled Mon/Fri sync.
-
----
-
-## ~2026-03-27 | LinkedIn authority content system | LinkedIn
-**Session name:** "Build LinkedIn authority on e-commerce customer experience"
-- Built full LinkedIn content system. YOHAN_MASTER_BRIEF.md created. 5 pillars defined. Post pipeline set up.
-
----
-
-## ~2026-03-27 | Review emails requiring response | Personal/Work
-**Session name:** "Review emails requiring my response"
-- Reviewed inbox, drafted responses.
-
----
-
-## ~2026-03-26 | Okinawa flight search | Personal
-**Session name:** "Find baby-friendly flight to Okinawa"
-- Searched baby-friendly flight options to Okinawa (Japan trip planning).
-
----
-
-## ~2026-03-23 | Nébuleuse Notion sync | Nébuleuse
-**Session name:** "23 Mar – Nebuleuse notion sync"
-- Scheduled Mon/Fri sync.
-
----
-
-## ~2026-03-23 | Gorgias Help Center weekly sync | Gorgias
-**Session name:** "23 Mar – Gorgias helpcenter weekly sync"
-- First scheduled Monday scrape.
-
----
-
-## ~2026-03-23 | Notion content scraping skill | Tools
-**Session name:** "Notion content scraping skill"
-- Built Notion scraping skill for automated content sync.
-
----
-
-## ~2026-03-23 | Notion Connector for AI Agent docs | Nébuleuse
-**Session name:** "Notion Connector - AI Agent doc fetching"
-- Set up Notion connector to fetch AI Agent documentation for Nébuleuse.
+- Added tasks to dashboard.html directly.
 
 ---
 
