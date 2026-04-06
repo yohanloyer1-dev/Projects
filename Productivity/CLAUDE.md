@@ -89,6 +89,20 @@ Decision OS based on Mandala framework. Full doc: memory/context/ohtani-matrix.m
 **For every task:** Which pillar? Core or sandbox? Leverage or just activity? Conflicts with constraints?
 **Protect Yohan from:** over-diversification, shiny objects, parallel execution, activity without assets.
 
+## Logs (Always Update)
+Two running logs must be updated every session — no exceptions:
+
+| File | What goes in it |
+|------|----------------|
+| `Productivity/memory/session-log.md` | What Yohan requested, what was done, key decisions made. One entry per session. |
+| `Productivity/memory/dashboard-changelog.md` | Every code change to dashboard.html — what changed, why, commit hash. |
+
+**Rules:**
+- Update `session-log.md` at the END of every session, before pushing
+- Update `dashboard-changelog.md` every time dashboard.html is changed
+- Entries are prepended (newest at top)
+- Keep entries concise — bullet points, not paragraphs
+
 ## Session Startup Protocol
 GitHub is the single source of truth. Local folder is optional convenience — never required.
 
