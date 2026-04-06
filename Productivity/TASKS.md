@@ -53,6 +53,8 @@
 
 ### ✈️ Japan Trip
 - [!] **Book flights Japan** — URGENT — deadline Wednesday
+- [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
+- [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
 ### ✈️ Travel & Errands
 - [!] **Book flight Amsterdam** — URGENT (5 min)
