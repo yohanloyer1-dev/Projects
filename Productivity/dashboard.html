@@ -1076,6 +1076,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="flights-japan"></div>
         <div class="t urg" data-id="hotel-taiwan-may9" data-xp="8" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Book hotel Taiwan May 9th</span><span class="td">Taiwan leg of Asia trip</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="hotel-taiwan-may9"></div>
+        <div class="t urg" data-id="intl-driving-license" data-xp="10" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Make international driving license request</span><span class="td">Required for car rentals in Japan</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="intl-driving-license"></div>
+        <div class="t urg" data-id="accommodation-okinawa" data-xp="8" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Book accommodation Okinawa</span><span class="td">Okinawa leg of Japan trip</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="accommodation-okinawa"></div>
+        <div class="t" data-id="flight-okinawa" data-xp="6" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Book flight from Okinawa</span><span class="td">Return leg (non-urgent)</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="flight-okinawa"></div>
         <div class="t" data-id="confirm-itinerary-asia" data-xp="8" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Confirm itinerary</span><span class="td">Full Asia trip — Japan + Taiwan</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="confirm-itinerary-asia"></div>
       </div>
@@ -1242,6 +1248,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="flight-marseille"></div>
         <div class="t urg hi" data-id="hotel-amsterdam" data-xp="10" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book hotel Amsterdam</span><span class="td">#1 priority — urgent + important</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Today</span></div>
         <div class="note-panel" data-for="hotel-amsterdam"></div>
+        <div class="t urg" data-id="hotel-barcelona" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Book hotel Barcelona</span><span class="td">Urgent — work event</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="hotel-barcelona"></div>
         <div class="t urg" data-id="brex-expenses" data-xp="8" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Submit Brex expenses</span><span class="td">Deadline: April 1st</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="brex-expenses"></div>
         <div class="t" data-id="brex-card-replace" data-xp="5" data-project="Work Travel"><div class="chk"></div><div class="tb"><span class="tn">Order replacement Brex Card</span><span class="td">Deadline: May 1st</span></div><button class="note-btn" title="Add note">📝</button></div>
@@ -1261,6 +1269,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="pc-acc" style="background:var(--blue)"></div>
       <div class="pc-head"><div><div class="pc-title">Follow-ups</div><div class="pc-sub">Shoptalk · Events · Partners</div></div><span class="pill p-act">Active</span></div>
       <div class="tl">
+        <div class="t urg" data-id="contact-jorge-farma2go" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Contact Jorge Farma2go</span><span class="td">URGENT follow-up</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="contact-jorge-farma2go"></div>
+        <div class="t urg hi" data-id="create-dock-spaces" data-xp="12" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Create DOCK spaces</span><span class="td">Urgent + important</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
+        <div class="note-panel" data-for="create-dock-spaces"></div>
         <div class="t urg" data-id="panagora-klaviyo" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">Panagora Klaviyo</span><span class="td">URGENT follow-up</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="panagora-klaviyo"></div>
         <div class="t urg" data-id="ltvplus-lunch-vouchers" data-xp="10" data-project="Gorgias Role"><div class="chk"></div><div class="tb"><span class="tn">LTV Plus Lunch Vouchers</span><span class="td">URGENT — handle lunch vouchers</span></div><button class="note-btn" title="Add note">📝</button></div>
@@ -2395,9 +2407,14 @@ function renderBrief() {
     else if (t.hasDl) scores.push('<span class="sc sc-u" style="color:var(--amber)">🟡 Deadline</span>');
     if (t.isClaude) scores.push('<span class="sc sc-c">🤖 Ready</span>');
 
+    // FIX: Conditional rank label based on how many candidates exist
+    const activeLabel = top.length > i ? rankLabels[i] : '';
+    const activeClass = top.length > i ? rankClasses[i] : 'r-empty';
+    const rankNum = i + 1;
+
     return `
       <div class="bi" onclick="goToTask('${t.id}','${t.tab}')" style="cursor:pointer" data-mode="${t.taskMode}">
-        <div class="bi-rank"><div class="rn ${rankClasses[i]}">${i+1}</div> ${rankLabels[i]}</div>
+        <div class="bi-rank"><div class="rn ${activeClass}">${rankNum}</div> ${activeLabel}</div>
         <div class="bi-name">${t.name}</div>
         <div class="bi-proj">${t.projEmoji} ${t.project}</div>
         <div class="bi-scores">${scores.join('')}</div>
@@ -2559,15 +2576,20 @@ function initNotePanel(panel, taskId) {
 }
 
 // ── LOG ───────────────────────────────────
-function addLog(name,proj,xp,taskId){
+function addLog(name,proj,xp,taskId,timestamp){
   const list=document.getElementById('logList');
   // Guard: don't add duplicate log entries for same taskId
   if(taskId && list.querySelector(`.log-item[data-id="${taskId}"]`)) return;
   const empty=list.querySelector('.log-empty');
   if(empty)empty.remove();
-  const now = new Date();
-  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  const date=now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  // FIX: Use provided timestamp (from S.done) instead of always using new Date()
+  // If no timestamp provided, use current time (fallback for legacy entries)
+  const ts = timestamp || Date.now();
+  const completionDate = new Date(ts);
+  const time=completionDate.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const date=completionDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
   const item=document.createElement('div');
   item.className='log-item';
   item.dataset.id = taskId||'';
@@ -2744,9 +2766,11 @@ function bind(){
         }, 200);
 
         S.xp += xp2; S.sessionDone++;
-        S.done.push({n:nm2, p:proj, xp:xp2, t:Date.now(), id:taskId2});
+        const completionTime = Date.now();
+        S.done.push({n:nm2, p:proj, xp:xp2, t:completionTime, id:taskId2});
         checkStreak(); save(); updateUI(); updateCounts(); renderStreakDots(); renderBrief(); dtnRender();
-        addLog(nm2, proj, xp2, taskId2);
+        // FIX: Pass the timestamp so addLog uses correct date, not current time
+        addLog(nm2, proj, xp2, taskId2, completionTime);
         showToast(nm2, xp2);
         celebrate(nm2, xp2);
         syncTaskDoneToGitHub(nm2);
@@ -2758,7 +2782,8 @@ function bind(){
   const existingIds = new Set(Array.from(document.querySelectorAll('.log-item')).map(li => li.dataset.id));
   S.done.forEach(done => {
     if(done.id && !existingIds.has(done.id)) {
-      addLog(done.n, done.p, done.xp, done.id);
+      // FIX: Pass timestamp from S.done so log shows actual completion date, not reload date
+      addLog(done.n, done.p, done.xp, done.id, done.t);
       existingIds.add(done.id);
     }
   });
