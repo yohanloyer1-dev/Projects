@@ -93,17 +93,17 @@
 ## 💼 Professional (Gorgias)
 
 ### ✈️ Work Travel & Expenses
-- [!][>] **Book hotel Amsterdam** — #1 PRIORITY — urgent + important. Book before anything else.
-- [!] **Book hotel Barcelona** — URGENT — book hotel for Barcelona work event.
-- [!] **Book flight Amsterdam** — URGENT — book today. Work event.
-- [!] **Book flight Barcelona** — URGENT — book today. Work event.
-- [ ] **Book flight Milano** — Work event.
-- [ ] **Book flight Marseille** — Work event.
-- [!] **Submit Brex expenses** — URGENT — deadline April 1st
+- [x] **Book hotel Amsterdam** — ✅ Done
+- [!] **Book hotel Barcelona** — URGENT — book hotel for Barcelona work event
+- [x] **Book flight Amsterdam** — ✅ Done
+- [x] **Book flight Barcelona** — ✅ Done
+- [ ] **Book flight Milano** — Work event
+- [ ] **Book flight Marseille** — Work event
+- [!] **Submit Brex expenses** — URGENT — 10 DAYS OVERDUE (deadline was April 1st)
 - [ ] **Order replacement Brex Card** — Deadline: May 1st
 
 ### 🗓️ Presentations & Events
-- [!][>] **Slides Fashion Commerce** — Urgent + important. Build/prep slides for Fashion Commerce.
+- [x] **Slides Fashion Commerce** — ✅ Done
 
 ### Role Optimization
 - [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
@@ -117,7 +117,7 @@
 - [!] **Panagora Klaviyo** — URGENT follow-up
 - [!] **LTV Plus Lunch Vouchers** — URGENT — handle lunch vouchers with LTV Plus
 - [!] **Follow up Nenad** — URGENT follow-up
-- [ ] **Ping Spanish partners + Blas** — Reach out to Spanish partners and Blas
+- [x] **Ping Spanish partners + Blas** — ✅ Done
 - [x] **Send follow-up email to LTVPlus team** — ✅ Done 27 Mar 2026
 - [ ] **Shoptalk follow ups — Plantmade** — Follow up with Plantmade contact met at Shoptalk
 - [ ] **Add German logos to partner deck — Nikos Media & Latori** — Update the partner deck with German partner logos
