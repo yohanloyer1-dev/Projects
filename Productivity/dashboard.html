@@ -1597,6 +1597,14 @@ const S = {
   sessionDone: 0
 };
 
+// ── SECURITY: HTML ESCAPE UTILITY ──────────────
+// SECURITY FIX: Prevents XSS by safely converting text to HTML entities
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 // ── PRE-SEEDED DEADLINES ───────────────────────────────────────
 // Known deadlines from TASKS.md — only set if not already customised by user.
 // Update these dates when tasks change. Format: 'YYYY-MM-DD'
@@ -2412,14 +2420,24 @@ function renderBrief() {
     const activeClass = top.length > i ? rankClasses[i] : 'r-empty';
     const rankNum = i + 1;
 
+    // SECURITY FIX: Use data-* attributes instead of onclick handler to prevent XSS
     return `
-      <div class="bi" onclick="goToTask('${t.id}','${t.tab}')" style="cursor:pointer" data-mode="${t.taskMode}">
+      <div class="bi brief-item" style="cursor:pointer" data-mode="${t.taskMode}" data-task-id="${escapeHtml(t.id)}" data-task-tab="${escapeHtml(t.tab)}">
         <div class="bi-rank"><div class="rn ${activeClass}">${rankNum}</div> ${activeLabel}</div>
-        <div class="bi-name">${t.name}</div>
-        <div class="bi-proj">${t.projEmoji} ${t.project}</div>
+        <div class="bi-name">${escapeHtml(t.name)}</div>
+        <div class="bi-proj">${t.projEmoji} ${escapeHtml(t.project)}</div>
         <div class="bi-scores">${scores.join('')}</div>
       </div>`;
   }).join('');
+
+  // SECURITY FIX: Add event delegation for brief items instead of inline onclick
+  grid.querySelectorAll('.brief-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const taskId = item.dataset.taskId;
+      const tab = item.dataset.taskTab;
+      if(taskId && tab) goToTask(taskId, tab);
+    });
+  });
 
   // Re-apply mode visibility to new elements
   document.querySelectorAll('#briefGrid [data-mode]').forEach(el => {
@@ -2590,11 +2608,57 @@ function addLog(name,proj,xp,taskId,timestamp){
   const time=completionDate.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   const date=completionDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 
+  // SECURITY FIX: Use safe DOM methods instead of innerHTML to prevent XSS
   const item=document.createElement('div');
   item.className='log-item';
   item.dataset.id = taskId||'';
-  item.innerHTML=`<div class="log-chk" title="Click to uncheck">✓</div><div><div class="log-name">${name}</div><div class="log-proj">${proj||'—'}</div></div><div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px"><div class="log-date">${date}</div><div class="log-time">${time}</div><div class="log-xp">+${xp} XP</div></div>`;
-  item.querySelector('.log-chk').addEventListener('click', () => uncompleteTask(taskId, name, xp, item));
+
+  // Build log item with safe text content methods (no HTML injection risk)
+  const chk = document.createElement('div');
+  chk.className = 'log-chk';
+  chk.title = 'Click to uncheck';
+  chk.textContent = '✓';
+
+  const taskInfo = document.createElement('div');
+  const taskName = document.createElement('div');
+  taskName.className = 'log-name';
+  taskName.textContent = name;  // Safe: textContent prevents HTML injection
+
+  const taskProj = document.createElement('div');
+  taskProj.className = 'log-proj';
+  taskProj.textContent = proj || '—';
+
+  taskInfo.appendChild(taskName);
+  taskInfo.appendChild(taskProj);
+
+  const timeInfo = document.createElement('div');
+  timeInfo.style.marginLeft = 'auto';
+  timeInfo.style.display = 'flex';
+  timeInfo.style.flexDirection = 'column';
+  timeInfo.style.alignItems = 'flex-end';
+  timeInfo.style.gap = '3px';
+
+  const logDate = document.createElement('div');
+  logDate.className = 'log-date';
+  logDate.textContent = date;
+
+  const logTime = document.createElement('div');
+  logTime.className = 'log-time';
+  logTime.textContent = time;
+
+  const logXp = document.createElement('div');
+  logXp.className = 'log-xp';
+  logXp.textContent = '+' + xp + ' XP';
+
+  timeInfo.appendChild(logDate);
+  timeInfo.appendChild(logTime);
+  timeInfo.appendChild(logXp);
+
+  item.appendChild(chk);
+  item.appendChild(taskInfo);
+  item.appendChild(timeInfo);
+
+  chk.addEventListener('click', () => uncompleteTask(taskId, name, xp, item));
   list.insertBefore(item,list.firstChild);
   // Update done count badge
   const badge = document.getElementById('tc-done');
