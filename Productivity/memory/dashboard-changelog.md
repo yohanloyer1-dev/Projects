@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-04-11 | Disable broken TASKS.md sync automation + security XSS fixes
+**Commits:** `1deb0e4` (XSS fixes), `9d4fd3b` (sync disable)
+
+### Security: XSS Vulnerability Fixes (1deb0e4)
+- **XSS via onclick handler (renderBrief, line 2416):** Replaced inline `onclick="goToTask(...)"` with event delegation using `data-*` attributes. Click listener now attached to `.brief-item` parent.
+- **XSS via innerHTML (addLog, line 2596):** Refactored to use safe DOM methods (`createElement`, `appendChild`, `.textContent`) instead of template literal innerHTML injection.
+- **XSS via unescaped template interpolation (renderBrief, line 2418):** Applied new `escapeHtml()` utility (line 1601) to all interpolated values.
+- **Added escapeHtml() utility (line 1601):** Safe HTML entity conversion using browser's built-in textContent method.
+
+### Bug Fixes (a7b8964)
+- **Brief priority numbering gap:** Fixed renderBrief to skip rank labels when fewer than 3 tasks qualify (was showing #1 and #3, missing #2).
+- **Task completion dates:** Fixed addLog to accept timestamp parameter (was always capturing current date, showing April 11 for all tasks).
+
+### Automation Disabled (9d4fd3b)
+- **Removed syncTaskDoneToGitHub() function (lines 1722-1768)** — non-functional for the following reasons:
+  - Token: Uses `yl_gist_token` (Gist sync) for GitHub API calls to TASKS.md (different service, different scope)
+  - Configuration: Token never set by users, function always returns silently
+  - Error handling: Failures only logged to console, no user visibility
+  - Matching: Fragile fuzzy substring matching with no fallback to data-id
+  - Testing: Never actually tested or verified to work end-to-end
+- **Removed sync call sites (lines 2840, 3819)** — both in task completion handlers
+- **Replaced with manual sync workflow:**
+  - Users: dashboard → exportSession() → copy markdown → paste to Claude
+  - Claude: manually updates TASKS.md on GitHub and confirms
+  - Future: Option B rebuild with proper token + UI feedback
+
+### Documentation Added
+- `memory/sync-automation-audit.md` — detailed analysis of sync system failure + recommendations
+- `memory/code-review-log.md` — comprehensive security audit findings
+
+### Tasks Updated
+- Added Japan trip tasks: international driving license request, Okinawa accommodation, Okinawa return flight
+
+---
+
 ## 2026-04-06 | 8-fix batch: mode filtering, new tasks, quick-add UX, timer, streak dots
 **Commit:** `4695b80`
 

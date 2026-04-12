@@ -181,13 +181,15 @@ Live: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
 
 ## Dashboard System
 - Location: `Productivity/dashboard.html` — source file, pushed to GitHub automatically by Claude
-- Current version: v2.5 — see `Productivity/versions/` for history
+- Current version: v2.6+ — see `Productivity/versions/` for history
 - **Live URL (primary):** https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html — GitHub Pages, free, no limits, auto-deploys ~30s after every push
 - Old Netlify URL (deprecated — bandwidth limits): https://yohan-productivity-dashboard.netlify.app/dashboard.html
 - GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC). Claude pushes directly via API — no manual git push needed.
 - Deploy workflow: Claude edits files → Claude pushes via GitHub API → GitHub Pages deploys in ~30s → Claude posts confirmation
 - Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Run `localStorage.setItem('yl_gist_token', 'TOKEN')` in browser console once per device. Progress syncs across all devices automatically.
+- **TASKS.md Sync:** Dashboard → TASKS.md sync automation is currently DISABLED (broken system). See `memory/sync-automation-audit.md`. Manual workflow: (1) Complete tasks in dashboard, (2) Click "Export Session", (3) Paste to Claude, (4) Claude updates TASKS.md manually.
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
+- Security: XSS vulnerabilities fixed (commit 1deb0e4) — all DOM methods now safe (no innerHTML, proper HTML escaping, event delegation)
 - ADHD-optimized variant: planned — research saved at `memory/context/adhd-dashboard-research.md`
 - Versioning rule: ALWAYS copy current dashboard to `versions/dashboard_vX.X_YYYY-MM-DD.html` before any significant edit
 
