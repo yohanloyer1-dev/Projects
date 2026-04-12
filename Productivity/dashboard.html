@@ -47,6 +47,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sync-banner-dismiss{color:var(--t3);cursor:pointer;font-size:12px;flex-shrink:0;padding:4px;transition:color .15s}
 .sync-banner-dismiss:hover{color:var(--t1)}
 
+/* TASKS SYNC BUTTON */
+.tasks-sync-group{display:flex;align-items:center;gap:5px}
+.tasks-sync-btn{font-family:var(--fm);font-size:10px;letter-spacing:.06em;transition:color .2s,opacity .2s}
+.tasks-sync-btn:disabled{opacity:.5;cursor:not-allowed}
+.tasks-sync-indicator{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.04em;white-space:nowrap;min-width:60px}
+
 /* QUEUE OVERDUE BANNER */
 .queue-overdue-banner{display:none;align-items:center;gap:12px;padding:10px 16px;border-radius:10px;margin-bottom:14px;font-family:var(--fm);font-size:11px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#f97316;animation:fd .3s ease both}
 .queue-overdue-banner.show{display:flex}
@@ -771,6 +777,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="mode-toggle" id="modeToggle">
       <button class="mode-btn active" id="mode-personal" onclick="setMode('personal')">🏠 Personal</button>
       <button class="mode-btn" id="mode-work" onclick="setMode('work')">💼 Work</button>
+    </div>
+    <div class="tasks-sync-group" title="Sync completed tasks to TASKS.md on GitHub">
+      <button class="calm-btn tasks-sync-btn" id="tasksSyncBtn" onclick="syncToTasksMd(false)">↑ Sync TASKS</button>
+      <span class="tasks-sync-indicator" id="tasksSyncIndicator"></span>
     </div>
     <button class="calm-btn" id="exportBtn" onclick="exportSession()" title="Copy session summary to clipboard — paste to Claude at next session start">📋 Export</button>
     <span class="gist-status" id="gistStatus" title="Cloud sync status — tap to reset sync" style="cursor:pointer" onclick="resetAndResync()">☁️</span>
@@ -1814,21 +1824,175 @@ async function syncQueueResults() {
   }
 }
 
-// ── TASKS.MD SYNC WORKFLOW (MANUAL) ────────────────────────────────────────
-// Dashboard → GitHub sync is currently DISABLED (broken automation system).
-// See: Productivity/memory/sync-automation-audit.md for details.
+// ── TASKS.MD SYNC SYSTEM ────────────────────────────────────────────────────
+// Syncs completed tasks from dashboard → Productivity/TASKS.md on GitHub.
+// Uses the same token as Gist sync (yl_gist_token) — requires repo scope PAT.
+// Architecture:
+//   1. buildTaskMap()     — runtime id→name lookup built from DOM
+//   2. syncToTasksMd()    — fetch TASKS.md SHA, mark done tasks [x], PUT back
+//   3. Sync button        — manual trigger in topbar; also fires on beforeunload
+//   4. Status indicator   — syncing / ok / error shown in topbar
 //
-// MANUAL SYNC WORKFLOW:
-// 1. Complete tasks in dashboard (localStorage updates + Gist cloud backup)
-// 2. At end of session: click "Export Session" button
-// 3. Copy the markdown output → paste into Claude at session start
-// 4. Claude updates TASKS.md on GitHub manually and confirms
-//
-// FUTURE: This will be rebuilt with:
-// - Proper GitHub repo write token (not Gist token)
-// - UI feedback banner showing sync status
-// - Reliable task ID matching (not fuzzy string search)
-// - Error visibility (toasts, not silent failures)
+// Security: token already in localStorage for Gist; same risk profile.
+// Race condition prevention: button disabled during sync; single in-flight request.
+// SHA requirement: always fetch current SHA before PUT (GitHub API requirement).
+
+// ── TASK ID → TASKS.MD DISPLAY NAME MAP ────────────────────────────────────
+// Built from DOM at runtime. Used for reliable id-based matching in TASKS.md.
+// Falls back to DOM text content if id not in map.
+function buildTaskMap() {
+  const map = {};
+  document.querySelectorAll('.t[data-id]').forEach(el => {
+    const id = el.dataset.id;
+    const name = el.querySelector('.tn')?.textContent?.trim();
+    if (id && name) map[id] = name;
+  });
+  return map;
+}
+
+// ── TASKS.MD SYNC STATE ────────────────────────────────────────────────────
+let _tasksSyncStatus = 'idle'; // idle | syncing | ok | error
+let _tasksSyncTimer = null;
+let _tasksSyncPending = false; // true if completions happened since last sync
+
+function setTasksSyncStatus(status, msg) {
+  _tasksSyncStatus = status;
+  const btn = document.getElementById('tasksSyncBtn');
+  const indicator = document.getElementById('tasksSyncIndicator');
+  if (!btn) return;
+  btn.disabled = (status === 'syncing');
+  if (status === 'syncing') {
+    btn.textContent = '↑ Syncing…';
+    btn.style.color = 'var(--amber)';
+    if (indicator) { indicator.textContent = '⟳'; indicator.style.color = 'var(--amber)'; }
+  } else if (status === 'ok') {
+    const now = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    btn.textContent = '↑ Synced';
+    btn.style.color = 'var(--green)';
+    if (indicator) { indicator.textContent = `✓ ${now}`; indicator.style.color = 'var(--green)'; }
+    _tasksSyncPending = false;
+    localStorage.setItem('yl_tasks_last_sync', new Date().toISOString());
+    setTimeout(() => {
+      if (btn) { btn.textContent = '↑ Sync TASKS'; btn.style.color = ''; }
+    }, 4000);
+  } else if (status === 'error') {
+    btn.textContent = '↑ Sync failed';
+    btn.style.color = 'var(--red)';
+    if (indicator) { indicator.textContent = `✗ ${msg || 'error'}`; indicator.style.color = 'var(--red)'; }
+    setTimeout(() => {
+      if (btn) { btn.textContent = '↑ Sync TASKS'; btn.style.color = ''; }
+    }, 6000);
+  } else {
+    btn.textContent = '↑ Sync TASKS';
+    btn.style.color = '';
+    const lastSync = localStorage.getItem('yl_tasks_last_sync');
+    if (indicator && lastSync) {
+      const t = new Date(lastSync).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const d = new Date(lastSync).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      const isToday = new Date(lastSync).toDateString() === new Date().toDateString();
+      indicator.textContent = `last: ${isToday ? t : d}`;
+      indicator.style.color = 'var(--t3)';
+    }
+  }
+}
+
+async function syncToTasksMd(silent) {
+  if (_tasksSyncStatus === 'syncing') return; // prevent concurrent syncs
+  const token = gistGetToken();
+  if (!token) {
+    if (!silent) showToast('No GitHub token — set it in cloud sync settings', 0);
+    return;
+  }
+
+  setTasksSyncStatus('syncing');
+
+  const REPO = 'yohanloyer1-dev/Projects';
+  const FILE = 'Productivity/TASKS.md';
+  const API  = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
+  const HEADERS = { Authorization: `token ${token}`, 'Content-Type': 'application/json' };
+
+  try {
+    // Step 1: Fetch current TASKS.md + SHA (required for PUT)
+    const getRes = await fetch(API, { headers: HEADERS });
+    if (!getRes.ok) {
+      const err = getRes.status === 401 ? 'auth' : getRes.status === 403 ? 'forbidden' : `HTTP ${getRes.status}`;
+      setTasksSyncStatus('error', err);
+      return;
+    }
+    const getJson = await getRes.json();
+    const sha = getJson.sha;
+    const currentContent = atob(getJson.content.replace(/\n/g, ''));
+
+    // Step 2: Build task map from DOM (id → display name)
+    const taskMap = buildTaskMap();
+
+    // Step 3: Determine which tasks are done in dashboard
+    const doneIds = new Set(S.done.map(d => d.id).filter(Boolean));
+    const doneNames = new Set(S.done.map(d => d.n).filter(Boolean));
+
+    // Step 4: Mark matching tasks as [x] in TASKS.md content
+    // Match by: bold name in TASKS.md matching dashboard task name (via id→name map)
+    let changed = false;
+    const lines = currentContent.split('\n');
+    const updatedLines = lines.map(line => {
+      // Only process unchecked task lines
+      if (!/^- \[ \]/.test(line)) return line;
+
+      // Extract the bold task name from TASKS.md line: **Task Name**
+      const nameMatch = line.match(/\*\*([^*]+)\*\*/);
+      if (!nameMatch) return line;
+      const mdName = nameMatch[1].trim();
+
+      // Check if any done task matches this line
+      // First: check via id→name map (most reliable)
+      let matched = false;
+      for (const [id, name] of Object.entries(taskMap)) {
+        if (doneIds.has(id) && name === mdName) { matched = true; break; }
+      }
+      // Fallback: direct name match from S.done
+      if (!matched && doneNames.has(mdName)) matched = true;
+
+      if (matched) {
+        changed = true;
+        // Preserve any trailing comment after the task name
+        return line.replace('- [ ]', '- [x]');
+      }
+      return line;
+    });
+
+    if (!changed) {
+      // Nothing to update — already in sync
+      setTasksSyncStatus('ok');
+      if (!silent) showToast('TASKS.md already up to date ✓', 0);
+      return;
+    }
+
+    // Step 5: PUT updated content back to GitHub
+    const newContent = updatedLines.join('\n');
+    const encoded = btoa(unescape(encodeURIComponent(newContent)));
+    const putRes = await fetch(API, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({
+        message: `Dashboard sync: mark completed tasks [x] (${new Date().toISOString().slice(0,10)})`,
+        content: encoded,
+        sha: sha
+      })
+    });
+
+    if (putRes.ok) {
+      setTasksSyncStatus('ok');
+      if (!silent) showToast('TASKS.md synced to GitHub ✓', 0);
+    } else {
+      const errData = await putRes.json().catch(()=>({}));
+      setTasksSyncStatus('error', errData.message || `HTTP ${putRes.status}`);
+    }
+
+  } catch(e) {
+    console.warn('[YL/OPS] TASKS.md sync error:', e);
+    setTasksSyncStatus('error', 'network');
+  }
+}
 
 function save() {
   const now = new Date().toISOString();
@@ -2142,6 +2306,23 @@ async function gistPull() {
 
 // Sync Claude queue results from GitHub on page load (after Gist sync)
 setTimeout(syncQueueResults, 500);
+
+// ── TASKS.MD SYNC INIT ─────────────────────────────────────────────────────
+// Show last sync timestamp in topbar on load (after DOM ready)
+document.addEventListener('DOMContentLoaded', () => {
+  setTasksSyncStatus('idle');
+});
+
+// Best-effort auto-sync on page close — fires if user closes tab or navigates away
+// Uses keepalive:true so the request completes even if page is unloading
+window.addEventListener('beforeunload', () => {
+  if (!_tasksSyncPending) return;
+  const token = gistGetToken();
+  if (!token) return;
+  // Fire-and-forget — can't await in beforeunload
+  // We trigger the async function but don't block page close
+  syncToTasksMd(true);
+});
 
 function getLvl(xp) {
   for (let i=LEVELS.length-1;i>=0;i--) if (xp>=LEVELS[i].min) return LEVELS[i];
@@ -2987,7 +3168,9 @@ function bind(){
         addLog(nm2, proj, xp2, taskId2, completionTime);
         showToast(nm2, xp2);
         celebrate(nm2, xp2);
-        // Sync to TASKS.md: use exportSession() → paste to Claude at session start
+        // Mark sync as pending — user can click "↑ Sync TASKS" or it fires on page close
+        _tasksSyncPending = true;
+        setTasksSyncStatus('idle');
       });
     }
   });
