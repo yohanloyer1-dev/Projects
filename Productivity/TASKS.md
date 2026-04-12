@@ -61,7 +61,6 @@
 - [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
 ### ✈️ Travel & Errands
-- [x] **Book flight Amsterdam** — ✅ Done
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [ ] **Book flights Asia** — Book flights for Asia trip
 - [ ] **Order wedding album** — Order printed wedding album
@@ -167,4 +166,3 @@
 - [x] **Set up Nébuleuse Notion auto-sync** — Mon + Fri 9am scheduled task
 - [x] **Set up Gorgias Help Center weekly scraping** — Mondays 9am, new articles only (Phase 1)
 - [x] **Pay Didier Degrandi** — ✅ Done ~week of 23 Mar 2026
-- [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
