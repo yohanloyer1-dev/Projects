@@ -204,7 +204,20 @@ console.log('[YL/OPS] Dashboard-to-TASKS.md sync is currently disabled. Manual s
 
 ---
 
-## Verdict
+## Resolution (2026-04-13)
+
+**Status: ✅ RESOLVED — commit 1f73241**
+
+Option B (rebuild) implemented. See `dashboard-changelog.md` entry for 2026-04-13 for full technical details.
+
+- `syncTaskDoneToGitHub()` replaced by `syncToTasksMd()` + `buildTaskMap()`
+- Token reuse (yl_gist_token has repo+gist scope — no new setup needed)
+- Button-triggered + beforeunload safety net
+- All errors visible in topbar (not silent console.warn)
+
+---
+
+## Verdict (original)
 
 **Status: 🔴 Do Not Release Without Fix**
 
