@@ -308,6 +308,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Note panel */
 .note-panel{display:none;padding:8px 16px 10px 40px;border-top:1px solid var(--b1);background:var(--bg);animation:fd .2s ease both}
 .note-panel.open{display:block}
+.queue-status{font-family:var(--fm);font-size:11px;padding:8px 10px;border-radius:6px;margin-bottom:8px;border:1px solid;text-align:center}
+.queue-status.pending{background:rgba(91,155,214,.1);border-color:rgba(91,155,214,.25);color:var(--blue)}
+.queue-status.processing{background:rgba(232,169,58,.08);border-color:rgba(232,169,58,.2);color:var(--amber);animation:pulse 2s ease infinite}
+.queue-status.completed{background:rgba(61,184,118,.1);border-color:rgba(61,184,118,.25);color:var(--green)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
 .note-textarea{width:100%;background:var(--s1);border:1px solid var(--b1);border-radius:6px;color:var(--t1);font-family:var(--fb);font-size:12px;line-height:1.5;padding:8px 10px;resize:vertical;min-height:64px;outline:none;transition:border-color .15s}
 .note-textarea:focus{border-color:var(--blue)}
 .note-actions{display:flex;gap:6px;margin-top:6px;align-items:center}
@@ -318,6 +324,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .note-discard{font-family:var(--fm);font-size:10px;color:var(--t3);background:transparent;border:1px solid var(--b1);padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .15s;margin-left:auto}
 .note-discard:hover{color:var(--red);border-color:rgba(255,71,87,.3)}
 .note-hint{font-family:var(--fm);font-size:9px;color:var(--t3);margin-left:2px}
+
+.queue-controls{margin-top:8px;padding-top:8px;border-top:1px solid var(--b1)}
+.queue-checkbox-label{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);cursor:pointer;user-select:none}
+.queue-checkbox-label input{cursor:pointer;accent-color:var(--blue)}
+.queue-checkbox-label:hover{color:var(--t1)}
 
 .tb{flex:1;min-width:0;overflow:hidden}
 .tn{font-size:12.5px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
@@ -1594,6 +1605,7 @@ const S = {
   statuses: JSON.parse(localStorage.getItem('yl_statuses') || '{}'),
   links:     JSON.parse(localStorage.getItem('yl_links')     || '{}'),
   deadlines: JSON.parse(localStorage.getItem('yl_deadlines') || '{}'),
+  queuedForClaude: JSON.parse(localStorage.getItem('yl_queued_for_claude') || '[]'),
   sessionDone: 0
 };
 
@@ -1738,6 +1750,7 @@ function save() {
   localStorage.setItem('yl_statuses', JSON.stringify(S.statuses));
   localStorage.setItem('yl_links',     JSON.stringify(S.links));
   localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
+  localStorage.setItem('yl_queued_for_claude', JSON.stringify(S.queuedForClaude));
   localStorage.setItem('yl_saved_at', now);
   gistSchedulePush(); // push to cloud after every save (debounced 2s)
 }
@@ -2495,21 +2508,77 @@ function showToast(name,xp){
 // ── NOTE PANEL ────────────────────────────
 function initNotePanel(panel, taskId) {
   const savedNote = S.notes[taskId] || '';
+  const queuedItems = S.queuedForClaude || [];
+  const queuedItem = queuedItems.find(item => item.taskId === taskId);
+  const isQueued = !!queuedItem;
+  const status = queuedItem?.status || 'pending'; // pending, processing, completed
+
+  let statusHtml = '';
+  if (isQueued) {
+    if (status === 'completed') {
+      statusHtml = `<div class="queue-status completed">✓ Claude processed (${queuedItem.processedAt ? new Date(queuedItem.processedAt).toLocaleDateString() : 'today'})</div>`;
+    } else if (status === 'processing') {
+      statusHtml = `<div class="queue-status processing">⏳ Claude is processing...</div>`;
+    } else {
+      statusHtml = `<div class="queue-status pending">📤 Queued for Claude</div>`;
+    }
+  }
+
   panel.innerHTML = `
-    <textarea class="note-textarea" placeholder="Add instructions for Claude, or notes for yourself...">${savedNote}</textarea>
+    ${statusHtml}
+    <textarea class="note-textarea" placeholder="Add instructions for Claude, or notes for yourself...">${escapeHtml(savedNote)}</textarea>
     <div class="note-actions">
       <button class="note-save">Save note</button>
       <button class="note-ask">🤖 Ask Claude now</button>
       <span class="note-hint">or go to Claude Tasks tab</span>
       <button class="note-discard">Discard</button>
+    </div>
+    <div class="queue-controls">
+      <label class="queue-checkbox-label">
+        <input type="checkbox" class="queue-checkbox" ${isQueued ? 'checked' : ''} />
+        Submit to Claude queue (process automatically)
+      </label>
     </div>`;
   const ta = panel.querySelector('.note-textarea');
   const saveBtn = panel.querySelector('.note-save');
   const askBtn = panel.querySelector('.note-ask');
   const discardBtn = panel.querySelector('.note-discard');
+  const queueCheckbox = panel.querySelector('.queue-checkbox');
+
   saveBtn.addEventListener('click', e => {
     e.stopPropagation();
     S.notes[taskId] = ta.value;
+
+    // Handle queue submission
+    if (!S.queuedForClaude) S.queuedForClaude = [];
+    const existingIdx = S.queuedForClaude.findIndex(item => item.taskId === taskId);
+
+    if (queueCheckbox.checked) {
+      // Add or update queue entry
+      const taskEl = document.querySelector(`.t[data-id="${taskId}"]`);
+      const taskName = taskEl?.querySelector('.tn')?.textContent || taskId;
+      const taskProject = taskEl?.getAttribute('data-project') || 'Unassigned';
+
+      if (existingIdx >= 0) {
+        S.queuedForClaude[existingIdx].note = ta.value;
+        S.queuedForClaude[existingIdx].submittedAt = new Date().toISOString();
+      } else {
+        S.queuedForClaude.push({
+          taskId,
+          taskName,
+          project: taskProject,
+          note: ta.value,
+          status: 'pending',
+          submittedAt: new Date().toISOString()
+        });
+      }
+    } else {
+      // Remove from queue
+      if (existingIdx >= 0) {
+        S.queuedForClaude.splice(existingIdx, 1);
+      }
+    }
+
     save();
     panel.classList.remove('open');
     // update note button
