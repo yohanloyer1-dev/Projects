@@ -47,6 +47,17 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sync-banner-dismiss{color:var(--t3);cursor:pointer;font-size:12px;flex-shrink:0;padding:4px;transition:color .15s}
 .sync-banner-dismiss:hover{color:var(--t1)}
 
+/* QUEUE OVERDUE BANNER */
+.queue-overdue-banner{display:none;align-items:center;gap:12px;padding:10px 16px;border-radius:10px;margin-bottom:14px;font-family:var(--fm);font-size:11px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#f97316;animation:fd .3s ease both}
+.queue-overdue-banner.show{display:flex}
+.queue-overdue-banner-icon{font-size:16px;flex-shrink:0}
+.queue-overdue-banner-text{flex:1;line-height:1.4}
+.queue-overdue-banner-text strong{display:block;margin-bottom:2px}
+.queue-overdue-banner-btn{background:#f97316;color:#fff;border:none;font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;flex-shrink:0;transition:opacity .15s;letter-spacing:.04em}
+.queue-overdue-banner-btn:hover{opacity:.85}
+.queue-overdue-banner-dismiss{color:#d97706;cursor:pointer;font-size:12px;flex-shrink:0;padding:4px;transition:color .15s}
+.queue-overdue-banner-dismiss:hover{color:#f97316}
+
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--b1);margin-bottom:20px;animation:fd .4s ease both}
 .tb-l{display:flex;align-items:baseline;gap:14px}
@@ -739,6 +750,16 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </div>
 </div>
 
+<div class="queue-overdue-banner" id="queueOverdueBanner">
+  <span class="queue-overdue-banner-icon">⚠️</span>
+  <div class="queue-overdue-banner-text">
+    <strong>Claude queue processor hasn't run yet</strong>
+    Expected at 10:30 AM today. Check back later or click below to run manually.
+  </div>
+  <button class="queue-overdue-banner-btn" onclick="document.getElementById('queueOverdueBanner').classList.remove('show')">Dismiss</button>
+  <span class="queue-overdue-banner-dismiss" onclick="document.getElementById('queueOverdueBanner').classList.remove('show')">✕</span>
+</div>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="tb-l">
@@ -1089,6 +1110,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="hotel-taiwan-may9"></div>
         <div class="t urg" data-id="intl-driving-license" data-xp="10" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Make international driving license request</span><span class="td">Required for car rentals in Japan</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="intl-driving-license"></div>
+        <div class="t urg" data-id="driving-license-translation" data-xp="8" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Driving license translation</span><span class="td">Required for car rentals in Japan</span></div><button class="note-btn" title="Add note">📝</button></div>
+        <div class="note-panel" data-for="driving-license-translation"></div>
         <div class="t urg" data-id="accommodation-okinawa" data-xp="8" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Book accommodation Okinawa</span><span class="td">Okinawa leg of Japan trip</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="accommodation-okinawa"></div>
         <div class="t" data-id="flight-okinawa" data-xp="6" data-project="Japan Trip"><div class="chk"></div><div class="tb"><span class="tn">Book flight from Okinawa</span><span class="td">Return leg (non-urgent)</span></div><button class="note-btn" title="Add note">📝</button></div>
@@ -1640,7 +1663,9 @@ const PRE_DONE = [
   { n: 'Cancel BP account',                 p: 'Real Estate',     xp: 10, id: 'cancel-bp',                   t: new Date('2026-03-28T10:00:00').getTime() },
   { n: 'Negotiate NL document translation', p: 'Real Estate',     xp: 10, id: 'negotiate-nl-translation',    t: new Date('2026-03-28T10:00:00').getTime() },
   { n: 'Gather docs Crédit Coopératif',     p: 'Real Estate',     xp: 8,  id: 'docs-credit',                 t: new Date('2026-03-29T10:00:00').getTime() },
-  { n: 'Sign Loan Insurance',              p: 'Real Estate',     xp: 8,  id: 'sign-loan-insurance',           t: new Date('2026-03-30T10:00:00').getTime() }
+  { n: 'Sign Loan Insurance',              p: 'Real Estate',     xp: 8,  id: 'sign-loan-insurance',           t: new Date('2026-03-30T10:00:00').getTime() },
+  { n: 'Book flights Japan',                p: 'Japan Trip',      xp: 10, id: 'flights-japan',                t: new Date('2026-04-12T18:00:00').getTime() },
+  { n: 'Book flight Amsterdam',             p: 'Work Travel',     xp: 8,  id: 'flight-amsterdam',             t: new Date('2026-04-12T14:30:00').getTime() }
 ];
 PRE_DONE.forEach(pd => {
   if (!S.done.find(d => d.n === pd.n)) {
@@ -1726,13 +1751,28 @@ function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = set
 
 // ── CLAUDE QUEUE SYNC ─────────────────────────────────────────────────────────
 // Fetches queue.json from GitHub to check for completed Claude tasks and sync results
-// back into dashboard task notes.
+// back into dashboard task notes. Also checks if processor is overdue.
 async function syncQueueResults() {
   try {
     const res = await fetch('https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/queue.json');
     if (!res.ok) return;
 
     const queueData = await res.json();
+
+    // Check if processor is overdue (hasn't run in 24+ hours)
+    if (queueData.lastProcessed) {
+      const lastProcessed = new Date(queueData.lastProcessed);
+      const now = new Date();
+      const hoursAgo = (now - lastProcessed) / (1000 * 60 * 60);
+
+      const banner = document.getElementById('queueOverdueBanner');
+      if (hoursAgo > 24 && S.queuedForClaude && S.queuedForClaude.some(t => t.status === 'pending')) {
+        banner.classList.add('show');
+      } else {
+        banner.classList.remove('show');
+      }
+    }
+
     if (!queueData.completed || queueData.completed.length === 0) return;
 
     let updated = false;
@@ -1761,6 +1801,8 @@ async function syncQueueResults() {
     if (updated) {
       save();
       showToast('Claude results synced','');
+      // Hide overdue banner if results were synced
+      document.getElementById('queueOverdueBanner').classList.remove('show');
       // Re-render any open note panels to show updated status
       document.querySelectorAll('.note-panel.open').forEach(panel => {
         const taskId = panel.getAttribute('data-for');
