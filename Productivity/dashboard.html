@@ -1712,60 +1712,21 @@ function resetAndResync() {
 function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
 
-// ── AUTO TASKS.MD SYNC ────────────────────────────────────────
-// When a task is completed on the dashboard, automatically marks it [x] in
-// TASKS.md on GitHub. Uses the same ghp_ token stored for Gist sync.
-// Silently skips if no token is set (offline or not configured).
-const GITHUB_REPO = 'yohanloyer1-dev/Projects';
-const TASKS_PATH  = 'Productivity/TASKS.md';
-
-async function syncTaskDoneToGitHub(taskName) {
-  const token = gistGetToken();
-  if (!token) return; // not configured, skip silently
-
-  try {
-    // 1. Fetch current TASKS.md
-    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${TASKS_PATH}`, {
-      headers: { Authorization: `token ${token}` }
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    const sha = data.sha;
-    const original = atob(data.content.replace(/\n/g, ''));
-
-    // 2. Find and mark the task done — match by task name (fuzzy: trim + lowercase)
-    const needle = taskName.trim().toLowerCase();
-    const lines = original.split('\n');
-    let matched = false;
-    const updated = lines.map(line => {
-      // Match lines like: - [ ] **Task name** or - [ ] Task name
-      if (matched) return line;
-      const bare = line.replace(/\*\*/g, '').toLowerCase();
-      if (/^- \[[ ]\]/.test(line) && bare.includes(needle)) {
-        matched = true;
-        return line.replace('- [ ]', '- [x]');
-      }
-      return line;
-    }).join('\n');
-
-    if (!matched) return; // task not found in TASKS.md, skip
-
-    // 3. Push updated TASKS.md
-    const payload = {
-      message: `✅ ${taskName} (completed from dashboard)`,
-      content: btoa(unescape(encodeURIComponent(updated))),
-      sha
-    };
-    await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${TASKS_PATH}`, {
-      method: 'PUT',
-      headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    console.log(`[YL/OPS] ✅ Synced "${taskName}" to TASKS.md on GitHub`);
-  } catch(e) {
-    console.warn('[YL/OPS] TASKS.md sync failed silently:', e);
-  }
-}
+// ── TASKS.MD SYNC WORKFLOW (MANUAL) ────────────────────────────────────────
+// Dashboard → GitHub sync is currently DISABLED (broken automation system).
+// See: Productivity/memory/sync-automation-audit.md for details.
+//
+// MANUAL SYNC WORKFLOW:
+// 1. Complete tasks in dashboard (localStorage updates + Gist cloud backup)
+// 2. At end of session: click "Export Session" button
+// 3. Copy the markdown output → paste into Claude at session start
+// 4. Claude updates TASKS.md on GitHub manually and confirms
+//
+// FUTURE: This will be rebuilt with:
+// - Proper GitHub repo write token (not Gist token)
+// - UI feedback banner showing sync status
+// - Reliable task ID matching (not fuzzy string search)
+// - Error visibility (toasts, not silent failures)
 
 function save() {
   const now = new Date().toISOString();
@@ -2837,7 +2798,7 @@ function bind(){
         addLog(nm2, proj, xp2, taskId2, completionTime);
         showToast(nm2, xp2);
         celebrate(nm2, xp2);
-        syncTaskDoneToGitHub(nm2);
+        // Sync to TASKS.md: use exportSession() → paste to Claude at session start
       });
     }
   });
@@ -3816,7 +3777,7 @@ function dtnComplete() {
   addLog(nm, proj, xp, taskId);
   showToast(nm, xp);
   celebrate(nm, xp);
-  syncTaskDoneToGitHub(nm);
+  // Sync to TASKS.md: use exportSession() → paste to Claude at session start
 
   dtnSkipIdx = 0;
   setTimeout(() => {
