@@ -1935,8 +1935,9 @@ async function syncToTasksMd(silent) {
     let changed = false;
     const lines = currentContent.split('\n');
     const updatedLines = lines.map(line => {
-      // Only process unchecked task lines
-      if (!/^- \[ \]/.test(line)) return line;
+      // Match any task line that is NOT already done: [ ] [!] [>] [~] [?] [_]
+      // Skip already-done [x] lines and non-task lines
+      if (!/^- \[[^x]\]/.test(line)) return line;
 
       // Extract the bold task name from TASKS.md line: **Task Name**
       const nameMatch = line.match(/\*\*([^*]+)\*\*/);
@@ -1954,8 +1955,9 @@ async function syncToTasksMd(silent) {
 
       if (matched) {
         changed = true;
-        // Preserve any trailing comment after the task name
-        return line.replace('- [ ]', '- [x]');
+        // Replace status marker [!], [>], [~], [?], [_], [ ] → [x]
+        // Preserves everything after the marker
+        return line.replace(/^- \[[^\]]\]/, '- [x]');
       }
       return line;
     });
