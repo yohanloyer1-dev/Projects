@@ -1724,6 +1724,54 @@ function resetAndResync() {
 function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
 
+// ── CLAUDE QUEUE SYNC ─────────────────────────────────────────────────────────
+// Fetches queue.json from GitHub to check for completed Claude tasks and sync results
+// back into dashboard task notes.
+async function syncQueueResults() {
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/queue.json');
+    if (!res.ok) return;
+
+    const queueData = await res.json();
+    if (!queueData.completed || queueData.completed.length === 0) return;
+
+    let updated = false;
+    queueData.completed.forEach(completedTask => {
+      const localIdx = S.queuedForClaude.findIndex(t => t.taskId === completedTask.id);
+      if (localIdx >= 0) {
+        const localItem = S.queuedForClaude[localIdx];
+
+        // Only update if status changed to completed
+        if (localItem.status !== 'completed') {
+          localItem.status = 'completed';
+          localItem.processedAt = completedTask.processedAt;
+          localItem.result = completedTask.result || null;
+          updated = true;
+
+          // Append result to task note if result exists
+          if (completedTask.result) {
+            const originalNote = S.notes[completedTask.id] || '';
+            const separator = originalNote ? '\n\n--- Claude Response ---\n' : '--- Claude Response ---\n';
+            S.notes[completedTask.id] = originalNote + separator + completedTask.result;
+          }
+        }
+      }
+    });
+
+    if (updated) {
+      save();
+      showToast('Claude results synced','');
+      // Re-render any open note panels to show updated status
+      document.querySelectorAll('.note-panel.open').forEach(panel => {
+        const taskId = panel.getAttribute('data-for');
+        if (taskId) initNotePanel(panel, taskId);
+      });
+    }
+  } catch (e) {
+    console.warn('[YL/OPS] Queue sync error:', e);
+  }
+}
+
 // ── TASKS.MD SYNC WORKFLOW (MANUAL) ────────────────────────────────────────
 // Dashboard → GitHub sync is currently DISABLED (broken automation system).
 // See: Productivity/memory/sync-automation-audit.md for details.
@@ -2049,6 +2097,9 @@ async function gistPull() {
     location.reload();
   }
 })();
+
+// Sync Claude queue results from GitHub on page load (after Gist sync)
+setTimeout(syncQueueResults, 500);
 
 function getLvl(xp) {
   for (let i=LEVELS.length-1;i>=0;i--) if (xp>=LEVELS[i].min) return LEVELS[i];
@@ -2513,10 +2564,24 @@ function initNotePanel(panel, taskId) {
   const isQueued = !!queuedItem;
   const status = queuedItem?.status || 'pending'; // pending, processing, completed
 
+  // SECURITY FIX: Validate processedAt is ISO timestamp before rendering
+  let processedDateStr = 'today';
+  if (queuedItem?.processedAt) {
+    try {
+      const parsed = new Date(queuedItem.processedAt);
+      if (!isNaN(parsed.getTime())) {
+        processedDateStr = parsed.toLocaleDateString();
+      }
+    } catch (e) {
+      // Silently fall back to 'today' if processedAt is invalid
+      processedDateStr = 'today';
+    }
+  }
+
   let statusHtml = '';
   if (isQueued) {
     if (status === 'completed') {
-      statusHtml = `<div class="queue-status completed">✓ Claude processed (${queuedItem.processedAt ? new Date(queuedItem.processedAt).toLocaleDateString() : 'today'})</div>`;
+      statusHtml = `<div class="queue-status completed">✓ Claude processed (${escapeHtml(processedDateStr)})</div>`;
     } else if (status === 'processing') {
       statusHtml = `<div class="queue-status processing">⏳ Claude is processing...</div>`;
     } else {
@@ -2554,14 +2619,27 @@ function initNotePanel(panel, taskId) {
     const existingIdx = S.queuedForClaude.findIndex(item => item.taskId === taskId);
 
     if (queueCheckbox.checked) {
-      // Add or update queue entry
+      // RACE CONDITION FIX: Get task data from existing queue item first, then DOM
       const taskEl = document.querySelector(`.t[data-id="${taskId}"]`);
-      const taskName = taskEl?.querySelector('.tn')?.textContent || taskId;
-      const taskProject = taskEl?.getAttribute('data-project') || 'Unassigned';
+      let taskName = taskId;
+      let taskProject = 'Unassigned';
 
       if (existingIdx >= 0) {
+        // Use existing queue item data as fallback (task may have been deleted)
+        taskName = S.queuedForClaude[existingIdx].taskName || taskName;
+        taskProject = S.queuedForClaude[existingIdx].project || taskProject;
+      }
+
+      // Only override if task element still exists
+      if (taskEl) {
+        taskName = taskEl.querySelector('.tn')?.textContent || taskName;
+        taskProject = taskEl.getAttribute('data-project') || taskProject;
+      }
+
+      const now = new Date().toISOString();
+      if (existingIdx >= 0) {
         S.queuedForClaude[existingIdx].note = ta.value;
-        S.queuedForClaude[existingIdx].submittedAt = new Date().toISOString();
+        S.queuedForClaude[existingIdx].submittedAt = now;
       } else {
         S.queuedForClaude.push({
           taskId,
@@ -2569,7 +2647,7 @@ function initNotePanel(panel, taskId) {
           project: taskProject,
           note: ta.value,
           status: 'pending',
-          submittedAt: new Date().toISOString()
+          submittedAt: now
         });
       }
     } else {
