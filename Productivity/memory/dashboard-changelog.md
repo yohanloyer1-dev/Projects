@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-04-13 | TASKS.md sync system rebuild (Option B)
+**Commit:** `1f73241`
+
+### Architecture
+- **Problem solved:** `syncTaskDoneToGitHub()` was using wrong token type, had silent failures, fuzzy name matching. Replaced entirely.
+- **New approach:** Button-triggered batch sync (not per-completion) to avoid race conditions on SHA requirement. `beforeunload` fires best-effort sync on page close.
+
+### New Functions
+- **`buildTaskMap()`** — builds `id→name` lookup from live DOM at runtime. Reliable because Claude controls both dashboard HTML and TASKS.md.
+- **`syncToTasksMd(silent)`** — fetches TASKS.md SHA + content from GitHub API, marks completed tasks `[x]` by matching `data-id` → bold name in TASKS.md, PUTs back atomically. Falls back to name-only match if id not in map.
+- **`setTasksSyncStatus(status, msg)`** — updates topbar button + indicator. States: idle / syncing / ok / error. Shows last sync time on idle.
+
+### UI
+- **Topbar sync group** — "↑ Sync TASKS" button + small indicator showing last sync time or current status
+- **Button disabled** during sync (prevents concurrent writes / SHA race condition)
+- **Color coding:** amber = syncing, green = ok, red = error
+
+### Triggers
+- **Manual:** click "↑ Sync TASKS" in topbar anytime
+- **Auto (pending flag):** when a task is completed, `_tasksSyncPending = true`. Button shows idle state nudging user to sync.
+- **Auto (beforeunload):** `window.beforeunload` fires `syncToTasksMd(true)` silently if pending. Best-effort — browser may not complete it on fast close.
+
+### Security
+- Same token (`yl_gist_token`) reused — already in localStorage, same XSS risk profile as Gist sync
+- No new attack surface introduced
+- SHA required by GitHub API prevents overwriting concurrent changes
+
+### Error handling
+- **401:** shown as "auth" error — token invalid or missing repo scope
+- **403:** shown as "forbidden" — token lacks repo write access
+- **Network failure:** shown as "network" error, caught cleanly
+- All errors visible in topbar (not silent console.warn)
+
+---
+
 ## 2026-04-13 | Claude task queue system + overdue processor notifications
 
 ### Queue System (lines ~1727-2650)
