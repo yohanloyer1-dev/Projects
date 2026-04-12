@@ -5,6 +5,38 @@
 
 ---
 
+## 2026-04-13 | TASKS.md sync rebuild + task fixes | YL/OPS (home base)
+
+### Requested
+- Add "Driving license translation" task (urgent) to Japan Trip
+- Mark Japan flights + Amsterdam flight as completed (were done Apr 12, not reflected)
+- Rebuild TASKS.md sync automation properly (Option B) after audit confirmed broken system
+
+### Done
+- Marked `flights-japan` and `flight-amsterdam` as completed in PRE_DONE (Apr 12 timestamps)
+- Added `driving-license-translation` task to Japan Trip section (dashboard + TASKS.md)
+- Updated TASKS.md: Japan flights [x], Amsterdam flight [x], new driving license translation task added
+- **Full TASKS.md sync system rebuilt (commit 1f73241):**
+  - `buildTaskMap()` — runtime id→name DOM lookup for reliable matching
+  - `syncToTasksMd()` — fetches SHA, marks done tasks [x], atomic PUT to GitHub API
+  - `setTasksSyncStatus()` — topbar indicator: idle/syncing/ok/error with last-sync timestamp
+  - Topbar "↑ Sync TASKS" button + indicator added
+  - `_tasksSyncPending` flag set on task completion
+  - `beforeunload` fires silent auto-sync when pending
+- Updated dashboard-changelog.md with full technical details
+- Saved version snapshot: `dashboard_v2.7_pre-sync-rebuild_2026-04-13.html`
+
+### Key Decisions
+- **Button-triggered, not per-completion:** avoids SHA race condition when completing multiple tasks rapidly
+- **Same token reused:** `yl_gist_token` already has repo+gist scope; no new token setup required
+- **beforeunload as safety net:** best-effort — not guaranteed on fast close, but catches normal navigation
+- **Errors visible in UI:** topbar shows auth/forbidden/network errors, not silent console.warn
+
+### Pending
+- None
+
+---
+
 ## 2026-04-13 | Claude task queue system implementation | YL/OPS (home base)
 
 ### Requested
