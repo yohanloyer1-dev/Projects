@@ -5,6 +5,47 @@
 
 ---
 
+## 2026-04-13 | Claude task queue system implementation | YL/OPS (home base)
+
+### Requested
+- Continued from 2026-04-11 session: implement Claude task queue + scheduled processor
+- Design: task submission from dashboard → queue.json on GitHub → scheduled processor (Claude) → results synced back to task notes
+- Integrate with dashboard, set processor timing, add notification for overdue runs
+
+### Done
+- **Queue system fully implemented:**
+  - `initNotePanel()` refactored (lines ~2509-2650): checkbox UI for "Queue for Claude", validation, submission handler
+  - `syncQueueResults()` new function (lines ~1727-1783): fetches queue.json, appends Claude results to task notes, detects/displays overdue processor notifications
+  - Queue UI: pending/processing/completed status badges with CSS (lines ~311-324)
+  - Result sync: triggered on page load (500ms delay) after Gist sync completes
+- **Scheduled processor task created:**
+  - Task ID: `process-claude-task-queue`
+  - Schedule: 10:30am daily (local timezone) via cron: "30 10 * * *"
+  - Reads queue.json from GitHub, processes pending tasks, appends Claude response, updates queue status
+  - Users can manually trigger anytime via dashboard
+- **Security fixes:**
+  - XSS in processedAt field: timestamp now validated (ISO 8601 check) before rendering; falls back to 'today' if invalid
+  - Race condition in note panel: saveBtn listener uses existing queue item as fallback when task DOM element is missing (fixes deletion edge case)
+- **Overdue notification system:**
+  - Banner added (HTML lines ~751-760): orange warning with "Processor overdue >24h" message
+  - `syncQueueResults()` checks `lastProcessed` timestamp and shows banner if >24h old AND pending tasks exist
+  - Banner dismissible; auto-hides when results sync succeeds
+- **GitHub integration:**
+  - queue.json structure: `{ pending: [], completed: [], lastProcessed: ISO_timestamp }`
+  - Dashboard reads directly from GitHub raw URL (no auth needed)
+  - Processor task reads/writes via GitHub API with token
+
+### Key Decisions
+- **Processor timing:** 10:30am chosen over 9am to accommodate computer sleep/wake cycles; overdue banner alerts if >24h since last run
+- **Manual + scheduled:** Users can trigger processor manually anytime, but 10:30am ensures daily processing without user intervention
+- **Result display:** Claude's response appended directly to task notes (preserves context, no modal/popup)
+- **State persistence:** queue.json is central source of truth for queue state (pending/completed tracking)
+
+### Pending
+- None — implementation complete and tested
+
+---
+
 ## 2026-04-11 | Dashboard automation audit + security fixes | YL/OPS (home base)
 
 ### Requested
