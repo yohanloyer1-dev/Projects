@@ -52,15 +52,16 @@
 - [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
 
 ### ✈️ Japan Trip
-- [!] **Book flights Japan** — URGENT — deadline Wednesday
+- [x] **Book flights Japan** — ✅ Done
 - [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
 - [!] **Make international driving license request** — Required for car rentals in Japan
+- [!] **Driving license translation** — Required for car rentals in Japan
 - [!] **Book accommodation Okinawa** — Okinawa leg of Japan trip
 - [ ] **Book flight from Okinawa** — Return leg (non-urgent)
 - [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
 ### ✈️ Travel & Errands
-- [!] **Book flight Amsterdam** — URGENT (5 min)
+- [x] **Book flight Amsterdam** — ✅ Done
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [ ] **Book flights Asia** — Book flights for Asia trip
 - [ ] **Order wedding album** — Order printed wedding album
