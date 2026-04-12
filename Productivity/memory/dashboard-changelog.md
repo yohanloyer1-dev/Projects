@@ -4,6 +4,47 @@
 
 ---
 
+## 2026-04-13 | Claude task queue system + overdue processor notifications
+
+### Queue System (lines ~1727-2650)
+- **New: initNotePanel()** (lines ~2509-2650)
+  - "Queue for Claude" checkbox UI with safe rendering
+  - Submission handler: validates task exists, captures project/title, sends to GitHub Gist endpoint
+  - Appends "Queued at [timestamp]" to task notes
+  - XSS: all DOM methods safe (no innerHTML), timestamp validated before rendering (ISO 8601 check, fallback to 'today')
+  - Race condition fix: uses existing queue item as fallback if task DOM element missing (deletion edge case)
+- **New: syncQueueResults()** (lines ~1727-1783)
+  - Fetches queue.json from GitHub raw URL (no auth needed)
+  - Detects completed tasks by checking `queue.completed` array
+  - Appends Claude's result to corresponding task notes
+  - Updates task status badges (pending → processing → completed)
+  - Checks `lastProcessed` timestamp; shows overdue banner if >24h old AND pending tasks exist
+  - Triggered on page load (500ms after Gist sync)
+- **Queue state persistence:** queue.json structure: `{ pending: [], completed: [], lastProcessed }`
+- **Status badges CSS** (lines ~311-324): `.queue-status` styles for pending/processing/completed states
+- **Overdue notification banner** (HTML lines ~751-760, CSS lines ~723-750)
+  - Orange warning: "⚠️ Processor overdue (last run >24h ago)"
+  - Shows only when processor hasn't run in 24+ hours AND pending tasks exist
+  - Dismissible; auto-hides when sync succeeds
+  - CSS animation: subtle pulse on .queue-overdue-banner
+
+### Scheduled Processor Task
+- **Task ID:** `process-claude-task-queue`
+- **Schedule:** Daily at 10:30am (cron: "30 10 * * *", local timezone)
+- **Action:** Reads queue.json, processes each pending task via Claude, appends result, updates queue status
+- **Result sync:** Dashboard fetches results on next page load via syncQueueResults()
+
+### Security Improvements
+- **XSS prevention:** processedAt timestamp validated (ISO 8601 format check before rendering)
+- **Race condition fix:** Note panel now uses queue item fallback when task is deleted while panel open
+- **Safe DOM:** All queue UI uses createElement/appendChild, no innerHTML
+
+### Known Limitations
+- Processor relies on computer being awake at 10:30am; overdue banner alerts if missed
+- Manual trigger available anytime via dashboard (not yet wired to UI button)
+
+---
+
 ## 2026-04-11 | Disable broken TASKS.md sync automation + security XSS fixes
 **Commits:** `1deb0e4` (XSS fixes), `9d4fd3b` (sync disable)
 
