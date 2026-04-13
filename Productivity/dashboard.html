@@ -2049,7 +2049,7 @@ function exportSession() {
     lines.push('_No new tasks added this session._');
   } else {
     quickQueue.forEach(t => {
-      const urgStr = t.urgency === 'urgent' ? '[!]' : t.urgency === 'important' ? '[>]' : '[ ]';
+      const urgStr = t.urgency === 'urgent+important' ? '[!][>]' : t.urgency === 'urgent' ? '[!]' : t.urgency === 'important' ? '[>]' : '[ ]';
       const deadline = t.deadline ? ` · Due: ${t.deadline}` : '';
       lines.push(`- ${urgStr} **${t.title}** · Project: ${t.project || 'Unassigned'}${deadline}`);
     });
@@ -3631,7 +3631,7 @@ function _startFocusTimer() {
 }
 
 // ── QUICK-ADD ─────────────────────────────
-let qaSelectedUrgency = 'normal';
+let qaSelectedUrgency = new Set(['normal']); // multi-select: urgent + important can both be active
 let qaSelectedMode = 'personal'; // set on open
 
 const QA_SECTIONS = {
@@ -3702,11 +3702,9 @@ function closeQuickAdd() {
   document.getElementById('qaProject').value = '';
   document.getElementById('qaEstimate').value = '';
   document.getElementById('qaDeadline').value = '';
-  qaSelectedUrgency = 'normal';
+  qaSelectedUrgency = new Set(['normal']);
   qaSelectedMode = localStorage.getItem('yl_mode') || 'personal';
-  document.querySelectorAll('.qa-urg-btn').forEach(b => {
-    b.className = 'qa-urg-btn' + (b.dataset.val === 'normal' ? ' sel-normal' : '');
-  });
+  renderUrgencyBtns();
   // Reset mode buttons
   document.querySelectorAll('#qaModebtns .qa-urg-btn').forEach(b => {
     b.className = 'qa-urg-btn' + (b.dataset.val === qaSelectedMode ? ' sel-normal' : '');
@@ -3714,10 +3712,28 @@ function closeQuickAdd() {
 }
 
 function selectUrgency(btn) {
-  qaSelectedUrgency = btn.dataset.val;
-  document.querySelectorAll('.qa-urg-btn').forEach(b => {
+  const val = btn.dataset.val;
+  if (val === 'normal') {
+    // Normal clears urgent + important
+    qaSelectedUrgency = new Set(['normal']);
+  } else {
+    // Toggle urgent/important independently; clear normal when either is active
+    qaSelectedUrgency.delete('normal');
+    if (qaSelectedUrgency.has(val)) {
+      qaSelectedUrgency.delete(val);
+      if (qaSelectedUrgency.size === 0) qaSelectedUrgency.add('normal');
+    } else {
+      qaSelectedUrgency.add(val);
+    }
+  }
+  renderUrgencyBtns();
+}
+
+function renderUrgencyBtns() {
+  document.querySelectorAll('#qaModal .qa-urgency-btns:not(#qaModebtns) .qa-urg-btn').forEach(b => {
+    const val = b.dataset.val;
     b.className = 'qa-urg-btn';
-    if (b.dataset.val === qaSelectedUrgency) b.classList.add('sel-' + qaSelectedUrgency);
+    if (qaSelectedUrgency.has(val)) b.classList.add('sel-' + val);
   });
 }
 
@@ -3733,8 +3749,11 @@ function submitQuickAdd() {
   const project   = document.getElementById('qaProject').value;
   const estimate  = document.getElementById('qaEstimate').value;
   const deadline  = document.getElementById('qaDeadline').value;
-  const urgency   = qaSelectedUrgency;
   const mode      = qaSelectedMode;
+  // Derive urgency string from multi-select Set
+  const isUrgent    = qaSelectedUrgency.has('urgent');
+  const isImportant = qaSelectedUrgency.has('important');
+  const urgency = isUrgent && isImportant ? 'urgent+important' : isUrgent ? 'urgent' : isImportant ? 'important' : 'normal';
   const id        = 'qa-' + Date.now();
   const timestamp = Date.now();
 
@@ -3798,8 +3817,8 @@ function injectQuickAddTask(task) {
 
   const tl = document.getElementById('qa-tl-' + targetView);
 
-  // Build urgency class
-  const urgClass = urgency === 'urgent' ? ' urg' : urgency === 'important' ? ' hi' : '';
+  // Build urgency class — urg = red border (urgent), hi = bold (important), both = urgent+important
+  const urgClass = (urgency === 'urgent+important') ? ' urg hi' : urgency === 'urgent' ? ' urg' : urgency === 'important' ? ' hi' : '';
 
   // Build estimate badge
   const estimateBadge = estimate ? `<span class="tbadge" style="background:rgba(91,155,214,.1);color:var(--blue);border:1px solid rgba(91,155,214,.18)">⏱ ${estimate}</span>` : '';
