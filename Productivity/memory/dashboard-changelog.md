@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-04-13 | Quick-add modal: mode-filtered sections
+**Commit:** `6b365d7`
+
+### Bug Fixed
+- **Section dropdown showed all sections regardless of Personal/Work mode** — no filtering, wrong names, missing sections (Work Travel, Role Optimization, Follow-ups, Presentations & Events)
+- `injectQuickAddTask()` routing used old stale project names (`'Agency'`, `'Nébuleuse'`) that no longer matched new section values
+
+### Changes
+- **HTML:** Replaced flat project `<select>` with mode-annotated options using `data-mode="personal"` or `data-mode="work"` attributes. All section names now exactly match dashboard card titles.
+- **Personal sections:** Strategy & Vision, Tools & Integrations, Dashboard & Productivity, Admin & Finance, Health, Real Estate, Japan Trip, Travel & Errands, Tech & Accounts, Network & Others, Bots & Automation
+- **Work sections:** Work Travel, Presentations & Events, Role Optimization, Follow-ups, Nébuleuse Bijoux, Accessory Partners, Gorgias Agency, LinkedIn Content
+- **New `filterQaProjectsByMode(mode)`** — hides options whose `data-mode` doesn't match current mode. Resets selection if current value becomes hidden.
+- **`selectQaMode()`** — now calls `filterQaProjectsByMode()` on every mode switch
+- **`openQuickAdd()`** — filters on open, so dropdown is already correct when modal appears
+- **`injectQuickAddTask()` routing** — updated project name lists to match new section values
+
+---
+
 ## 2026-04-13 | TASKS.md sync system rebuild (Option B)
 **Commit:** `1f73241`
 
