@@ -600,7 +600,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .qa-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:750;animation:fd .2s ease both}
 .qa-backdrop.open{display:block}
 .qa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,92vw);max-height:90vh;overflow-y:auto;background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:24px;z-index:760;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.qa-modal.open{display:block;animation:fuUp .25s cubic-bezier(.4,0,.2,1) both}
+.qa-modal.open{display:block;animation:qaFadeIn .2s ease both}
+@keyframes qaFadeIn{from{opacity:0;transform:translate(-50%,-48%)}to{opacity:1;transform:translate(-50%,-50%)}}
 .qa-title{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.3px;margin-bottom:20px}
 .qa-field{margin-bottom:14px}
 .qa-label{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;display:block}
@@ -3687,12 +3688,14 @@ function openQuickAdd() {
   filterQaProjectsByMode(qaSelectedMode);
   document.getElementById('qaBackdrop').classList.add('open');
   document.getElementById('qaModal').classList.add('open');
+  document.body.style.overflow = 'hidden'; // prevent page scroll behind modal
   setTimeout(() => document.getElementById('qaTitle').focus(), 100);
 }
 
 function closeQuickAdd() {
   document.getElementById('qaBackdrop').classList.remove('open');
   document.getElementById('qaModal').classList.remove('open');
+  document.body.style.overflow = ''; // restore page scroll
   // Reset form
   document.getElementById('qaTitle').value = '';
   document.getElementById('qaProject').value = '';
