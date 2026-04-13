@@ -599,7 +599,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .qa-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.5),0 0 0 8px rgba(61,184,118,.12)}
 .qa-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:750;animation:fd .2s ease both}
 .qa-backdrop.open{display:block}
-.qa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:min(480px,92vw);background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:24px;z-index:760;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.qa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,92vw);max-height:90vh;overflow-y:auto;background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:24px;z-index:760;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .qa-modal.open{display:block;animation:fuUp .25s cubic-bezier(.4,0,.2,1) both}
 .qa-title{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.3px;margin-bottom:20px}
 .qa-field{margin-bottom:14px}
