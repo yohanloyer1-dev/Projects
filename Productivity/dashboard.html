@@ -1520,27 +1520,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <label class="qa-label">Section</label>
       <select class="qa-select" id="qaProject">
         <option value="">— Unassigned —</option>
-        <!-- Personal sections (data-mode="personal") -->
-        <option value="Strategy &amp; Vision" data-mode="personal">Strategy &amp; Vision</option>
-        <option value="Tools &amp; Integrations" data-mode="personal">Tools &amp; Integrations</option>
-        <option value="Dashboard &amp; Productivity" data-mode="personal">Dashboard &amp; Productivity</option>
-        <option value="Admin &amp; Finance" data-mode="personal">Admin &amp; Finance</option>
-        <option value="Health" data-mode="personal">Health</option>
-        <option value="Real Estate" data-mode="personal">Real Estate</option>
-        <option value="Japan Trip" data-mode="personal">Japan Trip</option>
-        <option value="Travel &amp; Errands" data-mode="personal">Travel &amp; Errands</option>
-        <option value="Tech &amp; Accounts" data-mode="personal">Tech &amp; Accounts</option>
-        <option value="Network &amp; Others" data-mode="personal">Network &amp; Others</option>
-        <option value="Bots &amp; Automation" data-mode="personal">Bots &amp; Automation</option>
-        <!-- Work / Freelance sections (data-mode="work") -->
-        <option value="Work Travel" data-mode="work">Work Travel</option>
-        <option value="Presentations &amp; Events" data-mode="work">Presentations &amp; Events</option>
-        <option value="Role Optimization" data-mode="work">Role Optimization</option>
-        <option value="Follow-ups" data-mode="work">Follow-ups</option>
-        <option value="Nébuleuse Bijoux" data-mode="work">Nébuleuse Bijoux</option>
-        <option value="Accessory Partners" data-mode="work">Accessory Partners</option>
-        <option value="Gorgias Agency" data-mode="work">Gorgias Agency</option>
-        <option value="LinkedIn Content" data-mode="work">LinkedIn Content</option>
+        <!-- Options injected dynamically by filterQaProjectsByMode() -->
       </select>
     </div>
     <div class="qa-field">
@@ -3654,21 +3634,42 @@ function _startFocusTimer() {
 let qaSelectedUrgency = 'normal';
 let qaSelectedMode = 'personal'; // set on open
 
+const QA_SECTIONS = {
+  personal: [
+    'Strategy & Vision',
+    'Tools & Integrations',
+    'Dashboard & Productivity',
+    'Admin & Finance',
+    'Health',
+    'Real Estate',
+    'Japan Trip',
+    'Travel & Errands',
+    'Tech & Accounts',
+    'Network & Others',
+    'Bots & Automation',
+  ],
+  work: [
+    'Work Travel',
+    'Presentations & Events',
+    'Role Optimization',
+    'Follow-ups',
+    'Nébuleuse Bijoux',
+    'Accessory Partners',
+    'Gorgias Agency',
+    'LinkedIn Content',
+  ]
+};
+
 function filterQaProjectsByMode(mode) {
   const select = document.getElementById('qaProject');
-  const current = select.value;
-  Array.from(select.options).forEach(opt => {
-    const optMode = opt.dataset.mode;
-    // Always show "Unassigned" (no data-mode); show only options matching current mode
-    if (!optMode) {
-      opt.hidden = false;
-    } else {
-      opt.hidden = optMode !== mode;
-    }
+  // Fully rebuild options — avoids hidden attribute browser inconsistencies
+  select.innerHTML = '<option value="">— Unassigned —</option>';
+  (QA_SECTIONS[mode] || []).forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    select.appendChild(opt);
   });
-  // If current selection is now hidden, reset to unassigned
-  const currentOpt = select.querySelector(`option[value="${CSS.escape(current)}"]`);
-  if (currentOpt && currentOpt.hidden) select.value = '';
 }
 
 function selectQaMode(btn) {
