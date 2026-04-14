@@ -1,168 +1,170 @@
 # Tasks
 <!-- Status: [!] Urgent | [>] Important | [~] In Progress | [?] Waiting/Blocked | [_] Someday | [ ] Normal | [x] Done -->
 
-## ð  Personal
+## 🏠 Personal
 
-### ð§  Strategy & Vision
-- [!] **Complete Ohtani Matrix with ChatGPT** â Build the full 81-box Mandala document. Continue in ChatGPT.
-- [_] **Embed interactive Ohtani Matrix in dashboard** â Once matrix is complete, build a visual/interactive version inside dashboard.html ð¤
-- [ ] **CrÃ©er 2026 goals, sub-goals and tasks** â Use Claude to build full goal tree with sub-tasks ð¤
-- [ ] **CrÃ©er vision board 2026** â Visual 2026 vision board ð¤
-- [ ] **Create a vision board/tasks app** â Base44 + Claude (dedicated session)
-- [ ] **Create my "Network Pokedex"** â Personal CRM / contact tracker concept
+### 🧠 Strategy & Vision
+- [!] **Complete Ohtani Matrix with ChatGPT** — Build the full 81-box Mandala document. Continue in ChatGPT.
+- [_] **Embed interactive Ohtani Matrix in dashboard** — Once matrix is complete, build a visual/interactive version inside dashboard.html 🤖
+- [ ] **Créer 2026 goals, sub-goals and tasks** — Use Claude to build full goal tree with sub-tasks 🤖
+- [ ] **Créer vision board 2026** — Visual 2026 vision board 🤖
+- [ ] **Create a vision board/tasks app** — Base44 + Claude (dedicated session)
+- [ ] **Create my "Network Pokedex"** — Personal CRM / contact tracker concept
 
-### ð Tools & Integrations
-- [ ] **Connect Granola to Claude** â Integrate Granola meeting notes with Claude ð¤
-- [ ] **Review Granola notes (last few weeks) â extract work tasks** â Go through all recent transcripts and build a structured list of work-related action items ð¤
+### 🔌 Tools & Integrations
+- [ ] **Connect Granola to Claude** — Integrate Granola meeting notes with Claude 🤖
+- [ ] **Review Granola notes (last few weeks) → extract work tasks** — Go through all recent transcripts and build a structured list of work-related action items 🤖
 
-### ð Dashboard & Productivity System
-- [~] **Dashboard v2.5** â â GitHub auto-deploys to Netlify. Features: Personal/Work toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, GitHub Gist cloud sync
-- [x] **Set up GitHub repo for all Projects** â â Done. Private repo at github.com/yohanloyer1-dev/Projects, fully backed up as of 2026-03-27.
-- [?] **Netlify hosting** â â ï¸ Usage limit hit again (free plan). Resets ~Apr 1. Consider upgrading to Pro ($19/mo) or switching to GitHub Pages (free, no limits). Dashboard code is fine â it's a hosting-only issue.
-- [ ] **Add N8N/ai_agents_az/ to .gitignore** â Run: `echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main` ð¤
-- [_] **Build WhatsApp agent via Kapso** â Get Kapso number â connect to n8n â Claude API â responds to texts + voice notes, updates TASKS.md. Replaces Telegram plan.
-- [_] **Build voice notes workflow in n8n** â Now targeting WhatsApp via Kapso (not Telegram). Kapso â Whisper transcription â inbox.md â Claude responds ð¤
+### 📊 Dashboard & Productivity System
+- [~] **Dashboard v2.5** — ✅ GitHub auto-deploys to Netlify. Features: Personal/Work toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, GitHub Gist cloud sync
+- [x] **Set up GitHub repo for all Projects** — ✅ Done. Private repo at github.com/yohanloyer1-dev/Projects, fully backed up as of 2026-03-27.
+- [?] **Netlify hosting** — ⚠️ Usage limit hit again (free plan). Resets ~Apr 1. Consider upgrading to Pro ($19/mo) or switching to GitHub Pages (free, no limits). Dashboard code is fine — it's a hosting-only issue.
+- [ ] **Add N8N/ai_agents_az/ to .gitignore** — Run: `echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main` 🤖
+- [_] **Build WhatsApp agent via Kapso** — Get Kapso number → connect to n8n → Claude API → responds to texts + voice notes, updates TASKS.md. Replaces Telegram plan.
+- [_] **Build voice notes workflow in n8n** — Now targeting WhatsApp via Kapso (not Telegram). Kapso → Whisper transcription → inbox.md → Claude responds 🤖
 
-### ð° Admin & Finance
-- [!] **Pay Axon investment** â URGENT payment
-- [!] **DÃ©claration auto-entrepreneur** â French freelance income declaration
-- [!] **DÃ©claration impÃ´ts Netherlands** â Dutch tax declaration
-- [ ] **Simulation impÃ´ts Ã  la source** â Use impots.gouv simplified calculator
-- [ ] **Mettre Ã  jour taux de prÃ©lÃ¨vement impots.gouv** â Need Maria's numÃ©ro fiscal
-- [ ] **Relancer impÃ´ts Maria** â Follow up on Maria's tax situation
-- [ ] **Remboursements Alan + Cariban** â Claim reimbursements from Alan health insurance + Cariban
-- [ ] **Certificat AMELI Â· Appeler la CAF** â Get AMELI certificate + call CAF
-- [ ] **Money back Iceland Â· Celsius Â· Coinbase/Stretto** â Recover money from multiple sources
-- [ ] **Order Brex Card Â· Downgrade N26 Â· Close SG** â Banking cleanup
+### 💰 Admin & Finance
+- [!] **Pay Axon investment** — URGENT payment
+- [!] **Déclaration auto-entrepreneur** — French freelance income declaration
+- [!] **Déclaration impôts Netherlands** — Dutch tax declaration
+- [ ] **Simulation impôts à la source** — Use impots.gouv simplified calculator
+- [ ] **Mettre à jour taux de prélèvement impots.gouv** — Need Maria's numéro fiscal
+- [ ] **Relancer impôts Maria** — Follow up on Maria's tax situation
+- [ ] **Remboursements Alan + Cariban** — Claim reimbursements from Alan health insurance + Cariban
+- [ ] **Certificat AMELI · Appeler la CAF** — Get AMELI certificate + call CAF
+- [ ] **Money back Iceland · Celsius · Coinbase/Stretto** — Recover money from multiple sources
+- [ ] **Order Brex Card · Downgrade N26 · Close SG** — Banking cleanup
 
-### ð¥ Health
-- [!] **Benefiz AmÃ©lia** â URGENT â action needed for AmÃ©lia
-- [ ] **Book eye appointment Paris â Maria** â Book ophthalmologist in Paris for Maria
-- [ ] **Blood/health tests when in Cannes** â Schedule blood + health checkup
-- [ ] **ADHD diagnosis â follow up** â Research options in France, check Benefiz coverage ð¤
-- [ ] **Review Lucis results and recommendations** â Check latest Lucis blood analysis results and follow their supplement/lifestyle recommendations
-- [ ] **Freeletics â get back on track** â Resume training
-- [ ] **5min meditation daily** â Build daily habit
-- [ ] **Lucis: Zinc Picolinate + Flaxseeds** â Buy supplements from Lucis
+### 🏥 Health
+- [!] **Benefiz Amélia** — URGENT — action needed for Amélia
+- [ ] **Book eye appointment Paris — Maria** — Book ophthalmologist in Paris for Maria
+- [ ] **Blood/health tests when in Cannes** — Schedule blood + health checkup
+- [ ] **ADHD diagnosis — follow up** — Research options in France, check Benefiz coverage 🤖
+- [ ] **Review Lucis results and recommendations** — Check latest Lucis blood analysis results and follow their supplement/lifestyle recommendations
+- [ ] **Freeletics — get back on track** — Resume training
+- [ ] **5min meditation daily** — Build daily habit
+- [ ] **Lucis: Zinc Picolinate + Flaxseeds** — Buy supplements from Lucis
 
-### ð¡ Real Estate
-- [x] **Gather docs CrÃ©dit CoopÃ©ratif** â â Done 29 Mar 2026
-- [x] **Cancel BP account** â â Done 28 Mar 2026
-- [x] **Sign Loan Insurance** â â Done 30 Mar 2026
-- [x] **Negotiate NL document translation** â â Done 28 Mar 2026
+### 🏡 Real Estate
+- [x] **Gather docs Crédit Coopératif** — ✅ Done 29 Mar 2026
+- [x] **Cancel BP account** — ✅ Done 28 Mar 2026
+- [x] **Sign Loan Insurance** — ✅ Done 30 Mar 2026
+- [x] **Negotiate NL document translation** — ✅ Done 28 Mar 2026
 
-### âï¸ Japan Trip
-- [x] **Book flights Japan** â â Done
-- [!] **Book hotel Taiwan May 9th** â Taiwan leg of Asia trip
-- [!] **Make international driving license request** â Required for car rentals in Japan
-- [!] **Driving license translation** â Required for car rentals in Japan
-- [!] **Book accommodation Okinawa** â Okinawa leg of Japan trip
-- [ ] **Book flight from Okinawa** â Return leg (non-urgent)
-- [ ] **Confirm itinerary** â Full Asia trip â Japan + Taiwan
+### ✈️ Japan Trip
+- [x] **Book flights Japan** — ✅ Done
+- [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
+- [!] **Make international driving license request** — Required for car rentals in Japan
+- [!] **Driving license translation** — Required for car rentals in Japan
+- [!] **Book accommodation Okinawa** — Okinawa leg of Japan trip
+- [ ] **Book flight from Okinawa** — Return leg (non-urgent)
+- [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
-### âï¸ Travel & Errands
-- [!] **Cancel super.com account** â URGENT (5 min)
-- [x] **Book flights Asia** â Book flights for Asia trip
-- [ ] **Order wedding album** â Order printed wedding album
-- [ ] **Leave review of Mexico trip** â Write and post review
-- [ ] **Classeur docs Â· Semelles Filling PiÃ¨ces Â· Water flosser** â Misc errands
+### ✈️ Travel & Errands
+- [!] **Cancel super.com account** — URGENT (5 min)
+- [ ] **Book flights Asia** — Book flights for Asia trip
+- [ ] **Order wedding album** — Order printed wedding album
+- [ ] **Leave review of Mexico trip** — Write and post review
+- [ ] **Classeur docs · Semelles Filling Pièces · Water flosser** — Misc errands
 
-### ð± Tech & Accounts
-- [ ] **Transfer photos from iPhone** â Back up photos from iPhone
-- [ ] **Hide private albums** â Hide albums on iPhone/iCloud
-- [ ] **Connecter Phantom mobile â desktop** â Connect Phantom wallet mobile to desktop
-- [ ] **Check Cummies + Akash + Trustswap** â Check crypto token statuses
-- [?] **Airbnb account â appeal ban** â Account banned, reason unknown. Contact support to appeal/reinstate.
-- [ ] **Put together Gorgias event photos** â Collect + organize photos from all Gorgias events
+### 📱 Tech & Accounts
+- [ ] **Transfer photos from iPhone** — Back up photos from iPhone
+- [ ] **Hide private albums** — Hide albums on iPhone/iCloud
+- [ ] **Connecter Phantom mobile → desktop** — Connect Phantom wallet mobile to desktop
+- [ ] **Check Cummies + Akash + Trustswap** — Check crypto token statuses
+- [?] **Airbnb account — appeal ban** — Account banned, reason unknown. Contact support to appeal/reinstate.
+- [ ] **Put together Gorgias event photos** — Collect + organize photos from all Gorgias events
 
-### ð¤ Network & Others
-- [ ] **Kenny's newsletter** â Subscribe to or read Kenny's newsletter
-- [ ] **AI Agent â contenu, leads, commentaires** â Explore AI Agent for content, lead qualification, comments ð¤
+### 🤝 Network & Others
+- [ ] **Kenny's newsletter** — Subscribe to or read Kenny's newsletter
+- [ ] **AI Agent — contenu, leads, commentaires** — Explore AI Agent for content, lead qualification, comments 🤖
 
-### ð¤ Bots & Automation (Personal)
-- [_] **Build betting bot** â Automated betting system. ChatGPT couldn't finish. Dedicated session needed.
-- [_] **Copy trading bot â Polymarket** â Build/deploy Polymarket copy trading bot (GitHub: terauss/Polymarket-Copy-Trading-Bot) ð¤
+### 🤖 Bots & Automation (Personal)
+- [_] **Build betting bot** — Automated betting system. ChatGPT couldn't finish. Dedicated session needed.
+- [_] **Copy trading bot — Polymarket** — Build/deploy Polymarket copy trading bot (GitHub: terauss/Polymarket-Copy-Trading-Bot) 🤖
   - Note: Research Polymarket API, copy trading mechanics, Reddit/Claude communities
-- [_] **Copy trading bot â Whales Solana** â Build Solana whale copy trading bot ð¤
+- [_] **Copy trading bot — Whales Solana** — Build Solana whale copy trading bot 🤖
 
-### ð NÃ©buleuse (personal idea)
-- [_] **VIP customer rule â no AI Agent** â Auto-transfer VIP customers to human agent. Post-50% automation target.
+### 💎 Nébuleuse (personal idea)
+- [_] **VIP customer rule — no AI Agent** — Auto-transfer VIP customers to human agent. Post-50% automation target.
 
 ---
 
-## ð¼ Professional (Gorgias)
+## 💼 Professional (Gorgias)
 
-### âï¸ Work Travel & Expenses
-- [x] **Book hotel Amsterdam** â â Done
-- [!] **Book hotel Barcelona** â URGENT â book hotel for Barcelona work event
-- [x] **Book flight Amsterdam** â â Done
-- [x] **Book flight Barcelona** â â Done
-- [ ] **Book flight Milano** â Work event
-- [ ] **Book flight Marseille** â Work event
-- [!] **Submit Brex expenses** â URGENT â 10 DAYS OVERDUE (deadline was April 1st)
-- [ ] **Order replacement Brex Card** â Deadline: May 1st
+### ✈️ Work Travel & Expenses
+- [x] **Book hotel Amsterdam** — ✅ Done
+- [!] **Book hotel Barcelona** — URGENT — book hotel for Barcelona work event
+- [!] **Book hotel Milano** — URGENT — book hotel for Milano work event
+- [!] **Book hotel Marseille** — URGENT — book hotel for Marseille work event
+- [x] **Book flight Amsterdam** — ✅ Done
+- [x] **Book flight Barcelona** — ✅ Done
+- [ ] **Book flight Milano** — Work event
+- [ ] **Book flight Marseille** — Work event
+- [!] **Submit Brex expenses** — URGENT — 10 DAYS OVERDUE (deadline was April 1st)
+- [ ] **Order replacement Brex Card** — Deadline: May 1st
 
-### ðï¸ Presentations & Events
-- [x] **Slides Fashion Commerce** â â Done
+### 🗓️ Presentations & Events
+- [x] **Slides Fashion Commerce** — ✅ Done
 
 ### Role Optimization
-- [>] **Brainstorm Gorgias role optimization** â Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy ð¤
-- [!] **Get LinkedIn Premium subscription** â URGENT â required for prospecting + Sales Navigator
-- [ ] **Account Mapping â Bloomreach** â Map shared accounts with Bloomreach partner
-- [ ] **Use holiday credit** â Book or apply remaining holiday credit before expiry
+- [>] **Brainstorm Gorgias role optimization** — Tools, processes, frequent tasks, partner-sourced ARR + partner-influenced ARR strategy 🤖
+- [!] **Get LinkedIn Premium subscription** — URGENT — required for prospecting + Sales Navigator
+- [ ] **Account Mapping — Bloomreach** — Map shared accounts with Bloomreach partner
+- [ ] **Use holiday credit** — Book or apply remaining holiday credit before expiry
 
 ### Follow-ups
-- [!] **Contact Jorge Farma2go** â URGENT follow-up
-- [!][>] **Create DOCK spaces** â URGENT + IMPORTANT
-- [!] **Panagora Klaviyo** â URGENT follow-up
-- [!] **LTV Plus Lunch Vouchers** â URGENT â handle lunch vouchers with LTV Plus
-- [!] **Follow up Nenad** â URGENT follow-up
-- [x] **Ping Spanish partners + Blas** â â Done
-- [x] **Send follow-up email to LTVPlus team** â â Done 27 Mar 2026
-- [ ] **Shoptalk follow ups â Plantmade** â Follow up with Plantmade contact met at Shoptalk
-- [ ] **Add German logos to partner deck â Nikos Media & Latori** â Update the partner deck with German partner logos
-- [ ] **Review Latori's customer list** â Go through Latori's list of customers
-- [ ] **Follow up with Marvya** â Reach out / respond to Marvya
-- [ ] **Get back to Matt â Supreme, Yuma, Parfum de Marly** â Reply to Matt re: these three accounts
-- [ ] **Review v1 managed services playbook â send to Nick** â Read through v1, give feedback, and send to Nick
+- [!] **Contact Jorge Farma2go** — URGENT follow-up
+- [!][>] **Create DOCK spaces** — URGENT + IMPORTANT
+- [!] **Panagora Klaviyo** — URGENT follow-up
+- [!] **LTV Plus Lunch Vouchers** — URGENT — handle lunch vouchers with LTV Plus
+- [!] **Follow up Nenad** — URGENT follow-up
+- [x] **Ping Spanish partners + Blas** — ✅ Done
+- [x] **Send follow-up email to LTVPlus team** — ✅ Done 27 Mar 2026
+- [ ] **Shoptalk follow ups — Plantmade** — Follow up with Plantmade contact met at Shoptalk
+- [ ] **Add German logos to partner deck — Nikos Media & Latori** — Update the partner deck with German partner logos
+- [ ] **Review Latori's customer list** — Go through Latori's list of customers
+- [ ] **Follow up with Marvya** — Reach out / respond to Marvya
+- [ ] **Get back to Matt — Supreme, Yuma, Parfum de Marly** — Reply to Matt re: these three accounts
+- [ ] **Review v1 managed services playbook → send to Nick** — Read through v1, give feedback, and send to Nick
 
 ---
 
-## ð Freelance
+## 🚀 Freelance
 
-### NÃ©buleuse Bijoux
-- [>] **Share Baback integration checklist with client** â #1 unlock for +45-52% automation. Checklist is ready.
-- [ ] **Get Shopify API token (write_orders)** â Required to automate "Doublon nom" tag removal ð¤
-- [ ] **Loyoly integration** â Loyalty points API actions (check balance, tier, history)
-- [ ] **Deploy AI Agent to Chat** â Status unclear, needs confirmation
-- [ ] **Verify Phase 1 tasks 1.1 & 1.2** â Ignored tickets rules + handover topic refinement
-- [ ] **Get full AI Agent ticket export** â All tickets (not just unsuccessful), incl. message body + AI response ð¤
-- [_] **VIP customer rule â no AI Agent** â Auto-transfer VIPs to human post-50%
+### Nébuleuse Bijoux
+- [>] **Share Baback integration checklist with client** — #1 unlock for +45-52% automation. Checklist is ready.
+- [ ] **Get Shopify API token (write_orders)** — Required to automate "Doublon nom" tag removal 🤖
+- [ ] **Loyoly integration** — Loyalty points API actions (check balance, tier, history)
+- [ ] **Deploy AI Agent to Chat** — Status unclear, needs confirmation
+- [ ] **Verify Phase 1 tasks 1.1 & 1.2** — Ignored tickets rules + handover topic refinement
+- [ ] **Get full AI Agent ticket export** — All tickets (not just unsuccessful), incl. message body + AI response 🤖
+- [_] **VIP customer rule — no AI Agent** — Auto-transfer VIPs to human post-50%
 
 ### Accessory Partners
-- [>] **Validate blind spots with Rob** â Returns workflow, top ticket types, WISMO %, ERP capabilities
-- [>] **WISMO system** â World-class WISMO automation (ShipStation â Gorgias, multi-package, all states) ð¤
-- [ ] **Multi-brand structure (5 brands)** â Separate views/routing: Suspension Superstore, MaxTrac, All American Billet, Vision X, Legacy ð¤
-- [ ] **Returns flow + CSAT setup** â Structured intake + CSAT activation
-- [ ] **SMS fix** â Normalize +1 numbers
+- [>] **Validate blind spots with Rob** — Returns workflow, top ticket types, WISMO %, ERP capabilities
+- [>] **WISMO system** — World-class WISMO automation (ShipStation ↔ Gorgias, multi-package, all states) 🤖
+- [ ] **Multi-brand structure (5 brands)** — Separate views/routing: Suspension Superstore, MaxTrac, All American Billet, Vision X, Legacy 🤖
+- [ ] **Returns flow + CSAT setup** — Structured intake + CSAT activation
+- [ ] **SMS fix** — Normalize +1 numbers
 
 ### Gorgias Agency (name TBD)
-- [!] **Find agency name** â Blocker for all other agency tasks
-- [ ] **Build website on Lovable** â Dark, minimalist, EN/FR/ES
-- [ ] **Define service packages + pricing** â Productized offers with clear scope ð¤
-- [ ] **Complete 7 stub integration articles** â ShipStation, ShipBob, ShipHero, Shipmonk, Skio, Loop Returns (~1,300 words each) ð¤
-- [~] **Help Center scraping** â â Scheduled Mondays 9am Â· Phase 1: new articles only
+- [!] **Find agency name** — Blocker for all other agency tasks
+- [ ] **Build website on Lovable** — Dark, minimalist, EN/FR/ES
+- [ ] **Define service packages + pricing** — Productized offers with clear scope 🤖
+- [ ] **Complete 7 stub integration articles** — ShipStation, ShipBob, ShipHero, Shipmonk, Skio, Loop Returns (~1,300 words each) 🤖
+- [~] **Help Center scraping** — ✅ Scheduled Mondays 9am · Phase 1: new articles only
 
 ### LinkedIn Content
-- [>] **Update LinkedIn profile** â Headline + About (copy is ready)
-- [ ] **Publish Post 01 â contrarian opener** ð¤
+- [>] **Update LinkedIn profile** — Headline + About (copy is ready)
+- [ ] **Publish Post 01 — contrarian opener** 🤖
 - [ ] **Maintain 2 posts/week cadence**
 
 ---
 
-## â Done
+## ✅ Done
 
-- [x] **Set up productivity system** â CLAUDE.md, TASKS.md, memory/, dashboard, scheduled tasks
-- [x] **Set up NÃ©buleuse Notion auto-sync** â Mon + Fri 9am scheduled task
-- [x] **Set up Gorgias Help Center weekly scraping** â Mondays 9am, new articles only (Phase 1)
-- [x] **Pay Didier Degrandi** â â Done ~week of 23 Mar 2026
+- [x] **Set up productivity system** — CLAUDE.md, TASKS.md, memory/, dashboard, scheduled tasks
+- [x] **Set up Nébuleuse Notion auto-sync** — Mon + Fri 9am scheduled task
+- [x] **Set up Gorgias Help Center weekly scraping** — Mondays 9am, new articles only (Phase 1)
+- [x] **Pay Didier Degrandi** — ✅ Done ~week of 23 Mar 2026
