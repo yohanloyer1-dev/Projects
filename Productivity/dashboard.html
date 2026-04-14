@@ -3741,41 +3741,60 @@ function renderUrgencyBtns() {
 }
 
 function submitQuickAdd() {
-  const title = document.getElementById('qaTitle').value.trim();
-  if (!title) {
-    document.getElementById('qaTitle').focus();
-    document.getElementById('qaTitle').style.borderColor = 'var(--red)';
-    setTimeout(() => document.getElementById('qaTitle').style.borderColor = '', 1500);
-    return;
+  try {
+    console.log('[submitQuickAdd] START - checking title input');
+    const titleEl = document.getElementById('qaTitle');
+    console.log('[submitQuickAdd] titleEl:', titleEl);
+    const title = titleEl.value.trim();
+    console.log('[submitQuickAdd] title value:', title);
+
+    if (!title) {
+      console.log('[submitQuickAdd] title empty, focusing input');
+      titleEl.focus();
+      titleEl.style.borderColor = 'var(--red)';
+      setTimeout(() => { titleEl.style.borderColor = ''; }, 1500);
+      return;
+    }
+
+    const project   = document.getElementById('qaProject').value;
+    const estimate  = document.getElementById('qaEstimate').value;
+    const deadline  = document.getElementById('qaDeadline').value;
+    const mode      = qaSelectedMode;
+    console.log('[submitQuickAdd] mode:', mode, 'project:', project, 'urgency set:', qaSelectedUrgency);
+
+    const isUrgent    = qaSelectedUrgency.has('urgent');
+    const isImportant = qaSelectedUrgency.has('important');
+    const urgency = isUrgent && isImportant ? 'urgent+important' : isUrgent ? 'urgent' : isImportant ? 'important' : 'normal';
+    const id        = 'qa-' + Date.now();
+    const timestamp = Date.now();
+    console.log('[submitQuickAdd] urgency:', urgency, 'id:', id);
+
+    // 1. Save to quick-add queue in localStorage
+    const queue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
+    queue.push({ id, title, project, urgency, estimate, deadline, timestamp, mode });
+    localStorage.setItem('yl_quickadd', JSON.stringify(queue));
+    console.log('[submitQuickAdd] saved to localStorage, queue length:', queue.length);
+
+    // 2. Inject task card into the DOM immediately so it's interactive
+    console.log('[submitQuickAdd] calling injectQuickAddTask...');
+    injectQuickAddTask({ id, title, project, urgency, estimate, deadline, mode });
+    console.log('[submitQuickAdd] injectQuickAddTask completed');
+
+    // 3. Save deadline to S.deadlines if provided
+    if (deadline) {
+      S.deadlines[id] = deadline;
+      save();
+      console.log('[submitQuickAdd] saved deadline:', deadline);
+    }
+
+    console.log('[submitQuickAdd] closing modal');
+    closeQuickAdd();
+    showToast('Task added — will sync to TASKS.md on next Claude session', 0);
+    console.log('[submitQuickAdd] COMPLETE');
+  } catch(err) {
+    console.error('[submitQuickAdd] ERROR:', err);
+    alert('Error: ' + err.message);
   }
-
-  const project   = document.getElementById('qaProject').value;
-  const estimate  = document.getElementById('qaEstimate').value;
-  const deadline  = document.getElementById('qaDeadline').value;
-  const mode      = qaSelectedMode;
-  // Derive urgency string from multi-select Set
-  const isUrgent    = qaSelectedUrgency.has('urgent');
-  const isImportant = qaSelectedUrgency.has('important');
-  const urgency = isUrgent && isImportant ? 'urgent+important' : isUrgent ? 'urgent' : isImportant ? 'important' : 'normal';
-  const id        = 'qa-' + Date.now();
-  const timestamp = Date.now();
-
-  // 1. Save to quick-add queue in localStorage
-  const queue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
-  queue.push({ id, title, project, urgency, estimate, deadline, timestamp, mode });
-  localStorage.setItem('yl_quickadd', JSON.stringify(queue));
-
-  // 2. Inject task card into the DOM immediately so it's interactive
-  injectQuickAddTask({ id, title, project, urgency, estimate, deadline, mode });
-
-  // 3. Save deadline to S.deadlines if provided
-  if (deadline) {
-    S.deadlines[id] = deadline;
-    save();
-  }
-
-  closeQuickAdd();
-  showToast('Task added — will sync to TASKS.md on next Claude session', 0);
 }
 
 function injectQuickAddTask(task) {
