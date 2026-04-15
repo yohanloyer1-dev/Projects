@@ -142,6 +142,12 @@
 - [_] **VIP customer rule â no AI Agent** â Auto-transfer VIPs to human post-50%
 
 ### Accessory Partners
+- [!] **Challenge Gaia on Flow Automation** – HIGH PRIORITY – Validate approach
+- [!] **Find Good/Bad CSAT Examples** – HIGH PRIORITY – Identify patterns for setup
+- [>] **Review QA with Rob** – Validate QA patterns and approaches
+- [>] **Check BigCommerce AI Agents** – Research capabilities
+- [>] **Ask Gaia: Gorgias QA Analysis** – Get analysis on QA patterns
+- [>] **Ask Gaia: Returns One-Touch Breakdown** – Get breakdown of returns workflow
 - [>] **Validate blind spots with Rob** â Returns workflow, top ticket types, WISMO %, ERP capabilities
 - [>] **WISMO system** â World-class WISMO automation (ShipStation â Gorgias, multi-package, all states) ð¤
 - [ ] **Multi-brand structure (5 brands)** â Separate views/routing: Suspension Superstore, MaxTrac, All American Billet, Vision X, Legacy ð¤
