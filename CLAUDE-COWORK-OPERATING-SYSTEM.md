@@ -147,8 +147,3 @@ Mount in Cowork, resume work. Everything is on GitHub.
 - Skip memory reads (context loss)
 - Leave files out of sync
 
----
-
-## Next: Phase 2-4 Architecture
-
-See: `Productivity/TASKS.md` → "Claude Architecture" section for Phase 2-4 builds.
