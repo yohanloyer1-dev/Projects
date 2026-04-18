@@ -3911,6 +3911,7 @@ function bindSingleTask(t) {
   }
 
   // Checkbox click ONLY — do not fire on row click
+  const chkEl = t.querySelector('.chk');
   if (chkEl) chkEl.addEventListener('click', e => {
     e.stopPropagation();
     if (t.classList.contains('done-t')) return;
@@ -3918,7 +3919,6 @@ function bindSingleTask(t) {
     const nm2 = t.querySelector('.tn')?.textContent?.trim() || '';
     const proj = t.dataset.project || '';
     const taskId2 = t.dataset.id;
-    const chkEl = t.querySelector('.chk');
 
     t.classList.add('completing');
     chkEl.textContent = '✓';
