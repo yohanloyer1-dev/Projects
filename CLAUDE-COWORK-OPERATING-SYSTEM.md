@@ -41,17 +41,20 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 | LinkedIn content | `Productivity/memory/projects/linkedin-content-system.md` |
 | n8n / automation | `Productivity/memory/projects/n8n-automation.md` |
 | Dashboard / productivity | Read "Dashboard System" section in CLAUDE.md |
+| New/unlisted project | Read CLAUDE.md "Key Projects" section — find the relevant memory file |
 | Personal / health / travel | No project memory needed |
 
 ---
 
-## During Session
+## During Session — Update Rules
 
-**Update TASKS.md immediately** when task status changes. Don't batch to the end.
+**TASKS.md:** Update immediately when status changes. Don't batch to the end.
 
-**Append to `Productivity/memory/session-log.md`** as significant work completes (not required every 5 minutes, but log major milestones).
+**Project memory:** Update when new context is shared (add to relevant `Productivity/memory/projects/*.md`).
 
-**Push to GitHub** every 1-2 hours or when a file changes.
+**Session log:** Append to `Productivity/memory/session-log.md` as significant work completes (not required every 5 minutes, log major milestones).
+
+**Push to GitHub:** Every 1-2 hours, or when a file changes significantly.
 
 ---
 
@@ -78,7 +81,17 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ---
 
+## If Files Conflict
+
+- Local version ≠ GitHub version → GitHub wins. Always.
+- TASKS.md shows old status → Refresh from GitHub before starting work.
+- Unsure which version is current → Ask in chat: "GitHub status unclear, fetching..."
+
+---
+
 ## GitHub Write Pattern
+
+**Implementation:** Use Python, bash, or direct API calls (depending on available shell access).
 
 1. **Get current SHA** (prevents race conditions)
    ```bash
