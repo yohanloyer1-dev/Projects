@@ -6,7 +6,7 @@
 ---
 
 ## What This Is
-A unified system for maximizing Claude productivity in Cowork sessions through consistent startup, memory management, and automated wrap-up. GitHub is the single source of truth; everything flows through it.
+GitHub is the source of truth. Every session: read memory → work → push changes.
 
 ---
 
@@ -57,10 +57,9 @@ A unified system for maximizing Claude productivity in Cowork sessions through c
 
 ## Session Wrap-Up (Automated)
 
-**Trigger:** 5:30pm daily (scheduled task)  
-**What happens:** Reminder task appears in dashboard with pre-filled template
+**Trigger:** 5:30pm daily (scheduled task)
 
-**Manual step (you do once):**
+**Manual step (complete once):**
 1. Complete the session wrap-up task in dashboard
 2. Template auto-fills: what was requested, what was done, key decisions, pending items
 3. Click "Push to GitHub" button (if available) or manual push
@@ -80,8 +79,6 @@ A unified system for maximizing Claude productivity in Cowork sessions through c
 ---
 
 ## GitHub Write Pattern
-
-**Token saved by doing this right:**
 
 1. **Get current SHA** (prevents race conditions)
    ```bash
@@ -103,7 +100,7 @@ A unified system for maximizing Claude productivity in Cowork sessions through c
 
 ---
 
-## Key URLs (Bookmark These)
+## Key URLs
 
 | What | URL |
 |------|-----|
@@ -154,10 +151,4 @@ Mount in Cowork, resume work. Everything is on GitHub.
 
 ## Next: Phase 2-4 Architecture
 
-See: `Productivity/TASKS.md` → "Claude Architecture" section for upcoming automation builds (session wrap-up task, GitHub Wiki, memory consolidation, Cowork integration testing).
-
----
-
-**This document is your system. Reference it, don't memorize it.**
-
-Every session: Read → Work → Push. GitHub handles the rest.
+See: `Productivity/TASKS.md` → "Claude Architecture" section for Phase 2-4 builds.
