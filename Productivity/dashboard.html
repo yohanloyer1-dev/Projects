@@ -4249,7 +4249,7 @@ function dtnSkip() {
   setTimeout(()=>t.remove(), 1800);
 }
 
-dtnRender();
+if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", dtnRender); } else { dtnRender(); }
 // Re-render when tasks are completed
 const _origUpdateUI = updateUI;
 updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); };
