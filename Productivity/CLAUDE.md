@@ -103,54 +103,45 @@ Two running logs must be updated every session — no exceptions:
 - Entries are prepended (newest at top)
 - Keep entries concise — bullet points, not paragraphs
 
-## Session Startup Protocol
-GitHub is the single source of truth. Local folder is optional convenience — never required.
+## Quick Startup Checklist
 
-When starting any session, Claude MUST:
-1. Read `Productivity/CLAUDE.md`
-   - Local first (if mount available): read from mounted path
-   - Always verify against GitHub: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
-   - If conflict: GitHub wins
-2. Read `Productivity/TASKS.md`
-   - Same rule: local first, GitHub wins on conflict
-   - GitHub raw: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
-3. Check `Productivity/inbox.md` — read if it exists (voice notes from Yohan)
-4. Read relevant project memory file based on session topic (see routing table below)
-5. Confirm in one line what was read, e.g. "Read: CLAUDE.md, TASKS.md ✓ (GitHub)"
-6. Never assume task status — always check TASKS.md first
-7. Update memory and TASKS.md immediately when new info is shared
+Follow the protocol in CLAUDE-COWORK-OPERATING-SYSTEM.md (global Cowork instructions).
 
-## GitHub Write Protocol (MANDATORY — every session with file changes)
-Claude writes ALL files directly to GitHub via API. Never write local-only.
+**TL;DR:**
+1. [ ] Read CLAUDE.md (this file)
+2. [ ] Read TASKS.md
+3. [ ] Read routing table in CLAUDE-COWORK-OPERATING-SYSTEM.md
+4. [ ] Read project-specific memory (if applicable)
+5. [ ] Confirm: "✓ Read: CLAUDE.md, TASKS.md, [project] (GitHub verified)"
+6. [ ] Check TASKS.md — what's the priority?
+7. [ ] Work
+8. [ ] Update TASKS.md + relevant memory files
+9. [ ] Push to GitHub
+
+**GitHub is source of truth.** Local mount is optional convenience only.
+
+## GitHub Write Protocol (MANDATORY)
+
+All files pushed via GitHub API. Never write local-only.
 
 **Token:** `find /sessions -name ".github_token" 2>/dev/null | head -1 | xargs cat`
-- Token type: `ghp_...` classic PAT — has both `repo` and `gist` scope
-- If not found: ask Yohan to paste it, save to OPS folder as `.github_token`
-- Gist sync token (dashboard browser): `localStorage.setItem('yl_gist_token', 'ghp_...')` — run once per device
+- Type: `ghp_...` (has `repo` + `gist` scope)
+- If missing: ask Yohan, save to OPS folder as `.github_token`
 
 **Repo:** `yohanloyer1-dev/Projects`
 
-**Write pattern (for every changed file):**
+**Write pattern:**
 ```bash
 TOKEN=$(find /sessions -name ".github_token" 2>/dev/null | head -1 | xargs cat)
 REPO="yohanloyer1-dev/Projects"
-# 1. GET current SHA: curl -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/contents/{path}
-# 2. base64 encode content → /tmp/gh_payload.json
+# 1. GET SHA: curl -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/contents/{path}
+# 2. base64 encode content
 # 3. PUT to https://api.github.com/repos/$REPO/contents/{path}
 ```
 
-**Files to push after any session with changes:**
-- `Productivity/dashboard.html` — if any UI or task change
-- `Productivity/TASKS.md` — if any task change
-- `Productivity/CLAUDE.md` — if memory updated
-- `Productivity/memory/**` — if any memory files updated
-- Any other file Claude edited
-
 **After every push, confirm:**
 ```
-✅ Pushed to GitHub
-- [filename] — [what changed]
-Live: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
+✅ Pushed to GitHub — [filenames] — [what changed]
 ```
 
 ## Dashboard
@@ -193,34 +184,14 @@ Live: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
 - ADHD-optimized variant: planned — research saved at `memory/context/adhd-dashboard-research.md`
 - Versioning rule: ALWAYS copy current dashboard to `versions/dashboard_vX.X_YYYY-MM-DD.html` before any significant edit
 
-## GitHub as Primary Source of Truth
+## Key URLs
 
-**The repo is the system.** Everything lives at `github.com/yohanloyer1-dev/Projects`. The local mount is just a convenience — not required.
-
-### How Claude reads files
-1. **Normal (local mount available):** Read directly from `/sessions/.../mnt/Projects/`
-2. **No local mount / new device / disaster recovery:** Read from GitHub raw URLs via WebFetch:
-   - CLAUDE.md → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
-   - TASKS.md → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md`
-   - Any file → `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/{path}`
-3. Claude always **writes back via GitHub API** — same whether local or remote session
-
-### How Claude writes files
-Always via GitHub REST API (`PUT /repos/yohanloyer1-dev/Projects/contents/{path}`). Token at `/sessions/.../mnt/ OPS/.github_token`. Never requires git CLI or Yohan to touch the terminal.
-
-### Disaster recovery (laptop lost/broken)
-1. On any computer or new Cowork session with no mount:
-   - Claude reads CLAUDE.md + TASKS.md from raw GitHub URLs above
-   - Claude writes via GitHub API — no local clone needed at all
-2. To restore local clone on new machine: `git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects` then mount `~/Projects` in Cowork
-3. Token: ask Yohan — he has it (or check `OPS/.github_token` if mounted)
-
-### Key raw URLs (bookmark these)
 | File | URL |
 |------|-----|
 | CLAUDE.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md |
 | TASKS.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md |
-| dashboard.html (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
+| Operating System | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md |
+| Dashboard (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
 | Repo root | https://github.com/yohanloyer1-dev/Projects |
 
 ## Cowork Project Setup
