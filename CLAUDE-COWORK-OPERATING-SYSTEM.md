@@ -15,11 +15,16 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 **Every session, in order:**
 
 1. **Read CLAUDE.md** (project memory)
-   - Local: `/sessions/.../mnt/Projects/Productivity/CLAUDE.md`
-   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md`
+   - Local: `/sessions/.../mnt/Projects/CLAUDE.md`
+   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md`
 
-2. **Read TASKS.md** (current task list)
-   - Same paths as above (TASKS.md)
+2. **Read TASKS.md** (master task list)
+   - Local: `/sessions/.../mnt/Projects/TASKS.md`
+   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md`
+
+2b. **Read DASHBOARD-TASKS.md** (dashboard-specific: Personal, Professional, Freelance)
+   - Local: `/sessions/.../mnt/Projects/Productivity/DASHBOARD-TASKS.md`
+   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md`
 
 3. **Read project-specific memory** (if applicable — see Routing Table below)
 
@@ -68,14 +73,15 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 3. Click "Push to GitHub" button (if available) or manual push
 
 **Files to update before closing:**
-- `Productivity/TASKS.md` — mark tasks [x] if complete
+- `/TASKS.md` (root) — update master task list status
+- `Productivity/DASHBOARD-TASKS.md` — update dashboard-specific tasks if changed
 - `Productivity/memory/session-log.md` — append session entry
 - Any project files you edited
 
 **Confirmation in chat:**
 ```
 ✅ Pushed to GitHub
-- Productivity/TASKS.md — [what changed]
+- TASKS.md — [what changed]
 - Productivity/memory/session-log.md — session documented
 ```
 
@@ -91,23 +97,29 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ## GitHub Write Pattern
 
-**Implementation:** Use Python, bash, or direct API calls (depending on available shell access).
+**Authentication:** HTTPS + osxkeychain (macOS credential manager)
 
-1. **Get current SHA** (prevents race conditions)
-   ```bash
-   TOKEN=$(cat /sessions/.../mnt/OPS/.github_token)
-   REPO="yohanloyer1-dev/Projects"
-   SHA=$(curl -s -H "Authorization: token $TOKEN" \
-     "https://api.github.com/repos/$REPO/contents/Productivity/TASKS.md" | jq -r '.sha')
-   ```
+Verified setup (run once per device):
+```bash
+git config --global credential.helper osxkeychain
+```
 
-2. **Base64 encode content** and PUT to GitHub
-   ```bash
-   CONTENT=$(base64 -i /path/to/file)
-   curl -X PUT -H "Authorization: token $TOKEN" \
-     -d "{\"message\":\"Update TASKS.md\",\"content\":\"$CONTENT\",\"sha\":\"$SHA\"}" \
-     https://api.github.com/repos/$REPO/contents/Productivity/TASKS.md
-   ```
+**For pushes:** Use standard git commands. Credentials are cached automatically by osxkeychain after first authentication.
+
+```bash
+cd /Users/yohanloyer/Projects
+git add [files]
+git commit -m "Session: [description]"
+git push origin main
+```
+
+**First push on a device:** Git will prompt for GitHub credentials once. osxkeychain saves them for future use.
+
+**Verify setup:**
+```bash
+git config credential.helper  # Should return "osxkeychain"
+git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD  # Should return commit SHA (no auth prompt)
+```
 
 **Never write local-only.** Everything goes to GitHub.
 
@@ -119,8 +131,9 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 |------|-----|
 | **Operating System (this doc)** | https://github.com/yohanloyer1-dev/Projects/blob/main/CLAUDE-COWORK-OPERATING-SYSTEM.md |
 | **Live Dashboard** | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
-| **CLAUDE.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/CLAUDE.md |
-| **TASKS.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md |
+| **CLAUDE.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md |
+| **TASKS.md (master)** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md |
+| **DASHBOARD-TASKS.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md |
 | **Repo** | https://github.com/yohanloyer1-dev/Projects |
 
 ---
@@ -128,16 +141,16 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 ## Troubleshooting
 
 **"Mount not available"**  
-Use GitHub raw URLs above. You can still read + write via API.
+Use GitHub raw URLs above. Git commands work on remote URLs directly.
 
-**"GitHub token missing"**  
-Check: `/sessions/.../mnt/OPS/.github_token` — ask Yohan if not found.
+**"Authentication failed on first push"**  
+GitHub will prompt for credentials on first HTTPS push. Enter your GitHub username + personal access token (or use SSO). osxkeychain saves credentials automatically.
 
 **"TASKS.md out of sync"**  
-Read from GitHub, compare with dashboard, update via API to match.
+Refresh from GitHub: `git pull origin main` before reading files locally.
 
 **"File push failed"**  
-Verify SHA via curl, try again with latest SHA. Check token is valid.
+Verify remote is configured: `git remote -v` (should show https://github.com/yohanloyer1-dev/Projects.git). Check credentials with `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD`.
 
 **"New device / lost laptop"**  
 Clone: `git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects`  
