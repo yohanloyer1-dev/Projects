@@ -154,6 +154,11 @@ Two running logs must be updated every session — no exceptions:
 | Dashboard (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
 | Repo root | https://github.com/yohanloyer1-dev/Projects |
 
+## If Files Conflict
+- Local version ≠ GitHub version → GitHub wins. Always.
+- TASKS.md shows old status → run `git pull origin main` before reading locally.
+- Unsure which version is current → run `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD` to check latest commit SHA.
+
 ## Cowork Project Setup
 - Project name: YL / OPS
 - Folder mounted: `/Users/yohanloyer/Projects`

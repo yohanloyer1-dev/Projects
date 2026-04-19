@@ -14,7 +14,7 @@ This document defines the four-phase architecture for Claude-powered Cowork auto
 **GitHub as single source of truth** — all files, configs, and state live on GitHub. Local desktop folder is convenience only. This prevents sync issues, enables easy context-switching between Cowork sessions, and allows Claude to operate from any session without losing state.
 
 ### Key Constraints
-- **Token efficiency:** Global instructions must be ≤600 words (down from 6,000+)
+- **Token efficiency:** Global instructions target ≤500 words (community recommendation: ≤450; down from 6,000+)
 - **No manual overhead:** No copy/pasting instructions into every new session
 - **Clarity first:** Every file has a single responsibility
 - **Testable:** Each phase can be verified independently
@@ -33,9 +33,9 @@ This document defines the four-phase architecture for Claude-powered Cowork auto
 
 2. **Created CLAUDE-COWORK-OPERATING-SYSTEM.md** — Canonical operating system
    - Purpose: How to operate in Cowork sessions (startup, memory routing, wrap-up, GitHub writes)
-   - Word count: ~591 words (fits ≤600 constraint)
+   - Word count: ~826 words (markdown source); plaintext version trimmed to 480 words for Global Instructions
    - Location: `/CLAUDE-COWORK-OPERATING-SYSTEM.md` (root)
-   - Scope: For pasting into Cowork global instructions (one-time setup)
+   - Scope: Markdown is human reference; plaintext (`-PLAINTEXT.txt`) is pasted into Cowork global instructions
 
 3. **Verified GitHub Pages deployment** — Dashboard is live
    - Dashboard live URL: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
@@ -69,7 +69,10 @@ cat CLAUDE.md | head -20
 # Should show "# Memory" and "## Me"
 
 cat CLAUDE-COWORK-OPERATING-SYSTEM.md | wc -w
-# Should show ~591 words
+# Should show ~826 words (markdown source)
+
+cat CLAUDE-COWORK-OPERATING-SYSTEM-PLAINTEXT.txt | wc -w
+# Should show ~480 words (trimmed version in Global Instructions)
 ```
 
 ---
@@ -221,7 +224,7 @@ CLAUDE.md (root)
 
 CLAUDE-COWORK-OPERATING-SYSTEM.md (root)
 ├── Operating system for Cowork sessions
-├── Word count: ~591 (≤600 constraint)
+├── Word count: ~826 words (markdown); plaintext version 480 words (in Global Instructions)
 ├── Updated by: Manual (rarely)
 ├── Read by: Every session (in global instructions, Phase 3.1)
 └── Depends on: CLAUDE.md (references memory routing)
@@ -264,7 +267,7 @@ dashboard.html (Productivity/)
 ### Phase 1: Foundation
 - [x] GitHub is authoritative source (not local desktop)
 - [x] CLAUDE.md at root, <12KB, readable
-- [x] CLAUDE-COWORK-OPERATING-SYSTEM.md exists, ≤600 words
+- [x] CLAUDE-COWORK-OPERATING-SYSTEM.md exists; plaintext version trimmed to 480 words for Global Instructions
 - [x] Dashboard deployed to GitHub Pages
 - [x] Audit files renamed with dates, old versions archived
 

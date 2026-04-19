@@ -101,6 +101,44 @@ Every push to main triggers GitHub Pages deployment. Dashboard syncs via GitHub 
 
 ---
 
+## GitHub Authentication Setup (One-Time Per Device)
+
+Run once to configure credential caching so git push works without re-entering credentials:
+
+**macOS:**
+```bash
+git config --global credential.helper osxkeychain
+```
+
+**Linux:**
+```bash
+git config --global credential.helper cache
+```
+
+**Windows:**
+```bash
+git config --global credential.helper wincred
+```
+
+After running the command, your first `git push` will prompt for GitHub credentials once. The credential manager saves them automatically — no further prompts.
+
+**Verify setup:**
+```bash
+git config credential.helper
+# Should return: osxkeychain (or cache / wincred)
+
+git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD
+# Should return a commit SHA with no auth prompt
+```
+
+**New device or lost laptop:**
+```bash
+git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects
+```
+Then mount the folder in Cowork and resume. Everything is on GitHub.
+
+---
+
 ## Quick Links
 
 | Resource | URL |

@@ -1,16 +1,8 @@
 CLAUDE COWORK OPERATING SYSTEM
-Version: 1.0
-Source of Truth: GitHub (yohanloyer1-dev/Projects)
-Status: Live
-
-================================================================================
-WHAT THIS IS
-================================================================================
-
 GitHub is the source of truth. Every session: read memory → work → push changes.
 
 ================================================================================
-SESSION STARTUP (5 MINUTES)
+SESSION STARTUP
 ================================================================================
 
 EVERY SESSION, IN ORDER:
@@ -71,13 +63,8 @@ SESSION WRAP-UP (AUTOMATED)
 
 Trigger: 5:30pm daily (scheduled task)
 
-Manual steps:
-1. Update TASKS.md with completed task statuses
-2. Append to Productivity/memory/session-log.md: request, work done, key decisions
-3. Push to GitHub (see GitHub Write Pattern section below)
-
 Files to update before closing:
-- /TASKS.md (root) — update master task list status
+- TASKS.md (root) — update master task list status
 - Productivity/DASHBOARD-TASKS.md — update dashboard-specific tasks if changed
 - Productivity/memory/session-log.md — append session entry
 - Any project files you edited
@@ -94,77 +81,6 @@ IF FILES CONFLICT
 Local version ≠ GitHub version → GitHub wins. Always.
 
 TASKS.md shows old status → Refresh from GitHub: git pull origin main (before reading locally)
-
-Unsure which version is current → In Cowork, ask Claude: "GitHub status unclear, let me verify..." Then run: git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD (to check latest commit)
-
-================================================================================
-GITHUB WRITE PATTERN
-================================================================================
-
-AUTHENTICATION: HTTPS + credential manager (macOS/Linux/Windows)
-
-macOS (verified setup):
-Run once: git config --global credential.helper osxkeychain
-
-Linux: Use credential.helper = cache or store (see git docs for your distribution)
-
-Windows: Use credential.helper = wincred (Windows Credential Manager)
-
-FOR PUSHES: Use standard git commands. Credentials are cached automatically after first authentication.
-
-Commands:
-cd /Users/yohanloyer/Projects
-git add [files]
-git commit -m "Session: [description]"
-git push origin main
-
-FIRST PUSH ON A DEVICE: Git will prompt for GitHub credentials once. osxkeychain saves them for future use.
-
-VERIFY SETUP:
-git config credential.helper
-→ Should return "osxkeychain" (or appropriate manager for your OS)
-
-git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD
-→ Should return commit SHA (no auth prompt)
-
-CRITICAL RULE: Never write local-only. Everything goes to GitHub.
-
-================================================================================
-KEY URLS
-================================================================================
-
-Operating System (this document): https://github.com/yohanloyer1-dev/Projects/blob/main/CLAUDE-COWORK-OPERATING-SYSTEM.md
-Full documentation (markdown): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md
-
-Memory files:
-CLAUDE.md: https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md
-TASKS.md (master): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md
-DASHBOARD-TASKS.md: https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md
-
-Live tools:
-Dashboard: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
-Repo: https://github.com/yohanloyer1-dev/Projects
-
-================================================================================
-TROUBLESHOOTING
-================================================================================
-
-"Mount not available"
-Use GitHub raw URLs above. Git commands work on remote URLs directly.
-
-"Authentication failed on first push"
-GitHub will prompt for credentials on first HTTPS push. Enter your GitHub username + personal access token (or use SSO). Credential manager saves credentials automatically.
-
-"TASKS.md out of sync"
-Refresh from GitHub: git pull origin main (before reading files locally)
-
-"File push failed"
-Verify remote is configured: git remote -v (should show https://github.com/yohanloyer1-dev/Projects.git)
-Check credentials: git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD
-
-"New device / lost laptop"
-Clone: git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects
-Mount in Cowork, resume work. Everything is on GitHub.
 
 ================================================================================
 RULES
