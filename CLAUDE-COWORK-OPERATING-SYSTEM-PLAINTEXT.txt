@@ -1,0 +1,186 @@
+CLAUDE COWORK OPERATING SYSTEM
+Version: 1.0
+Source of Truth: GitHub (yohanloyer1-dev/Projects)
+Status: Live
+
+================================================================================
+WHAT THIS IS
+================================================================================
+
+GitHub is the source of truth. Every session: read memory → work → push changes.
+
+================================================================================
+SESSION STARTUP (5 MINUTES)
+================================================================================
+
+EVERY SESSION, IN ORDER:
+
+1. READ CLAUDE.md (project memory)
+   GitHub (source of truth): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md
+   Local (if available): /sessions/.../mnt/Projects/CLAUDE.md
+
+2. READ TASKS.md (master task list)
+   GitHub (source of truth): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md
+   Local (if available): /sessions/.../mnt/Projects/TASKS.md
+
+2b. READ DASHBOARD-TASKS.md (dashboard-specific: Personal, Professional, Freelance)
+   GitHub (source of truth): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md
+   Local (if available): /sessions/.../mnt/Projects/Productivity/DASHBOARD-TASKS.md
+
+3. READ PROJECT-SPECIFIC MEMORY (if applicable — see Routing Table below)
+
+4. CONFIRM IN CHAT:
+   ✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md, [project if relevant] (GitHub verified) — and session log if context-switching
+
+5. CHECK ALIGNMENT: Scan Ohtani Matrix (Productivity/memory/context/ohtani-matrix.md) — does this task fit constraints?
+
+6. OPTIONAL: REVIEW SESSION CONTEXT (if context-switching or returning to ongoing work)
+   - Read last entry in Productivity/memory/session-log.md to understand previous session's work
+   - Not required for new tasks or fresh starts
+
+CRITICAL RULE: Never assume task status. Always read TASKS.md first.
+
+================================================================================
+MEMORY ROUTING TABLE
+================================================================================
+
+If working on Nébuleuse AI Agent → Read: Productivity/memory/projects/nebuleuse-bijoux.md
+If working on Accessory Partners → Read: Productivity/memory/projects/accessory-partners.md
+If working on Gorgias Help Center → Read: Productivity/memory/projects/gorgias-agency.md
+If working on LinkedIn content → Read: Productivity/memory/projects/linkedin-content-system.md
+If working on n8n / automation → Read: Productivity/memory/projects/n8n-automation.md
+If working on Dashboard / productivity → Read "Dashboard System" section in CLAUDE.md
+If working on New/unlisted project → Read CLAUDE.md "Key Projects" section — find the relevant memory file
+If working on Personal / health / travel → No project memory needed
+
+================================================================================
+DURING SESSION — UPDATE RULES
+================================================================================
+
+TASKS.md: Update immediately when status changes. Don't batch to the end.
+
+Project memory: Update when new context is shared (add to relevant Productivity/memory/projects/*.md).
+
+Session log: At end of session, append one entry to Productivity/memory/session-log.md with: request, work done, key decisions. Entries are prepended (newest at top).
+
+Push to GitHub: Every 1-2 hours, or when a file changes significantly.
+
+================================================================================
+SESSION WRAP-UP (AUTOMATED)
+================================================================================
+
+Trigger: 5:30pm daily (scheduled task)
+
+Manual steps:
+1. Update TASKS.md with completed task statuses
+2. Append to Productivity/memory/session-log.md: request, work done, key decisions
+3. Push to GitHub (see GitHub Write Pattern section below)
+
+Files to update before closing:
+- /TASKS.md (root) — update master task list status
+- Productivity/DASHBOARD-TASKS.md — update dashboard-specific tasks if changed
+- Productivity/memory/session-log.md — append session entry
+- Any project files you edited
+
+Confirmation in chat:
+✅ Pushed to GitHub
+- TASKS.md — [what changed]
+- Productivity/memory/session-log.md — session documented
+
+================================================================================
+IF FILES CONFLICT
+================================================================================
+
+Local version ≠ GitHub version → GitHub wins. Always.
+
+TASKS.md shows old status → Refresh from GitHub: git pull origin main (before reading locally)
+
+Unsure which version is current → In Cowork, ask Claude: "GitHub status unclear, let me verify..." Then run: git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD (to check latest commit)
+
+================================================================================
+GITHUB WRITE PATTERN
+================================================================================
+
+AUTHENTICATION: HTTPS + credential manager (macOS/Linux/Windows)
+
+macOS (verified setup):
+Run once: git config --global credential.helper osxkeychain
+
+Linux: Use credential.helper = cache or store (see git docs for your distribution)
+
+Windows: Use credential.helper = wincred (Windows Credential Manager)
+
+FOR PUSHES: Use standard git commands. Credentials are cached automatically after first authentication.
+
+Commands:
+cd /Users/yohanloyer/Projects
+git add [files]
+git commit -m "Session: [description]"
+git push origin main
+
+FIRST PUSH ON A DEVICE: Git will prompt for GitHub credentials once. osxkeychain saves them for future use.
+
+VERIFY SETUP:
+git config credential.helper
+→ Should return "osxkeychain" (or appropriate manager for your OS)
+
+git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD
+→ Should return commit SHA (no auth prompt)
+
+CRITICAL RULE: Never write local-only. Everything goes to GitHub.
+
+================================================================================
+KEY URLS
+================================================================================
+
+Operating System (this document): https://github.com/yohanloyer1-dev/Projects/blob/main/CLAUDE-COWORK-OPERATING-SYSTEM.md
+Full documentation (markdown): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md
+
+Memory files:
+CLAUDE.md: https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md
+TASKS.md (master): https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md
+DASHBOARD-TASKS.md: https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md
+
+Live tools:
+Dashboard: https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
+Repo: https://github.com/yohanloyer1-dev/Projects
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+"Mount not available"
+Use GitHub raw URLs above. Git commands work on remote URLs directly.
+
+"Authentication failed on first push"
+GitHub will prompt for credentials on first HTTPS push. Enter your GitHub username + personal access token (or use SSO). Credential manager saves credentials automatically.
+
+"TASKS.md out of sync"
+Refresh from GitHub: git pull origin main (before reading files locally)
+
+"File push failed"
+Verify remote is configured: git remote -v (should show https://github.com/yohanloyer1-dev/Projects.git)
+Check credentials: git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD
+
+"New device / lost laptop"
+Clone: git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects
+Mount in Cowork, resume work. Everything is on GitHub.
+
+================================================================================
+RULES
+================================================================================
+
+DO THIS:
+- Always read CLAUDE.md + TASKS.md + DASHBOARD-TASKS.md at startup
+- Verify GitHub is up-to-date (compare with memory)
+- Push every change to GitHub immediately
+- Update session-log.md as work happens
+- Use GitHub raw URLs if no local mount
+
+NEVER DO THIS:
+- Write local-only (no backup = lost work)
+- Assume task status (always check TASKS.md)
+- Skip memory reads (context loss)
+- Leave files out of sync
+
+================================================================================
