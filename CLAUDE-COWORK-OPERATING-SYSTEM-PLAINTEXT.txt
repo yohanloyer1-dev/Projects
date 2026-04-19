@@ -1,9 +1,7 @@
 CLAUDE COWORK OPERATING SYSTEM
 GitHub is the source of truth. Every session: read memory → work → push changes.
 
-================================================================================
 SESSION STARTUP
-================================================================================
 
 EVERY SESSION, IN ORDER:
 
@@ -32,9 +30,7 @@ EVERY SESSION, IN ORDER:
 
 CRITICAL RULE: Never assume task status. Always read TASKS.md first.
 
-================================================================================
 MEMORY ROUTING TABLE
-================================================================================
 
 If working on Nébuleuse AI Agent → Read: Productivity/memory/projects/nebuleuse-bijoux.md
 If working on Accessory Partners → Read: Productivity/memory/projects/accessory-partners.md
@@ -45,9 +41,7 @@ If working on Dashboard / productivity → Read "Dashboard System" section in CL
 If working on New/unlisted project → Read CLAUDE.md "Key Projects" section — find the relevant memory file
 If working on Personal / health / travel → No project memory needed
 
-================================================================================
 DURING SESSION — UPDATE RULES
-================================================================================
 
 TASKS.md: Update immediately when status changes. Don't batch to the end.
 
@@ -57,9 +51,7 @@ Session log: At end of session, append one entry to Productivity/memory/session-
 
 Push to GitHub: Every 1-2 hours, or when a file changes significantly.
 
-================================================================================
 SESSION WRAP-UP (AUTOMATED)
-================================================================================
 
 Trigger: 5:30pm daily (scheduled task)
 
@@ -74,17 +66,13 @@ Confirmation in chat:
 - TASKS.md — [what changed]
 - Productivity/memory/session-log.md — session documented
 
-================================================================================
 IF FILES CONFLICT
-================================================================================
 
 Local version ≠ GitHub version → GitHub wins. Always.
 
 TASKS.md shows old status → Refresh from GitHub: git pull origin main (before reading locally)
 
-================================================================================
 RULES
-================================================================================
 
 DO THIS:
 - Always read CLAUDE.md + TASKS.md + DASHBOARD-TASKS.md at startup
@@ -98,5 +86,3 @@ NEVER DO THIS:
 - Assume task status (always check TASKS.md)
 - Skip memory reads (context loss)
 - Leave files out of sync
-
-================================================================================
