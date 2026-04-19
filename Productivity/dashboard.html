@@ -1898,7 +1898,7 @@ async function syncToTasksMd(silent) {
   setTasksSyncStatus('syncing');
 
   const REPO = 'yohanloyer1-dev/Projects';
-  const FILE = 'Productivity/TASKS.md';
+  const FILE = 'Productivity/DASHBOARD-TASKS.md';
   const API  = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
   const HEADERS = { Authorization: `token ${token}`, 'Content-Type': 'application/json' };
 
