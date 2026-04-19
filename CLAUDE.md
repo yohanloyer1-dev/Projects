@@ -94,14 +94,15 @@ Two running logs must be updated every session — no exceptions:
 
 | File | What goes in it |
 |------|----------------|
-| `Productivity/memory/session-log.md` | What Yohan requested, what was done, key decisions made. One entry per session. |
+| `Productivity/memory/session-log.md` | What Yohan requested, what was done, key decisions made. One entry per session (at END). |
 | `Productivity/memory/dashboard-changelog.md` | Every code change to dashboard.html — what changed, why, commit hash. |
 
 **Rules:**
-- Update `session-log.md` at the END of every session, before pushing
-- Update `dashboard-changelog.md` every time dashboard.html is changed
-- Entries are prepended (newest at top)
+- Update `session-log.md` at the END of every session, before pushing. One entry = one session.
+- Update `dashboard-changelog.md` every time dashboard.html is changed (immediately)
+- All entries are prepended (newest at top)
 - Keep entries concise — bullet points, not paragraphs
+- **Session-log timing:** Append at session wrap-up (not continuous). Log major work completed, decisions made, next steps.
 
 ## Dashboard
 - Location: `Productivity/dashboard.html` — open in browser, bookmark for daily use

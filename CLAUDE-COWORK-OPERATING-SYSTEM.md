@@ -57,7 +57,7 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 **Project memory:** Update when new context is shared (add to relevant `Productivity/memory/projects/*.md`).
 
-**Session log:** Append to `Productivity/memory/session-log.md` as significant work completes (not required every 5 minutes, log major milestones).
+**Session log:** At end of session, append one entry to `Productivity/memory/session-log.md` with: request, work done, key decisions. Entries are prepended (newest at top).
 
 **Push to GitHub:** Every 1-2 hours, or when a file changes significantly.
 
@@ -97,12 +97,16 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ## GitHub Write Pattern
 
-**Authentication:** HTTPS + osxkeychain (macOS credential manager)
+**Authentication:** HTTPS + credential manager (macOS/Linux/Windows)
 
-Verified setup (run once per device):
+**macOS (verified setup):**
 ```bash
 git config --global credential.helper osxkeychain
 ```
+
+**Linux:** Use `credential.helper` = `cache` or `store` (see git docs for your distribution)
+
+**Windows:** Use `credential.helper` = `wincred` (Windows Credential Manager)
 
 **For pushes:** Use standard git commands. Credentials are cached automatically by osxkeychain after first authentication.
 
