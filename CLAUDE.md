@@ -106,7 +106,7 @@ Two running logs must be updated every session — no exceptions:
 ## Dashboard
 - Location: `Productivity/dashboard.html` — open in browser, bookmark for daily use
 - Source of truth for all tasks, statuses, notes, and progress
-- All tasks in dashboard = all tasks in TASKS.md (kept in sync)
+- Dashboard tasks (DASHBOARD-TASKS.md) are synced with dashboard.html. Master tasks (TASKS.md) are separate and track Claude architecture work
 - Task statuses: Urgent [!] · Important [>] · In Progress [~] · Waiting [?] · Someday [_] · Normal [ ]
 - 🤖 = Claude-actionable task
 
@@ -134,8 +134,8 @@ Two running logs must be updated every session — no exceptions:
 - Current version: v2.6+ — see `Productivity/versions/` for history
 - **Live URL (primary):** https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html — GitHub Pages, free, no limits, auto-deploys ~30s after every push
 - Old Netlify URL (deprecated — bandwidth limits): https://yohan-productivity-dashboard.netlify.app/dashboard.html
-- GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC). Claude pushes directly via API — no manual git push needed.
-- Deploy workflow: Claude edits files → Claude pushes via GitHub API → GitHub Pages deploys in ~30s → Claude posts confirmation
+- GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC)
+- Deploy workflow: Edit files → Push via git (`git push origin main`) → GitHub Pages deploys in ~30s
 - Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Run `localStorage.setItem('yl_gist_token', 'TOKEN')` in browser console once per device. Progress syncs across all devices automatically.
 - **TASKS.md Sync:** Dashboard → TASKS.md sync automation is currently DISABLED (broken system). See `Productivity/memory/sync-automation-audit.md`. Manual workflow: (1) Complete tasks in dashboard, (2) Click "Export Session", (3) Paste to Claude, (4) Claude updates TASKS.md manually.
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
@@ -148,7 +148,7 @@ Two running logs must be updated every session — no exceptions:
 | File | URL |
 |------|-----|
 | CLAUDE.md (this file) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md |
-| TASKS.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/TASKS.md |
+| TASKS.md | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md |
 | Operating System | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md |
 | Dashboard (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
 | Repo root | https://github.com/yohanloyer1-dev/Projects |

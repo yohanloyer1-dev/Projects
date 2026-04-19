@@ -53,7 +53,7 @@ Welcome. This repository is your single source of truth for Claude-powered Cowor
 2. Read `/TASKS.md` — understand what work exists
 3. Read `/CLAUDE-COWORK-OPERATING-SYSTEM.md` (from global instructions) — how to operate
 4. Read project-specific memory if applicable (e.g., Nébuleuse context in CLAUDE.md)
-5. Confirm in chat: "✓ Read: CLAUDE.md, TASKS.md, [project] (GitHub verified)"
+5. Confirm in chat: "✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md, [project] (GitHub verified)"
 
 **Work:**
 - Check TASKS.md — what's the priority?
@@ -109,6 +109,7 @@ Every push to main triggers GitHub Pages deployment. Dashboard syncs via GitHub 
 | Dashboard (live) | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
 | CLAUDE.md (raw) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md |
 | TASKS.md (raw) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md |
+| DASHBOARD-TASKS.md (raw) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md |
 | Operating System (raw) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md |
 | Architecture (raw) | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-ARCHITECTURE.md |
 
@@ -129,4 +130,4 @@ Every push to main triggers GitHub Pages deployment. Dashboard syncs via GitHub 
 
 All files are markdown. They're meant to be read and understood. If something is unclear or needs updating, it's a sign the docs need clarification — update them.
 
-**This repo is evolving.** Phase 2 (File Organization & Clarity) is in progress. Phase 3 (Automation) and Phase 4 (Testing) follow. See `/CLAUDE-ARCHITECTURE.md` for the full roadmap.
+**This repo is evolving.** Phase 2 (File Organization & Clarity) is complete. Phase 3 (Automation) and Phase 4 (Testing) ready to begin. See `/CLAUDE-ARCHITECTURE.md` for the full roadmap.

@@ -161,7 +161,7 @@ Mount in Cowork, resume work. Everything is on GitHub.
 ## Rules
 
 ✅ **Do This:**
-- Always read CLAUDE.md + TASKS.md at startup
+- Always read CLAUDE.md + TASKS.md + DASHBOARD-TASKS.md at startup
 - Verify GitHub is up-to-date (compare with memory)
 - Push every change to GitHub immediately
 - Update session-log.md as work happens
