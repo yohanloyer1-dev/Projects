@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowork OS — How It Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #5cffb1;
+    --accent2: #7b8cff;
+    --accent3: #ff6b6b;
+    --text: #e8e8f0;
+    --muted: #5a5a72;
+    --github: #f0c060;
+    --local: #7b8cff;
+    --git: #5cffb1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 70px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .header-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .header h1 span {
+    color: var(--accent);
+  }
+
+  .header-sub {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Main diagram */
+  .diagram {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr 80px 1fr;
+    gap: 0;
+    align-items: start;
+    margin-bottom: 80px;
+  }
+
+  /* Columns */
+  .col {
+    opacity: 0;
+  }
+  .col-github { animation: fadeUp 0.6s ease 0.2s forwards; }
+  .col-local  { animation: fadeUp 0.6s ease 0.35s forwards; }
+  .col-claude { animation: fadeUp 0.6s ease 0.5s forwards; }
+
+  .col-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 2px;
+  }
+
+  .col-github .col-header { color: var(--github); background: rgba(240,192,96,0.07); border: 1px solid rgba(240,192,96,0.15); }
+  .col-local  .col-header { color: var(--local);  background: rgba(123,140,255,0.07); border: 1px solid rgba(123,140,255,0.15); }
+  .col-claude .col-header { color: var(--accent);  background: rgba(92,255,177,0.07); border: 1px solid rgba(92,255,177,0.15); }
+
+  .col-body {
+    border-radius: 0 0 10px 10px;
+    padding: 20px 16px;
+    min-height: 420px;
+  }
+
+  .col-github .col-body { background: rgba(240,192,96,0.03); border: 1px solid rgba(240,192,96,0.1); border-top: none; }
+  .col-local  .col-body { background: rgba(123,140,255,0.03); border: 1px solid rgba(123,140,255,0.1); border-top: none; }
+  .col-claude .col-body { background: rgba(92,255,177,0.03); border: 1px solid rgba(92,255,177,0.1); border-top: none; }
+
+  /* File nodes */
+  .file-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .file-node:hover {
+    transform: translateX(3px);
+    border-color: var(--muted);
+  }
+
+  .file-node.active {
+    border-color: var(--accent);
+    background: rgba(92,255,177,0.05);
+    box-shadow: 0 0 20px rgba(92,255,177,0.08);
+  }
+
+  .file-node.github-file { border-left: 3px solid var(--github); }
+  .file-node.local-file  { border-left: 3px solid var(--local); }
+  .file-node.claude-file { border-left: 3px solid var(--accent); }
+
+  .file-node.github-file:hover, .file-node.github-file.active { border-color: var(--github); background: rgba(240,192,96,0.05); box-shadow: 0 0 20px rgba(240,192,96,0.08); }
+  .file-node.local-file:hover,  .file-node.local-file.active  { border-color: var(--local); background: rgba(123,140,255,0.05); box-shadow: 0 0 20px rgba(123,140,255,0.08); }
+
+  .file-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .file-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .file-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .badge-truth { background: rgba(240,192,96,0.15); color: var(--github); }
+  .badge-copy  { background: rgba(123,140,255,0.15); color: var(--local); }
+  .badge-mem   { background: rgba(92,255,177,0.15); color: var(--accent); }
+
+  /* Arrow columns */
+  .arrow-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+
+  .arrow-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .arrow-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .arrow-svg {
+    width: 40px;
+    height: 28px;
+  }
+
+  /* Flow section */
+  .flow-section {
+    margin-bottom: 70px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.6s forwards;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2px;
+  }
+
+  .flow-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child  { border-radius: 0 8px 8px 0; }
+
+  .flow-step::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .flow-step:hover::before,
+  .flow-step.active::before {
+    transform: scaleX(1);
+  }
+
+  .flow-step:hover {
+    background: rgba(92,255,177,0.03);
+    border-color: rgba(92,255,177,0.2);
+  }
+
+  .flow-step.active {
+    background: rgba(92,255,177,0.05);
+    border-color: rgba(92,255,177,0.3);
+  }
+
+  .step-num {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .step-detail {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 2px;
+    min-height: 80px;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    display: none;
+  }
+
+  .detail-panel.visible {
+    display: block;
+    animation: fadeUp 0.3s ease forwards;
+  }
+
+  .detail-panel code {
+    background: rgba(92,255,177,0.08);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  /* Rule cards */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.7s forwards;
+  }
+
+  .rule-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .rule-card.do   { border-top: 2px solid var(--accent); }
+  .rule-card.dont { border-top: 2px solid var(--accent3); }
+
+  .rule-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .rule-card.do   .rule-card-title { color: var(--accent); }
+  .rule-card.dont .rule-card-title { color: var(--accent3); }
+
+  .rule-item {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .rule-item:last-child { border-bottom: none; }
+
+  .rule-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Tooltip / info panel */
+  .info-bar {
+    background: rgba(92,255,177,0.05);
+    border: 1px solid rgba(92,255,177,0.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 11px;
+    color: var(--accent);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.15s forwards;
+  }
+
+  .info-bar strong { color: var(--text); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  .pulse { animation: pulse 2s ease infinite; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    .diagram { grid-template-columns: 1fr; }
+    .arrow-col { display: none; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .flow-steps { grid-template-columns: 1fr 1fr; }
+    .flow-step:first-child { border-radius: 8px 8px 0 0; }
+    .flow-step:last-child  { border-radius: 0 0 8px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-label">// system architecture</div>
+    <h1>Cowork <span>OS</span><br>How it works</h1>
+    <p class="header-sub">Three layers. One source of truth. Every session reads from GitHub, works locally, pushes back up. No exceptions.</p>
+  </div>
+
+  <!-- Info bar -->
+  <div class="info-bar">
+    <strong>Click any element</strong> to learn more about it. The three layers are independent — GitHub is canonical, local is convenience, Claude is the operator.
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--github)"></div> GitHub — source of truth</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--local)"></div> Local folder — working copy</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Claude — reads, writes, pushes</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div> git push — sync bridge</div>
+  </div>
+
+  <!-- Three-column diagram -->
+  <div class="diagram">
+
+    <!-- GitHub column -->
+    <div class="col col-github">
+      <div class="col-header">☁ GitHub</div>
+      <div class="col-body">
+        <div class="file-node github-file" onclick="showInfo('claude-md')">
+          <span class="file-badge badge-truth">truth</span>
+          <div class="file-name">CLAUDE.md</div>
+          <div class="file-desc">Memory & context.<br>Who you are, projects, terms.</div>
+        </div>
+        <div class="file-node github-file" onclick="showInfo('tasks-md')">
+          <span class="file-badge badge-truth">truth</span>
+          <div class="file-name">TASKS.md</div>
+          <div class="file-desc">Master task list.<br>Never assume status — read this.</div>
+        </div>
+        <div class="file-node github-file" onclick="showInfo('dashboard-tasks')">
+          <span class="file-badge badge-truth">truth</span>
+          <div class="file-name">DASHBOARD-TASKS.md</div>
+          <div class="file-desc">Personal / Professional / Freelance tasks.</div>
+        </div>
+        <div class="file-node github-file" onclick="showInfo('session-log')">
+          <span class="file-badge badge-truth">truth</span>
+          <div class="file-name">session-log.md</div>
+          <div class="file-desc">Every session documented.<br>Prepended (newest top).</div>
+        </div>
+        <div class="file-node github-file" onclick="showInfo('project-memory')">
+          <span class="file-badge badge-truth">truth</span>
+          <div class="file-name">memory/projects/*.md</div>
+          <div class="file-desc">Per-project context.<br>Nébuleuse, AP, LinkedIn…</div>
+        </div>
+        <div class="file-node github-file" onclick="showInfo('ohtani')">
+          <div class="file-name">ohtani-matrix.md</div>
+          <div class="file-desc">Decision OS.<br>€50K, ≤20h/wk constraint check.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow 1: GitHub ↔ Local -->
+    <div class="arrow-col">
+      <div class="arrow-group" onclick="showInfo('git-pull')">
+        <div class="arrow-label" style="color:var(--local)">git pull</div>
+        <svg class="arrow-svg" viewBox="0 0 40 28" fill="none">
+          <path d="M2 14 L38 14" stroke="#7b8cff" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M28 6 L38 14 L28 22" stroke="#7b8cff" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="arrow-group" onclick="showInfo('git-push')">
+        <svg class="arrow-svg" viewBox="0 0 40 28" fill="none">
+          <path d="M38 14 L2 14" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M12 6 L2 14 L12 22" stroke="#ff6b6b" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="arrow-label" style="color:var(--accent3)">git push</div>
+      </div>
+    </div>
+
+    <!-- Local column -->
+    <div class="col col-local">
+      <div class="col-header">💻 Local Folder</div>
+      <div class="col-body">
+        <div class="file-node local-file" onclick="showInfo('local-folder')">
+          <span class="file-badge badge-copy">mount</span>
+          <div class="file-name">/Users/yohanloyer/Projects</div>
+          <div class="file-desc">Cowork mounts this folder.<br>Claude can read & write here.</div>
+        </div>
+        <div class="file-node local-file" onclick="showInfo('local-sync')">
+          <div class="file-name">Working copies</div>
+          <div class="file-desc">Same files as GitHub.<br>Convenience only — not canonical.</div>
+        </div>
+        <div class="file-node local-file" onclick="showInfo('git-repo')">
+          <div class="file-name">.git/</div>
+          <div class="file-desc">Local git repo.<br>Tracks changes, enables push.</div>
+        </div>
+        <div class="file-node local-file" onclick="showInfo('dashboard-html')">
+          <div class="file-name">Productivity/dashboard.html</div>
+          <div class="file-desc">Interactive task manager.<br>Opens in browser, Gist sync.</div>
+        </div>
+        <div style="margin-top: 20px; padding: 12px; background: rgba(123,140,255,0.05); border: 1px dashed rgba(123,140,255,0.15); border-radius: 8px; font-size: 10px; color: var(--muted); line-height: 1.7;">
+          ⚠ Conflict rule:<br>
+          <span style="color:var(--github)">GitHub wins. Always.</span><br>
+          If local ≠ GitHub → git pull first.
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow 2: Local ↔ Claude -->
+    <div class="arrow-col">
+      <div class="arrow-group" onclick="showInfo('claude-reads')">
+        <div class="arrow-label" style="color:var(--accent)">reads</div>
+        <svg class="arrow-svg" viewBox="0 0 40 28" fill="none">
+          <path d="M2 14 L38 14" stroke="#5cffb1" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M28 6 L38 14 L28 22" stroke="#5cffb1" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="arrow-group" onclick="showInfo('claude-writes')">
+        <svg class="arrow-svg" viewBox="0 0 40 28" fill="none">
+          <path d="M38 14 L2 14" stroke="#5cffb1" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M12 6 L2 14 L12 22" stroke="#5cffb1" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="arrow-label" style="color:var(--accent)">writes</div>
+      </div>
+    </div>
+
+    <!-- Claude column -->
+    <div class="col col-claude">
+      <div class="col-header">🤖 Claude</div>
+      <div class="col-body">
+        <div class="file-node claude-file" onclick="showInfo('startup')">
+          <span class="file-badge badge-mem">startup</span>
+          <div class="file-name">Session startup</div>
+          <div class="file-desc">Reads CLAUDE.md → TASKS.md → DASHBOARD-TASKS.md → project memory → confirms in chat.</div>
+        </div>
+        <div class="file-node claude-file" onclick="showInfo('global-inst')">
+          <span class="file-badge badge-mem">always on</span>
+          <div class="file-name">Global Instructions</div>
+          <div class="file-desc">467-word operating system.<br>Loaded in every session automatically.</div>
+        </div>
+        <div class="file-node claude-file" onclick="showInfo('routing')">
+          <div class="file-name">Memory routing</div>
+          <div class="file-desc">Maps task → project memory file.<br>Nébuleuse, AP, LinkedIn, n8n…</div>
+        </div>
+        <div class="file-node claude-file" onclick="showInfo('wrapup')">
+          <div class="file-name">Wrap-up (5:30pm)</div>
+          <div class="file-desc">Scheduled task. Updates TASKS.md, session-log.md, pushes to GitHub.</div>
+        </div>
+        <div class="file-node claude-file" onclick="showInfo('never-local')">
+          <div class="file-name" style="color:var(--accent3)">Rule #1</div>
+          <div class="file-desc">Never write local-only.<br>Everything goes to GitHub.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel" id="detail-panel"></div>
+
+  <!-- Session flow -->
+  <div class="flow-section">
+    <div class="section-title">Session flow</div>
+    <div class="flow-steps">
+      <div class="flow-step" onclick="toggleStep(this, 'step1')">
+        <div class="step-num">01</div>
+        <div class="step-title">Open session</div>
+        <div class="step-detail" id="step1" style="display:none;margin-top:8px;">Mount <code>/Users/yohanloyer/Projects</code> in Cowork. Global Instructions load automatically.</div>
+      </div>
+      <div class="flow-step" onclick="toggleStep(this, 'step2')">
+        <div class="step-num">02</div>
+        <div class="step-title">Read memory</div>
+        <div class="step-detail" id="step2" style="display:none;margin-top:8px;">Claude fetches CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md from GitHub raw URLs. Source of truth always.</div>
+      </div>
+      <div class="flow-step" onclick="toggleStep(this, 'step3')">
+        <div class="step-num">03</div>
+        <div class="step-title">Route to project</div>
+        <div class="step-detail" id="step3" style="display:none;margin-top:8px;">Memory routing table maps the task to the right project file. Nébuleuse → nebuleuse-bijoux.md, etc.</div>
+      </div>
+      <div class="flow-step" onclick="toggleStep(this, 'step4')">
+        <div class="step-num">04</div>
+        <div class="step-title">Confirm in chat</div>
+        <div class="step-detail" id="step4" style="display:none;margin-top:8px;"><code>✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md (GitHub verified)</code> — required before any work starts.</div>
+      </div>
+      <div class="flow-step" onclick="toggleStep(this, 'step5')">
+        <div class="step-num">05</div>
+        <div class="step-title">Do the work</div>
+        <div class="step-detail" id="step5" style="display:none;margin-top:8px;">Update TASKS.md immediately when status changes. Don't batch to end. Push every 1–2 hours.</div>
+      </div>
+      <div class="flow-step" onclick="toggleStep(this, 'step6')">
+        <div class="step-num">06</div>
+        <div class="step-title">Wrap up</div>
+        <div class="step-detail" id="step6" style="display:none;margin-top:8px;">Update TASKS.md + DASHBOARD-TASKS.md + session-log.md. Single <code>git push origin main</code>. Done.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules -->
+  <div class="section-title" style="opacity:0;animation:fadeUp 0.6s ease 0.7s forwards">Rules</div>
+  <div class="rules-grid">
+    <div class="rule-card do">
+      <div class="rule-card-title">✓ Do this</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent)">→</span> Always read CLAUDE.md + TASKS.md + DASHBOARD-TASKS.md at startup</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent)">→</span> Verify GitHub is up-to-date before working locally</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent)">→</span> Push every change to GitHub — every session, no exceptions</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent)">→</span> Update session-log.md at wrap-up, prepended (newest first)</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent)">→</span> Use GitHub raw URLs if no local mount available</div>
+    </div>
+    <div class="rule-card dont">
+      <div class="rule-card-title">✗ Never do this</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent3)">→</span> Write local-only — no backup means lost work</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent3)">→</span> Assume task status — always check TASKS.md first</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent3)">→</span> Skip memory reads — leads to context loss</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent3)">→</span> Leave files out of sync between local and GitHub</div>
+      <div class="rule-item"><span class="rule-icon" style="color:var(--accent3)">→</span> Batch TASKS.md updates to end of session</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const info = {
+  'claude-md':     { title: 'CLAUDE.md', color: '#f0c060', text: 'The brain. Everything Claude needs to know about Yohan — role, companies, active projects, key terms, preferences. Updated automatically via sessions. Lives at <code>raw.githubusercontent.com/.../CLAUDE.md</code>.' },
+  'tasks-md':      { title: 'TASKS.md', color: '#f0c060', text: 'Master task list. Tracks all Claude architecture + operations work. <strong>Critical rule: never assume status — always read this first.</strong> Updated immediately when any status changes, not batched.' },
+  'dashboard-tasks': { title: 'DASHBOARD-TASKS.md', color: '#f0c060', text: 'Dashboard-specific tasks: Personal, Professional (Gorgias), Freelance. Separate from TASKS.md. Synced with dashboard.html via the "↑ Sync TASKS" button (commit 1f73241).' },
+  'session-log':   { title: 'session-log.md', color: '#f0c060', text: 'Running log of every session — what was requested, what was done, key decisions. One entry per session, prepended (newest at top). Updated at wrap-up before pushing.' },
+  'project-memory':{ title: 'memory/projects/*.md', color: '#f0c060', text: 'Per-project deep context. Nébuleuse Bijoux → nebuleuse-bijoux.md. Accessory Partners → accessory-partners.md. LinkedIn → linkedin-content-system.md. Read at startup when working on that project.' },
+  'ohtani':        { title: 'ohtani-matrix.md', color: '#f0c060', text: 'Decision OS. Locked goal: €50K net/year within 3 years, ≤20h/week. 3 levers: Active cash (Agency) → Scalable assets (content) → Capital. Every task runs through this filter at startup Step 5.' },
+  'git-pull':      { title: 'git pull', color: '#7b8cff', text: 'Syncs GitHub → local folder. Run before reading local files if there\'s any chance of drift. Command: <code>git pull origin main</code>. GitHub always wins on conflict.' },
+  'git-push':      { title: 'git push', color: '#ff6b6b', text: 'The bridge. Syncs local changes → GitHub. Run every 1–2 hours during a session, and always at wrap-up. Command: <code>git push origin main</code> from /Users/yohanloyer/Projects. Requires credential manager (osxkeychain).' },
+  'local-folder':  { title: '/Users/yohanloyer/Projects', color: '#7b8cff', text: 'The folder Cowork mounts. Claude can read and write files here directly using file tools. This is convenience — not canonical. GitHub is always the source of truth.' },
+  'local-sync':    { title: 'Working copies', color: '#7b8cff', text: 'Local copies of GitHub files. Used during active work. If they differ from GitHub: <strong>GitHub wins</strong>. Always run git pull before relying on local versions.' },
+  'git-repo':      { title: '.git/', color: '#7b8cff', text: 'The local git repository. Tracks all changes, enables git push to sync back to GitHub. Occasionally gets a stale index.lock file — remove with <code>rm .git/index.lock</code> if git commands fail.' },
+  'dashboard-html':{ title: 'dashboard.html', color: '#7b8cff', text: 'Interactive task manager. Open in browser, bookmark for daily use. Cloud sync via GitHub Gist (yl_gist_token). Live at github.io/Projects/Productivity/dashboard.html after every push.' },
+  'claude-reads':  { title: 'Claude reads', color: '#5cffb1', text: 'At session startup, Claude reads files either from GitHub raw URLs (always current) or the local mount. GitHub URLs are preferred — they guarantee the source of truth.' },
+  'claude-writes': { title: 'Claude writes', color: '#5cffb1', text: 'Claude edits files directly in the mounted local folder using file tools (Read/Write/Edit). Changes are local until pushed. Always followed by git push.' },
+  'startup':       { title: 'Session startup protocol', color: '#5cffb1', text: '6 steps: (1) Read CLAUDE.md (2) Read TASKS.md (2b) Read DASHBOARD-TASKS.md (3) Read project memory (4) Confirm in chat (5) Check Ohtani Matrix (6) Optional: review session-log for context switch.' },
+  'global-inst':   { title: 'Global Instructions', color: '#5cffb1', text: '467-word plaintext file loaded automatically in every Cowork session. Contains the startup protocol, memory routing table, update rules, wrap-up trigger, and DO/NEVER rules. No separators, no bloat.' },
+  'routing':       { title: 'Memory routing table', color: '#5cffb1', text: 'Maps task type → project memory file. Nébuleuse AI Agent → nebuleuse-bijoux.md. Accessory Partners → accessory-partners.md. Gorgias Help Center → gorgias-agency.md. LinkedIn → linkedin-content-system.md. n8n → n8n-automation.md.' },
+  'wrapup':        { title: 'Wrap-up (5:30pm scheduled)', color: '#5cffb1', text: 'Automated daily task at 5:30pm. Updates TASKS.md, DASHBOARD-TASKS.md, session-log.md. Single consolidated git push covering all three files. Confirmation: ✅ Pushed to GitHub — [what changed].' },
+  'never-local':   { title: 'Rule #1 — Never local-only', color: '#ff6b6b', text: 'Every file Claude touches must be pushed to GitHub before the session ends. No exceptions. Local-only = lost work. This is the most important rule in the entire system.' },
+};
+
+function showInfo(key) {
+  const panel = document.getElementById('detail-panel');
+  const d = info[key];
+  if (!d) return;
+  panel.innerHTML = `<span style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:${d.color};display:block;margin-bottom:8px;">${d.title}</span>${d.text}`;
+  panel.classList.add('visible');
+  panel.style.borderColor = d.color + '33';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function toggleStep(el, id) {
+  const detail = document.getElementById(id);
+  const isActive = el.classList.contains('active');
+  document.querySelectorAll('.flow-step').forEach(s => {
+    s.classList.remove('active');
+  });
+  document.querySelectorAll('.flow-step .step-detail').forEach(d => {
+    d.style.display = 'none';
+  });
+  if (!isActive) {
+    el.classList.add('active');
+    detail.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>

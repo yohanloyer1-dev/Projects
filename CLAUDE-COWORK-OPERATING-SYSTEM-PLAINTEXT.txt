@@ -39,6 +39,7 @@ If working on LinkedIn content → Read: Productivity/memory/projects/linkedin-c
 If working on n8n / automation → Read: Productivity/memory/projects/n8n-automation.md
 If working on Dashboard / productivity → Read "Dashboard System" section in CLAUDE.md
 If working on New/unlisted project → Read CLAUDE.md "Key Projects" section — find the relevant memory file
+If working on Claude OS product → Read: Claude-OS/memory/claude-os-memory.md
 If working on Personal / health / travel → No project memory needed
 
 DURING SESSION — UPDATE RULES
