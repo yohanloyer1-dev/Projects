@@ -99,7 +99,7 @@ Two running logs must be updated every session — no exceptions:
 
 **Rules:**
 - Update `session-log.md` at the END of every session, before pushing. One entry = one session.
-- Update `dashboard-changelog.md` every time dashboard.html is changed (immediately)
+- **HARD RULE — dashboard-changelog.md:** Update IMMEDIATELY after any edit to dashboard.html — in the same commit, no exceptions. Never commit dashboard.html without dashboard-changelog.md staged in the same commit. Enforced by pre-commit git hook at `~/Projects/.git/hooks/pre-commit`. Skipping this is a critical protocol violation.
 - All entries are prepended (newest at top)
 - Keep entries concise — bullet points, not paragraphs
 - **Session-log timing:** Append at session wrap-up (not continuous). Log major work completed, decisions made, next steps.
