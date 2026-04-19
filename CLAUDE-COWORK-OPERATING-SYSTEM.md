@@ -15,22 +15,26 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 **Every session, in order:**
 
 1. **Read CLAUDE.md** (project memory)
-   - Local: `/sessions/.../mnt/Projects/CLAUDE.md`
-   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md`
+   - GitHub (source of truth): `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md`
+   - Local (if available): `/sessions/.../mnt/Projects/CLAUDE.md`
 
 2. **Read TASKS.md** (master task list)
-   - Local: `/sessions/.../mnt/Projects/TASKS.md`
-   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md`
+   - GitHub (source of truth): `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md`
+   - Local (if available): `/sessions/.../mnt/Projects/TASKS.md`
 
 2b. **Read DASHBOARD-TASKS.md** (dashboard-specific: Personal, Professional, Freelance)
-   - Local: `/sessions/.../mnt/Projects/Productivity/DASHBOARD-TASKS.md`
-   - GitHub fallback: `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md`
+   - GitHub (source of truth): `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md`
+   - Local (if available): `/sessions/.../mnt/Projects/Productivity/DASHBOARD-TASKS.md`
 
 3. **Read project-specific memory** (if applicable — see Routing Table below)
 
-4. **Confirm in chat:** `✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md, [project if relevant] (GitHub verified)`
+4. **Confirm in chat:** `✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md, [project if relevant] (GitHub verified)` — and session log if context-switching
 
 5. **Check alignment:** Scan Ohtani Matrix (`Productivity/memory/context/ohtani-matrix.md`) — does this task fit constraints?
+
+6. **Optional: Review session context** (if context-switching or returning to ongoing work)
+   - Read last entry in `Productivity/memory/session-log.md` to understand previous session's work
+   - Not required for new tasks or fresh starts
 
 **Never assume task status. Always read TASKS.md first.**
 
