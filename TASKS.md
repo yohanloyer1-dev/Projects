@@ -24,6 +24,9 @@
   - [ ] Verify GitHub Pages dashboard is live and synced
   - [ ] Document any issues and iterate
 
+### Claude OS Product (New Project)
+- [>] **Define the Claude OS product** — Productized system: Claude-powered operating system for entrepreneurs. Sell setup + consulting. Research market, positioning, packaging. 🤖
+
 ### Ongoing File Management
 - [_] **Push Nébuleuse project files to GitHub** — Deferred until Phase 2 complete. Untracked files: 528+ files (AI Agent data, One Pilot guidance, financial models, etc.)
 - [x] **Add N8N/ai_agents_az/ to .gitignore** — Done. Entry already present in .gitignore (commit 87e6ea4).

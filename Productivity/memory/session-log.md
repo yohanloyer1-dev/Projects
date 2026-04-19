@@ -5,6 +5,44 @@
 
 ---
 
+## 2026-04-19 | Dashboard sync rebuild — quick-add auto-sync + sticky notifications | Dashboard session
+
+### Requested
+- Fix "↑ Sync TASKS" showing HTTP 404
+- Audit and fix the full quick-add → GitHub sync flow (tasks added from dashboard not syncing)
+- 60s undo buffer on completions, revert on un-complete
+- Sticky dismissable notifications (not silent failures)
+- Section names match between dashboard and DASHBOARD-TASKS.md
+- Fix tasks injecting to wrong card in dashboard
+- Fix: unchecking tasks with same name removes wrong task (filter by ID not name)
+
+### Done
+- Diagnosed HTTP 404: sync was calling `Productivity/TASKS.md` (doesn't exist) — fixed to `Productivity/DASHBOARD-TASKS.md` (commit `b067052`)
+- Full code review of quick-add → sync pipeline — found 7 issues
+- Built `notify()` sticky notification system (top-right, stacked, colored border, X dismiss)
+- Replaced `syncToTasksMd()` with unified `syncDashboardTasks()` — one PUT handles new tasks + completions + reverts
+- Built `normSection()` for fuzzy section matching (emoji-stripped) + auto-creates missing sections
+- Built 60s completion buffer (`scheduleCompletionSync` / `cancelOrRevertCompletion`)
+- Fixed `injectQuickAddTask()` to find correct section card by title match
+- Fixed `S.done` filter to use ID not name in 3 places
+- Removed `beforeunload` sync trigger
+- Saved version snapshot: `dashboard_v2.7_2026-04-19.html`
+- Updated `dashboard-changelog.md`
+- Commit `d55067d` staged, pending push from Yohan's Terminal
+
+### Key Decisions
+- Auto-sync fires immediately on task submit (not deferred to Claude session)
+- 60s buffer gives undo window before GitHub write — cancels cleanly if task unchecked in time
+- Sync button becomes retry mechanism (shows count badge when queue non-empty)
+- No-token → warn notification, task queued locally — never silent
+
+### Next Steps
+- Yohan to run: `cd ~/Projects && git pull --rebase origin main && git push origin main`
+- Test: add task → confirm appears in correct section card + DASHBOARD-TASKS.md updated on GitHub
+- Test: check task → wait 60s → verify `[x]` in MD; uncheck within 60s → verify no write
+
+---
+
 ## 2026-04-19 | Cowork OS full audit + fixes + Phase 4 verification | YL/OPS (home base)
 
 ### Requested

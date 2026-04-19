@@ -156,6 +156,12 @@
 - [ ] **Returns flow + CSAT setup** Ã¢ÂÂ Structured intake + CSAT activation
 - [ ] **SMS fix** Ã¢ÂÂ Normalize +1 numbers
 
+### Claude OS (New Product)
+- [>] **Claude OS — market research** — Research existing Claude/AI OS products, entrepreneur pain points, positioning, packaging. First session: research + proposition. 🤖
+- [>] **Claude OS — product definition** — Define the offer: what's included, pricing tiers, consulting vs self-serve, install process. 🤖
+- [>] **Claude OS — marketing system** — Social media strategy: infographics, demos, animations, use cases. Build content pipeline around the product. 🤖
+- [_] **Claude OS — build v1 for Yohan** — Yohan is customer #0. Document everything as the product is built. 🤖
+
 ### Gorgias Agency (name TBD)
 - [!] **Find agency name** Ã¢ÂÂ Blocker for all other agency tasks
 - [ ] **Build website on Lovable** Ã¢ÂÂ Dark, minimalist, EN/FR/ES

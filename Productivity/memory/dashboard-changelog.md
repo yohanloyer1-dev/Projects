@@ -4,6 +4,55 @@
 
 ---
 
+## 2026-04-19 | Unified auto-sync engine + sticky notifications (v2.7)
+**Commit:** `d55067d` (pending push)
+
+### Problems Fixed
+- `syncToTasksMd()` was pointing to `Productivity/TASKS.md` (404) → fixed to `Productivity/DASHBOARD-TASKS.md` (commit `b067052`)
+- New tasks added via quick-add were never synced to GitHub — only queued locally indefinitely
+- Completing then un-completing a task within 60s still wrote `[x]` to GitHub
+- Tasks already synced as `[x]` had no way to revert if uncompleted
+- `S.done` filtered by name not ID — duplicate task names caused wrong tasks to be un-done
+- Quick-added tasks injected into a floating "⚡ Quick-added" card instead of their correct section
+- All sync failures were silent — no user-visible error feedback
+
+### New: Sticky Notification System
+- `notify('ok'|'err'|'warn', title, msg)` — top-right, stacked, colored left border, X to dismiss
+- Used for all sync outcomes: success, failure, no-token warning
+- Completely separate from XP toast (bottom-right) — no interference
+
+### New: Unified `syncDashboardTasks()`
+- Single function, single GitHub PUT, handles three ops atomically:
+  1. Append new tasks from `yl_quickadd` queue → correct section in `DASHBOARD-TASKS.md`
+  2. Mark completions `[x]` (after 60s buffer elapses)
+  3. Revert un-completions back to original marker (`[!]`, `[>]`, `[ ]`)
+- `syncToTasksMd()` kept as alias for backward compatibility
+
+### New: `normSection()` — fuzzy section matching
+- Strips leading emoji and trailing parentheticals before comparing
+- `"Admin & Finance"` matches `"### 💰 Admin & Finance"` automatically
+- New sections not found in MD → auto-created at bottom of correct `##` block
+
+### New: 60s completion buffer
+- `scheduleCompletionSync(taskId, name, origMarker)` — starts 60s countdown on check
+- `cancelOrRevertCompletion(taskId, name)` — cancels if still in buffer, or queues revert if already synced
+- `data-orig-marker` stored on task element at completion time for accurate revert
+
+### New: `injectQuickAddTask()` — section-aware injection
+- Now finds correct `.pc` card by matching project name to `.pc-title` (normalised)
+- Falls back to floating "Quick-added" card only for unassigned/unmatched sections
+- Floating card subtitle changed to "Syncing to DASHBOARD-TASKS.md…"
+
+### Fix: ID-based S.done filtering
+- `uncompleteTask()`, checkbox handler in `bind()`, and `bindSingleTask()` — all three now filter by `id` not `name`
+- Prevents duplicate-name tasks from interfering with each other
+
+### Removed
+- `beforeunload` sync trigger — replaced by auto-sync pipeline
+- `updateSyncQueueBadge()` on DOMContentLoaded — shows pending count on Sync button at load
+
+---
+
 ## 2026-04-13 | Quick-add modal: mode-filtered sections
 **Commit:** `6b365d7`
 
