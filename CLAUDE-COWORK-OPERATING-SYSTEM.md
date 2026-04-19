@@ -28,7 +28,7 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 3. **Read project-specific memory** (if applicable — see Routing Table below)
 
-4. **Confirm in chat:** `✓ Read: CLAUDE.md, TASKS.md, [project if relevant] (GitHub verified)`
+4. **Confirm in chat:** `✓ Read: CLAUDE.md, TASKS.md, DASHBOARD-TASKS.md, [project if relevant] (GitHub verified)`
 
 5. **Check alignment:** Scan Ohtani Matrix (`Productivity/memory/context/ohtani-matrix.md`) — does this task fit constraints?
 
@@ -67,10 +67,10 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 **Trigger:** 5:30pm daily (scheduled task)
 
-**Manual step (complete once):**
-1. Complete the session wrap-up task in dashboard
-2. Template auto-fills: what was requested, what was done, key decisions, pending items
-3. Click "Push to GitHub" button (if available) or manual push
+**Manual step:**
+1. Update TASKS.md with completed task statuses
+2. Append to `Productivity/memory/session-log.md`: request, work done, key decisions
+3. Push to GitHub (see GitHub Write Pattern section below)
 
 **Files to update before closing:**
 - `/TASKS.md` (root) — update master task list status
@@ -90,8 +90,8 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 ## If Files Conflict
 
 - Local version ≠ GitHub version → GitHub wins. Always.
-- TASKS.md shows old status → Refresh from GitHub before starting work.
-- Unsure which version is current → Ask in chat: "GitHub status unclear, fetching..."
+- TASKS.md shows old status → Refresh from GitHub: `git pull origin main` before reading locally.
+- Unsure which version is current → In Cowork, ask Claude: "GitHub status unclear, let me verify..." Then run `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD` to check latest commit.
 
 ---
 
