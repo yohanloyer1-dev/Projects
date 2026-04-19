@@ -136,7 +136,7 @@ Verify all URLs are live and correct:
 ## Phase 4 Test Strategy (Already Designed)
 
 **Agent:** Opus (Session 1 context)  
-**Files created:** 8 documents in `/sessions/sleepy-dazzling-rubin/` (not in Projects folder yet)
+**Files created:** 8 documents — now committed to Projects folder (commit f343635)
 
 ### Test Plan Components
 1. **README_PHASE_4.md** — Quick start guide
@@ -211,12 +211,7 @@ https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/REPO-README.md
 ```
 
 ### 2. Access Phase 4 Test Strategy
-The test plan files are located in:
-```
-/sessions/sleepy-dazzling-rubin/
-```
-
-These files should be copied to the Projects folder before Phase 4 execution:
+The test plan files are located in the Projects folder (committed in f343635):
 - README_PHASE_4.md
 - PHASE_4_OVERVIEW.md
 - PHASE_4_QUICK_CHECKLIST.md

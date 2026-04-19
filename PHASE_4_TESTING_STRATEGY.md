@@ -964,11 +964,11 @@ git show COMMIT_HASH:Productivity/dashboard.html > /tmp/dashboard-backup.html
 
 **Saved to:**
 ```
-/sessions/sleepy-dazzling-rubin/
+/Users/yohanloyer/Projects/  (committed to GitHub in f343635)
 ├── PHASE_4_TESTING_STRATEGY.md (this file)
-├── PHASE_4_RESULTS.md (test outcomes)
-├── PHASE_4_ISSUES.md (identified issues)
-└── PHASE_4_SECURITY_AUDIT.md (security findings)
+├── PHASE_4_RESULTS_TEMPLATE.md (fill in during testing)
+├── PHASE_4_ISSUES.md (create if issues found)
+└── PHASE_4_SECURITY_AUDIT.md (create if security findings)
 ```
 
 ---

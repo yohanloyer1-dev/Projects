@@ -20,7 +20,7 @@
 - [~] **Dashboard v2.5** — GitHub auto-deploys to GitHub Pages. Features: Personal/Work toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task filtering, XP/streaks, GitHub Gist cloud sync
 - [x] **Set up GitHub repo for all Projects** — Done. Private repo at github.com/yohanloyer1-dev/Projects, fully backed up as of 2026-03-27.
 - [?] **Netlify hosting** — Usage limit hit again (free plan). Resets ~Apr 1. Consider upgrading to Pro ($19/mo) or switching to GitHub Pages (free, no limits). Dashboard code is fine — it's a hosting-only issue.
-- [ ] **Add N8N/ai_agents_az/ to .gitignore** — Run: `echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main` 🤖
+- [x] **Add N8N/ai_agents_az/ to .gitignore** — Done. Entry already present in .gitignore (commit 87e6ea4).
 - [_] **Build WhatsApp agent via Kapso** — Get Kapso number → connect to n8n → Claude API → responds to texts + voice notes, updates TASKS.md. Replaces Telegram plan.
 - [_] **Build voice notes workflow in n8n** — Now targeting WhatsApp via Kapso (not Telegram). Kapso → Whisper transcription → inbox.md → Claude responds 🤖
 

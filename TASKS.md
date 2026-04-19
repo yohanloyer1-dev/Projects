@@ -15,18 +15,18 @@
   - [x] Create CLAUDE-ARCHITECTURE.md with Phase 1-4 roadmap
   - [x] Clean CLAUDE.md: remove duplicate protocol sections
   - [x] Create REPO-README.md navigation guide
-- [ ] **Phase 3: Automation & Process** — Queued
-  - [ ] Paste CLAUDE-COWORK-OPERATING-SYSTEM.md into Cowork global instructions (one-time setup)
-  - [ ] Setup 5:30pm scheduled task: session wrap-up with auto-template
-  - [ ] Implement automatic CLAUDE.md update proposal system
-- [ ] **Phase 4: Testing & Verification** — Queued
+- [x] **Phase 3: Automation & Process** — 3/3 TASKS COMPLETE.
+  - [x] Paste CLAUDE-COWORK-OPERATING-SYSTEM.md into Cowork global instructions (one-time setup)
+  - [x] Setup 5:30pm scheduled task: session wrap-up with auto-template
+  - [x] Implement automatic CLAUDE.md update proposal system
+- [~] **Phase 4: Testing & Verification** — In Progress
   - [ ] Test complete startup protocol in new Cowork session
   - [ ] Verify GitHub Pages dashboard is live and synced
   - [ ] Document any issues and iterate
 
 ### Ongoing File Management
 - [_] **Push Nébuleuse project files to GitHub** — Deferred until Phase 2 complete. Untracked files: 528+ files (AI Agent data, One Pilot guidance, financial models, etc.)
-- [ ] **Add N8N/ai_agents_az/ to .gitignore** — Run: `echo "N8N/ai_agents_az/" >> /Users/yohanloyer/Projects/.gitignore && git add .gitignore && git commit -m "Add N8N/ai_agents_az to gitignore" && git push origin main`
+- [x] **Add N8N/ai_agents_az/ to .gitignore** — Done. Entry already present in .gitignore (commit 87e6ea4).
 
 ---
 

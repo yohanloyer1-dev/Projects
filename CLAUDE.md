@@ -138,7 +138,7 @@ Two running logs must be updated every session — no exceptions:
 - GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC)
 - Deploy workflow: Edit files → Push via git (`git push origin main`) → GitHub Pages deploys in ~30s
 - Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Run `localStorage.setItem('yl_gist_token', 'TOKEN')` in browser console once per device. Progress syncs across all devices automatically.
-- **TASKS.md Sync:** Dashboard → TASKS.md sync automation is currently DISABLED (broken system). See `Productivity/memory/sync-automation-audit.md`. Manual workflow: (1) Complete tasks in dashboard, (2) Click "Export Session", (3) Paste to Claude, (4) Claude updates TASKS.md manually.
+- **TASKS.md Sync:** Dashboard → TASKS.md sync is live (rebuilt commit 1f73241, 2026-04-13). Click "↑ Sync TASKS" button in topbar to push completed task statuses to GitHub. Requires `yl_gist_token` in localStorage (same token as Gist sync — repo+gist scope). See `Productivity/memory/sync-automation-audit.md` for full history.
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
 - Security: XSS vulnerabilities fixed (commit 1deb0e4) — all DOM methods now safe (no innerHTML, proper HTML escaping, event delegation)
 - ADHD-optimized variant: planned — research saved at `Productivity/memory/context/adhd-dashboard-research.md`
