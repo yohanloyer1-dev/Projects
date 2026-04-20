@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-04-20 | Fix section name mismatches between QA_SECTIONS and DASHBOARD-TASKS.md
+**Commit:** pending
+
+### Bug Fixed
+- Sync still showed "Already up to date" after loop fix — `normSection("Work Travel")` = `"work travel"` but file header is `"Work Travel & Expenses"` → no match, nothing appended
+- Other mismatches: `"Dashboard & Productivity"` vs `"Dashboard & Productivity System"`, `"Gorgias Agency"` vs `"Gorgias Agency (name TBD)"`, `"Bots & Automation"` vs `"Bots & Automation (Personal)"`
+- `SECTION_PARENT` block search used `normParent.slice(0,10)` — fragile, breaks with emoji-prefixed `##` headers
+
+### Fix
+- Updated `QA_SECTIONS` dropdown values to exactly match `DASHBOARD-TASKS.md` headers (post-normalisation)
+- Updated `SECTION_PARENT` keys to match new `QA_SECTIONS` values
+- Fixed parent block search: replaced `slice(0,10)` with `normSection(lines2[i]) === normParent` — proper normalised comparison
+
+---
+
 ## 2026-04-20 | Fix quick-add queue not syncing to DASHBOARD-TASKS.md
 **Commit:** pending
 

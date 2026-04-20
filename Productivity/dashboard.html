@@ -1878,27 +1878,27 @@ function normSection(str) {
 // Maps QA_SECTIONS keys to their parent ## block header (for new section creation)
 const SECTION_PARENT = {
   // Personal
-  'Strategy & Vision':        '## 🧑 Personal',
-  'Tools & Integrations':     '## 🧑 Personal',
-  'Dashboard & Productivity': '## 🧑 Personal',
-  'Admin & Finance':          '## 🧑 Personal',
-  'Health':                   '## 🧑 Personal',
-  'Real Estate':              '## 🧑 Personal',
-  'Japan Trip':               '## 🧑 Personal',
-  'Travel & Errands':         '## 🧑 Personal',
-  'Tech & Accounts':          '## 🧑 Personal',
-  'Network & Others':         '## 🧑 Personal',
-  'Bots & Automation':        '## 🧑 Personal',
+  'Strategy & Vision':                '## 🧑 Personal',
+  'Tools & Integrations':             '## 🧑 Personal',
+  'Dashboard & Productivity System':  '## 🧑 Personal',
+  'Admin & Finance':                  '## 🧑 Personal',
+  'Health':                           '## 🧑 Personal',
+  'Real Estate':                      '## 🧑 Personal',
+  'Japan Trip':                       '## 🧑 Personal',
+  'Travel & Errands':                 '## 🧑 Personal',
+  'Tech & Accounts':                  '## 🧑 Personal',
+  'Network & Others':                 '## 🧑 Personal',
+  'Bots & Automation (Personal)':     '## 🧑 Personal',
   // Work
-  'Work Travel':              '## 💼 Professional (Gorgias)',
-  'Presentations & Events':   '## 💼 Professional (Gorgias)',
-  'Role Optimization':        '## 💼 Professional (Gorgias)',
-  'Follow-ups':               '## 💼 Professional (Gorgias)',
+  'Work Travel & Expenses':           '## 💼 Professional (Gorgias)',
+  'Presentations & Events':           '## 💼 Professional (Gorgias)',
+  'Role Optimization':                '## 💼 Professional (Gorgias)',
+  'Follow-ups':                       '## 💼 Professional (Gorgias)',
   // Freelance
-  'Nébuleuse Bijoux':         '## 🔧 Freelance',
-  'Accessory Partners':       '## 🔧 Freelance',
-  'Gorgias Agency':           '## 🔧 Freelance',
-  'LinkedIn Content':         '## 🔧 Freelance',
+  'Nébuleuse Bijoux':                 '## 🔧 Freelance',
+  'Accessory Partners':               '## 🔧 Freelance',
+  'Gorgias Agency (name TBD)':        '## 🔧 Freelance',
+  'LinkedIn Content':                 '## 🔧 Freelance',
 };
 
 // ── URGENCY → MARKER MAP ───────────────────────────────────────────────────
@@ -2066,9 +2066,9 @@ async function syncDashboardTasks(silent) {
         // Section not found — create it at bottom of parent ## block
         const parentHeader = SECTION_PARENT[sectionKey];
         if (parentHeader) {
-          const normParent = parentHeader.toLowerCase();
+          const normParent = normSection(parentHeader);
           for (let i = 0; i < lines2.length; i++) {
-            if (lines2[i].toLowerCase().startsWith(normParent.slice(0, 10))) {
+            if (lines2[i].startsWith('## ') && normSection(lines2[i]) === normParent) {
               let j = i + 1;
               while (j < lines2.length && !lines2[j].startsWith('## ')) {
                 j++;
@@ -3897,7 +3897,7 @@ const QA_SECTIONS = {
   personal: [
     'Strategy & Vision',
     'Tools & Integrations',
-    'Dashboard & Productivity',
+    'Dashboard & Productivity System',
     'Admin & Finance',
     'Health',
     'Real Estate',
@@ -3905,16 +3905,16 @@ const QA_SECTIONS = {
     'Travel & Errands',
     'Tech & Accounts',
     'Network & Others',
-    'Bots & Automation',
+    'Bots & Automation (Personal)',
   ],
   work: [
-    'Work Travel',
+    'Work Travel & Expenses',
     'Presentations & Events',
     'Role Optimization',
     'Follow-ups',
     'Nébuleuse Bijoux',
     'Accessory Partners',
-    'Gorgias Agency',
+    'Gorgias Agency (name TBD)',
     'LinkedIn Content',
   ]
 };
