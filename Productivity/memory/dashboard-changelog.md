@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-04-20 | Fuzzy section matching — legacy queue entries now sync correctly | pending
+
+### Bug Fixed
+- 3 queued tasks stored with `project: "Work Travel"` (old abbreviated value) couldn't find
+  the `"### ✈️ Work Travel & Expenses"` section in DASHBOARD-TASKS.md — exact normSection
+  comparison returned no match → sync said "Already up to date" with tasks still pending
+- Same issue in `addQuickAddTaskToUI()`: card title `"Work Travel & Expenses"` wouldn't match
+  legacy queue entry `"Work Travel"` → tasks injected into floating fallback card instead of
+  the correct section card
+
+### Fix
+- `syncDashboardTasks()` (line ~2050): two-pass section scan — exact match preferred, then
+  `normFile.startsWith(normTarget)` fallback for legacy/abbreviated names
+- `addQuickAddTaskToUI()` (line ~4088): same two-pass pattern for UI card injection
+- Both functions: `startsWithTl` / `startsWithIdx` hold the fallback; exact match overrides
+
+---
+
 ## 2026-04-20 | Fix section name mismatches between QA_SECTIONS and DASHBOARD-TASKS.md
 **Commit:** pending
 
