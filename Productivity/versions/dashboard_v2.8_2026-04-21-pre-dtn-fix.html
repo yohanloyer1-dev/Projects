@@ -2934,14 +2934,14 @@ function renderBrief() {
   const doneIds = new Set(S.done.map(d => d.id).filter(Boolean));
   const doneNames = new Set(S.done.map(d => d.n).filter(Boolean));
 
-  // Only score tasks from views relevant to the active mode — prevents work tasks
-  // from occupying invisible slots in personal mode (and vice versa), which caused
-  // the Brief to show rank "3" when slots 1+2 were invisible cross-mode tasks.
-  const activeViews = mode === 'personal' ? ['view-personal'] : ['view-freelance', 'view-pro'];
+  // Determine which views are relevant for current mode
+  const modeViews = mode === 'personal' ? ['view-personal'] : ['view-freelance', 'view-pro'];
+  // Always include both for picking — Brief shows all, but tag data-mode correctly
+  const allViews = ['view-personal', 'view-freelance', 'view-pro'];
 
   const candidates = [];
 
-  activeViews.forEach(viewId => {
+  allViews.forEach(viewId => {
     const view = document.getElementById(viewId);
     if (!view) return;
     const taskMode = (viewId === 'view-personal') ? 'personal' : 'work';
@@ -2986,7 +2986,7 @@ function renderBrief() {
         'Network': '🤝', 'Tech': '📱'
       }[project] || '📋';
 
-      candidates.push({ id, name, project, projEmoji, score, isUrgent, isHi, hasDl, isClaude, tab });
+      candidates.push({ id, name, project, projEmoji, score, isUrgent, isHi, hasDl, isClaude, tab, taskMode });
     });
   });
 
@@ -3012,7 +3012,7 @@ function renderBrief() {
 
     // SECURITY FIX: Use data-* attributes instead of onclick handler to prevent XSS
     return `
-      <div class="bi brief-item" style="cursor:pointer" data-task-id="${escapeHtml(t.id)}" data-task-tab="${escapeHtml(t.tab)}">
+      <div class="bi brief-item" style="cursor:pointer" data-mode="${t.taskMode}" data-task-id="${escapeHtml(t.id)}" data-task-tab="${escapeHtml(t.tab)}">
         <div class="bi-rank"><div class="rn ${activeClass}">${rankNum}</div> ${activeLabel}</div>
         <div class="bi-name">${escapeHtml(t.name)}</div>
         <div class="bi-proj">${t.projEmoji} ${escapeHtml(t.project)}</div>
@@ -3027,6 +3027,11 @@ function renderBrief() {
       const tab = item.dataset.taskTab;
       if(taskId && tab) goToTask(taskId, tab);
     });
+  });
+
+  // Re-apply mode visibility to new elements
+  document.querySelectorAll('#briefGrid [data-mode]').forEach(el => {
+    el.style.display = el.dataset.mode === mode ? '' : 'none';
   });
 }
 
@@ -4582,15 +4587,10 @@ function dtnGetTopTask() {
     const st = S.statuses[id] || '';
     if(st === 'Urgent')     score += 300;
     else if(st === 'Important') score += 120;
+    else if(st === 'Someday' || st === 'Waiting') score -= 200;
 
     // 3. Deadline boost — carries significant weight
     score += dlPriorityScore(id);
-
-    // 4. Someday/Waiting cap — applied AFTER deadline so a stale deadline can't
-    // resurrect a deliberately deprioritised task above genuinely urgent work.
-    // A Someday task with a 30-day-overdue deadline would otherwise score 1100+,
-    // beating an urgent task (600). Cap prevents this pathological outcome.
-    if(st === 'Someday' || st === 'Waiting') score = Math.min(score, 50);
 
     return { el: t, score, id };
   });

@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-04-21 | DTN + Brief scoring fixes — mode-aware ranking + Someday cap | pending
+
+### Problems Fixed
+- **Brief showed rank "3" in Personal mode**: `renderBrief()` was scoring ALL views (personal + work + freelance) together, then hiding cross-mode items with CSS. Result: work tasks occupied invisible slots 1+2, leaving only slot 3 visible. Same bug caused only 2 tasks visible in Work mode.
+- **Someday tasks with stale deadlines outranked urgent tasks**: A Someday task 30 days overdue scored 1100+ (deadline boost) vs 600 for a genuine urgent task. Explicitly deprioritised tasks were surfacing first.
+
+### Changes
+- `renderBrief()`: Changed `allViews` → `activeViews` filtered by mode BEFORE scoring. Removed `taskMode` candidate property. Removed `data-mode` attribute from rendered brief items. Removed CSS post-filter loop (`#briefGrid [data-mode]`). Brief now always shows 3 slots from the correct mode.
+- `dtnGetTopTask()`: Moved Someday/Waiting penalty to AFTER deadline scoring, applied as a hard cap (`score = Math.min(score, 50)`). Prevents deadline boost from overriding explicit deprioritisation.
+
+### Version snapshot
+- `Productivity/versions/dashboard_v2.8_2026-04-21-pre-dtn-fix.html`
+
+---
+
 ## 2026-04-20 | Inline task rename — pencil button + double-click | pending
 
 ### Feature Added
