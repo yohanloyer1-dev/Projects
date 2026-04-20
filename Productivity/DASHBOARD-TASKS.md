@@ -122,6 +122,7 @@
 - [ ] **Account Mapping — Bloomreach** — Map shared accounts with Bloomreach partner
 - [ ] **Use holiday credit** — Book or apply remaining holiday credit before expiry
 
+- [!] **Create list of partners to hand over** _(30min)_ — Due: 2026-04-28
 ### Follow-ups
 - [x] **Contact Jorge Farma2go** — URGENT follow-up
 - [!][>] **Create DOCK spaces** — URGENT + IMPORTANT
