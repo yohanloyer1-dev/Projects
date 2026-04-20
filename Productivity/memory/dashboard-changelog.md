@@ -4,6 +4,39 @@
 
 ---
 
+## 2026-04-20 | Inline task rename — pencil button + double-click | pending
+
+### Feature Added
+- Pencil button `✏️` injected on every task (appears on hover, same pattern as 📝 note btn)
+- Double-click on task name also triggers edit — two entry points, one interaction
+- Clicking pencil or double-clicking: `.tn` span replaced with inline `<input>` pre-filled
+- Enter / click away → saves; Escape → cancels with no change
+- Completed tasks (`done-t`) are not editable
+- On save: updates DOM, `yl_renames` localStorage key, triggers silent `syncDashboardTasks()`
+- `syncDashboardTasks()`: new Step 4b applies pending renames to MD file via bold-name regex
+  replace, clears `yl_renames` after successful write
+- Works for both hardcoded tasks (`bind()`) and quick-add tasks (`bindSingleTask()`)
+- Mobile: `.edit-btn` added to always-visible button list on small screens
+
+### New function
+- `startInlineEdit(taskEl)` — handles full edit lifecycle (input inject, save, cancel, sync)
+
+### New CSS
+- `.edit-btn` — amber hover colour, matches `.note-btn` / `.link-btn` sizing pattern
+- `.tn-edit` — amber border input, matches dashboard dark theme
+
+---
+
+## 2026-04-20 | Reduce completion buffer from 60s to 10s | pending
+
+### Change
+- `scheduleCompletionSync()`: timeout reduced from 60000ms to 10000ms
+- 60s was too long — accidental completions required a full minute wait to undo
+- 10s gives enough time to notice and uncheck without feeling like a delay
+- All comments updated to reflect new value
+
+---
+
 ## 2026-04-20 | Fix UTF-8 encoding in GitHub API read/write + rebuild DASHBOARD-TASKS.md clean | 435c914
 
 ### Root Cause
