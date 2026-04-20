@@ -4,7 +4,27 @@
 
 ---
 
-## 2026-04-20 | Fix normSection emoji stripping — non-ASCII regex replaces codepoint allowlist | pending
+## 2026-04-20 | Fix UTF-8 encoding in GitHub API read/write + rebuild DASHBOARD-TASKS.md clean | pending
+
+### Root Cause
+- `atob()` returns a raw byte string, not Unicode — emoji and French accented chars (é, à, ô etc.)
+  decoded to garbled `ÃÂ°...` sequences on every GitHub API read
+- `btoa(unescape(encodeURIComponent(...)))` write pattern perpetuated the corruption on every PUT
+- DASHBOARD-TASKS.md was fully corrupted — every emoji and accented char mangled
+
+### Fix
+- **Read (line ~2034):** replaced `atob(...)` with proper UTF-8 decode:
+  `new TextDecoder('utf-8').decode(Uint8Array.from(atob(...), c => c.charCodeAt(0)))`
+- **Write (line ~2192):** replaced `btoa(unescape(encodeURIComponent(...)))` with:
+  `btoa(String.fromCharCode(...new TextEncoder().encode(content)))`
+- **DASHBOARD-TASKS.md:** fully rebuilt from scratch — all emojis removed from `###` section
+  headers (kept as plain text), all French accents restored, em-dashes (—) restored
+- `###` headers now emoji-free: "Work Travel & Expenses", "Admin & Finance", etc.
+  This permanently eliminates the emoji-in-header matching problem at source
+
+---
+
+## 2026-04-20 | Fix normSection emoji stripping — non-ASCII regex replaces codepoint allowlist | 31501e2
 
 ### Bug Fixed
 - `normSection()` emoji regex allowlist (`\u{1F000}-\u{1FFFF}` etc.) failed to strip emoji
