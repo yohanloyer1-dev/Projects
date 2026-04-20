@@ -3342,7 +3342,9 @@ function bind(){
     }
 
     // ── CHECKBOX ONLY — complete/uncomplete ──
-    if(chkEl) {
+    // Guard: skip if already bound to prevent duplicate listeners from stacking
+    if(chkEl && !chkEl.dataset.bound) {
+      chkEl.dataset.bound = '1';
       chkEl.addEventListener('click', function(e){
         e.stopPropagation();
         const task = t;
@@ -4194,8 +4196,11 @@ function bindSingleTask(t) {
   }
 
   // Checkbox click ONLY — do not fire on row click
+  // Guard: skip if already bound to prevent duplicate listeners from stacking
   const chkEl = t.querySelector('.chk');
-  if (chkEl) chkEl.addEventListener('click', e => {
+  if (chkEl && !chkEl.dataset.bound) {
+    chkEl.dataset.bound = '1';
+    chkEl.addEventListener('click', e => {
     e.stopPropagation();
     if (t.classList.contains('done-t')) return;
     const xp2 = +(t.dataset.xp) || 10;
@@ -4229,7 +4234,8 @@ function bindSingleTask(t) {
       t.dataset.origMarker = origMarker2;
     }
     if (taskId2) scheduleCompletionSync(taskId2, nm2, t.dataset.origMarker || '[ ]');
-  });
+  }); // end addEventListener
+  } // end if chkEl && !bound
 
   // Deadline badge (same as main bind)
   bindDeadline(t);

@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-04-20 | Fix duplicate completion bug — checkbox bound multiple times
+**Commit:** pending
+
+### Bug Fixed
+- Checking a task off fired multiple completions (4x "Book hotel Milano" in Done log)
+- Root cause: `bind()` and `bindSingleTask()` both attached click listeners to the same `.chk` element with no guard — `restoreQuickAddTasks()` runs after `bind()` and re-binds already-bound checkboxes; any re-call to `bind()` stacks another listener on top
+- Each extra listener fired independently → one click = multiple completions, multiple Done log entries
+
+### Fix
+- Added `data-bound` guard to `.chk` in `bind()`: `if(chkEl && !chkEl.dataset.bound)` — sets `chkEl.dataset.bound = '1'` before attaching listener
+- Same guard added to `bindSingleTask()` for quick-add tasks
+- Once a `.chk` is bound, no subsequent call to either function can attach another listener
+
+---
+
 ## 2026-04-19 | Unified auto-sync engine + sticky notifications (v2.7)
 **Commit:** `d55067d` (pending push)
 
