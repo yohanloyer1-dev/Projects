@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-04-20 | Fix normSection emoji stripping — non-ASCII regex replaces codepoint allowlist | pending
+
+### Bug Fixed
+- `normSection()` emoji regex allowlist (`\u{1F000}-\u{1FFFF}` etc.) failed to strip emoji
+  bytes after `atob()` base64 decode — Safari/Chrome produce garbled multi-byte sequences
+  (e.g. `"ã â ã â¢ã..."`) that don't match the Unicode ranges
+- Result: `normFile` = `"ã â ã ... work travel & expenses"` — `startsWith("work travel")`
+  fails → all 3 queued tasks hit ❌ NO MATCH → sync reports "Already up to date"
+
+### Fix
+- `normSection()`: replaced specific emoji codepoint regex with `/^[^\x00-\x7F\s]+\s*/g`
+  (strip all leading non-ASCII character runs) + `/^[^\w]*/` (strip remaining non-word chars)
+- More robust than an allowlist — handles any encoding artifact, not just known emoji ranges
+- Both the file-side and queue-side strings now normalise to clean ASCII before comparison
+
+---
+
 ## 2026-04-20 | Fuzzy section matching — legacy queue entries now sync correctly | fc3e0d1
 
 ### Bug Fixed
