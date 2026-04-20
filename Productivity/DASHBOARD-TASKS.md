@@ -61,6 +61,7 @@
 - [ ] **Book flight from Okinawa** — Return leg (non-urgent)
 - [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
+- [!] **Log into Home Exchange account for Japan** _(15min)_ — Due: 2026-04-24
 ### Travel & Errands
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [x] **Book flights Asia** — Book flights for Asia trip
