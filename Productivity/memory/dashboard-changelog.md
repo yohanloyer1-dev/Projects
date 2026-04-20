@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-04-20 | Fuzzy section matching — legacy queue entries now sync correctly | pending
+## 2026-04-20 | Fuzzy section matching — legacy queue entries now sync correctly | fc3e0d1
 
 ### Bug Fixed
 - 3 queued tasks stored with `project: "Work Travel"` (old abbreviated value) couldn't find
