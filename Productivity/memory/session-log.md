@@ -5,6 +5,38 @@
 
 ---
 
+## 2026-04-20 | Dashboard sync bugfixes + Claude-OS project launch | Dashboard + YL/OPS
+
+### Requested
+- Fix remaining dashboard sync bugs (duplicate checkbox listeners, quick-add queue not syncing, fuzzy section matching failures, UTF-8 encoding errors)
+- Launch Claude-OS as a formal project
+- 5:30pm automated session wrap-up (this entry)
+
+### Done
+- **Dashboard sync fixes (6 commits, `bea63c3` → `435c914`):**
+  - Fixed duplicate checkbox listeners — added `data-bound` guard in `bind()` and `bindSingleTask()`
+  - Fixed quick-add queue not syncing — `lines2` was being built outside loop; rebuilt single content after all tasks
+  - Fixed `QA_SECTIONS` + `SECTION_PARENT` to align with actual DASHBOARD-TASKS.md headers
+  - Fixed fuzzy section matching for legacy queue entries (starts-with fallback)
+  - Fixed `normSection()` — replaced emoji codepoint regex with non-ASCII strip
+  - Fixed UTF-8 encode/decode for GitHub API + rebuilt DASHBOARD-TASKS.md clean
+- **5 tasks marked done via dashboard sync** (commit `0627653`)
+- **Claude-OS project launched** (commit `ff39dda`): folder created, research file, memory doc, session prompt
+- **Session log + changelog docs** updated (commit `bd3cf62`)
+- **Pre-commit hook** added for dashboard-edit protocol enforcement (commit `7232546`)
+
+### Key Decisions
+- UTF-8 encoding fix required full DASHBOARD-TASKS.md rebuild via GitHub API — file now clean
+- normSection regex approach was fragile with emoji; non-ASCII strip is simpler and reliable
+- Claude-OS is now a formal project tracked in memory + task list
+
+### Next Steps
+- Test dashboard quick-add end-to-end: add task → verify appears in correct section + syncs to DASHBOARD-TASKS.md
+- Continue Claude-OS research (market positioning, pricing, packaging)
+- Push all files verified on GitHub (already done — last commit `435c914`)
+
+---
+
 ## 2026-04-19 | Dashboard sync rebuild — quick-add auto-sync + sticky notifications | Dashboard session
 
 ### Requested
