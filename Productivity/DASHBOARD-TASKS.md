@@ -110,6 +110,9 @@
 - [ ] **Book flights Gorgias Connect** — Work event
 - [ ] **Book hotel Gorgias Connect** — Work event
 
+- [!] **Book flight Paris --> Athens** _(5min)_ — Due: 2026-04-21
+- [ ] **Book flight BBQ Axome** _(15min)_ — Due: 2026-04-24
+- [ ] **Book Hotel Shoptalk** _(15min)_ — Due: 2026-05-01
 ### Presentations & Events
 - [x] **Slides Fashion Commerce** — Done
 
