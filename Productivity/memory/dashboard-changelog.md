@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-04-20 | Fix quick-add queue not syncing to DASHBOARD-TASKS.md
+**Commit:** pending
+
+### Bug Fixed
+- Sync button showed "Already up to date" despite 3 tasks in queue — nothing was written to GitHub
+- Two bugs in the append loop:
+  1. `lines2` was rebuilt from `content.split('\n')` on every loop iteration — each task started from the original content, so only the last task's insertion survived in `content`
+  2. When section was found via `SECTION_PARENT` (insertIdx === -2 sentinel), `content` was never updated from the mutated `lines2` (guarded by `if (insertIdx !== -2)`)
+
+### Fix
+- Moved `const lines2 = content.split('\n')` outside the loop — array is built once and mutated in place across all iterations
+- Removed per-iteration `content = lines2.join('\n')` assignments inside the loop
+- Single `content = lines2.join('\n')` after the loop, only when `successfullyAdded.length > 0`
+- Removed the now-unnecessary `insertIdx !== -2` guard
+
+---
+
 ## 2026-04-20 | Fix duplicate completion bug — checkbox bound multiple times
 **Commit:** pending
 

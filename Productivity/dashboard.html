@@ -2033,6 +2033,11 @@ async function syncDashboardTasks(silent) {
     const queue = JSON.parse(localStorage.getItem('yl_quickadd') || '[]');
     const successfullyAdded = [];
 
+    // Build lines array ONCE outside the loop — mutations accumulate correctly
+    // across multiple tasks. Rebuilding from content each iteration meant only
+    // the last task's insertion survived (each loop started from original content).
+    const lines2 = content.split('\n');
+
     for (const task of queue) {
       const marker = urgencyToMarker(task.urgency);
       const deadlineSuffix = task.deadline ? ` — Due: ${task.deadline}` : '';
@@ -2042,18 +2047,17 @@ async function syncDashboardTasks(silent) {
       const sectionKey = task.project || '';
       const normTarget = normSection(sectionKey);
 
-      // Find matching ### section header in content
-      const lines2 = content.split('\n');
+      // Find matching ### section header in lines2
       let insertIdx = -1;
 
       for (let i = 0; i < lines2.length; i++) {
         if (lines2[i].startsWith('###') && normSection(lines2[i]) === normTarget) {
-          // Found section — insert after last task in this section
+          // Found section — insert after last task line in this section
           let j = i + 1;
           while (j < lines2.length && !lines2[j].startsWith('##')) {
             j++;
           }
-          insertIdx = j; // insert before next section
+          insertIdx = j;
           break;
         }
       }
@@ -2065,22 +2069,20 @@ async function syncDashboardTasks(silent) {
           const normParent = parentHeader.toLowerCase();
           for (let i = 0; i < lines2.length; i++) {
             if (lines2[i].toLowerCase().startsWith(normParent.slice(0, 10))) {
-              // Find end of this ## block (next ## or EOF)
               let j = i + 1;
               while (j < lines2.length && !lines2[j].startsWith('## ')) {
                 j++;
               }
-              // Insert new section + task before next ##
               lines2.splice(j, 0, `### ${sectionKey}`, newLine, '');
-              insertIdx = -2; // sentinel: already inserted
               changed = true;
               successfullyAdded.push(task);
+              insertIdx = -2; // sentinel: inserted
               break;
             }
           }
         }
         if (insertIdx === -1) {
-          // Fallback: append to end of file before ## ✅ Done
+          // Final fallback: insert before ## ✅ Done
           for (let i = lines2.length - 1; i >= 0; i--) {
             if (lines2[i].startsWith('## ✅ Done')) {
               lines2.splice(i, 0, `### ${sectionKey}`, newLine, '');
@@ -2090,16 +2092,17 @@ async function syncDashboardTasks(silent) {
             }
           }
         }
-        if (insertIdx !== -2) content = lines2.join('\n');
         continue;
       }
 
       // Insert at found position
       lines2.splice(insertIdx, 0, newLine);
-      content = lines2.join('\n');
       changed = true;
       successfullyAdded.push(task);
     }
+
+    // Rebuild content from mutated lines2 once after all tasks processed
+    if (successfullyAdded.length > 0) content = lines2.join('\n');
 
     if (successfullyAdded.length > 0) {
       summaryParts.push(`${successfullyAdded.length} task${successfullyAdded.length > 1 ? 's' : ''} added`);
