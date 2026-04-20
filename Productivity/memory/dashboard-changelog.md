@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-04-20 | Fix UTF-8 encoding in GitHub API read/write + rebuild DASHBOARD-TASKS.md clean | pending
+## 2026-04-20 | Fix UTF-8 encoding in GitHub API read/write + rebuild DASHBOARD-TASKS.md clean | 435c914
 
 ### Root Cause
 - `atob()` returns a raw byte string, not Unicode — emoji and French accented chars (é, à, ô etc.)

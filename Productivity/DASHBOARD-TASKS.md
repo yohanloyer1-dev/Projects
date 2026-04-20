@@ -107,6 +107,8 @@
 - [ ] **Book flight Paris --> Athens** — Work Travel
 - [ ] **Book flight BBQ Axome** — Work Travel
 - [ ] **Book Hotel Shoptalk** — Work Travel
+- [ ] **Book flights Gorgias Connect** — Work event
+- [ ] **Book hotel Gorgias Connect** — Work event
 
 ### Presentations & Events
 - [x] **Slides Fashion Commerce** — Done
