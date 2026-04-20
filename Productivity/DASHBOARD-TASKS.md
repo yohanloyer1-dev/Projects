@@ -71,6 +71,7 @@
 - [ ] **Leave review of Mexico trip** — Write and post review
 - [ ] **Classeur docs · Semelles Filling Pièces · Water flosser** — Misc errands
 
+- [!] **Add Amélia to Easyjet flight to Nice** — Due: 2026-04-24
 ### Tech & Accounts
 - [ ] **Transfer photos from iPhone** — Back up photos from iPhone
 - [ ] **Hide private albums** — Hide albums on iPhone/iCloud
