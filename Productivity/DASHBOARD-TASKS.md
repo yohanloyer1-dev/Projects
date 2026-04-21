@@ -148,6 +148,7 @@
 
 ---
 
+- [ ] **Get back to Sendcloud + Antadis** _(10min)_ — Due: 2026-04-24
 ## Freelance
 
 ### Nébuleuse Bijoux
