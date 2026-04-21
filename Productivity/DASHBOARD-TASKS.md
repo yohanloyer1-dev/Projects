@@ -94,6 +94,7 @@
   - Note: Research Polymarket API, copy trading mechanics, Reddit/Claude communities
 - [_] **Copy trading bot — Whales Solana** — Build Solana whale copy trading bot 🤖
 
+- [>] **Setup Obsidian + 2nd brain** _(60min)_ — Due: 2026-05-10
 ### Nébuleuse (personal idea)
 - [_] **VIP customer rule — no AI Agent** — Auto-transfer VIP customers to human agent. Post-50% automation target.
 
