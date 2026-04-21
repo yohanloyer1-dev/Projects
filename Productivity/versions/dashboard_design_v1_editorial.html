@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YL / OPS — Editorial Direction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────
+   DIRECTION: "The Archive"
+   Reference: Bauhaus Dessau meets The Economist
+   Feeling: Authoritative. Every pixel earned. No decoration.
+   Type: Playfair Display (editorial weight) + IBM Plex Mono (data)
+   Color: Near-white ground. Single red. Deep black type.
+   Motion: Nothing moves unless it reports something changed.
+───────────────────────────────────────────────────── */
+
+:root {
+  --bg: #F5F2EC;
+  --paper: #FAFAF7;
+  --ink: #0D0D0B;
+  --ink-2: #3A3A36;
+  --ink-3: #7A7A74;
+  --ink-4: #B8B8B0;
+  --rule: #D8D5CE;
+  --red: #C8202A;
+  --red-pale: #FAF0F0;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ── */
+.shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 32px 0 20px;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 0;
+}
+
+.masthead-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.masthead-issue {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.masthead-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: .9;
+  color: var(--ink);
+}
+
+.masthead-title span {
+  color: var(--red);
+  font-style: italic;
+}
+
+.masthead-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding-bottom: 6px;
+}
+
+.masthead-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: .08em;
+}
+
+.mode-strip {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--ink);
+}
+
+.mode-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  border-right: 1px solid var(--ink);
+  transition: background .15s, color .15s;
+}
+.mode-btn:last-child { border-right: none; }
+.mode-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ── DIVIDER RULE ── */
+.rule { border: none; border-top: 1px solid var(--rule); }
+.rule-heavy { border: none; border-top: 1px solid var(--ink); }
+
+/* ── HEADLINE STRIP (goal) ── */
+.headline-strip {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+}
+
+.hl-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--red);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hl-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.hl-text em {
+  font-style: normal;
+  color: var(--red);
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 2px;
+}
+
+/* ── 3-COLUMN GRID ── */
+.columns {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.2fr;
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  margin-bottom: 28px;
+}
+
+.col {
+  padding: 20px 24px 20px 0;
+  border-right: 1px solid var(--rule);
+}
+.col:last-child { border-right: none; padding-right: 0; padding-left: 24px; }
+.col:first-child { padding-left: 0; }
+
+.col-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* STREAK */
+.streak-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 88px;
+  font-weight: 900;
+  line-height: .85;
+  letter-spacing: -4px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.streak-unit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  margin-bottom: 8px;
+}
+.week-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  color: var(--ink-4);
+  text-align: center;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.week-day {
+  height: 8px;
+  background: var(--rule);
+}
+.week-day.done { background: var(--ink); }
+.week-day.done.today { background: var(--red); }
+
+.streak-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+/* LEVEL / PROGRESS */
+.level-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.level-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: .85;
+  letter-spacing: -3px;
+  color: var(--ink);
+}
+.level-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+}
+.level-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink-2);
+  margin-bottom: 16px;
+}
+
+.xp-bar {
+  height: 3px;
+  background: var(--rule);
+  margin-bottom: 6px;
+}
+.xp-fill {
+  height: 100%;
+  background: var(--ink);
+  width: 68%;
+}
+.xp-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+}
+
+.prog-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.prog-row { display: flex; flex-direction: column; gap: 4px; }
+.prog-name { font-size: 10px; color: var(--ink-2); display: flex; justify-content: space-between; }
+.prog-name span { font-family: 'IBM Plex Mono', monospace; color: var(--ink-3); font-size: 9px; }
+.prog-bar { height: 2px; background: var(--rule); }
+.prog-fill { height: 100%; background: var(--ink); }
+.prog-fill.red { background: var(--red); }
+
+/* STATS (right col) */
+.stat-stack { display: flex; flex-direction: column; gap: 0; }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label { font-size: 10px; color: var(--ink-2); }
+.stat-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.stat-val.red { color: var(--red); }
+
+/* ── NAV TABS ── */
+.nav-strip {
+  display: flex;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 20px;
+}
+
+.ntab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color .15s;
+  position: relative;
+}
+.ntab .cnt {
+  font-size: 8px;
+  color: var(--ink-4);
+  margin-left: 6px;
+}
+.ntab.active {
+  color: var(--ink);
+  border-bottom-color: var(--red);
+}
+.ntab.urgent .cnt { color: var(--red); }
+
+/* ── TASK LIST ── */
+.task-section-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 12px 0 6px;
+  border-top: 1px solid var(--rule);
+}
+
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.task-check {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink-3);
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.task-check:hover { border-color: var(--ink); }
+.task-check.done { background: var(--ink); border-color: var(--ink); }
+.task-check.done::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 5px;
+  border-left: 1.5px solid var(--paper);
+  border-bottom: 1.5px solid var(--paper);
+  transform: rotate(-45deg) translate(2px, 2px);
+}
+
+.task-body { flex: 1; }
+.task-title { font-size: 12px; color: var(--ink); line-height: 1.4; }
+.task-title.done { color: var(--ink-4); text-decoration: line-through; }
+.task-meta { display: flex; gap: 12px; margin-top: 3px; }
+.task-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.task-due {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: var(--ink-4);
+}
+.task-due.urgent { color: var(--red); }
+
+.task-priority {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.task-priority.p1 { background: var(--red); color: white; }
+.task-priority.p2 { border: 1px solid var(--ink-3); color: var(--ink-3); }
+.task-priority.p3 { color: var(--ink-4); }
+
+/* ── FOOTER RULE ── */
+.footer {
+  border-top: 3px solid var(--ink);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+.footer-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: var(--ink-4);
+  letter-spacing: .08em;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="masthead-issue">Operations Review · Vol. 2 No. 8</div>
+      <div class="masthead-title">YL <span>/</span> OPS</div>
+    </div>
+    <div class="masthead-right">
+      <div class="masthead-date">Tuesday, 21 April 2026</div>
+      <div class="mode-strip">
+        <button class="mode-btn active">Work</button>
+        <button class="mode-btn">Personal</button>
+        <button class="mode-btn">Calm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADLINE STRIP -->
+  <div class="headline-strip">
+    <div class="hl-kicker">North Star</div>
+    <div class="hl-text">Become the best Gorgias Agency Partner and <em>get promoted to Senior PSM</em></div>
+  </div>
+
+  <!-- 3-COLUMN EDITORIAL GRID -->
+  <div class="columns">
+
+    <!-- COL 1: STREAK -->
+    <div class="col">
+      <div class="col-label">Consistency Streak</div>
+      <div class="streak-big">12</div>
+      <div class="streak-unit">days active</div>
+
+      <div class="week-grid">
+        <div class="week-label">M</div><div class="week-label">T</div><div class="week-label">W</div>
+        <div class="week-label">T</div><div class="week-label">F</div><div class="week-label">S</div><div class="week-label">S</div>
+      </div>
+      <div class="week-grid">
+        <div class="week-day done"></div><div class="week-day done"></div><div class="week-day done"></div>
+        <div class="week-day done"></div><div class="week-day done today"></div><div class="week-day"></div><div class="week-day"></div>
+      </div>
+      <div class="week-grid">
+        <div class="week-day done"></div><div class="week-day done"></div><div class="week-day done"></div>
+        <div class="week-day done"></div><div class="week-day done"></div><div class="week-day"></div><div class="week-day"></div>
+      </div>
+
+      <div class="streak-note">7 days until Level 13 milestone</div>
+
+      <div class="prog-rows" style="margin-top: 24px;">
+        <div class="col-label" style="margin-bottom: 10px;">Progress by Area</div>
+        <div class="prog-row">
+          <div class="prog-name">Gorgias Agency <span>78%</span></div>
+          <div class="prog-bar"><div class="prog-fill red" style="width:78%"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Nébuleuse Bijoux <span>64%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:64%"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Accessory Partners <span>40%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:40%"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Personal <span>55%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 2: LEVEL + XP -->
+    <div class="col">
+      <div class="col-label">Level & Experience</div>
+      <div class="level-display">
+        <div class="level-num">12</div>
+        <div class="level-label">Level</div>
+      </div>
+      <div class="level-title">Strategic Operator</div>
+
+      <div class="xp-bar"><div class="xp-fill"></div></div>
+      <div class="xp-meta"><span>6,800 XP earned</span><span>2,400 to Lv.13</span></div>
+
+      <div style="margin-top: 24px;">
+        <div class="col-label" style="margin-bottom: 12px;">Today's Activity</div>
+        <div class="stat-stack">
+          <div class="stat-row">
+            <div class="stat-label">Tasks completed</div>
+            <div class="stat-val">4</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label">Tasks remaining</div>
+            <div class="stat-val red">6</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label">Micro-wins</div>
+            <div class="stat-val">3</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label">Focus sessions</div>
+            <div class="stat-val">2</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label">XP earned today</div>
+            <div class="stat-val">+340</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 3: QUICK STATS -->
+    <div class="col">
+      <div class="col-label">This Week</div>
+      <div class="stat-stack">
+        <div class="stat-row">
+          <div class="stat-label">Completed</div>
+          <div class="stat-val">18</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label">Overdue</div>
+          <div class="stat-val red">3</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label">Queue</div>
+          <div class="stat-val">2</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label">Wins</div>
+          <div class="stat-val">7</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label">XP Total</div>
+          <div class="stat-val">6,800</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--rule);">
+        <div class="col-label" style="margin-bottom: 8px;">Status</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--ink-3); line-height: 1.8;">
+          <div>● Synced · 14:32</div>
+          <div style="color: var(--ink-4);">○ Mode: Work</div>
+          <div style="color: var(--ink-4);">○ Theme: Light</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-strip">
+    <button class="ntab active">All Tasks <span class="cnt">24</span></button>
+    <button class="ntab urgent">Urgent <span class="cnt">3</span></button>
+    <button class="ntab">Gorgias <span class="cnt">8</span></button>
+    <button class="ntab">Nébuleuse <span class="cnt">5</span></button>
+    <button class="ntab">Accessory Partners <span class="cnt">4</span></button>
+    <button class="ntab">Personal <span class="cnt">4</span></button>
+    <button class="ntab">Queue <span class="cnt">2</span></button>
+  </div>
+
+  <!-- TASKS -->
+  <div class="task-section-head">Urgent · Due today or overdue</div>
+
+  <div class="task">
+    <div class="task-check"></div>
+    <div class="task-body">
+      <div class="task-title">Finalize Q2 Accessory Partners QBR presentation</div>
+      <div class="task-meta">
+        <div class="task-tag">Gorgias Agency</div>
+        <div class="task-due urgent">Overdue · Apr 18</div>
+      </div>
+    </div>
+    <div class="task-priority p1">P1</div>
+  </div>
+
+  <div class="task">
+    <div class="task-check"></div>
+    <div class="task-body">
+      <div class="task-title">Review AI Agent optimization plan for Nébuleuse</div>
+      <div class="task-meta">
+        <div class="task-tag">Nébuleuse Bijoux</div>
+        <div class="task-due urgent">Today · Apr 21</div>
+      </div>
+    </div>
+    <div class="task-priority p1">P1</div>
+  </div>
+
+  <div class="task-section-head" style="margin-top: 8px;">In Progress</div>
+
+  <div class="task">
+    <div class="task-check"></div>
+    <div class="task-body">
+      <div class="task-title">Set up GitHub sync between Code and Cowork sessions</div>
+      <div class="task-meta">
+        <div class="task-tag">Productivity</div>
+        <div class="task-due">Apr 21</div>
+      </div>
+    </div>
+    <div class="task-priority p2">P2</div>
+  </div>
+
+  <div class="task">
+    <div class="task-check done"></div>
+    <div class="task-body">
+      <div class="task-title done">Move Nébuleuse Bijoux folder into Gorgias Agency structure</div>
+      <div class="task-meta">
+        <div class="task-tag">Admin</div>
+        <div class="task-due">Done</div>
+      </div>
+    </div>
+    <div class="task-priority p3">Done</div>
+  </div>
+
+  <div class="task">
+    <div class="task-check"></div>
+    <div class="task-body">
+      <div class="task-title">Build Design Director skill for Claude Code sessions</div>
+      <div class="task-meta">
+        <div class="task-tag">Productivity</div>
+        <div class="task-due">Apr 21</div>
+      </div>
+    </div>
+    <div class="task-priority p2">P2</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-note">YL / OPS · Dashboard v2.8 · Editorial Direction Mockup · Not production</div>
+    <div class="footer-note">All data illustrative</div>
+  </div>
+
+</div>
+</body>
+</html>
