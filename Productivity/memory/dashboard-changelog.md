@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-04-22 | Add Productivity category (Personal) + 3 tasks | pending
+
+### Changes
+- Added new "Productivity" section to Personal view in dashboard.html (after Network & Others)
+- Added 3 tasks: Dashboard Audit P1 (continue), Security fixes, Git conflicts + DTN audit
+- Added `Productivity` to `SECTION_PARENT` map (→ `## 🧑 Personal`)
+- Added `Productivity` to `QA_SECTIONS.personal` array
+- Added `Productivity` emoji (`⚡`) to project emoji map
+- Version snapshot: `versions/dashboard_v2.8_2026-04-22-pre-productivity.html`
+
+---
+
 ## 2026-04-21 | DTN + Brief scoring fixes — mode-aware ranking + Someday cap | pending
 
 ### Problems Fixed
