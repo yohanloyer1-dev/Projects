@@ -1208,6 +1208,23 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
   </div>
 
+  <!-- PRODUCTIVITY -->
+  <div class="sh"><div class="sh-lbl">Productivity</div><div class="sh-line"></div></div>
+  <div class="g1">
+    <div class="pc">
+      <div class="pc-acc" style="background:var(--cyan)"></div>
+      <div class="pc-head"><div><div class="pc-title">Productivity System</div><div class="pc-sub">Dashboard · Claude OS · automation</div></div><span class="pill p-per">Personal</span></div>
+      <div class="tl">
+        <div class="t cl" data-id="productivity-dashboard-audit-p1" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Continue Part 1 — Productivity Dashboard Audit and Recommendations</span><span class="td">Continue in Claude Code</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="note-panel" data-for="productivity-dashboard-audit-p1"></div>
+        <div class="t cl" data-id="productivity-dashboard-security-fix" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to fix all security recommendations from the Productivity Dashboard Audit</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="note-panel" data-for="productivity-dashboard-security-fix"></div>
+        <div class="t cl" data-id="productivity-dashboard-git-dtn" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to implement Git conflicts and audit DTN system</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="note-panel" data-for="productivity-dashboard-git-dtn"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══════════════════════════════════ -->
@@ -1970,6 +1987,7 @@ const SECTION_PARENT = {
   'Tech & Accounts':                  '## 🧑 Personal',
   'Network & Others':                 '## 🧑 Personal',
   'Bots & Automation (Personal)':     '## 🧑 Personal',
+  'Productivity':                      '## 🧑 Personal',
   // Work
   'Work Travel & Expenses':           '## 💼 Professional (Gorgias)',
   'Presentations & Events':           '## 💼 Professional (Gorgias)',
@@ -2983,7 +3001,7 @@ function renderBrief() {
         'Real Estate': '🏡', 'Health': '🏥', 'Strategy': '🧠',
         'Nébuleuse': '💎', 'Accessory Partners': '🚗', 'Agency': '🏢',
         'LinkedIn': '💼', 'Gorgias Role': '📊', 'Bots': '🤖',
-        'Network': '🤝', 'Tech': '📱'
+        'Network': '🤝', 'Tech': '📱', 'Productivity': '⚡'
       }[project] || '📋';
 
       candidates.push({ id, name, project, projEmoji, score, isUrgent, isHi, hasDl, isClaude, tab });
@@ -4040,6 +4058,7 @@ const QA_SECTIONS = {
     'Tech & Accounts',
     'Network & Others',
     'Bots & Automation (Personal)',
+    'Productivity',
   ],
   work: [
     'Work Travel & Expenses',
