@@ -94,9 +94,13 @@
   - Note: Research Polymarket API, copy trading mechanics, Reddit/Claude communities
 - [_] **Copy trading bot — Whales Solana** — Build Solana whale copy trading bot 🤖
 
-- [>] **Setup Obsidian + 2nd brain** _(60min)_ — Due: 2026-05-10
 ### Nébuleuse (personal idea)
 - [_] **VIP customer rule — no AI Agent** — Auto-transfer VIP customers to human agent. Post-50% automation target.
+
+### Productivity
+- [ ] **Continue Part 1 - Productivity Dashboard Audit and Recommendations on Claude Code** 🤖
+- [ ] **Get Claude Code to fix all security recommendations from the Productivity Dashboard Audit** 🤖
+- [ ] **Get Claude Code to implement Git conflicts and audit DTN system** 🤖
 
 ---
 
@@ -122,7 +126,6 @@
 - [!] **Book flight Paris --> Athens** _(5min)_ — Due: 2026-04-21
 - [ ] **Book flight BBQ Axome** _(15min)_ — Due: 2026-04-24
 - [ ] **Book Hotel Shoptalk** _(15min)_ — Due: 2026-05-01
-- [ ] **Book Flights Gorgias Connect** _(10min)_ — Due: 2026-04-23
 ### Presentations & Events
 - [x] **Slides Fashion Commerce** — Done
 
