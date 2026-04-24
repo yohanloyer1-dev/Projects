@@ -68,6 +68,7 @@
 - [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
 - [!] **Log into Home Exchange account for Japan** _(15min)_ — Due: 2026-04-24
+- [x] **Driving license translation** _(10min)_ — Due: 2026-04-25
 ### Travel & Errands
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [x] **Book flights Asia** — Book flights for Asia trip
