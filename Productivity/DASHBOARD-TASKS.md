@@ -42,6 +42,7 @@
 - [ ] **Pay 1000€ impôts** _(5min)_ — Due: 2026-07-31
 - [ ] **Pay 1000€ impôts** _(5min)_ — Due: 2026-08-31
 - [!] **Check situation BP - Follow up if needed** _(10min)_ — Due: 2026-04-24
+- [>] **Update taux d'impôsition** _(10min)_ — Due: 2026-04-29
 ### Health
 - [!] **Benefiz Amélia** — URGENT — action needed for Amélia
 - [ ] **Book eye appointment Paris — Maria** — Book ophthalmologist in Paris for Maria
