@@ -61,6 +61,7 @@
 - [x] **Negotiate NL document translation** — Done 28 Mar 2026
 
 - [!] **Send documents Crédit Coopératif** _(25min)_ — Due: 2026-04-27
+- [!] **Send documents Crédit Mutuel** _(25min)_ — Due: 2026-04-27
 ### Japan Trip
 - [x] **Book flights Japan** — Done
 - [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
