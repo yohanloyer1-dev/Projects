@@ -73,7 +73,7 @@
 
 - [!] **Log into Home Exchange account for Japan** _(15min)_ — Due: 2026-04-24
 - [x] **Driving license translation** _(10min)_ — Due: 2026-04-25
-- [!] **Buy Portable Travel Bed** _(30min)_ — Due: 2026-04-28
+- [x] **Buy Portable Travel Bed** _(30min)_ — Due: 2026-04-28
 ### Travel & Errands
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [x] **Book flights Asia** — Book flights for Asia trip
@@ -142,6 +142,7 @@
 - [ ] **Use holiday credit** — Book or apply remaining holiday credit before expiry
 
 - [!] **Create list of partners to hand over** _(30min)_ — Due: 2026-04-28
+- [!] **Intro Chiara Nabla Cosmetics (CSM+AM)** _(10min)_ — Due: 2026-04-29
 ### Follow-ups
 - [x] **Contact Jorge Farma2go** — URGENT follow-up
 - [!][>] **Create DOCK spaces** — URGENT + IMPORTANT
