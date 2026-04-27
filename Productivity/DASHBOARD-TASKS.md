@@ -46,6 +46,7 @@
 - [>] **Payer rattrapage impôts** _(5min)_ — Due: 2026-05-08
 - [!] **Déclaration impôts 2025** _(25min)_ — Due: 2026-04-28
 - [x] **Pay Axon in full** _(10min)_ — Due: 2026-04-27
+- [>] **Déclaration impôts 2026** _(30min)_ — Due: 2026-05-01
 ### Health
 - [!] **Benefiz Amélia** — URGENT — action needed for Amélia
 - [ ] **Book eye appointment Paris — Maria** — Book ophthalmologist in Paris for Maria
