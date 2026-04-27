@@ -44,6 +44,7 @@
 - [!] **Check situation BP - Follow up if needed** _(10min)_ — Due: 2026-04-24
 - [>] **Update taux d'impôsition** _(10min)_ — Due: 2026-04-29
 - [>] **Payer rattrapage impôts** _(5min)_ — Due: 2026-05-08
+- [!] **Déclaration impôts 2025** _(25min)_ — Due: 2026-04-28
 ### Health
 - [!] **Benefiz Amélia** — URGENT — action needed for Amélia
 - [ ] **Book eye appointment Paris — Maria** — Book ophthalmologist in Paris for Maria
