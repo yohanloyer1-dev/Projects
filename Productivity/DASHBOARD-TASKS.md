@@ -57,6 +57,7 @@
 - [ ] **5min meditation daily** — Build daily habit
 - [ ] **Lucis: Zinc Picolinate + Flaxseeds** — Buy supplements from Lucis
 
+- [>] **Book follow-up checkup Lucis** _(10min)_ — Due: 2026-05-01
 ### Real Estate
 - [x] **Gather docs Crédit Coopératif** — Done 29 Mar 2026
 - [x] **Cancel BP account** — Done 28 Mar 2026
