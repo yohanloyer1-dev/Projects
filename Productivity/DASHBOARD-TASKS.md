@@ -171,6 +171,7 @@
 
 - [ ] **Get back to Sendcloud + Antadis** _(10min)_ — Due: 2026-04-24
 - [!] **Follow up all WTBAD deals before Pat Leave** _(30min)_ — Due: 2026-04-28
+- [!] **Follow up Portuguese Brands** _(15min)_ — Due: 2026-04-30
 ## Freelance
 
 ### Nébuleuse Bijoux
