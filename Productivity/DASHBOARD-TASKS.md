@@ -150,6 +150,7 @@
 - [!] **Intro Chiara Nabla Cosmetics (CSM+AM)** _(10min)_ — Due: 2026-04-29
 - [!] **Introduce Micha to Lauren** _(5min)_ — Due: 2026-04-30
 - [!] **Intro Nabla Cosmetics** _(5min)_ — Due: 2026-04-30
+- [!] **Intro Micha x Lauren** _(10min)_ — Due: 2026-04-30
 ### Follow-ups
 - [x] **Contact Jorge Farma2go** — URGENT follow-up
 - [!][>] **Create DOCK spaces** — URGENT + IMPORTANT
