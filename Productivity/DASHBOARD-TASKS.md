@@ -70,7 +70,7 @@
 - [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
 - [x] **Make international driving license request** — Required for car rentals in Japan
 - [x] **Driving license translation** — Required for car rentals in Japan
-- [!] **Book accommodation Okinawa** — Okinawa leg of Japan trip
+- [x] **Book accommodation Okinawa** — Okinawa leg of Japan trip
 - [ ] **Book flight from Okinawa** — Return leg (non-urgent)
 - [ ] **Confirm itinerary** — Full Asia trip — Japan + Taiwan
 
@@ -152,7 +152,7 @@
 ### Follow-ups
 - [x] **Contact Jorge Farma2go** — URGENT follow-up
 - [!][>] **Create DOCK spaces** — URGENT + IMPORTANT
-- [!] **Panagora Klaviyo** — URGENT follow-up
+- [x] **Panagora Klaviyo** — URGENT follow-up
 - [!] **LTV Plus Lunch Vouchers** — URGENT — handle lunch vouchers with LTV Plus
 - [!] **Follow up Nenad** — URGENT follow-up
 - [x] **Ping Spanish partners + Blas** — Done
