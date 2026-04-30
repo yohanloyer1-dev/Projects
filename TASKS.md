@@ -27,6 +27,14 @@
 ### Claude OS Product (New Project)
 - [>] **Define the Claude OS product** — Productized system: Claude-powered operating system for entrepreneurs. Sell setup + consulting. Research market, positioning, packaging. 🤖
 
+### Gorgias Integrations (New Venture — Launched 2026-04-30)
+- [x] **Launch venture folder + master-prompt-V1** — GO decision made on ManoMano → Gorgias integration (commit d82d375)
+- [!] **T-010: Run 5 validation conversations** — Merchant + agency validation scripts ready. First conversations to confirm problem + willingness to pay.
+- [!] **T-008: Request ManoMano API access** — Apply for ManoMano REST API credentials (seller/order endpoints)
+- [!] **T-018: Lawyer consult** — Validate Gorgias partner/reseller agreement constraints before building
+- [>] **T-011: Build n8n proof-of-concept** — ManoMano → Gorgias ticket flow, single tenant, manual trigger
+- [_] **T-013: First paying customer** — Convert 1 validation contact to paid beta user
+
 ### Ongoing File Management
 - [_] **Push Nébuleuse project files to GitHub** — Deferred until Phase 2 complete. Untracked files: 528+ files (AI Agent data, One Pilot guidance, financial models, etc.)
 - [x] **Add N8N/ai_agents_az/ to .gitignore** — Done. Entry already present in .gitignore (commit 87e6ea4).

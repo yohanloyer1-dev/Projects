@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-04-30 | Gorgias Integrations Venture — master-prompt-V1 kickoff | Strategy + Research
+
+### Requested
+- Launch Gorgias Integrations venture from scratch: validate idea, map opportunity, make go/no-go decision, design intelligence layer, build 90-day roadmap, create validation scripts
+
+### Done
+- **T-001:** Initialized full GitHub folder structure under `Gorgias-Integrations/` (research, architecture, roadmap, validation, decisions, parking-lot, integrations, agents)
+- **T-002:** Co-founder stress test (step1-challenge-2026-04-30.md) — 10 dimensions answered with cited sources. All passed.
+- **T-003:** Opportunity map (step2-opportunity-map-2026-04-30.md) — 3 integration opportunities ranked: ManoMano (channel), Loyoly (display), Aftersell (display). ManoMano ranked #1.
+- **T-004:** GO decision made (go-decision-2026-04-30.md + venture-decisions.md) — ManoMano → Gorgias channel integration confirmed as wedge. All 4 criteria met.
+- **T-005:** Intelligence layer designed (architecture/intelligence-layer-2026-04-30.md) — Reddit OAuth2 monitor, G2/Capterra scrape via Firecrawl, API change detector, all in n8n.
+- **T-006:** 90-day roadmap built (roadmap/90-day-roadmap-2026-04-30.md) — 4 phases: validate (D1–30), build (D31–60), sell (D61–75), scale (D76–90). Environments: Cowork/Code/n8n/Yohan.
+- **T-007:** Validation scripts written (validation/validation-script-2026-04-30.md) — Script A (merchant), Script B (agency), tracking table, pass threshold defined (≥3/5, WTP ≥€50/mo).
+- **AGENT-TASKS.md** written with T-001 through T-018, full dependency chain, blocked tasks flagged.
+- **parking-lot/pre-launch-checklist.md** written with 9 gates (IP/legal, GDPR, trademark, tech partner terms, etc.)
+- All files pushed to GitHub: https://github.com/yohanloyer1-dev/Projects/tree/main/Gorgias-Integrations
+
+### Key Decisions
+- **GO on ManoMano → Gorgias channel integration** as the wedge product. Channel integrations over display because: higher switching cost, usage-based revenue, no native competitor, ManoMano is FR #2 marketplace.
+- Ohtani Matrix filter passed: active cash pillar, core not sandbox, leverage (build once/sell many), no employment conflict.
+- Architecture: polling/push service (not HTTP widget) for this integration type.
+- Revenue model: usage-based (per ticket routed), not fixed monthly.
+- Next actions are Yohan-owned: T-010 (5 validation calls), T-008 (ManoMano API access), T-018 (employment lawyer).
+
+### Next Steps
+- T-010: Run 5 validation conversations using scripts in validation/validation-script-2026-04-30.md
+- T-008: Check ManoMano seller API access from seller portal or manomano.dev
+- T-009: Confirm Gorgias ticket creation endpoint (Postman or browser)
+- T-018: Contact employment lawyer re: IP/non-compete
+- T-011 (Code session): ManoMano feasibility assessment — unblocked once T-008+T-009+T-010 done
+
+---
+
+
 ## 2026-04-20 | Dashboard sync bugfixes + Claude-OS project launch | Dashboard + YL/OPS
 
 ### Requested
