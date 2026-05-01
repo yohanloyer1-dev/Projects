@@ -101,33 +101,35 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ## GitHub Write Pattern
 
-**Authentication:** HTTPS + credential manager (macOS/Linux/Windows)
+**Authentication:** PAT stored on disk at `~/Projects/.github-token` (repo + gist scope).
 
-**macOS (verified setup):**
+**Token location:** `~/Projects/.github-token` — never committed (in `.gitignore`).  
+**Dashboard sync:** Token also stored in browser `localStorage` as `yl_gist_token` on the dashboard page.  
+**Setup date:** 2026-04-30 | Token name: "Cowork auto-push"
+
+**From Cowork sandbox (Claude uses this — fully autonomous):**
 ```bash
-git config --global credential.helper osxkeychain
+TOKEN=$(cat ~/Projects/.github-token)
+# Push via GitHub API
+CONTENT=$(base64 -w 0 /path/to/file)
+SHA=$(curl -s -H "Authorization: token $TOKEN" \
+  "https://api.github.com/repos/yohanloyer1-dev/Projects/contents/PATH" | python3 -c "import sys,json; print(json.load(sys.stdin)['sha'])")
+curl -s -X PUT \
+  -H "Authorization: token $TOKEN" \
+  -H "Content-Type: application/json" \
+  "https://api.github.com/repos/yohanloyer1-dev/Projects/contents/PATH" \
+  -d "{\"message\": \"COMMIT MSG\", \"content\": \"$CONTENT\", \"sha\": \"$SHA\"}"
 ```
 
-**Linux:** Use `credential.helper` = `cache` or `store` (see git docs for your distribution)
-
-**Windows:** Use `credential.helper` = `wincred` (Windows Credential Manager)
-
-**For pushes:** Use standard git commands. Credentials are cached automatically by osxkeychain after first authentication.
-
+**From terminal (manual fallback):**
 ```bash
-cd /Users/yohanloyer/Projects
+cd ~/Projects
 git add [files]
 git commit -m "Session: [description]"
 git push origin main
 ```
 
-**First push on a device:** Git will prompt for GitHub credentials once. osxkeychain saves them for future use.
-
-**Verify setup:**
-```bash
-git config credential.helper  # Should return "osxkeychain"
-git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD  # Should return commit SHA (no auth prompt)
-```
+**If token is lost:** Regenerate at github.com/settings/tokens → "Cowork auto-push" → Regenerate. Save to `~/Projects/.github-token` and restore in dashboard localStorage: `localStorage.setItem('yl_gist_token', 'NEW_TOKEN')`.
 
 **Never write local-only.** Everything goes to GitHub.
 
