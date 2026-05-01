@@ -115,6 +115,7 @@
 
 ---
 
+- [ ] **Merge Google Maps saved Perso + Gorgias** _(10min)_
 ## Professional (Gorgias)
 
 ### Work Travel & Expenses
