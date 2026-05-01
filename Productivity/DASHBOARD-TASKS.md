@@ -79,6 +79,7 @@
 - [x] **Driving license translation** _(10min)_ — Due: 2026-04-25
 - [x] **Buy Portable Travel Bed** _(30min)_ — Due: 2026-04-28
 - [>] **Check accomodation on local platforms** _(45min)_ — Due: 2026-04-30
+- [!] **Book Ferry Tokashiki** _(15min)_ — Due: 2026-05-02
 ### Travel & Errands
 - [!] **Cancel super.com account** — URGENT (5 min)
 - [x] **Book flights Asia** — Book flights for Asia trip
