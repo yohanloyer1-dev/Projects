@@ -110,9 +110,12 @@
 - [_] **VIP customer rule — no AI Agent** — Auto-transfer VIP customers to human agent. Post-50% automation target.
 
 ### Productivity
-- [ ] **Continue Part 1 - Productivity Dashboard Audit and Recommendations on Claude Code** 🤖
-- [ ] **Get Claude Code to fix all security recommendations from the Productivity Dashboard Audit** 🤖
-- [ ] **Get Claude Code to implement Git conflicts and audit DTN system** 🤖
+- [x] **DTN + Brief scoring audit and fixes** — Brief now mode-aware (no invisible cross-mode slots), Someday cap prevents stale deadlines from overriding urgent tasks. Done in Cowork 2026-05-01.
+- [>] **Fix A — Token security: move yl_gist_token to sessionStorage** — Real XSS exposure. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix A. For Claude Code. 🤖
+- [>] **Fix B — GitHub sync: visible error notifications** — Sync failures are currently silent. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix B. For Claude Code. 🤖
+- [>] **Fix C — Dynamic Claude Tasks tab** — Replace 9 hardcoded cards with auto-populated list from cl-marked tasks. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix C. For Claude Code. 🤖
+- [ ] **Fix D — Disable dead fetchClaudeQueue()** — Fires a 404 on every page load. 5 min job. Ref: Fix D. For Claude Code. 🤖
+- [ ] **Fix E — dtnSkipIdx divide-by-zero guard** — Edge case if all tasks completed. 2 min job. Ref: Fix E. For Claude Code. 🤖
 
 ---
 
