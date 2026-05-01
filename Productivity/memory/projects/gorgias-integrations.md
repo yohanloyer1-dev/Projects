@@ -83,3 +83,47 @@ T-008 + T-009 + T-010 → T-011 (feasibility, Claude Code) → T-012 (build) →
 - Gorgias trademark use clearance
 - ManoMano ToS review (reselling API access)
 - Tech partner program terms (no application until post-employment or explicit clearance)
+
+---
+
+## Session 2026-05-01 — Competitive Intelligence + Architecture Decision
+
+### Competitive Map [VERIFIED — live sources, 2026-05-01]
+
+**Who covers ManoMano → Gorgias today:** Nobody. Clear gap confirmed.
+
+| Competitor | ManoMano | Cdiscount | Amazon FR | Veepee | Gorgias native |
+|---|---|---|---|---|---|
+| Juble.io | ❌ | ❌ | ✅ | ❌ | ✅ |
+| ChannelReply | ❌ | ❌ | ✅ | ❌ | ✅ |
+| eDesk | ✅ | ✅ | ✅ | ✅ | ❌ (replaces Gorgias) |
+| Our integration | ✅ (Phase 1) | Phase 3 | low priority | Phase 3 | ✅ |
+
+**Juble.io:** $30/$60/$150/mo, message-based pricing, covers Mirakl/Amazon/eBay → Gorgias. Does NOT cover ManoMano or Veepee. Already has Gorgias integration.
+
+**ChannelReply:** US-focused (Amazon, eBay, Walmart, Back Market, Etsy, Mirakl beta). No French marketplace coverage.
+
+**eDesk:** Full helpdesk (requires merchants to abandon Gorgias). Native ManoMano, Cdiscount, Veepee, Fnac. Uses ChannelEngine for order enrichment (NOT for message routing).
+
+### ADR-001: Do Not Build on ChannelEngine [DECIDED]
+
+ChannelEngine (950+ marketplaces) was considered as "Option 2" — build once, cover all. **Ruled out.**
+
+**Evidence:** Live OpenAPI scrape (api.channelengine.net/api/swagger/) confirmed zero message/conversation endpoints across all 107 endpoints (83 Merchant + 24 Channel). Only `/v2/orders/comment` exists — internal merchant note, not buyer-seller messaging.
+
+**How eDesk actually uses it:** Order context enrichment AFTER their own direct connectors have routed messages. ChannelEngine is an OMS layer, not a messaging layer.
+
+Full decision record: `decisions/architecture-decision-channelengine-2026-05-01.md`
+
+### Revised Build Architecture
+
+**Phase 1 (NOW):** ManoMano direct → Gorgias. No competitor. 24h SLA urgency for merchants. ~4–6 weeks.
+
+**Phase 2 (after Phase 1 validation):** Mirakl API → Gorgias. One integration covers Fnac, Darty, Decathlon, Boulanger, Leroy Merlin, La Redoute, 400+ others. **GATE: must verify Mirakl exposes buyer-seller messaging endpoints (T-021).**
+
+**Phase 3 (demand-driven):** Cdiscount via Octopia, Veepee direct. Both require API messaging verification first (T-022).
+
+### Open Research Gates Before Phase 2 Commit
+- **T-021** — Mirakl API messaging verification (CRITICAL — gates Phase 2)
+- **T-022** — Octopia API messaging verification (HIGH — gates Cdiscount/Phase 3)
+
