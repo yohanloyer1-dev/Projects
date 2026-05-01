@@ -79,6 +79,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .mode-btn.active{color:var(--t1);background:var(--b1);box-shadow:0 1px 4px rgba(0,0,0,.35)}
 .mode-btn#mode-personal.active{color:var(--pink)}
 .mode-btn#mode-work.active{color:var(--blue)}
+.mode-btn#mode-freelance.active{color:var(--green)}
 .mode-btn:hover:not(.active){color:var(--t2)}
 .live{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;color:var(--t3)}
 .ldot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.5s ease infinite}
@@ -797,6 +798,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="tb-r">
     <div class="mode-toggle" id="modeToggle">
       <button class="mode-btn active" id="mode-personal" onclick="setMode('personal')">🏠 Personal</button>
+      <button class="mode-btn" id="mode-freelance" onclick="setMode('freelance')">🔧 Freelance</button>
       <button class="mode-btn" id="mode-work" onclick="setMode('work')">💼 Work</button>
     </div>
     <div class="tasks-sync-group" title="Sync completed tasks to TASKS.md on GitHub">
@@ -954,7 +956,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <div class="nav-tabs">
   <div class="tab active" onclick="sv('brief')" id="tab-brief">🧠 Daily Brief</div>
   <div class="tab urgent-tab" onclick="sv('personal')" id="tab-personal">🏠 Personal <span class="tc" id="tc-personal">—</span></div>
-  <div class="tab" onclick="sv('freelance')" id="tab-freelance">💼 Freelance <span class="tc" id="tc-freelance">—</span></div>
+  <div class="tab" onclick="sv('freelance')" id="tab-freelance">🔧 Freelance <span class="tc" id="tc-freelance">—</span></div>
   <div class="tab" onclick="sv('pro')" id="tab-pro">📊 Professional <span class="tc" id="tc-pro">—</span></div>
   <div class="tab" onclick="sv('claude')" id="tab-claude">🤖 Claude Tasks <span class="tc" id="tc-claude">9</span></div>
   <div class="tab" onclick="sv('done')" id="tab-done">✅ Done <span class="tc" id="tc-done">0</span></div>
@@ -1537,6 +1539,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <label class="qa-label">Mode</label>
     <div class="qa-urgency-btns" id="qaModebtns">
       <button class="qa-urg-btn sel-normal" data-val="personal" id="qaModPersonal" onclick="selectQaMode(this)">🏠 Personal</button>
+      <button class="qa-urg-btn" data-val="freelance" id="qaModFreelance" onclick="selectQaMode(this)">🔧 Freelance</button>
       <button class="qa-urg-btn" data-val="work" id="qaModWork" onclick="selectQaMode(this)">💼 Work</button>
     </div>
   </div>
@@ -2899,38 +2902,38 @@ function sv(v) {
   document.getElementById('tab-'+v).classList.add('active');
 }
 
-// ── MODE TOGGLE (Personal / Work) ─────────
-const PERSONAL_TABS = ['personal'];
-const WORK_TABS     = ['freelance','pro'];
-const SHARED_TABS   = ['brief','claude','done'];
+// ── MODE TOGGLE (Personal / Freelance / Work) ─────────
+const PERSONAL_TABS  = ['personal'];
+const FREELANCE_TABS = ['freelance'];
+const WORK_TABS      = ['pro'];
+const SHARED_TABS    = ['brief','claude','done'];
+
+const ALL_MODE_TABS = [...PERSONAL_TABS, ...FREELANCE_TABS, ...WORK_TABS];
 
 function setMode(mode) {
   localStorage.setItem('yl_mode', mode);
   // Update toggle buttons
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('mode-'+mode).classList.add('active');
-  // Show/hide nav tabs
-  const hideTabs = mode === 'personal' ? WORK_TABS : PERSONAL_TABS;
-  const showTabs = mode === 'personal' ? PERSONAL_TABS : WORK_TABS;
-  hideTabs.forEach(t => {
+  // Show only tabs relevant to this mode
+  const showTabs = mode === 'personal' ? PERSONAL_TABS : mode === 'freelance' ? FREELANCE_TABS : WORK_TABS;
+  ALL_MODE_TABS.forEach(t => {
     const tab = document.getElementById('tab-'+t);
-    if (tab) tab.style.display = 'none';
-  });
-  showTabs.forEach(t => {
-    const tab = document.getElementById('tab-'+t);
-    if (tab) tab.style.display = '';
+    if (tab) tab.style.display = showTabs.includes(t) ? '' : 'none';
   });
   // Show/hide data-mode elements in Brief (priority cards, project snapshot)
+  // 'freelance' and 'work' both map to the work-mode brief elements
+  const briefMode = (mode === 'freelance') ? 'work' : mode;
   document.querySelectorAll('[data-mode]').forEach(el => {
-    el.style.display = el.dataset.mode === mode ? '' : 'none';
+    el.style.display = el.dataset.mode === briefMode ? '' : 'none';
   });
   // Update topbar subtitle to reflect current mode
   const sub = document.querySelector('.tb-sub');
-  if (sub) sub.textContent = mode === 'personal' ? 'Personal Dashboard' : 'Work Dashboard';
+  if (sub) sub.textContent = mode === 'personal' ? 'Personal Dashboard' : mode === 'freelance' ? 'Freelance Dashboard' : 'Work Dashboard';
   // If current view is now hidden, redirect to brief
   const activeTab = document.querySelector('.tab.active');
   const activeId  = activeTab?.id?.replace('tab-','');
-  if (activeId && hideTabs.includes(activeId)) sv('brief');
+  if (activeId && !showTabs.includes(activeId) && !SHARED_TABS.includes(activeId)) sv('brief');
   // Re-render brief and DTN to reflect mode-appropriate tasks
   renderBrief();
   dtnRender();
@@ -2955,15 +2958,14 @@ function renderBrief() {
   // Only score tasks from views relevant to the active mode — prevents work tasks
   // from occupying invisible slots in personal mode (and vice versa), which caused
   // the Brief to show rank "3" when slots 1+2 were invisible cross-mode tasks.
-  const activeViews = mode === 'personal' ? ['view-personal'] : ['view-freelance', 'view-pro'];
+  const activeViews = mode === 'personal' ? ['view-personal'] : mode === 'freelance' ? ['view-freelance'] : ['view-pro'];
 
   const candidates = [];
 
   activeViews.forEach(viewId => {
     const view = document.getElementById(viewId);
     if (!view) return;
-    const taskMode = (viewId === 'view-personal') ? 'personal' : 'work';
-    const tab = viewId === 'view-personal' ? 'personal' : (viewId === 'view-freelance' ? 'freelance' : 'pro');
+    const tab = viewId === 'view-personal' ? 'personal' : viewId === 'view-freelance' ? 'freelance' : 'pro';
 
     view.querySelectorAll('.t[data-id]').forEach(el => {
       const id = el.dataset.id;
@@ -4060,15 +4062,18 @@ const QA_SECTIONS = {
     'Bots & Automation (Personal)',
     'Productivity',
   ],
+  freelance: [
+    'Nébuleuse Bijoux',
+    'Accessory Partners',
+    'Gorgias Agency (name TBD)',
+    'LinkedIn Content',
+    'Claude OS',
+  ],
   work: [
     'Work Travel & Expenses',
     'Presentations & Events',
     'Role Optimization',
     'Follow-ups',
-    'Nébuleuse Bijoux',
-    'Accessory Partners',
-    'Gorgias Agency (name TBD)',
-    'LinkedIn Content',
   ]
 };
 
@@ -4568,7 +4573,7 @@ let dtnSkipIdx = 0;
 function dtnGetActiveTasks() {
   const doneIds = new Set(S.done.map(d => d.id || d.n));
   const mode = localStorage.getItem('yl_mode') || 'personal';
-  const viewIds = mode === 'personal' ? ['view-personal'] : ['view-pro', 'view-freelance'];
+  const viewIds = mode === 'personal' ? ['view-personal'] : mode === 'freelance' ? ['view-freelance'] : ['view-pro'];
   const views = viewIds.map(id => document.getElementById(id)).filter(Boolean);
   const allTasks = views.flatMap(v => Array.from(v.querySelectorAll('.t')));
   return allTasks.filter(t => {
