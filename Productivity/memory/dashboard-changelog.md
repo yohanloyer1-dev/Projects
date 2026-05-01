@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-05-02 | Add Freelance as standalone mode (3-way toggle) | pending
+
+### Goal
+Separate Freelance from Work mode so each area (Personal / Freelance / Work) has its own dedicated context, Brief, and Do This Now suggestions. Freelance was previously grouped with Professional (Work) mode, causing cognitive blending.
+
+### Changes
+- **CSS** (line ~82): Added `.mode-btn#mode-freelance.active { color: var(--green) }` — green highlight for Freelance mode button
+- **Mode toggle HTML** (line ~801): Added `🔧 Freelance` button between Personal and Work
+- **Nav tab emoji** (line ~957): Changed Freelance tab from `💼` to `🔧` to match new mode button
+- **Mode constants** (line ~2903): Refactored `PERSONAL_TABS`, extracted `FREELANCE_TABS = ['freelance']`, `WORK_TABS = ['pro']` (removed `freelance` from Work). Added `ALL_MODE_TABS` union for show/hide loop.
+- **`setMode()`** (line ~2913): 3-way logic — shows only the tabs for the active mode; `briefMode` maps `'freelance'` → `'work'` so Brief's `data-mode="work"` Project Snapshot still renders in Freelance mode; topbar subtitle shows `'Freelance Dashboard'`
+- **`renderBrief()`** (line ~2961): Added `mode === 'freelance' ? ['view-freelance']` case — Brief now scores only freelance tasks when in Freelance mode
+- **`dtnGetActiveTasks()`** (line ~4576): Added `mode === 'freelance' ? ['view-freelance']` case — DTN and Pick for Me now surface only freelance tasks
+- **`QA_SECTIONS`** (line ~4050): Extracted `freelance` key with `['Nébuleuse Bijoux', 'Accessory Partners', 'Gorgias Agency (name TBD)', 'LinkedIn Content', 'Claude OS']`; `work` key now contains only Gorgias sections
+- **Quick Add modal HTML** (line ~1542): Added `🔧 Freelance` mode button — pre-selects correctly when dashboard is in Freelance mode
+
+### Revert
+- Version snapshot: `versions/dashboard_v2.9_2026-05-02_pre-freelance-mode.html`
+- All changes isolated to ~9 specific locations; no task data or localStorage keys touched
+
+---
+
 ## 2026-04-22 | Add Productivity category (Personal) + 3 tasks | pending
 
 ### Changes
