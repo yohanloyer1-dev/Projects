@@ -5,6 +5,37 @@
 
 ---
 
+---
+
+## 2026-05-01 | Gorgias Integrations — Competitive Intelligence + ChannelEngine ADR | Research
+
+### Requested
+- Research whether any existing tool connects ManoMano → Gorgias
+- Investigate why ManoMano vs other marketplaces; identify biggest ManoMano merchants
+- Deep-dive Juble.io and ChannelReply coverage
+- Map Cdiscount, Amazon FR, Veepee gaps
+- Investigate eDesk's 250+ integrations architecture
+- Research ChannelEngine as "Option 2" (build once, cover 950 marketplaces)
+- Save all findings + decisions to GitHub
+
+### Done
+- Confirmed market gap: no competitor covers ManoMano → Gorgias (Juble/ChannelReply absent, eDesk requires full helpdesk migration)
+- Built full competitor coverage matrix (Juble, ChannelReply, eDesk vs ManoMano/Cdiscount/Amazon/Veepee)
+- Verified live ChannelEngine OpenAPI spec: zero message/conversation endpoints across 107 endpoints
+- Confirmed eDesk uses ChannelEngine for order enrichment only, NOT message routing — debunks Option 2 hypothesis
+- Identified real Phase 2 platform play: Mirakl API (400+ marketplaces incl. Fnac, Darty, Decathlon)
+- Wrote ADR-001: Do not build on ChannelEngine (evidence-based, live API verified)
+- Pushed to GitHub: competitive-intelligence-2026-05-01.md, option2-channelengine-analysis-2026-05-01.md, architecture-decision-channelengine-2026-05-01.md
+- Updated AGENT-TASKS.md: T-019/T-020 marked done, T-021/T-022 added (Mirakl + Octopia messaging verification)
+- Updated gorgias-integrations.md project memory
+
+### Key Decisions
+- ADR-001: ChannelEngine ruled out as messaging layer. Live API proof, not assumption.
+- Architecture locked: Phase 1 = ManoMano direct, Phase 2 = Mirakl (gated on T-021), Phase 3 = Cdiscount/Veepee
+- T-021 is now the critical research gate before any Phase 2 engineering commitment
+- ManoMano 24h SLA penalty confirmed as urgency driver (merchant pain is real, not just convenience)
+
+
 ## 2026-04-30 | Gorgias Integrations Venture — master-prompt-V1 kickoff | Strategy + Research
 
 ### Requested
