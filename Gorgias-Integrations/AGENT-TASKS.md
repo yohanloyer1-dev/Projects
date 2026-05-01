@@ -27,17 +27,25 @@
 | T-016 | [one-time] Set up Reddit OAuth2 in n8n | Yohan | todo | — | — (n8n credentials setup) | Reddit node authenticated, test poll returning results | 2026-04-30 |
 | T-017 | [one-time] Set up Firecrawl API key in n8n | Yohan | todo | — | — (n8n credentials setup) | G2/Capterra scrape returning review text in n8n | 2026-04-30 |
 | T-018 | [one-time] Legal gates review | Yohan | in-progress | — | parking-lot/pre-launch-checklist.md (update) | All 5 legal gates in checklist marked done | 2026-04-30 |
+| T-019 | [one-time] Competitive intelligence — full competitor map | Cowork | done | — | research/competitive-intelligence-2026-05-01.md | Juble, ChannelReply, eDesk mapped; coverage matrix complete | 2026-05-01 |
+| T-020 | [one-time] ChannelEngine architecture deep-dive + ADR | Cowork | done | T-019 | research/option2-channelengine-analysis-2026-05-01.md + decisions/architecture-decision-channelengine-2026-05-01.md | Live API verified (zero messaging endpoints); ADR-001 written; Phase 1/2/3 architecture decided | 2026-05-01 |
+| T-021 | [one-time] Verify Mirakl API exposes buyer-seller messaging | Cowork | todo | T-020 | research/mirakl-api-messaging-2026-05-[date].md | Confirmed: Mirakl message/conversation endpoints exist (or ruled out); Phase 2 gate answered | 2026-05-01 |
+| T-022 | [one-time] Verify Octopia API exposes buyer-seller messaging | Cowork | todo | T-020 | research/octopia-api-messaging-2026-05-[date].md | Confirmed: Octopia message endpoints exist (or ruled out); Cdiscount Phase 3 gate answered | 2026-05-01 |
 
 ---
 
 **Blocked dependency chain:**
 T-008 + T-009 + T-010 → T-011 → T-012 → T-014
 
+**Phase 2 gate (Mirakl):**
+T-021 must be done before committing to Phase 2 architecture build (see ADR-001)
+
 **Immediate next actions for Yohan:**
 1. T-010: Schedule 5 validation conversations (use scripts in validation/validation-script-2026-04-30.md)
 2. T-008: Check ManoMano seller API access tier from your seller portal or manomano.dev
-3. T-018: Contact employment lawyer re: IP/non-compete review
+3. T-021: Run Mirakl API messaging verification (next Cowork session, ~1h)
+4. T-018: Contact employment lawyer re: IP/non-compete review
 
 ---
 
-_Last updated: 2026-04-30 | Session: master-prompt-V1 kickoff_
+_Last updated: 2026-05-01 | Session: competitive-intelligence + ChannelEngine deep-dive + ADR-001_
