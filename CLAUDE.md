@@ -25,6 +25,7 @@ Public face of Gorgias in EMEA — keynote speaker, webinar host, event lead (EM
 | **Accessory Partners CX** | Active | Build scalable CX OS. WISMO, multi-brand, returns, CSAT. Retainer ~$600–900/mo. |
 | **Gorgias Agency** | Active | Productized Gorgias services agency. Website (Lovable), LinkedIn, service offers. |
 | **LinkedIn content system** | Active | Full system built. 5,945 followers. 2 posts/week. Goal: #1 Gorgias/CX authority. |
+| **Gorgias Integrations** | Active — Validation | Paid integration layer between Gorgias and unconnected tools. Wedge: ManoMano → Gorgias channel integration. GO decision made 2026-04-30. Currently in Phase 1: 5 validation conversations. Target: €2–5K MRR/12mo. |
 
 ## File System
 | Path | What |
@@ -138,6 +139,7 @@ Two running logs must be updated every session — no exceptions:
 - GitHub repo: github.com/yohanloyer1-dev/Projects (now PUBLIC)
 - Deploy workflow: Edit files → Push via git (`git push origin main`) → GitHub Pages deploys in ~30s
 - Cloud sync: GitHub Gist (token stored in localStorage as `yl_gist_token`). Run `localStorage.setItem('yl_gist_token', 'TOKEN')` in browser console once per device. Progress syncs across all devices automatically.
+- **GitHub PAT for Cowork auto-push:** Token "Cowork auto-push" (repo+gist scope) stored at `~/Projects/.github-token` (in .gitignore). Same token as `yl_gist_token`. Cowork uses this to push autonomously via GitHub API — no terminal needed. Set up 2026-04-30. If lost: regenerate at github.com/settings/tokens and restore both locations.
 - **TASKS.md Sync:** Dashboard → TASKS.md sync is live (rebuilt commit 1f73241, 2026-04-13). Click "↑ Sync TASKS" button in topbar to push completed task statuses to GitHub. Requires `yl_gist_token` in localStorage (same token as Gist sync — repo+gist scope). See `Productivity/memory/sync-automation-audit.md` for full history.
 - Features: Personal/Work mode toggle, mode-aware Brief, Focus mode, deadline system, Pick for Me, task search/filter, XP/streaks/levels, celebration animations, GitHub Gist cloud sync, task notes, task links, Done log
 - Security: XSS vulnerabilities fixed (commit 1deb0e4) — all DOM methods now safe (no innerHTML, proper HTML escaping, event delegation)
