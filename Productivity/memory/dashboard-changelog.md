@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Option 3 claude-findings: fetch + overlay research on Claude Tasks cards | pending
+## 2026-05-02 | Option 3 claude-findings: fetch + overlay research on Claude Tasks cards | 073afa5
 
 ### Changes
 - `claude-findings.json` created: schema `{ taskId: { summary, updatedAt } }`. Research pre-loaded for `decl-ae` and `adhd-diag`.

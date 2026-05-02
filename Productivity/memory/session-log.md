@@ -5,6 +5,36 @@
 
 ---
 
+## 2026-05-02 | Option 3 research system + dashboard cleanup | Claude Code
+
+### Requested
+- Research `decl-ae` (Déclaration auto-entrepreneur) as first Option 3 test case
+- Clarify status of `adhd-diag` task in Claude Tasks tab
+- Audit dashboard for remaining improvements
+
+### Done
+- Researched `decl-ae` via WebSearch: Q1 URSSAF deadline was April 30 (overdue if quarterly), cumul salarié/AE rules, seuil 83 600€/an, nouveaux taux 2026
+- Researched `adhd-diag`: diagnosis process France, Benefiz/mutuelle coverage for neuropsychological assessments
+- Created `Productivity/claude-findings.json` with findings for both tasks
+- Added `fetchClaudeFindings()` in dashboard: fetches JSON from GitHub raw on DOMContentLoaded, re-renders Claude Tasks tab
+- `renderClaudeTasks()`: user note wins, falls back to `claudeFindings[id].summary`; purple "Researched" badge; `white-space:pre-wrap` for multi-line notes
+- Added `cl` class to `adhd-diag` → now appears in Claude Tasks (Personal mode)
+- Removed `cl` from 3 completed `productivity-dashboard-*` tasks → clean up Claude Tasks tab
+- Commit: 073afa5 — pushed and live
+
+### Key decisions
+- `S.notes[id]` always wins over `claude-findings.json` — user-written notes are authoritative
+- `?t=Date.now()` cache-bust on findings fetch so updates appear without hard reload
+- Three productivity-dashboard tasks: `cl` removed (not deleted) — Yohan should still check them off manually in the dashboard
+
+### Next
+- Yohan to check off the 3 productivity-dashboard tasks in the dashboard UI
+- Regenerate GitHub PAT with `gist` scope to fix 403 on Gist push
+- Graduate to `/schedule` daily findings refresh once value confirmed
+- `gistPull` 401: could add `notify()` instead of banner text (minor)
+
+---
+
 ## 2026-05-02 | 5:30pm Automated Wrap-Up | YL/OPS
 
 ### Requested
