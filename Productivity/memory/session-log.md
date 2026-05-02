@@ -5,6 +5,38 @@
 
 ---
 
+## 2026-05-01 | Git infrastructure decision + DTN/Brief audit + Claude Code handover | YL/OPS
+
+### Requested
+- Analyze git conflict problem (sandbox vs Mac committing simultaneously — 6–7 conflicts in Apr 20 session)
+- Compare Options A/B/C for git workflow going forward
+- Full audit of DTN ("Do This Now") and Daily Brief scoring system
+- Explain Brief showing rank "3" in Personal mode and only 2 cards in Work mode
+- Review "Ask Claude now" / Claude queue — fit for purpose?
+- Create Claude Code briefing file for remaining fixes
+
+### Done
+- **Git infrastructure analysis:** Recommended formalizing GitHub API writes (PUT Contents API) as the standard pattern for Claude-authored files — no git CLI needed, no lock files. Option A (sandbox edits + manual push) adopted as interim. Claude Code on Mac sidesteps the problem for code sessions.
+- **Brief bug fixed:** `renderBrief()` was scoring all 3 views together then hiding cross-mode items with CSS — work tasks occupied invisible slots 1+2, causing Personal rank "3" and only 2 Work cards. Fixed by filtering to `activeViews` before scoring. Removed `data-mode` post-filter loop.
+- **DTN Someday cap fixed:** Someday/Waiting tasks with stale overdue deadlines could score 1100+ vs 600 for genuinely urgent tasks. Fixed with `Math.min(score, 50)` cap applied after deadline boost.
+- **Claude queue audit:** Three overlapping systems (static Claude Tasks tab, `cl` badge, Ask Claude button) don't talk to each other. `fetchClaudeQueue()` fires a 404 on every page load — dead infrastructure. "Ask Claude now" opens blank claude.ai tab with no project context.
+- **CLAUDE_CODE_SESSION_PROMPT.md created:** Accurate handover for Claude Code — corrects Haiku doc errors (wrong architecture, nonexistent functions), reduces 13 fixes to 5 real ones, estimates 2–3h not 15–20h.
+- **DASHBOARD-TASKS.md updated:** Fix A–E added as named trackable tasks in Productivity section.
+- **Pushed:** commit `a71e4e3` (after resolving index.lock, rebase conflict, stash conflict)
+
+### Key Decisions
+- Claude Code handles dashboard code sessions going forward (native git, no sandbox conflicts)
+- `SONNET_SESSION_PROMPT.md` and Haiku audit docs are superseded — do not use
+- Fix A (token security) is the only one with a real security implication — prioritize first
+- Fix C (dynamic Claude Tasks tab) is the highest-value UX improvement
+
+### Next Steps
+- Claude Code: run Fix A → B → C → D → E using `CLAUDE_CODE_SESSION_PROMPT.md`
+- Formalize GitHub API writes as standard Claude pattern (eliminates git conflict problem permanently)
+- "Ask Claude now" button improvement: copy prompt with project context, not just task name
+
+---
+
 ---
 ## 2026-05-01 | 5:30pm Automated Wrap-Up | YL/OPS
 
