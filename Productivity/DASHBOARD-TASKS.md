@@ -66,6 +66,7 @@
 
 - [!] **Send documents Crédit Coopératif** _(25min)_ — Due: 2026-04-27
 - [!] **Send documents Crédit Mutuel** _(25min)_ — Due: 2026-04-27
+- [>] **Envoyer informations assurance immo à Benjamin pour devis** _(15min)_ — Due: 2026-05-22
 ### Japan Trip
 - [x] **Book flights Japan** — Done
 - [!] **Book hotel Taiwan May 9th** — Taiwan leg of Asia trip
