@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Fix B: Visible error notifications for all sync failures | pending
+## 2026-05-02 | Fix B: Visible error notifications for all sync failures | 4199358
 
 ### Problem Fixed
 - `gistPush` / `gistPull` failures were silent (only status indicator changed, no popup)
