@@ -20,7 +20,7 @@
 
 ---
 
-## 2026-05-02 | Add URSSAF Q1 + impôts 2042-C-PRO tasks (urgent, deadline May 8) | pending
+## 2026-05-02 | Add URSSAF Q1 + impôts 2042-C-PRO tasks (urgent, deadline May 8) | bdcb7bb
 
 ### Changes
 - Added `urssaf-q1-decl`: "Déclarer CA Q1 URSSAF (auto-entrepreneur)" — class `t urg hi`, Tax & Declarations section, Personal mode
