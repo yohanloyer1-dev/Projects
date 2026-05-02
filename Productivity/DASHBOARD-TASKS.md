@@ -112,11 +112,11 @@
 
 ### Productivity
 - [x] **DTN + Brief scoring audit and fixes** — Brief now mode-aware (no invisible cross-mode slots), Someday cap prevents stale deadlines from overriding urgent tasks. Done in Cowork 2026-05-01.
-- [>] **Fix A — Token security: move yl_gist_token to sessionStorage** — Real XSS exposure. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix A. For Claude Code. 🤖
-- [>] **Fix B — GitHub sync: visible error notifications** — Sync failures are currently silent. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix B. For Claude Code. 🤖
-- [>] **Fix C — Dynamic Claude Tasks tab** — Replace 9 hardcoded cards with auto-populated list from cl-marked tasks. Ref: CLAUDE_CODE_SESSION_PROMPT.md Fix C. For Claude Code. 🤖
-- [ ] **Fix D — Disable dead fetchClaudeQueue()** — Fires a 404 on every page load. 5 min job. Ref: Fix D. For Claude Code. 🤖
-- [ ] **Fix E — dtnSkipIdx divide-by-zero guard** — Edge case if all tasks completed. 2 min job. Ref: Fix E. For Claude Code. 🤖
+- [>] **Fix A — Token security: move yl_gist_token to sessionStorage** — Reverted by design: sessionStorage wrong tradeoff for single-user personal tool. localStorage kept. 🤖
+- [x] **Fix B — GitHub sync: visible error notifications** — Done 2026-05-02 (commit 4199358). 🤖
+- [x] **Fix C — Dynamic Claude Tasks tab** — Done 2026-05-02 (commit ec12ed2). renderClaudeTasks() live. 🤖
+- [x] **Fix D — Disable dead fetchClaudeQueue()** — Done 2026-05-02 (commit ec12ed2). syncQueueResults call also disabled. 🤖
+- [x] **Fix E — dtnSkipIdx divide-by-zero guard** — Done 2026-05-02 (commit ec12ed2). 🤖
 
 ---
 

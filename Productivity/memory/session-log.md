@@ -5,6 +5,32 @@
 
 ---
 
+## 2026-05-02 | 5:30pm Automated Wrap-Up | YL/OPS
+
+### Requested
+- Automated daily session wrap-up (scheduled task 5:30pm)
+
+### Done
+- Read TASKS.md, DASHBOARD-TASKS.md, session-log.md from GitHub (verified current)
+- Confirmed today's Claude Code work: dashboard fixes B, C, D, E implemented and pushed (commits 4199358, ec12ed2, 595dcf6 and others)
+- Fix A (sessionStorage) was intentionally reverted — localStorage kept as correct tradeoff for single-user personal tool
+- Fix for ct-head click handler added as final commit (595dcf6) — card header now navigates to task
+- Updated DASHBOARD-TASKS.md: Fixes B/C/D/E marked [x] done; Fix A updated with reverted-by-design note
+- Session log entry appended
+
+### Key Decisions
+- Fix A closed as "won't fix in this direction" — sessionStorage adds daily friction with no real security gain for a personal tool
+- Fixes B–E are fully shipped and live on GitHub Pages
+
+### Next Steps (Yohan-owned)
+- T-010: Run 5 validation conversations (Gorgias Integrations)
+- T-008: Request ManoMano API access
+- T-018: Contact employment lawyer re: IP/non-compete
+- Admin: Book hotel Taiwan May 9th (trip coming up), Book Ferry Tokashiki (due today)
+- Finance: Payer rattrapage impôts (due May 8), Pay 1000€ impôts (due May 31)
+
+---
+
 ## 2026-05-02 | Dashboard fixes A–E implementation + audit | Claude Code session
 
 ### Requested
