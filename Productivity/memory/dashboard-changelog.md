@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-05-02 | Fix A: Move yl_gist_token from localStorage to sessionStorage | pending
+
+### Problem Fixed
+- Token persisted across sessions in localStorage, readable by any injected script (XSS risk)
+
+### Changes
+- Migration block added at start of GITHUB GIST section: reads legacy token from localStorage, moves to sessionStorage, removes from localStorage (one-time, runs on every load until done)
+- `gistGetToken()` (line ~1775): reads from `sessionStorage` instead of `localStorage`
+- `saveGistToken()` (line ~1782): writes to `sessionStorage` instead of `localStorage`
+- `resetAndResync()` (lines ~1791–1794): reads/restores token via `sessionStorage`
+- `gistSetId()` (line ~1798): writes id to `sessionStorage`
+- DOMContentLoaded (line ~2693): added 1500ms delayed `notify('warn')` if no token in sessionStorage
+- Updated stale comment on line ~1875 to reflect sessionStorage
+- Snapshot: `versions/dashboard_v3.0_2026-05-02_pre-fix-A.html`
+
+---
+
 ## 2026-05-01 | Reorder mode toggle: Personal → Work → Freelance | a71e4e3+
 
 ### Change
