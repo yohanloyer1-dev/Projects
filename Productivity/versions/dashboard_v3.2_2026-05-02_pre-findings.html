@@ -1096,7 +1096,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="eye-maria"></div>
         <div class="t" data-id="blood-tests" data-xp="10" data-project="Health"><div class="chk"></div><div class="tb"><span class="tn">Blood/health tests when in Cannes</span></div><button class="note-btn" title="Add note">📝</button></div>
         <div class="note-panel" data-for="blood-tests"></div>
-        <div class="t cl" data-id="adhd-diag" data-xp="15" data-project="Health"><div class="chk"></div><div class="tb"><span class="tn">ADHD diagnosis — follow up</span></div><button class="note-btn has-note" title="View note">📝</button></div>
+        <div class="t" data-id="adhd-diag" data-xp="15" data-project="Health"><div class="chk"></div><div class="tb"><span class="tn">ADHD diagnosis — follow up</span></div><button class="note-btn has-note" title="View note">📝</button></div>
         <div class="note-panel" data-for="adhd-diag"></div>
         <div class="t urg" data-id="benefiz-health" data-xp="15" data-project="Health"><div class="chk"></div><div class="tb"><span class="tn">Benefiz Amélia</span><span class="td">Action needed — urgent</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge br">Urgent</span></div>
         <div class="note-panel" data-for="benefiz-health"></div>
@@ -1217,11 +1217,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="pc-acc" style="background:var(--cyan)"></div>
       <div class="pc-head"><div><div class="pc-title">Productivity System</div><div class="pc-sub">Dashboard · Claude OS · automation</div></div><span class="pill p-per">Personal</span></div>
       <div class="tl">
-        <div class="t" data-id="productivity-dashboard-audit-p1" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Continue Part 1 — Productivity Dashboard Audit and Recommendations</span><span class="td">Continue in Claude Code</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="t cl" data-id="productivity-dashboard-audit-p1" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Continue Part 1 — Productivity Dashboard Audit and Recommendations</span><span class="td">Continue in Claude Code</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
         <div class="note-panel" data-for="productivity-dashboard-audit-p1"></div>
-        <div class="t" data-id="productivity-dashboard-security-fix" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to fix all security recommendations from the Productivity Dashboard Audit</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="t cl" data-id="productivity-dashboard-security-fix" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to fix all security recommendations from the Productivity Dashboard Audit</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
         <div class="note-panel" data-for="productivity-dashboard-security-fix"></div>
-        <div class="t" data-id="productivity-dashboard-git-dtn" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to implement Git conflicts and audit DTN system</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
+        <div class="t cl" data-id="productivity-dashboard-git-dtn" data-xp="20" data-project="Productivity"><div class="chk"></div><div class="tb"><span class="tn">Get Claude Code to implement Git conflicts and audit DTN system</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge bc">🤖 Claude Code</span></div>
         <div class="note-panel" data-for="productivity-dashboard-git-dtn"></div>
       </div>
     </div>
@@ -4663,18 +4663,6 @@ function dtnSkip() {
 if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", dtnRender); } else { dtnRender(); }
 
 // ── DYNAMIC CLAUDE TASKS TAB ──────────────────────────────────────────────
-// Claude research findings fetched from GitHub — overlaid on cards without user notes
-let claudeFindings = {};
-const FINDINGS_URL = 'https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/claude-findings.json';
-async function fetchClaudeFindings() {
-  try {
-    const res = await fetch(FINDINGS_URL + '?t=' + Date.now());
-    if (!res.ok) return;
-    claudeFindings = await res.json();
-    renderClaudeTasks();
-  } catch(e) {}
-}
-
 function renderClaudeTasks() {
   const container = document.getElementById('view-claude');
   if (!container) return;
@@ -4725,10 +4713,7 @@ function renderClaudeTasks() {
     const id = t.dataset.id;
     const name = t.querySelector('.tn')?.textContent || id;
     const project = t.dataset.project || '';
-    const userNote = S.notes?.[id] || '';
-    const finding = claudeFindings?.[id];
-    const note = userNote || finding?.summary || '';
-    const hasResearch = !userNote && !!finding;
+    const note = S.notes?.[id] || '';
     const isUrgent = t.classList.contains('urg');
     const isHi = t.classList.contains('hi');
     const badgeClass = isUrgent ? 'ct-research' : isHi ? 'ct-ready' : 'ct-research';
@@ -4742,9 +4727,8 @@ function renderClaudeTasks() {
         <div class="ct-name">${escapeHtml(name)}</div>
         ${project ? `<div class="ct-proj">${escapeHtml(project)}</div>` : ''}
         <span class="ct-status ${escapeHtml(badgeClass)}">${escapeHtml(badgeText)}</span>
-        ${hasResearch ? `<span class="ct-status" style="background:rgba(139,92,246,.15);color:#a78bfa;border-color:rgba(139,92,246,.25);margin-left:4px">🤖 Researched ${escapeHtml(finding.updatedAt)}</span>` : ''}
       </div>
-      ${note ? `<div class="ct-note" style="white-space:pre-wrap">${escapeHtml(note)}</div>` : ''}
+      ${note ? `<div class="ct-note">${escapeHtml(note)}</div>` : ''}
       <button class="ct-copy" data-prompt="${escapeHtml(promptText)}">📋 Copy session prompt</button>
       <a class="ct-start" href="#" data-task-id="${escapeHtml(id)}" data-tab-id="${escapeHtml(tabId)}">→ Jump to task</a>
     </div>`;
@@ -4768,12 +4752,7 @@ function renderClaudeTasks() {
   });
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => { renderClaudeTasks(); fetchClaudeFindings(); });
-} else {
-  renderClaudeTasks();
-  fetchClaudeFindings();
-}
+if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", renderClaudeTasks); } else { renderClaudeTasks(); }
 
 // Re-render when tasks are completed
 const _origUpdateUI = updateUI;

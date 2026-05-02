@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-05-02 | Option 3 claude-findings: fetch + overlay research on Claude Tasks cards | pending
+
+### Changes
+- `claude-findings.json` created: schema `{ taskId: { summary, updatedAt } }`. Research pre-loaded for `decl-ae` and `adhd-diag`.
+- `claudeFindings` global + `fetchClaudeFindings()`: fetches JSON from GitHub raw URL on DOMContentLoaded (cache-busted), re-renders Claude Tasks tab on success
+- `renderClaudeTasks()`: uses `S.notes[id]` first (user note wins), falls back to `claudeFindings[id].summary`; adds purple "🤖 Researched YYYY-MM-DD" badge on cards with findings; note rendered with `white-space:pre-wrap` so line breaks in findings display correctly
+- `adhd-diag`: added `cl` class → now appears in Claude Tasks tab (Personal mode)
+- Removed `cl` from 3 completed `productivity-dashboard-*` tasks → no longer pollute Claude Tasks tab
+- Snapshot: `versions/dashboard_v3.2_2026-05-02_pre-findings.html`
+
+---
+
 ## 2026-05-02 | Fix C: ct-head click handler (cursor was pointer with no action) | pending
 
 ### Problem Fixed
