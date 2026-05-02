@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Fix A: Move yl_gist_token from localStorage to sessionStorage | pending
+## 2026-05-02 | Fix A: Move yl_gist_token from localStorage to sessionStorage | 589eeac
 
 ### Problem Fixed
 - Token persisted across sessions in localStorage, readable by any injected script (XSS risk)
