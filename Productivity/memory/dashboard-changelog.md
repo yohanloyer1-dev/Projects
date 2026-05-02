@@ -4,6 +4,14 @@
 
 ---
 
+## 2026-05-01 | Reorder mode toggle: Personal → Work → Freelance | a71e4e3+
+
+### Change
+- Swapped Work and Freelance button order in mode toggle HTML (line ~801)
+- New order: 🏠 Personal · 💼 Work · 🔧 Freelance
+
+---
+
 ## 2026-05-02 | Add Freelance as standalone mode (3-way toggle) | pending
 
 ### Goal
