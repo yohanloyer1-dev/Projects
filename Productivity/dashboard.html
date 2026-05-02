@@ -436,7 +436,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ct-head{padding:12px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s}
 .ct-head:hover{background:var(--s2)}
 .ct-icon{font-size:14px;flex-shrink:0}
-.ct-name{font-family:var(--fd);font-size:13px;font-weight:700;color:#fff;flex:1;letter-spacing:-.2px}
+.ct-name{font-family:var(--fd);font-size:13px;font-weight:700;color:#fff;flex:1;letter-spacing:-.2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ct-proj{font-family:var(--fm);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em}
 .ct-status{font-family:var(--fm);font-size:9px;padding:2px 8px;border-radius:4px}
 .ct-ready{background:var(--blue-d);color:var(--blue);border:1px solid rgba(74,158,255,.2)}
@@ -470,7 +470,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .t-xp{color:var(--amber);font-weight:500}
 
 /* STICKY NOTIFICATIONS */
-#sn-tray{position:fixed;top:20px;right:20px;z-index:11000;display:flex;flex-direction:column;gap:8px;max-width:340px;pointer-events:none}
+#sn-tray{position:fixed;top:20px;right:20px;z-index:11000;display:flex;flex-direction:column;gap:8px;max-width:min(340px,calc(100vw - 16px));pointer-events:none}
 .sn{pointer-events:all;display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:10px;background:var(--s2);border:1px solid var(--b2);box-shadow:0 8px 32px rgba(0,0,0,.55);font-family:var(--fm);font-size:11px;color:var(--t1);animation:snIn .25s cubic-bezier(.4,0,.2,1) both;line-height:1.45}
 .sn.sn-ok{border-left:3px solid var(--green)}
 .sn.sn-err{border-left:3px solid var(--red)}
@@ -943,7 +943,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <button class="panic-regen" onclick="panicPick()" title="Pick a different task">🔄 try again</button>
       </div>
     </div>
-    <button class="panic-pick-btn" onclick="panicPick()">Pick a task</button>
+    <button class="panic-pick-btn" id="panicPickBtn" onclick="panicPick()">Pick a task</button>
   </div>
 </div>
 
@@ -1587,6 +1587,7 @@ if (localStorage.getItem('yl_gist_id') !== CANONICAL_GIST_ID) {
   localStorage.setItem('yl_gist_id', CANONICAL_GIST_ID);
 }
 let _gistSaveTimer = null; // must be here — save() calls gistSchedulePush() before Gist block
+let _gistSyncing   = false; // mutex: true while any push or pull is in-flight
 
 // ── STATE ──────────────────────────────────
 const S = {
@@ -2305,16 +2306,25 @@ function buildTaskMap() {
 
 function save() {
   const now = new Date().toISOString();
-  localStorage.setItem('yl_xp',       S.xp);
-  localStorage.setItem('yl_streak',   S.streak);
-  localStorage.setItem('yl_day',      S.lastDay);
-  localStorage.setItem('yl_done',     JSON.stringify(S.done));
-  localStorage.setItem('yl_notes',    JSON.stringify(S.notes));
-  localStorage.setItem('yl_statuses', JSON.stringify(S.statuses));
-  localStorage.setItem('yl_links',     JSON.stringify(S.links));
-  localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
-  localStorage.setItem('yl_queued_for_claude', JSON.stringify(S.queuedForClaude));
-  localStorage.setItem('yl_saved_at', now);
+  try {
+    localStorage.setItem('yl_xp',       S.xp);
+    localStorage.setItem('yl_streak',   S.streak);
+    localStorage.setItem('yl_day',      S.lastDay);
+    localStorage.setItem('yl_done',     JSON.stringify(S.done));
+    localStorage.setItem('yl_notes',    JSON.stringify(S.notes));
+    localStorage.setItem('yl_statuses', JSON.stringify(S.statuses));
+    localStorage.setItem('yl_links',     JSON.stringify(S.links));
+    localStorage.setItem('yl_deadlines', JSON.stringify(S.deadlines));
+    localStorage.setItem('yl_queued_for_claude', JSON.stringify(S.queuedForClaude));
+    localStorage.setItem('yl_saved_at', now);
+  } catch(e) {
+    if (e.name === 'QuotaExceededError') {
+      notify('err', 'Storage full', 'localStorage is full — clear the Done log or browser storage to continue saving');
+    } else {
+      console.error('save() failed:', e);
+    }
+    return; // do not push partially-written state to Gist
+  }
   gistSchedulePush(); // push to cloud after every save (debounced 2s)
 }
 
@@ -2489,8 +2499,10 @@ function gistBuildPayload() {
 }
 
 async function gistPush() {
+  if (_gistSyncing) return; // pull in-flight — drop this push to avoid overwriting mid-pull state
   const token = gistGetToken();
   if (!token) { gistSetStatus('notoken'); return; }
+  _gistSyncing = true;
   gistSetStatus('syncing');
   const payload = JSON.stringify(gistBuildPayload(), null, 2);
   const body = { files: { [GIST_FILENAME]: { content: payload } } };
@@ -2534,6 +2546,8 @@ async function gistPush() {
     console.warn('Gist push error', e);
     gistSetStatus('err');
     notify('warn', 'Gist sync failed', 'Network error — check connection');
+  } finally {
+    _gistSyncing = false;
   }
 }
 
@@ -2543,6 +2557,8 @@ function hideSyncBanner() {
 }
 
 async function gistPull() {
+  if (_gistSyncing) return false; // push in-flight — skip pull to avoid clobbering push state
+  _gistSyncing = true;
   const token = gistGetToken();
   const gistId = gistGetId();
 
@@ -2553,6 +2569,7 @@ async function gistPull() {
   // No token — leave banner visible so user can paste it
   if (!token) {
     gistSetStatus('notoken');
+    _gistSyncing = false;
     return false;
   }
   // Token exists — update banner text to show we're connecting (not "not set up")
@@ -2610,6 +2627,8 @@ async function gistPull() {
     gistSetStatus('err');
     notify('warn', 'Gist pull failed', 'Network error — local data will be used');
     return false;
+  } finally {
+    _gistSyncing = false;
   }
 }
 
@@ -4666,15 +4685,18 @@ function dtnRender() {
   const statusEl = document.getElementById('dtnStatus');
   const doneBtn = document.getElementById('dtnDoneBtn');
 
+  const panicBtn = document.getElementById('panicPickBtn');
   if (!task) {
     taskEl.textContent = 'All tasks cleared. Incredible work!';
     statusEl.textContent = '';
     statusEl.className = 'dtn-status';
     card.className = 'dtn-card';
     doneBtn.style.display = 'none';
+    if (panicBtn) panicBtn.style.display = 'none';
     return;
   }
 
+  if (panicBtn) panicBtn.style.display = '';
   doneBtn.style.display = '';
   const name = task.querySelector('.tn');
   taskEl.textContent = name ? name.textContent : '—';
@@ -4825,7 +4847,7 @@ function renderClaudeTasks() {
   }
 
   if (!clTasks.length) {
-    dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm);margin-bottom:16px">No Claude-ready tasks in this mode.</p>';
+    dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm);margin-bottom:6px">No Claude-ready tasks in this mode.</p><p style="color:var(--t3);font-size:11px;font-family:var(--fm);line-height:1.6">Switch to another mode or mark a task with 🤖 to make it Claude-ready.</p>';
     return;
   }
 

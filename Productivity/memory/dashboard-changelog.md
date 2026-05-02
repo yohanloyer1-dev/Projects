@@ -4,6 +4,19 @@
 
 ---
 
+## 2026-05-02 | Plan fixes: gist mutex, localStorage quota, DTN button, CSS polish | pending
+
+### Changes
+- **Gist sync race condition:** Added `_gistSyncing` boolean mutex. `gistPush` and `gistPull` each check and set the lock; `finally` blocks always release it. Early-return paths in `gistPull` also clear the lock. Prevents push from writing stale pre-pull state to the Gist.
+- **localStorage quota:** Wrapped all 10 `setItem` calls in `save()` in try/catch. On `QuotaExceededError`: shows `notify('err')`, returns early (does NOT call `gistSchedulePush` with partial state).
+- **DTN "Pick a task" button:** Added `id="panicPickBtn"` to HTML. `dtnRender()` now hides/shows it based on whether the task pool is empty — button disappears when "All tasks cleared" is shown.
+- **`.ct-name` overflow:** Added `min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap` — long Claude task names now truncate cleanly instead of pushing badges off-screen.
+- **Mobile notification tray:** Changed `max-width:340px` → `max-width:min(340px,calc(100vw - 16px))` — tray no longer clips on narrow screens.
+- **Claude Tasks empty state:** Added a second hint line explaining how to switch modes or add Claude-ready tasks.
+- Snapshot: `versions/dashboard_v3.6_2026-05-02_pre-plan-fixes.html`
+
+---
+
 ## 2026-05-02 | Audit fixes: focusBtn dupe, noteBtn stacked listeners, stale deadlines, badge logic | pending
 
 ### Bugs Fixed
