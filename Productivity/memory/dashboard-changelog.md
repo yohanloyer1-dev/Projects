@@ -4,6 +4,19 @@
 
 ---
 
+## 2026-05-02 | Fix gistPull 401/other errors: add notify() popups | pending
+
+### Problem Fixed
+- `gistPull` 401 only updated banner text — no visible popup, inconsistent with `gistPush` Fix B
+- Non-401 errors (e.g. 403, 5xx) silently hid the banner with no feedback at all
+
+### Changes
+- 401 branch: added `notify('err', 'Gist sync failed', 'Token invalid (401)…')`
+- Other non-ok branch: added `notify('err', 'Gist sync failed', 'GitHub API error (${res.status})…')`
+- Snapshot: `versions/dashboard_v3.4_2026-05-02_pre-gistpull-401.html`
+
+---
+
 ## 2026-05-02 | Fix F: drag-and-drop section reordering with localStorage persistence | pending
 
 ### Feature Added

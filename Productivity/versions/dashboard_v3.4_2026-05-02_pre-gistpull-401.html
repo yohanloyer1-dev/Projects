@@ -2570,11 +2570,9 @@ async function gistPull() {
         gistSetStatus('notoken');
         const bannerText = document.querySelector('#syncBannerGist .sync-banner-text strong');
         if (bannerText) bannerText.textContent = 'Token invalid — re-enter your GitHub token';
-        notify('err', 'Gist sync failed', 'Token invalid (401) — re-enter your GitHub token in the sync banner');
       } else {
         gistSetStatus('err');
         hideSyncBanner();
-        notify('err', 'Gist sync failed', `GitHub API error (${res.status}) — try again later`);
       }
       return false;
     }
