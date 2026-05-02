@@ -100,10 +100,59 @@ Two running logs must be updated every session — no exceptions:
 
 **Rules:**
 - Update `session-log.md` at the END of every session, before pushing. One entry = one session.
-- **HARD RULE — dashboard-changelog.md:** Update IMMEDIATELY after any edit to dashboard.html — in the same commit, no exceptions. Never commit dashboard.html without dashboard-changelog.md staged in the same commit. Enforced by pre-commit git hook at `~/Projects/.git/hooks/pre-commit`. Skipping this is a critical protocol violation.
+- **HARD RULE — dashboard-changelog.md:** Update IMMEDIATELY after any edit to dashboard.html — in the same commit, no exceptions. Never commit dashboard.html without dashboard-changelog.md staged in the same commit. Enforced by pre-commit git hook. Skipping this is a critical protocol violation.
 - All entries are prepended (newest at top)
 - Keep entries concise — bullet points, not paragraphs
 - **Session-log timing:** Append at session wrap-up (not continuous). Log major work completed, decisions made, next steps.
+
+**Git hooks (local — not tracked by git, must reinstall after fresh clone):**
+
+| Hook | File | What it enforces |
+|------|------|-----------------|
+| pre-commit | `.git/hooks/pre-commit` | dashboard.html staged → changelog must be staged (BLOCK) + today's version snapshot must exist (BLOCK) |
+| pre-push | `.git/hooks/pre-push` | dashboard.html in push → session-log.md committed today (BLOCK) |
+
+**To reinstall hooks after a fresh clone:**
+```bash
+cat > .git/hooks/pre-commit << 'HOOK'
+#!/bin/sh
+DASHBOARD="Productivity/dashboard.html"
+CHANGELOG="Productivity/memory/dashboard-changelog.md"
+TODAY=$(date +%Y-%m-%d)
+if git diff --cached --name-only | grep -q "^${DASHBOARD}$"; then
+  if ! git diff --cached --name-only | grep -q "^${CHANGELOG}$"; then
+    echo "  ✗ COMMIT BLOCKED: stage dashboard-changelog.md with dashboard.html"; exit 1
+  fi
+  if ! ls Productivity/versions/dashboard_v*${TODAY}*.html 2>/dev/null | grep -q .; then
+    echo "  ✗ COMMIT BLOCKED: no version snapshot for today (${TODAY}). Save one to Productivity/versions/ first."; exit 1
+  fi
+fi
+exit 0
+HOOK
+
+cat > .git/hooks/pre-push << 'HOOK'
+#!/bin/sh
+DASHBOARD="Productivity/dashboard.html"
+SESSION_LOG="Productivity/memory/session-log.md"
+dashboard_pushed=0
+while read local_ref local_sha remote_ref remote_sha; do
+  zero='0000000000000000000000000000000000000000'
+  [ "$local_sha" = "$zero" ] && continue
+  range="${remote_sha}..${local_sha}"
+  [ "$remote_sha" = "$zero" ] && range="$local_sha"
+  git log --name-only --format="" "$range" -- "$DASHBOARD" 2>/dev/null | grep -q "dashboard.html" && dashboard_pushed=1
+done
+if [ "$dashboard_pushed" -eq 1 ]; then
+  today=$(date +%Y-%m-%d)
+  if ! git log --since="${today} 00:00:00" --name-only --format="" -- "$SESSION_LOG" | grep -q "session-log.md"; then
+    echo "  ✗ PUSH BLOCKED: update Productivity/memory/session-log.md and commit it before pushing dashboard changes."; exit 1
+  fi
+fi
+exit 0
+HOOK
+
+chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+```
 
 ## Dashboard
 - Location: `Productivity/dashboard.html` — open in browser, bookmark for daily use
