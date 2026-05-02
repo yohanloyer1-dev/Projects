@@ -1760,26 +1760,19 @@ const STREAKS = [
 ];
 
 // ── GITHUB GIST CLOUD SYNC ────────────────────────────────────
-// One-time migration: move token from localStorage to sessionStorage (Fix A, 2026-05-02)
-const _legacyToken = localStorage.getItem('yl_gist_token');
-if (_legacyToken && !sessionStorage.getItem('yl_gist_token')) {
-  sessionStorage.setItem('yl_gist_token', _legacyToken);
-  localStorage.removeItem('yl_gist_token');
-}
-
-// Token stored in sessionStorage under 'yl_gist_token' — clears on tab close for security.
+// Token stored in localStorage under 'yl_gist_token' — never in the file.
 // Gist ID stored in localStorage under 'yl_gist_id' after first creation.
 // On save(): pushes state to Gist (debounced 2s).
 // On load: pulls from Gist first, falls back to localStorage if offline/no token.
 // (GIST_FILENAME and _gistSaveTimer declared at top of script to avoid TDZ issues)
-function gistGetToken() { return sessionStorage.getItem('yl_gist_token') || null; }
+function gistGetToken() { return localStorage.getItem('yl_gist_token') || null; }
 function gistGetId()    { return localStorage.getItem('yl_gist_id')    || null; }
 
 function saveGistToken() {
   const input = document.getElementById('gistTokenInput');
   const token = (input?.value || '').trim();
   if (!token) { input && (input.style.borderColor = 'var(--red)'); return; }
-  sessionStorage.setItem('yl_gist_token', token);
+  localStorage.setItem('yl_gist_token', token);
   document.getElementById('syncBannerGist').style.display = 'none';
   gistPull().then(() => gistPush());
 }
@@ -1788,14 +1781,14 @@ function resetAndResync() {
   // Clears all local state and reloads so Gist data (or fresh seed) takes over.
   // Used to fix stale/wrong localStorage on any device.
   if (!confirm('Reset local data and pull from cloud sync?\n\nThis clears XP, streak and tasks from this device and reloads from your Gist. Your token is kept.')) return;
-  const token = sessionStorage.getItem('yl_gist_token');
+  const token = localStorage.getItem('yl_gist_token');
   const gistId = localStorage.getItem('yl_gist_id');
   localStorage.clear();
-  if (token) sessionStorage.setItem('yl_gist_token', token);
+  if (token) localStorage.setItem('yl_gist_token', token);
   if (gistId) localStorage.setItem('yl_gist_id', gistId);
   location.reload();
 }
-function gistSetId(id)  { sessionStorage.setItem('yl_gist_id', id); }
+function gistSetId(id)  { localStorage.setItem('yl_gist_id', id); }
 function gistSchedulePush() { clearTimeout(_gistSaveTimer); _gistSaveTimer = setTimeout(gistPush, 2000); }
 
 // ── CLAUDE QUEUE SYNC ─────────────────────────────────────────────────────────
@@ -1872,7 +1865,7 @@ async function syncQueueResults() {
 //   3. Sync button        — manual trigger in topbar; also fires on beforeunload
 //   4. Status indicator   — syncing / ok / error shown in topbar
 //
-// Security: token in sessionStorage (clears on tab close) — same as Gist sync.
+// Security: token in localStorage — same risk profile as Gist sync.
 // Race condition prevention: button disabled during sync; single in-flight request.
 // SHA requirement: always fetch current SHA before PUT (GitHub API requirement).
 
@@ -2709,7 +2702,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTasksSyncStatus('idle');
   updateSyncQueueBadge();
   setTimeout(() => {
-    if (!sessionStorage.getItem('yl_gist_token')) {
+    if (!localStorage.getItem('yl_gist_token')) {
       notify('warn', 'GitHub token not set', 'Paste your PAT in Settings to enable Gist sync');
     }
   }, 1500);

@@ -4,6 +4,25 @@
 
 ---
 
+## 2026-05-02 | Revert Fix A: restore yl_gist_token to localStorage | pending
+
+### Reason for revert
+Fix A moved the GitHub token to sessionStorage, requiring re-entry every session.
+For a single-user personal dashboard on GitHub Pages with no external scripts or CDN,
+the XSS threat model doesn't justify the daily friction. Token stayed in localStorage.
+The no-token warning notification is kept (useful for first-time setup).
+
+### Changes reverted
+- Migration block removed
+- `gistGetToken()` → back to `localStorage.getItem('yl_gist_token')`
+- `saveGistToken()` → back to `localStorage.setItem('yl_gist_token', token)`
+- `resetAndResync()` → back to localStorage for token preserve/restore
+- `gistSetId()` → back to `localStorage.setItem('yl_gist_id', id)`
+- Notification setTimeout now checks `localStorage` (kept — useful for new device setup)
+- Comments updated to reflect localStorage
+
+---
+
 ## 2026-05-02 | Fix D: Remove stale queue processor banner message | e18f28b
 
 ### Problem Fixed
