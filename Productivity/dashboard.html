@@ -2343,6 +2343,15 @@ async function syncDashboardTasks(silent) {
       const remaining = JSON.parse(localStorage.getItem('yl_quickadd') || '[]').filter(t => !addedIds.has(t.id));
       localStorage.setItem('yl_quickadd', JSON.stringify(remaining));
       updateSyncQueueBadge();
+    } else if (putRes.status === 401) {
+      setTasksSyncStatus('error', 'auth failed');
+      notify('err', 'GitHub token invalid', 'Re-enter your PAT in Settings to re-enable sync');
+    } else if (putRes.status === 409) {
+      setTasksSyncStatus('error', 'conflict');
+      notify('warn', 'Sync conflict', 'Refresh to get the latest version, then retry');
+    } else if (putRes.status >= 500) {
+      setTasksSyncStatus('error', `server error ${putRes.status}`);
+      notify('warn', 'GitHub API error', `HTTP ${putRes.status} — will retry next session`);
     } else {
       const errData = await putRes.json().catch(()=>({}));
       const errMsg = errData.message || `HTTP ${putRes.status}`;
@@ -2587,12 +2596,21 @@ async function gistPush() {
       gistSetStatus('ok');
       setTimeout(() => gistSetStatus('idle'), 3000);
     } else {
-      console.warn('Gist push failed', res.status);
       gistSetStatus('err');
+      if (res.status === 401) {
+        notify('err', 'Gist sync failed', 'Token invalid — re-enter in Settings');
+      } else if (res.status === 409) {
+        notify('warn', 'Gist sync conflict', 'Refresh to get the latest version');
+      } else if (res.status >= 500) {
+        notify('warn', 'Gist sync failed', `GitHub API error (${res.status}) — will retry on next save`);
+      } else {
+        notify('warn', 'Gist sync failed', `HTTP ${res.status}`);
+      }
     }
   } catch(e) {
     console.warn('Gist push error', e);
     gistSetStatus('err');
+    notify('warn', 'Gist sync failed', 'Network error — check connection');
   }
 }
 
@@ -2665,6 +2683,7 @@ async function gistPull() {
   } catch(e) {
     console.warn('Gist pull error', e);
     gistSetStatus('err');
+    notify('warn', 'Gist pull failed', 'Network error — local data will be used');
     return false;
   }
 }

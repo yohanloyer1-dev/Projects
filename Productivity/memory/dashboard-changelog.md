@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-05-02 | Fix B: Visible error notifications for all sync failures | pending
+
+### Problem Fixed
+- `gistPush` / `gistPull` failures were silent (only status indicator changed, no popup)
+- `syncDashboardTasks` PUT response had no specific 401/409/5xx handling
+
+### Changes
+- `gistPush` (line ~2599): replaced silent `console.warn` + status with `notify` for 401, 409, 5xx, network errors
+- `gistPull` catch (line ~2684): added `notify('warn', 'Gist pull failed', ...)` for network errors
+- `syncDashboardTasks` PUT block (line ~2346): added specific branches for 401 → token invalid message, 409 → conflict message, 5xx → API error message
+- Note: `syncDashboardTasks` GET + catch were already fully notified (fix written before those were added)
+
+---
+
 ## 2026-05-02 | Fix A: Move yl_gist_token from localStorage to sessionStorage | 589eeac
 
 ### Problem Fixed
