@@ -278,6 +278,140 @@ theoretically be empty if all active tasks are filtered out by scoring. Add the 
 
 ---
 
+### Fix F — Drag-and-drop section reordering
+**Priority:** Medium — UX improvement, no data risk
+
+Users want to drag entire task sections (e.g. move "Japan Trip" above "Admin & Finance") to
+reprioritize them within a view. Order persists in localStorage so it survives refresh.
+
+**Section DOM structure:**
+- Sections use `<div class="sh">` headers with `<div class="sh-lbl">Section Name</div>`
+- Each section = the `.sh` div + all sibling `.t` task rows that follow it until the next `.sh`
+- Sections live inside view containers: `#view-personal`, `#view-freelance`, `#view-pro`
+
+**Personal view sections (in default order, line numbers approx):**
+- Strategy & Vision (~1021)
+- Admin & Finance (~1052)
+- Health (~1089)
+- Real Estate & Travel (~1120)
+- Tech & Accounts (~1172)
+- Network & Others (~1199)
+- Productivity (~1214)
+
+**Freelance view sections:** Clients (~1236), Agency (~1279)
+**Work view sections:** Gorgias Day Job (~1319)
+
+**Implementation approach — pure HTML5 drag API (no library):**
+
+1. **Wrap each section** in a `<div class="section-block" data-section-id="...">` that contains
+   the `.sh` header + all its task `.t` divs. This is the draggable unit.
+   - `data-section-id` = slugified section name (e.g. `"admin-finance"`)
+
+2. **Make section headers draggable:**
+   ```javascript
+   function initSectionDrag() {
+     document.querySelectorAll('.section-block').forEach(block => {
+       const header = block.querySelector('.sh');
+       if (!header) return;
+       header.setAttribute('draggable', 'true');
+       header.style.cursor = 'grab';
+       
+       header.addEventListener('dragstart', e => {
+         e.dataTransfer.effectAllowed = 'move';
+         e.dataTransfer.setData('text/plain', block.dataset.sectionId);
+         block.classList.add('dragging');
+       });
+       header.addEventListener('dragend', () => {
+         block.classList.remove('dragging');
+         document.querySelectorAll('.section-block').forEach(b => b.classList.remove('drag-over'));
+       });
+       
+       block.addEventListener('dragover', e => {
+         e.preventDefault();
+         e.dataTransfer.dropEffect = 'move';
+         block.classList.add('drag-over');
+       });
+       block.addEventListener('dragleave', () => block.classList.remove('drag-over'));
+       block.addEventListener('drop', e => {
+         e.preventDefault();
+         block.classList.remove('drag-over');
+         const draggedId = e.dataTransfer.getData('text/plain');
+         const draggedBlock = document.querySelector(`.section-block[data-section-id="${draggedId}"]`);
+         if (!draggedBlock || draggedBlock === block) return;
+         
+         // Insert dragged block before the drop target
+         block.parentNode.insertBefore(draggedBlock, block);
+         saveSectionOrder(block.closest('[id^="view-"]')?.id);
+       });
+     });
+   }
+   ```
+
+3. **Save order to localStorage:**
+   ```javascript
+   function saveSectionOrder(viewId) {
+     if (!viewId) return;
+     const view = document.getElementById(viewId);
+     if (!view) return;
+     const order = Array.from(view.querySelectorAll('.section-block'))
+       .map(b => b.dataset.sectionId);
+     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+     orders[viewId] = order;
+     localStorage.setItem('yl_section_orders', JSON.stringify(orders));
+   }
+   ```
+
+4. **Restore order on page load:**
+   ```javascript
+   function restoreSectionOrders() {
+     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+     Object.entries(orders).forEach(([viewId, order]) => {
+       const view = document.getElementById(viewId);
+       if (!view) return;
+       order.forEach(sectionId => {
+         const block = view.querySelector(`.section-block[data-section-id="${sectionId}"]`);
+         if (block) view.appendChild(block); // appending in order moves them correctly
+       });
+     });
+   }
+   ```
+   Call `restoreSectionOrders()` once after DOM ready, before `updateUI()`.
+
+5. **Wire into init:**
+   ```javascript
+   // Near end of script, where dtnRender() and renderClaudeTasks() are wired:
+   restoreSectionOrders();
+   initSectionDrag();
+   ```
+   Also call `initSectionDrag()` inside `setMode()` so new view sections get drag handlers after mode switch.
+
+6. **CSS for drag states:**
+   ```css
+   .section-block.dragging { opacity: 0.5; }
+   .section-block.drag-over { border-top: 2px solid var(--accent); }
+   .sh[draggable="true"] { cursor: grab; user-select: none; }
+   .sh[draggable="true"]:active { cursor: grabbing; }
+   ```
+
+7. **Reset button (optional)** — small "↺" button in topbar or section header area:
+   ```javascript
+   function resetSectionOrder(viewId) {
+     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+     delete orders[viewId];
+     localStorage.setItem('yl_section_orders', JSON.stringify(orders));
+     location.reload(); // simplest way to restore default DOM order
+   }
+   ```
+
+**Testing:**
+- Drag "Japan Trip" section above "Admin & Finance" → order changes visually
+- Refresh page → order persists
+- Switch mode → other views unaffected
+- Mark a task done in a reordered section → task disappears, section stays in position
+- All tasks still completable, notes still openable after drag
+
+---
+
 ## Commit Strategy
 
 **Two commits:**
@@ -289,10 +423,10 @@ git commit -m "fix: token sessionStorage migration, sync error visibility, queue
 git push origin main
 ```
 
-**Commit 2** — Fixes C + E (dynamic Claude tab + edge case):
+**Commit 2** — Fixes C + E + F (dynamic Claude tab + edge case + drag sections):
 ```bash
 git add Productivity/dashboard.html Productivity/memory/dashboard-changelog.md
-git commit -m "feat/fix: dynamic Claude Tasks tab, dtnSkipIdx guard"
+git commit -m "feat/fix: dynamic Claude Tasks tab, dtnSkipIdx guard, drag-drop section reorder"
 git push origin main
 ```
 
@@ -328,6 +462,8 @@ Mode switch → tab updates to show correct mode's tasks.
 **Fix D:** DevTools → Network → reload → no 404 for queue.json.
 
 **Fix E:** Mark all tasks done → DTN shows "All tasks cleared", no JS error in console.
+
+**Fix F:** Drag "Japan Trip" section above "Admin & Finance" → updates visually. Refresh → order persists. Switch mode → other views unaffected. Tasks still completable after drag.
 
 ---
 
