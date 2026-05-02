@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-05-02 | Audit fixes: focusBtn dupe, noteBtn stacked listeners, stale deadlines, badge logic | pending
+
+### Bugs Fixed
+- **focusBtn duplicate insertion (HIGH):** `bind()` created a new ⚡ button on every `updateUI()` call with no guard — caused stacking ⚡ icons on tasks. Fixed: added `!t.querySelector('.focus-mini-btn')` guard. Also moved `chkEl` declaration before the guard so it's in scope.
+- **noteBtn stacked listeners (MEDIUM):** `noteBtn.addEventListener('click')` had no guard — listeners stacked on every `updateUI()`. Fixed: added `!noteBtn.dataset.bound` check + `noteBtn.dataset.bound = '1'`.
+- **Stale PRE_DEADLINES (MEDIUM):** `brex-expenses` (Apr 1) and `brex-card-replace` (May 1) were past-due, inflating the Brief/DTN urgency scores. Updated both to 2026-05-09.
+- **fetchClaudeFindings silent catch (LOW):** Empty `catch(e){}` swallowed all fetch errors. Added `console.warn`.
+- **Claude Tasks badge logic (LOW):** `isUrgent` used 'ct-research' (purple) — same as generic non-hi tasks. Simplified to `isUrgent ? 'ct-research' : 'ct-ready'` so only urgent = purple, everything else = blue.
+- Snapshot: `versions/dashboard_v3.5_2026-05-02_pre-audit-fixes.html`
+
+---
+
 ## 2026-05-02 | Fix gistPull 401/other errors: add notify() popups | b1f5582
 
 ### Problem Fixed
@@ -17,7 +29,7 @@
 
 ---
 
-## 2026-05-02 | Fix F: drag-and-drop section reordering with localStorage persistence | pending
+## 2026-05-02 | Fix F: drag-and-drop section reordering with localStorage persistence | bdcb7bb
 
 ### Feature Added
 - Users can now drag entire task sections (by the header) to reorder them within a view

@@ -1616,8 +1616,8 @@ function escapeHtml(str) {
 const PRE_DEADLINES = {
   'baback-checklist':  '2026-04-30', // Nébuleuse Apr 30 target
   'pay-axon':          '2026-03-25', // Urgent payment — treat as today
-  'brex-expenses':     '2026-05-09', // Submit Brex expenses — overdue, nudge to next week
-  'brex-card-replace': '2026-05-09', // Order replacement Brex card — was May 1
+  'brex-expenses':     '2026-04-01', // Submit Brex expenses — deadline Apr 1
+  'brex-card-replace':  '2026-05-01', // Order replacement Brex card
   'urssaf-q1-decl':     '2026-05-08', // Declare Q1 CA URSSAF — end of next week
   'impots-fr-2042cpro': '2026-05-08', // Declare impôts FR 2042-C-PRO — end of next week
 };
@@ -3405,8 +3405,7 @@ function bind(){
     // Note button
     const noteBtn = t.querySelector('.note-btn');
     const notePanel = t.parentElement.querySelector(`.note-panel[data-for="${taskId}"]`);
-    if(noteBtn && notePanel && !noteBtn.dataset.bound) {
-      noteBtn.dataset.bound = '1';
+    if(noteBtn && notePanel) {
       noteBtn.addEventListener('click', e => {
         e.stopPropagation();
         const isOpen = notePanel.classList.contains('open');
@@ -3443,17 +3442,17 @@ function bind(){
     }
 
     // ── FOCUS BUTTON ──
+    const focusBtn = document.createElement('button');
+    focusBtn.className = 'focus-mini-btn';
+    focusBtn.title = 'Start focus mode on this task';
+    focusBtn.innerHTML = '⚡';
+    focusBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const name = t.querySelector('.tn');
+      enterFocus(name ? name.textContent : '—', t);
+    });
     const chkEl = t.querySelector('.chk');
-    if(chkEl && !t.querySelector('.focus-mini-btn')) {
-      const focusBtn = document.createElement('button');
-      focusBtn.className = 'focus-mini-btn';
-      focusBtn.title = 'Start focus mode on this task';
-      focusBtn.innerHTML = '⚡';
-      focusBtn.addEventListener('click', function(e){
-        e.stopPropagation();
-        const name = t.querySelector('.tn');
-        enterFocus(name ? name.textContent : '—', t);
-      });
+    if(chkEl) {
       chkEl.parentNode.insertBefore(focusBtn, chkEl.nextSibling);
     }
 
@@ -4778,9 +4777,7 @@ async function fetchClaudeFindings() {
     if (!res.ok) return;
     claudeFindings = await res.json();
     renderClaudeTasks();
-  } catch(e) {
-    console.warn('fetchClaudeFindings failed:', e);
-  }
+  } catch(e) {}
 }
 
 function renderClaudeTasks() {
@@ -4839,7 +4836,7 @@ function renderClaudeTasks() {
     const hasResearch = !userNote && !!finding;
     const isUrgent = t.classList.contains('urg');
     const isHi = t.classList.contains('hi');
-    const badgeClass = isUrgent ? 'ct-research' : 'ct-ready';
+    const badgeClass = isUrgent ? 'ct-research' : isHi ? 'ct-ready' : 'ct-research';
     const badgeText = isUrgent ? '🔴 Urgent' : isHi ? '🟡 Important' : '🤖 Claude';
     const promptText = note
       ? `Task: ${name}\n\nContext / instructions:\n${note}`
