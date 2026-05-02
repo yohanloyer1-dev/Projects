@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-05-02 | Fix D: Remove stale queue processor banner message | pending
+
+### Problem Fixed
+- `queueOverdueBanner` referenced a Claude queue processor that no longer exists
+- `fetchClaudeQueue()` was already removed in a prior session; this cleans up the last UI artifact
+
+### Changes
+- Banner text (line ~784): "Claude queue processor hasn't run yet / Expected at 10:30 AM..." → "Claude-ready tasks in queue / Use the 🤖 Claude Tasks tab"
+- No code removed — `syncQueueResults` kept (harmless, silently 404s if queue.json absent)
+
+---
+
 ## 2026-05-02 | Fix B: Visible error notifications for all sync failures | 4199358
 
 ### Problem Fixed
