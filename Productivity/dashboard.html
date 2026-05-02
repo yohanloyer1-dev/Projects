@@ -1405,108 +1405,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="sh"><div class="sh-lbl" style="color:var(--blue)">🤖 Claude-Actionable Tasks</div><div class="sh-line"></div><div class="sh-ct" style="color:var(--blue)">tasks I can execute for you</div></div>
   <p style="font-size:12px;color:var(--t3);margin-bottom:16px;font-family:var(--fm)">These tasks have notes you've written or are marked as Claude-ready. Just say "work on [task name]" and we'll tackle it in this session. Results are saved to your Projects folder.</p>
 
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">🔬</div>
-      <div class="ct-name">Copy trading bot — Polymarket</div>
-      <div class="ct-proj">Bots & Automation</div>
-      <span class="ct-status ct-research">Research</span>
-    </div>
-    <div class="ct-note">
-      <strong>Your note:</strong> Do some research on copy trading bots and Polymarket. Think about how to create and implement such a bot using the Polymarket API. Check the Claude and Reddit communities about this topic.
-    </div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Research copy trading bots and Polymarket. Using the Polymarket API and the terauss/Polymarket-Copy-Trading-Bot repo on GitHub as a reference, think through how to build and implement a copy trading bot. Check the Claude and Reddit communities for context. Summarise findings and propose an implementation plan.')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('polymarket-bot','personal');return false;">→ Jump to task in Personal tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">🧠</div>
-      <div class="ct-name">ADHD diagnosis — follow up</div>
-      <div class="ct-proj">Health · Medical</div>
-      <span class="ct-status ct-research">Research</span>
-    </div>
-    <div class="ct-note">
-      <strong>Your note:</strong> Do some research on how someone can book an ADHD diagnosis session in France. Check my Benefiz coverage to see what is the best option in my personal case.
-    </div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Research how to book an ADHD diagnosis in France — private psychiatrists, specialised centres, wait times, and typical costs. Then check my Benefiz health coverage (Alan) to see what is reimbursed and what the best practical option is for my situation. Output a short comparison and recommended next step.')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('adhd-diag','personal');return false;">→ Jump to task in Personal tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">⭐</div>
-      <div class="ct-name">Créer 2026 goals + sub-goals</div>
-      <div class="ct-proj">Strategy & Vision</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">Claude can build a full structured goals document based on your Ohtani Matrix pillars and locked goal. We'll define quarterly OKRs, sub-goals per pillar, and leading indicators.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Using my Ohtani Matrix (Productivity/memory/context/ohtani-matrix.md) and locked goal (€50K net/year, ≤20h/week, 3 years), build a full 2026 goals document with quarterly OKRs, sub-goals per pillar, and measurable leading indicators. Save as Productivity/memory/context/goals-2026.md')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('goals-2026','personal');return false;">→ Jump to task in Personal tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">🏷️</div>
-      <div class="ct-name">Find agency name</div>
-      <div class="ct-proj">Agency · Blocker</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">A shortlist of 10 name candidates is ready in memory/projects/agency-name-brainstorm.md. Top picks: Kairo, Reflow, Celio. Review and pick one — then check domain availability.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/agency-name-brainstorm.md. Review my top 3 picks (Kairo, Reflow, Celio) and help me decide. Check domain availability for each (.com, .co, .agency). Run a quick conflict check. Help me make a final decision and update memory/projects/gorgias-agency.md with the chosen name.')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('agency-name','freelance');return false;">→ Jump to task in Freelance tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">📦</div>
-      <div class="ct-name">Define service packages + pricing</div>
-      <div class="ct-proj">Agency</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">5-package framework is drafted in memory/projects/agency-service-packages.md. Review pricing, adjust numbers, then build the website copy (one page per package, EN + FR).</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/agency-service-packages.md and memory/projects/gorgias-agency.md. Review the 5-package framework. Then write the website copy for each package — short, premium, outcome-focused. EN first, then FR. Max 150 words per package. Save to memory/projects/agency-website-copy.md')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('service-packages','freelance');return false;">→ Jump to task in Freelance tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">⚡</div>
-      <div class="ct-name">Gorgias role optimisation — quick wins</div>
-      <div class="ct-proj">Professional · Gorgias</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">Full analysis is in memory/projects/gorgias-role-optimisation.md. 4 quick wins identified — HubSpot pipeline review, Granola action extraction, Shoptalk follow-up templates, weekly partner pulse.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/gorgias-role-optimisation.md. Start with Quick Win #1: use the HubSpot MCP to pull my current partner pipeline, identify the top 3 stale or at-risk partner deals, and draft follow-up emails for each. Then move to Quick Win #2: use the Granola MCP to extract action items from my last 3 weeks of meetings.')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('role-brainstorm','pro');return false;">→ Jump to task in Professional tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">📝</div>
-      <div class="ct-name">Complete 7 stub integration articles</div>
-      <div class="ct-proj">Agency · Help Center</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">ShipStation, ShipBob, ShipHero, Shipmonk, Skio, Loop Returns — 7 stubs to flesh out. Claude will draft each one using the existing article format from the 61 already ingested articles.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read the existing Gorgias Help Center articles in Gorgias/Help Center/ to understand the format and tone. Then write full articles (~1,300 words each) for these 7 integrations: ShipStation, ShipBob, ShipHero, Shipmonk, Skio Subscriptions, Loop Subscriptions, Loop Returns. Save each to the appropriate section file.')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('stub-articles','freelance');return false;">→ Jump to task in Freelance tab</a>
-  </div>
-
-  <div class="claude-task">
-    <div class="ct-head">
-      <div class="ct-icon">🏗️</div>
-      <div class="ct-name">Multi-brand Gorgias structure (5 brands)</div>
-      <div class="ct-proj">Accessory Partners</div>
-      <span class="ct-status ct-ready">Ready</span>
-    </div>
-    <div class="ct-note">Claude can build the full multi-brand view and tagging architecture in Gorgias for Suspension Superstore and the 4 other brands. Includes routing rules, team assignments, and macro library.</div>
-    <button class="ct-copy" onclick="copyPrompt(this,'Read Productivity/memory/projects/accessory-partners.md. Design the full multi-brand Gorgias structure for 5 brands: Suspension Superstore, MaxTrac, All American Billet, Vision X, Legacy. Output: view setup, routing rules, tag taxonomy, team assignment logic, and starter macro library. Save to Gorgias/accessory-partners-multiband-spec.md')">📋 Copy session prompt</button>
-    <a class="ct-start" href="#" onclick="goToTask('multi-brand','freelance');return false;">→ Jump to task in Freelance tab</a>
-  </div>
-
-  <div style="margin-top:20px;padding:14px 16px;background:var(--s1);border:1px solid var(--b1);border-radius:8px;font-size:12px;color:var(--t3);font-family:var(--fm)">
-    💡 Add notes to any task by hovering it and clicking the 📝 button. Notes with instructions tell Claude exactly what to do when you start a session on that task.
+  <div class="claude-hint" style="margin-top:20px;padding:14px 16px;background:var(--s1);border:1px solid var(--b1);border-radius:8px;font-size:12px;color:var(--t3);font-family:var(--fm)">
+    💡 Add notes to any task by hovering it and clicking the 📝 button. Notes become the session prompt when you hit "Copy session prompt".
   </div>
 </div>
 
@@ -2694,7 +2594,7 @@ async function gistPull() {
 })();
 
 // Sync Claude queue results from GitHub on page load (after Gist sync)
-setTimeout(syncQueueResults, 500);
+// setTimeout(syncQueueResults, 500); // Disabled 2026-05-02 — no queue processor running
 
 // ── TASKS.MD SYNC INIT ─────────────────────────────────────────────────────
 // Show last sync timestamp in topbar on load (after DOM ready)
@@ -2958,9 +2858,10 @@ function setMode(mode) {
   const activeTab = document.querySelector('.tab.active');
   const activeId  = activeTab?.id?.replace('tab-','');
   if (activeId && !showTabs.includes(activeId) && !SHARED_TABS.includes(activeId)) sv('brief');
-  // Re-render brief and DTN to reflect mode-appropriate tasks
+  // Re-render brief, DTN and Claude Tasks tab to reflect mode-appropriate tasks
   renderBrief();
   dtnRender();
+  renderClaudeTasks();
 }
 
 function initMode() {
@@ -4647,6 +4548,7 @@ function dtnGetTopTask() {
   scored.sort((a, b) => b.score - a.score);
 
   // dtnSkipIdx cycles through the sorted list
+  if (!scored.length) return null;
   const idx = dtnSkipIdx % scored.length;
   return scored[idx].el;
 }
@@ -4759,9 +4661,92 @@ function dtnSkip() {
 }
 
 if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", dtnRender); } else { dtnRender(); }
+
+// ── DYNAMIC CLAUDE TASKS TAB ──────────────────────────────────────────────
+function renderClaudeTasks() {
+  const container = document.getElementById('view-claude');
+  if (!container) return;
+
+  const mode = localStorage.getItem('yl_mode') || 'personal';
+  const viewMap = {
+    personal:  [['view-personal',  'personal']],
+    freelance: [['view-freelance', 'freelance']],
+    work:      [['view-pro',       'pro']]
+  };
+  const viewPairs = viewMap[mode] || viewMap.personal;
+
+  const doneIds = new Set(S.done.map(d => d.id || d.n));
+
+  const clTasks = viewPairs.flatMap(([viewId, tabId]) => {
+    const view = document.getElementById(viewId);
+    if (!view) return [];
+    return Array.from(view.querySelectorAll('.t.cl[data-id]'))
+      .filter(t => {
+        if (t.classList.contains('done-t')) return false;
+        const id = t.dataset.id;
+        const name = t.querySelector('.tn')?.textContent || '';
+        return !doneIds.has(id) && !doneIds.has(name);
+      })
+      .map(t => ({ el: t, tabId }));
+  });
+
+  clTasks.sort((a, b) => {
+    const score = el => el.classList.contains('urg') ? 2 : el.classList.contains('hi') ? 1 : 0;
+    return score(b.el) - score(a.el);
+  });
+
+  let dynamicSection = container.querySelector('.claude-dynamic');
+  if (!dynamicSection) {
+    dynamicSection = document.createElement('div');
+    dynamicSection.className = 'claude-dynamic';
+    const hintDiv = container.querySelector('.claude-hint');
+    if (hintDiv) container.insertBefore(dynamicSection, hintDiv);
+    else container.appendChild(dynamicSection);
+  }
+
+  if (!clTasks.length) {
+    dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm);margin-bottom:16px">No Claude-ready tasks in this mode.</p>';
+    return;
+  }
+
+  dynamicSection.innerHTML = clTasks.map(({ el: t, tabId }) => {
+    const id = t.dataset.id;
+    const name = t.querySelector('.tn')?.textContent || id;
+    const project = t.dataset.project || '';
+    const note = S.notes?.[id] || '';
+    const isUrgent = t.classList.contains('urg');
+    const isHi = t.classList.contains('hi');
+    const badgeClass = isUrgent ? 'ct-research' : isHi ? 'ct-ready' : 'ct-research';
+    const badgeText = isUrgent ? '🔴 Urgent' : isHi ? '🟡 Important' : '🤖 Claude';
+    const promptText = note
+      ? `Task: ${name}\n\nContext / instructions:\n${note}`
+      : `I need help with this task: ${name}`;
+
+    return `<div class="claude-task" data-id="${escapeHtml(id)}">
+      <div class="ct-head">
+        <div class="ct-name">${escapeHtml(name)}</div>
+        ${project ? `<div class="ct-proj">${escapeHtml(project)}</div>` : ''}
+        <span class="ct-status ${escapeHtml(badgeClass)}">${escapeHtml(badgeText)}</span>
+      </div>
+      ${note ? `<div class="ct-note">${escapeHtml(note)}</div>` : ''}
+      <button class="ct-copy" data-prompt="${escapeHtml(promptText)}">📋 Copy session prompt</button>
+      <a class="ct-start" href="#" data-task-id="${escapeHtml(id)}" data-tab-id="${escapeHtml(tabId)}">→ Jump to task</a>
+    </div>`;
+  }).join('');
+
+  dynamicSection.querySelectorAll('.ct-copy').forEach(btn => {
+    btn.addEventListener('click', () => copyPrompt(btn, btn.dataset.prompt));
+  });
+  dynamicSection.querySelectorAll('.ct-start').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); goToTask(a.dataset.taskId, a.dataset.tabId); });
+  });
+}
+
+if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", renderClaudeTasks); } else { renderClaudeTasks(); }
+
 // Re-render when tasks are completed
 const _origUpdateUI = updateUI;
-updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); };
+updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); renderClaudeTasks(); };
 
 
 // ── PANIC BUTTON ──────────────────────────

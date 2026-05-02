@@ -4,6 +4,25 @@
 
 ---
 
+## 2026-05-02 | Fixes C + D(complete) + E: dynamic Claude tab, queue call disabled, DTN guard | pending
+
+### Changes
+- **Fix C — renderClaudeTasks()** (line ~4666): New function replaces 8 hardcoded `.claude-task` cards
+  - Reads live `.t.cl[data-id]` tasks from the active mode's view (personal/freelance/pro)
+  - Filters out completed tasks (cross-checks `S.done` by id and name)
+  - Sorts urgent > important > rest
+  - Generates cards using existing `.ct-head`, `.ct-status`, `.ct-note`, `.ct-copy`, `.ct-start` CSS
+  - "Copy session prompt" uses `S.notes[id]` if set, else generic prompt
+  - "Jump to task" uses existing `goToTask()` with correct tab id
+  - Wired into `setMode()` (re-renders on mode switch) and `updateUI()` (re-renders on task completion)
+  - Initial call at DOMContentLoaded
+  - Removed: 8 hardcoded cards covering polymarket-bot, adhd-diag, goals-2026, agency-name, service-packages, role-brainstorm, stub-articles, multi-brand (2 of which no longer existed as cl-marked tasks)
+  - Added `claude-hint` class to hint div for JS anchor; updated hint text
+- **Fix D(complete)** (line ~2697): Disabled `setTimeout(syncQueueResults, 500)` — was making a 404 network request on every page load
+- **Fix E** (line ~4650): Added `if (!scored.length) return null` guard before `dtnSkipIdx % scored.length` in `dtnGetTopTask()`
+
+---
+
 ## 2026-05-02 | Revert Fix A: restore yl_gist_token to localStorage | pending
 
 ### Reason for revert
