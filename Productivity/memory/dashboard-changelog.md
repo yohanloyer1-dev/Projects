@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Plan fixes: gist mutex, localStorage quota, DTN button, CSS polish | pending
+## 2026-05-02 | Plan fixes: gist mutex, localStorage quota, DTN button, CSS polish | cd65c2e
 
 ### Changes
 - **Gist sync race condition:** Added `_gistSyncing` boolean mutex. `gistPush` and `gistPull` each check and set the lock; `finally` blocks always release it. Early-return paths in `gistPull` also clear the lock. Prevents push from writing stale pre-pull state to the Gist.
