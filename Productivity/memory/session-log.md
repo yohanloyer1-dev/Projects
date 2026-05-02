@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-05-02 | Dashboard fixes A–E implementation + audit | Claude Code session
+
+### Requested
+- Implement fixes A–E from `CLAUDE_CODE_SESSION_PROMPT.md` in order
+
+### Done
+- **Fix A (sessionStorage):** Implemented, then reverted. Decision: for a single-user personal GitHub Pages dashboard with no external scripts, XSS threat model doesn't justify daily re-entry friction. Token stays in localStorage. No-token warning notification kept (useful on new device setup).
+- **Fix B (sync error visibility):** `gistPush` and `gistPull` failures were genuinely silent — only status indicator changed. Added `notify()` calls for 401/409/5xx/network in both functions. `syncDashboardTasks` PUT block upgraded with specific 401/409/5xx branches (GET + catch were already notified from a prior session).
+- **Fix C (dynamic Claude Tasks tab):** Replaced 8 hardcoded `.claude-task` cards with `renderClaudeTasks()`. Reads live `.t.cl[data-id]` tasks, filters completed, sorts by urgency, generates cards with existing CSS. Wired into `setMode()` and `updateUI()`. 2 of the 8 hardcoded cards referenced tasks that no longer existed as cl-marked in the DOM.
+- **Fix D (queue cleanup):** Banner text updated (prior partial fix). Audit found `setTimeout(syncQueueResults, 500)` was also firing a pointless 404 network request on every page load — disabled that call too.
+- **Fix E (DTN divide-by-zero guard):** Added `if (!scored.length) return null` in `dtnGetTopTask()` before the `% scored.length` modulo.
+- **Full audit run:** Spawned Explore agent mid-session to challenge all recommendations. Confirmed "already fixed" items (#1 renderBrief, #2 DTN cap) are present. Identified Fix D was incomplete and Fix A was over-engineered for this use case.
+
+### Key Decisions
+- Fix A reverted — sessionStorage is wrong tradeoff for a personal single-user tool
+- Fix D was incomplete in prior pass — `syncQueueResults` call also needed disabling
+- `renderClaudeTasks()` uses existing CSS classes (`.ct-head`, `.ct-status`, etc.) and existing `copyPrompt()`/`goToTask()` functions — no new CSS added
+- Curated session prompts from old hardcoded cards are no longer in HTML — users should add notes via the 📝 button instead (stored in `S.notes`)
+
+### Commits
+- `589eeac` Fix A (sessionStorage) — later reverted
+- `4199358` Fix B (sync error notifications)
+- `e18f28b` Fix D partial (banner text)
+- `1988e82` Revert Fix A (back to localStorage)
+- `ec12ed2` Fixes C + D(complete) + E
+
+---
+
 ## 2026-05-01 | Git infrastructure decision + DTN/Brief audit + Claude Code handover | YL/OPS
 
 ### Requested
