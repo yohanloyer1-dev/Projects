@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-05-02 | Fix F: drag-and-drop section reordering with localStorage persistence | pending
+
+### Feature Added
+- Users can now drag entire task sections (by the header) to reorder them within a view
+- Order persists across refreshes via `yl_section_orders` in localStorage
+
+### Changes
+- HTML: wrapped all 10 sections in `<div class="section-block" data-section-id="...">` — 7 in `#view-personal` (strategy-vision, admin-finance, health, real-estate-travel, tech-accounts, network-others, productivity), 2 in `#view-freelance` (clients, agency), 1 in `#view-pro` (gorgias-day-job)
+- CSS: added `.section-block.dragging`, `.section-block.drag-over`, `.sh[draggable="true"]`, `.sh[draggable="true"]:active`
+- JS: added `saveSectionOrder(viewId)`, `restoreSectionOrders()`, `initSectionDrag()`, `resetSectionOrder(viewId)`
+- Init: `restoreSectionOrders()` and `initSectionDrag()` called at page load (after updateUI override)
+- `setMode()`: `initSectionDrag()` added at end so drag handlers apply after mode switch
+- Snapshot: `versions/dashboard_v3.3_2026-05-02_pre-drag-sections.html`
+
+---
+
+## 2026-05-02 | Add URSSAF Q1 + impôts 2042-C-PRO tasks (urgent, deadline May 8) | pending
+
+### Changes
+- Added `urssaf-q1-decl`: "Déclarer CA Q1 URSSAF (auto-entrepreneur)" — class `t urg hi`, Tax & Declarations section, Personal mode
+- Added `impots-fr-2042cpro`: "Déclaration impôts France — formulaire 2042-C-PRO" — class `t urg hi`, same section
+- Both tasks seeded with deadline `2026-05-08` in `PRE_DEADLINES`
+- Snapshot: `versions/dashboard_v3.3_2026-05-02_pre-new-tasks.html`
+
+---
+
 ## 2026-05-02 | Option 3 claude-findings: fetch + overlay research on Claude Tasks cards | 073afa5
 
 ### Changes

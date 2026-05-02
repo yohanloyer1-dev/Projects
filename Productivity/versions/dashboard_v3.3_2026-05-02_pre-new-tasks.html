@@ -758,10 +758,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   .fo-header{flex-wrap:wrap}
   .focus-overlay{padding:20px 16px}
 }
-.section-block.dragging{opacity:.45}
-.section-block.drag-over{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
-.sh[draggable="true"]{cursor:grab;user-select:none}
-.sh[draggable="true"]:active{cursor:grabbing}
 </style>
 </head>
 <body>
@@ -1021,7 +1017,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <button class="filter-btn" data-filter="quick" onclick="toggleTaskFilter(this, 'quick')">Quick (≤15min)</button>
   </div>
 
-  <div class="section-block" data-section-id="strategy-vision">
   <!-- STRATEGY & VISION -->
   <div class="sh"><div class="sh-lbl">Strategy & Vision</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -1052,9 +1047,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block strategy-vision -->
 
-  <div class="section-block" data-section-id="admin-finance">
   <!-- ADMIN & FINANCE -->
   <div class="sh"><div class="sh-lbl">Admin & Finance</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -1066,10 +1059,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="note-panel" data-for="pay-axon"></div>
         <div class="t hi cl" data-id="decl-ae" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclaration auto-entrepreneur</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
         <div class="note-panel" data-for="decl-ae"></div>
-        <div class="t urg hi" data-id="urssaf-q1-decl" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclarer CA Q1 URSSAF (auto-entrepreneur)</span><span class="td">autoentrepreneur.urssaf.fr · Q1 Jan–Mar 2026</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
-        <div class="note-panel" data-for="urssaf-q1-decl"></div>
-        <div class="t urg hi" data-id="impots-fr-2042cpro" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclaration impôts France — formulaire 2042-C-PRO</span><span class="td">impots.gouv.fr · revenus auto-entrepreneur 2025</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
-        <div class="note-panel" data-for="impots-fr-2042cpro"></div>
         <div class="t hi" data-id="decl-nl" data-xp="15" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Déclaration impôts Netherlands</span></div><button class="note-btn" title="Add note">📝</button><span class="tbadge ba">Urgent</span></div>
         <div class="note-panel" data-for="decl-nl"></div>
         <div class="t" data-id="simu-impots" data-xp="10" data-project="Admin &amp; Finance"><div class="chk"></div><div class="tb"><span class="tn">Simulation impôts à la source</span></div><button class="note-btn" title="Add note">📝</button></div>
@@ -1095,9 +1084,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block admin-finance -->
 
-  <div class="section-block" data-section-id="health">
   <!-- HEALTH -->
   <div class="sh"><div class="sh-lbl">Health</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -1128,9 +1115,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block health -->
 
-  <div class="section-block" data-section-id="real-estate-travel">
   <!-- REAL ESTATE + JAPAN -->
   <div class="sh"><div class="sh-lbl">Real Estate & Travel</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -1182,9 +1167,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block real-estate-travel -->
 
-  <div class="section-block" data-section-id="tech-accounts">
   <!-- TECH & ACCOUNTS (standalone full-width) -->
   <div class="sh"><div class="sh-lbl">Tech & Accounts</div><div class="sh-line"></div></div>
   <div class="g1">
@@ -1211,9 +1194,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block tech-accounts -->
 
-  <div class="section-block" data-section-id="network-others">
   <!-- NETWORK & OTHERS -->
   <div class="sh"><div class="sh-lbl">Network & Others</div><div class="sh-line"></div></div>
   <div class="g2">
@@ -1228,9 +1209,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block network-others -->
 
-  <div class="section-block" data-section-id="productivity">
   <!-- PRODUCTIVITY -->
   <div class="sh"><div class="sh-lbl">Productivity</div><div class="sh-line"></div></div>
   <div class="g1">
@@ -1247,7 +1226,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block productivity -->
 
 </div>
 
@@ -1255,7 +1233,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <!-- FREELANCE -->
 <!-- ══════════════════════════════════ -->
 <div class="view" id="view-freelance">
-  <div class="section-block" data-section-id="clients">
   <div class="sh"><div class="sh-lbl">Clients</div><div class="sh-line"></div><div class="sh-ct">2 active</div></div>
   <div class="g2">
     <div class="pc">
@@ -1298,9 +1275,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block clients -->
 
-  <div class="section-block" data-section-id="agency">
   <div class="sh" style="margin-top:20px"><div class="sh-lbl">Agency</div><div class="sh-line"></div></div>
   <div class="g2">
     <div class="pc">
@@ -1335,14 +1310,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block agency -->
 </div>
 
 <!-- ══════════════════════════════════ -->
 <!-- PROFESSIONAL -->
 <!-- ══════════════════════════════════ -->
 <div class="view" id="view-pro">
-  <div class="section-block" data-section-id="gorgias-day-job">
   <div class="sh"><div class="sh-lbl">Gorgias Day Job</div><div class="sh-line"></div><div class="sh-ct">Partner-sourced + Partner-influenced ARR</div></div>
   <div class="g2">
     <div class="pc">
@@ -1423,7 +1396,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
   </div>
-  </div><!-- /section-block gorgias-day-job -->
 </div>
 
 <!-- ══════════════════════════════════ -->
@@ -1617,9 +1589,7 @@ const PRE_DEADLINES = {
   'baback-checklist':  '2026-04-30', // Nébuleuse Apr 30 target
   'pay-axon':          '2026-03-25', // Urgent payment — treat as today
   'brex-expenses':     '2026-04-01', // Submit Brex expenses — deadline Apr 1
-  'brex-card-replace':  '2026-05-01', // Order replacement Brex card
-  'urssaf-q1-decl':     '2026-05-08', // Declare Q1 CA URSSAF — end of next week
-  'impots-fr-2042cpro': '2026-05-08', // Declare impôts FR 2042-C-PRO — end of next week
+  'brex-card-replace': '2026-05-01', // Order replacement Brex card
 };
 Object.entries(PRE_DEADLINES).forEach(([id, date]) => {
   if (!S.deadlines[id]) S.deadlines[id] = date;
@@ -2892,7 +2862,6 @@ function setMode(mode) {
   renderBrief();
   dtnRender();
   renderClaudeTasks();
-  initSectionDrag();
 }
 
 function initMode() {
@@ -4511,78 +4480,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── Section drag-and-drop ──────────────────────────────────────────────────
-
-function saveSectionOrder(viewId) {
-  if (!viewId) return;
-  const view = document.getElementById(viewId);
-  if (!view) return;
-  const order = Array.from(view.querySelectorAll(':scope > .section-block'))
-    .map(b => b.dataset.sectionId);
-  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-  orders[viewId] = order;
-  localStorage.setItem('yl_section_orders', JSON.stringify(orders));
-}
-
-function restoreSectionOrders() {
-  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-  Object.entries(orders).forEach(([viewId, order]) => {
-    const view = document.getElementById(viewId);
-    if (!view) return;
-    order.forEach(sectionId => {
-      const block = view.querySelector(`.section-block[data-section-id="${sectionId}"]`);
-      if (block) view.appendChild(block);
-    });
-  });
-}
-
-function initSectionDrag() {
-  document.querySelectorAll('.section-block').forEach(block => {
-    const header = block.querySelector('.sh');
-    if (!header) return;
-
-    header.setAttribute('draggable', 'true');
-
-    header.addEventListener('dragstart', e => {
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', block.dataset.sectionId);
-      block.classList.add('dragging');
-    });
-
-    header.addEventListener('dragend', () => {
-      block.classList.remove('dragging');
-      document.querySelectorAll('.section-block').forEach(b => b.classList.remove('drag-over'));
-    });
-
-    block.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      block.classList.add('drag-over');
-    });
-
-    block.addEventListener('dragleave', e => {
-      if (!block.contains(e.relatedTarget)) block.classList.remove('drag-over');
-    });
-
-    block.addEventListener('drop', e => {
-      e.preventDefault();
-      block.classList.remove('drag-over');
-      const draggedId = e.dataTransfer.getData('text/plain');
-      const draggedBlock = document.querySelector(`.section-block[data-section-id="${draggedId}"]`);
-      if (!draggedBlock || draggedBlock === block) return;
-      block.parentNode.insertBefore(draggedBlock, block);
-      saveSectionOrder(block.closest('[id^="view-"]')?.id);
-    });
-  });
-}
-
-function resetSectionOrder(viewId) {
-  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-  delete orders[viewId];
-  localStorage.setItem('yl_section_orders', JSON.stringify(orders));
-  location.reload();
-}
-
 // ── DTN SCROLL TO TASK ──────────────────────────
 function dtnScrollToTask() {
   const task = dtnGetTopTask();
@@ -4882,8 +4779,6 @@ if (document.readyState === "loading") {
 const _origUpdateUI = updateUI;
 updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); renderClaudeTasks(); };
 
-restoreSectionOrders();
-initSectionDrag();
 
 // ── PANIC BUTTON ──────────────────────────
 const QUICK_TASK_NAMES = [
