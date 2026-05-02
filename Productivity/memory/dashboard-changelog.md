@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-05-02 | Fix C: ct-head click handler (cursor was pointer with no action) | pending
+
+### Problem Fixed
+- `.ct-head` has `cursor:pointer` + hover styling in CSS but no click handler in dynamic cards
+- Clicking the card header did nothing — misleading UX
+
+### Changes
+- `renderClaudeTasks()`: added click handler on `.ct-head` → calls `goToTask()` using the card's `ct-start` data attributes
+- Snapshot: `versions/dashboard_v3.1_2026-05-02_pre-cursor-fix.html`
+
+---
+
 ## 2026-05-02 | Fixes C + D(complete) + E: dynamic Claude tab, queue call disabled, DTN guard | ec12ed2
 
 ### Changes
