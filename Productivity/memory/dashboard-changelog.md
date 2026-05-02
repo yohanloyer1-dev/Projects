@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Fix D: Remove stale queue processor banner message | pending
+## 2026-05-02 | Fix D: Remove stale queue processor banner message | e18f28b
 
 ### Problem Fixed
 - `queueOverdueBanner` referenced a Claude queue processor that no longer exists
