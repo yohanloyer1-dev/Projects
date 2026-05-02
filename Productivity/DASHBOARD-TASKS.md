@@ -58,6 +58,7 @@
 - [ ] **Lucis: Zinc Picolinate + Flaxseeds** — Buy supplements from Lucis
 
 - [>] **Book follow-up checkup Lucis** _(10min)_ — Due: 2026-05-01
+- [>] **Book appointment teeth July (Léa + Victoria)** _(30min)_ — Due: 2026-05-15
 ### Real Estate
 - [x] **Gather docs Crédit Coopératif** — Done 29 Mar 2026
 - [x] **Cancel BP account** — Done 28 Mar 2026
