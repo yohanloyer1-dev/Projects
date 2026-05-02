@@ -1,7 +1,7 @@
-# Claude Code Session Prompt — Dashboard Fixes
-**Date prepared:** 2026-05-01
-**Prepared by:** Claude Sonnet (Cowork session — supersedes SONNET_SESSION_PROMPT.md)
-**Target file:** `~/Projects/Productivity/dashboard.html` (4,766 lines)
+# Claude Code Session Prompt — Dashboard Fix F
+**Date updated:** 2026-05-02
+**Prepared by:** Claude Sonnet (Cowork session)
+**Target file:** `~/Projects/Productivity/dashboard.html`
 **Repo:** `~/Projects/` — push to `main`, no feature branch needed
 **Live URL:** https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
 
@@ -37,7 +37,7 @@ Single-file productivity app (`dashboard.html`, vanilla JS/CSS, no framework). K
   The real state uses `S.done` and hardcoded task HTML in the DOM.
 - **GitHub sync:** Two systems — (1) Gist sync for cross-device state (`gistPush/Pull`),
   (2) DASHBOARD-TASKS.md sync via GitHub Contents API (`syncDashboardTasks()`).
-  Token stored in **localStorage** at `yl_gist_token` (this is what Fix A changes).
+  Token stored in **localStorage** at `yl_gist_token`.
 - **Task DOM structure:** Tasks are hardcoded HTML
   `<div class="t [urg|hi|cl]" data-id="..." data-xp="..." data-project="...">`.
   No dynamic task creation from a data model.
@@ -48,248 +48,80 @@ Single-file productivity app (`dashboard.html`, vanilla JS/CSS, no framework). K
 
 ## Already Fixed (DO NOT RE-DO)
 
-Verify these exist before touching related code:
+All fixes below are verified live as of 2026-05-02. Confirm before touching related code:
 
 ### Fixed #1 — `renderBrief()` mode-aware ranking
 ```bash
 grep -n "activeViews" ~/Projects/Productivity/dashboard.html
 # Should return a line around 2958
 ```
-Brief now scores only tasks from the active mode's views. No invisible cross-mode slots.
+Brief now scores only tasks from the active mode's views.
 
 ### Fixed #2 — DTN Someday/Waiting cap
 ```bash
 grep -n "Math.min(score, 50)" ~/Projects/Productivity/dashboard.html
-# Should return a line
 ```
-Someday/Waiting tasks can no longer outscore genuinely urgent tasks via stale deadlines.
+Someday/Waiting tasks can no longer outscore urgent tasks via stale deadlines.
 
----
-
-## Fix List — Apply In This Order
-
-### Fix A — Token security: move `yl_gist_token` to sessionStorage
-**Priority:** High — real XSS exposure (localStorage persists across sessions, readable by any
-injected script; sessionStorage clears on tab close)
-
-Find all occurrences:
+### Fixed #3 — Fix B: Visible sync error notifications (commit `4199358`)
 ```bash
-grep -n "yl_gist_token\|yl_gist_id" ~/Projects/Productivity/dashboard.html
+grep -n "notify.*token invalid\|notify.*Sync conflict\|notify.*GitHub API" ~/Projects/Productivity/dashboard.html
 ```
+`syncDashboardTasks`, `gistPush`, `gistPull` all surface errors via `notify()`.
 
-**Changes:**
-1. `gistGetToken()` → `sessionStorage.getItem('yl_gist_token')`
-2. `gistSetId()` → `sessionStorage.setItem('yl_gist_id', id)`
-3. Wherever `saveGistToken()` writes to localStorage → switch to sessionStorage
-4. Add a one-time migration block at the very top of the script (before `gistGetToken()` is called):
-
-```javascript
-// One-time migration: move token from localStorage to sessionStorage
-const _legacyToken = localStorage.getItem('yl_gist_token');
-if (_legacyToken && !sessionStorage.getItem('yl_gist_token')) {
-  sessionStorage.setItem('yl_gist_token', _legacyToken);
-  localStorage.removeItem('yl_gist_token');
-}
-```
-
-5. Add a notification for users who have no token set (delayed so `notify()` is ready):
-```javascript
-setTimeout(() => {
-  if (!sessionStorage.getItem('yl_gist_token')) {
-    notify('GitHub token not set — paste your PAT in Settings to enable sync', 'warn', 8000);
-  }
-}, 1500);
-```
-
-6. Do NOT move `yl_state` (main task data) — that stays in localStorage. Only the token moves.
-
-**Testing:**
-- Open DevTools → Application → localStorage: `yl_gist_token` should be gone
-- Open DevTools → Application → sessionStorage: token present after entering it
-- Refresh page → token cleared from sessionStorage, warning notification appears
-- Legacy users: localStorage entry removed automatically on first load
-
----
-
-### Fix B — GitHub sync: visible error notifications
-**Priority:** High — sync failures are currently silent (user never knows their completions didn't sync)
-
-Find the function:
+### Fixed #4 — Fix C: Dynamic Claude Tasks tab (commit `ec12ed2`, patched `595dcf6`)
 ```bash
-grep -n "async function syncDashboardTasks\|function syncDashboardTasks" ~/Projects/Productivity/dashboard.html
+grep -n "function renderClaudeTasks" ~/Projects/Productivity/dashboard.html
 ```
+`renderClaudeTasks()` is live. Hardcoded cards removed. Wired into `updateUI` and `setMode`.
 
-**Changes:**
-1. In the `catch` block, replace `console.error(...)` with:
-   `notify('GitHub sync failed — will retry next session', 'error', 6000)`
-2. After the `fetch` call, add HTTP status checking:
-   - 401: `notify('GitHub token invalid — re-enter in Settings', 'error', 8000)`
-   - 409: `notify('Sync conflict — refresh to get latest version', 'warn', 6000)`
-   - 5xx: `notify('GitHub API error — will retry', 'warn', 4000)`
-3. On success: check if a success notification already exists — if not, add:
-   `notify('Synced ✓', 'success', 2000)`
-
-Do NOT add full retry logic with exponential backoff — that's overengineering.
-The sync button already acts as a manual retry. Keep it simple: fail visibly.
-
----
-
-### Fix C — Dynamic Claude Tasks tab
-**Priority:** Medium — the Claude Tasks tab (`view-claude`) has 9 hardcoded cards that drift
-out of sync as tasks are completed or added
-
-Find the tab:
+### Fixed #5 — Fix D: Dead queue call disabled (commit `ec12ed2`)
 ```bash
-grep -n 'id="view-claude"' ~/Projects/Productivity/dashboard.html
+grep -n "fetchClaudeQueue\|syncQueueResults" ~/Projects/Productivity/dashboard.html
 ```
+`fetchClaudeQueue` call and `syncQueueResults` timeout are both commented out.
 
-**Build `renderClaudeTasks()`:**
-
-```javascript
-function renderClaudeTasks() {
-  const container = document.getElementById('view-claude');
-  if (!container) return;
-
-  const mode = localStorage.getItem('yl_mode') || 'personal';
-  const viewIds = mode === 'personal'
-    ? ['view-personal']
-    : mode === 'freelance'
-      ? ['view-freelance']
-      : ['view-pro', 'view-freelance'];
-
-  const doneIds = new Set(S.done.map(d => d.id || d.n));
-
-  // Collect all cl-marked, undone tasks
-  const clTasks = viewIds
-    .map(id => document.getElementById(id))
-    .filter(Boolean)
-    .flatMap(v => Array.from(v.querySelectorAll('.t.cl[data-id]')))
-    .filter(t => {
-      if (t.classList.contains('done-t')) return false;
-      const id = t.dataset.id;
-      const name = t.querySelector('.tn')?.textContent || '';
-      return !doneIds.has(id) && !doneIds.has(name);
-    });
-
-  // Sort: urg first, then hi, then rest
-  clTasks.sort((a, b) => {
-    const score = el => (el.classList.contains('urg') ? 2 : el.classList.contains('hi') ? 1 : 0);
-    return score(b) - score(a);
-  });
-
-  // Find the dynamic section (or create it)
-  let dynamicSection = container.querySelector('.claude-dynamic');
-  if (!dynamicSection) {
-    dynamicSection = document.createElement('div');
-    dynamicSection.className = 'claude-dynamic';
-    // Insert before the first hardcoded .claude-task, or at top after the header
-    const firstCard = container.querySelector('.claude-task');
-    if (firstCard) container.insertBefore(dynamicSection, firstCard);
-    else container.appendChild(dynamicSection);
-  }
-
-  if (!clTasks.length) {
-    dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm)">No Claude-ready tasks in this mode.</p>';
-    return;
-  }
-
-  dynamicSection.innerHTML = clTasks.map(t => {
-    const id = t.dataset.id;
-    const name = t.querySelector('.tn')?.textContent || id;
-    const project = t.dataset.project || '';
-    const note = S.notes?.[id] || '';
-    const isUrgent = t.classList.contains('urg');
-    const isHi = t.classList.contains('hi');
-    const badge = isUrgent ? '🔴 Urgent' : isHi ? '🟡 Important' : '';
-
-    return `<div class="claude-task" data-id="${escapeHtml(id)}">
-      <div class="ct-header">
-        <div class="ct-name">${escapeHtml(name)}</div>
-        ${badge ? `<span class="claude-status" style="background:rgba(217,95,75,.15);color:var(--red)">${badge}</span>` : ''}
-      </div>
-      ${project ? `<div class="ct-proj" style="font-size:11px;color:var(--t3);font-family:var(--fm);margin:2px 0 6px">${escapeHtml(project)}</div>` : ''}
-      ${note ? `<div class="ct-note">${escapeHtml(note)}</div>` : ''}
-      <button class="ct-copy" data-task-id="${escapeHtml(id)}" data-task-name="${escapeHtml(name)}" data-task-note="${escapeHtml(note)}">📋 Ask Claude now</button>
-    </div>`;
-  }).join('');
-
-  // Wire up Ask Claude buttons
-  dynamicSection.querySelectorAll('.ct-copy').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.dataset.taskName;
-      const note = btn.dataset.taskNote;
-      const prompt = note
-        ? `Task: ${name}\n\nContext / instructions:\n${note}`
-        : `I need help with this task: ${name}`;
-      navigator.clipboard.writeText(prompt).then(() => {
-        btn.textContent = '✓ Copied! Opening Claude...';
-        setTimeout(() => {
-          window.open('https://claude.ai/new', '_blank');
-          btn.textContent = '📋 Ask Claude now';
-        }, 800);
-      }).catch(() => window.open('https://claude.ai/new', '_blank'));
-    });
-  });
-}
-```
-
-Wire into `updateUI` the same way `dtnRender()` is wired (check around line 4716):
-```javascript
-updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); renderClaudeTasks(); };
-```
-Also call `renderClaudeTasks()` in the `setMode()` function so it updates on mode switch.
-
-Once verified working, remove the hardcoded `.claude-task` cards in the same commit.
-
----
-
-### Fix D — Disable dead `fetchClaudeQueue()`
-**Priority:** Low — 5 min job
-
+### Fixed #6 — Fix E: `dtnSkipIdx` divide-by-zero guard (commit `ec12ed2`)
 ```bash
-grep -n "fetchClaudeQueue" ~/Projects/Productivity/dashboard.html
+grep -n "scored.length.*return null" ~/Projects/Productivity/dashboard.html
 ```
+Guard exists in `dtnGetTopTask()`.
 
-Comment out the call (don't delete the function):
-```javascript
-// fetchClaudeQueue(); // Disabled 2026-05-01 — no queue processor running
-```
-
-Also find the "Claude queue processor hasn't run yet" message (search for it) and remove or replace with something accurate, e.g. "Use the 🤖 Claude Tasks tab to work on Claude-ready tasks."
+### Fix A — CLOSED (intentional revert, commit `1988e82`)
+Token stays in localStorage. sessionStorage required re-entry every browser session — wrong
+tradeoff for a single-user personal tool on GitHub Pages. No external scripts, no CDN.
+The no-token warning notification was kept (useful for new device setup).
 
 ---
 
-### Fix E — `dtnSkipIdx` divide-by-zero guard
-**Priority:** Low — 2 min job
-
-Find in `dtnGetTopTask()` (~line 4600):
-```javascript
-const idx = dtnSkipIdx % scored.length;
-```
-
-Add a guard immediately before it:
-```javascript
-if (!scored.length) return null;
-const idx = dtnSkipIdx % scored.length;
-```
-
-(Check if `active.length === 0` is already guarded above — it probably is, but `scored` could
-theoretically be empty if all active tasks are filtered out by scoring. Add the guard explicitly.)
-
----
+## Only Remaining Fix — Apply This Now
 
 ### Fix F — Drag-and-drop section reordering
-**Priority:** Medium — UX improvement, no data risk
+**Priority:** Medium — UX improvement, no data risk  
+**Estimated time:** 30–45 min
 
 Users want to drag entire task sections (e.g. move "Japan Trip" above "Admin & Finance") to
 reprioritize them within a view. Order persists in localStorage so it survives refresh.
 
-**Section DOM structure:**
-- Sections use `<div class="sh">` headers with `<div class="sh-lbl">Section Name</div>`
-- Each section = the `.sh` div + all sibling `.t` task rows that follow it until the next `.sh`
-- Sections live inside view containers: `#view-personal`, `#view-freelance`, `#view-pro`
+**Verify it's not already done:**
+```bash
+grep -n "section-block\|initSectionDrag\|yl_section_orders" ~/Projects/Productivity/dashboard.html
+# Should return nothing — if it does, this fix is already applied, stop here
+```
 
-**Personal view sections (in default order, line numbers approx):**
+---
+
+#### Step 1 — Understand the section DOM structure
+
+Sections use `<div class="sh">` headers. Each section = the `.sh` div + all sibling `.t` task
+rows that follow it until the next `.sh`. Sections live inside view containers.
+
+Verify:
+```bash
+grep -n 'class="sh"' ~/Projects/Productivity/dashboard.html | head -20
+```
+
+**Personal view sections (approximate line numbers):**
 - Strategy & Vision (~1021)
 - Admin & Finance (~1052)
 - Health (~1089)
@@ -298,137 +130,208 @@ reprioritize them within a view. Order persists in localStorage so it survives r
 - Network & Others (~1199)
 - Productivity (~1214)
 
-**Freelance view sections:** Clients (~1236), Agency (~1279)
+**Freelance view sections:** Clients (~1236), Agency (~1279)  
 **Work view sections:** Gorgias Day Job (~1319)
-
-**Implementation approach — pure HTML5 drag API (no library):**
-
-1. **Wrap each section** in a `<div class="section-block" data-section-id="...">` that contains
-   the `.sh` header + all its task `.t` divs. This is the draggable unit.
-   - `data-section-id` = slugified section name (e.g. `"admin-finance"`)
-
-2. **Make section headers draggable:**
-   ```javascript
-   function initSectionDrag() {
-     document.querySelectorAll('.section-block').forEach(block => {
-       const header = block.querySelector('.sh');
-       if (!header) return;
-       header.setAttribute('draggable', 'true');
-       header.style.cursor = 'grab';
-       
-       header.addEventListener('dragstart', e => {
-         e.dataTransfer.effectAllowed = 'move';
-         e.dataTransfer.setData('text/plain', block.dataset.sectionId);
-         block.classList.add('dragging');
-       });
-       header.addEventListener('dragend', () => {
-         block.classList.remove('dragging');
-         document.querySelectorAll('.section-block').forEach(b => b.classList.remove('drag-over'));
-       });
-       
-       block.addEventListener('dragover', e => {
-         e.preventDefault();
-         e.dataTransfer.dropEffect = 'move';
-         block.classList.add('drag-over');
-       });
-       block.addEventListener('dragleave', () => block.classList.remove('drag-over'));
-       block.addEventListener('drop', e => {
-         e.preventDefault();
-         block.classList.remove('drag-over');
-         const draggedId = e.dataTransfer.getData('text/plain');
-         const draggedBlock = document.querySelector(`.section-block[data-section-id="${draggedId}"]`);
-         if (!draggedBlock || draggedBlock === block) return;
-         
-         // Insert dragged block before the drop target
-         block.parentNode.insertBefore(draggedBlock, block);
-         saveSectionOrder(block.closest('[id^="view-"]')?.id);
-       });
-     });
-   }
-   ```
-
-3. **Save order to localStorage:**
-   ```javascript
-   function saveSectionOrder(viewId) {
-     if (!viewId) return;
-     const view = document.getElementById(viewId);
-     if (!view) return;
-     const order = Array.from(view.querySelectorAll('.section-block'))
-       .map(b => b.dataset.sectionId);
-     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-     orders[viewId] = order;
-     localStorage.setItem('yl_section_orders', JSON.stringify(orders));
-   }
-   ```
-
-4. **Restore order on page load:**
-   ```javascript
-   function restoreSectionOrders() {
-     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-     Object.entries(orders).forEach(([viewId, order]) => {
-       const view = document.getElementById(viewId);
-       if (!view) return;
-       order.forEach(sectionId => {
-         const block = view.querySelector(`.section-block[data-section-id="${sectionId}"]`);
-         if (block) view.appendChild(block); // appending in order moves them correctly
-       });
-     });
-   }
-   ```
-   Call `restoreSectionOrders()` once after DOM ready, before `updateUI()`.
-
-5. **Wire into init:**
-   ```javascript
-   // Near end of script, where dtnRender() and renderClaudeTasks() are wired:
-   restoreSectionOrders();
-   initSectionDrag();
-   ```
-   Also call `initSectionDrag()` inside `setMode()` so new view sections get drag handlers after mode switch.
-
-6. **CSS for drag states:**
-   ```css
-   .section-block.dragging { opacity: 0.5; }
-   .section-block.drag-over { border-top: 2px solid var(--accent); }
-   .sh[draggable="true"] { cursor: grab; user-select: none; }
-   .sh[draggable="true"]:active { cursor: grabbing; }
-   ```
-
-7. **Reset button (optional)** — small "↺" button in topbar or section header area:
-   ```javascript
-   function resetSectionOrder(viewId) {
-     const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
-     delete orders[viewId];
-     localStorage.setItem('yl_section_orders', JSON.stringify(orders));
-     location.reload(); // simplest way to restore default DOM order
-   }
-   ```
-
-**Testing:**
-- Drag "Japan Trip" section above "Admin & Finance" → order changes visually
-- Refresh page → order persists
-- Switch mode → other views unaffected
-- Mark a task done in a reordered section → task disappears, section stays in position
-- All tasks still completable, notes still openable after drag
 
 ---
 
-## Commit Strategy
+#### Step 2 — Wrap each section in a `section-block` div (HTML change)
 
-**Two commits:**
+Each section needs to be wrapped so the header + its tasks move as one unit.
 
-**Commit 1** — Fixes A + B + D (security + visibility + noise):
+For every section in `#view-personal`, `#view-freelance`, `#view-pro`:
+
+**Before:**
+```html
+<div class="sh"><div class="sh-lbl">Admin &amp; Finance</div></div>
+<div class="t urg" data-id="..." ...>...</div>
+<div class="t hi" data-id="..." ...>...</div>
+```
+
+**After:**
+```html
+<div class="section-block" data-section-id="admin-finance">
+  <div class="sh"><div class="sh-lbl">Admin &amp; Finance</div></div>
+  <div class="t urg" data-id="..." ...>...</div>
+  <div class="t hi" data-id="..." ...>...</div>
+</div>
+```
+
+`data-section-id` = kebab-case slug of the section name. Use these exact IDs:
+
+| Section | `data-section-id` |
+|---|---|
+| Strategy & Vision | `strategy-vision` |
+| Admin & Finance | `admin-finance` |
+| Health | `health` |
+| Real Estate & Travel | `real-estate-travel` |
+| Tech & Accounts | `tech-accounts` |
+| Network & Others | `network-others` |
+| Productivity | `productivity` |
+| Clients (Freelance) | `clients` |
+| Agency (Freelance) | `agency` |
+| Gorgias Day Job (Work) | `gorgias-day-job` |
+
+**Important:** The closing `</div>` for each section-block goes immediately before the next
+`.sh` div (or before the end of the view container).
+
+---
+
+#### Step 3 — Add JavaScript functions
+
+Add these functions near the other utility functions (e.g. near `dtnRender` or `renderClaudeTasks`):
+
+```javascript
+// ── Section drag-and-drop ──────────────────────────────────────────────────
+
+function saveSectionOrder(viewId) {
+  if (!viewId) return;
+  const view = document.getElementById(viewId);
+  if (!view) return;
+  const order = Array.from(view.querySelectorAll(':scope > .section-block'))
+    .map(b => b.dataset.sectionId);
+  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+  orders[viewId] = order;
+  localStorage.setItem('yl_section_orders', JSON.stringify(orders));
+}
+
+function restoreSectionOrders() {
+  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+  Object.entries(orders).forEach(([viewId, order]) => {
+    const view = document.getElementById(viewId);
+    if (!view) return;
+    order.forEach(sectionId => {
+      const block = view.querySelector(`.section-block[data-section-id="${sectionId}"]`);
+      if (block) view.appendChild(block);
+    });
+  });
+}
+
+function initSectionDrag() {
+  document.querySelectorAll('.section-block').forEach(block => {
+    const header = block.querySelector('.sh');
+    if (!header) return;
+
+    header.setAttribute('draggable', 'true');
+
+    header.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', block.dataset.sectionId);
+      block.classList.add('dragging');
+    });
+
+    header.addEventListener('dragend', () => {
+      block.classList.remove('dragging');
+      document.querySelectorAll('.section-block').forEach(b => b.classList.remove('drag-over'));
+    });
+
+    block.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      block.classList.add('drag-over');
+    });
+
+    block.addEventListener('dragleave', e => {
+      // Only remove class if leaving the block itself, not a child
+      if (!block.contains(e.relatedTarget)) block.classList.remove('drag-over');
+    });
+
+    block.addEventListener('drop', e => {
+      e.preventDefault();
+      block.classList.remove('drag-over');
+      const draggedId = e.dataTransfer.getData('text/plain');
+      const draggedBlock = document.querySelector(`.section-block[data-section-id="${draggedId}"]`);
+      if (!draggedBlock || draggedBlock === block) return;
+      block.parentNode.insertBefore(draggedBlock, block);
+      saveSectionOrder(block.closest('[id^="view-"]')?.id);
+    });
+  });
+}
+
+function resetSectionOrder(viewId) {
+  const orders = JSON.parse(localStorage.getItem('yl_section_orders') || '{}');
+  delete orders[viewId];
+  localStorage.setItem('yl_section_orders', JSON.stringify(orders));
+  location.reload();
+}
+```
+
+---
+
+#### Step 4 — Add CSS
+
+Add to the stylesheet (near other drag/interaction styles):
+
+```css
+.section-block.dragging { opacity: 0.45; }
+.section-block.drag-over { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+.sh[draggable="true"] { cursor: grab; user-select: none; }
+.sh[draggable="true"]:active { cursor: grabbing; }
+```
+
+---
+
+#### Step 5 — Wire into init
+
+Find where `dtnRender()` and `renderClaudeTasks()` are called at page load (around line 4716).
+Add `restoreSectionOrders()` and `initSectionDrag()` immediately after:
+
+```javascript
+// existing line:
+updateUI = function() { _origUpdateUI.apply(this, arguments); dtnRender(); renderClaudeTasks(); };
+
+// add after:
+restoreSectionOrders();
+initSectionDrag();
+```
+
+Also add `initSectionDrag()` at the end of `setMode()` so drag handlers apply after a mode switch:
+
+```javascript
+function setMode(m) {
+  // ... existing code ...
+  renderClaudeTasks(); // already there
+  initSectionDrag();   // add this line
+}
+```
+
+---
+
+#### Step 6 — Commit
+
 ```bash
-git add Productivity/dashboard.html Productivity/memory/dashboard-changelog.md Productivity/versions/dashboard_vX.X_YYYY-MM-DD.html
-git commit -m "fix: token sessionStorage migration, sync error visibility, queue call disabled"
+cd ~/Projects
+
+# Save version snapshot first (required by pre-commit hook)
+cp Productivity/dashboard.html Productivity/versions/dashboard_v3.2_$(date +%Y-%m-%d)_pre-drag-sections.html
+
+# Make edits (steps 2–5 above)
+
+# Update changelog (prepend entry to dashboard-changelog.md)
+
+# Stage and commit
+git add Productivity/dashboard.html \
+        Productivity/memory/dashboard-changelog.md \
+        Productivity/versions/
+
+git commit -m "feat: drag-and-drop section reordering with localStorage persistence"
 git push origin main
 ```
 
-**Commit 2** — Fixes C + E + F (dynamic Claude tab + edge case + drag sections):
-```bash
-git add Productivity/dashboard.html Productivity/memory/dashboard-changelog.md
-git commit -m "feat/fix: dynamic Claude Tasks tab, dtnSkipIdx guard, drag-drop section reorder"
-git push origin main
-```
+---
+
+## Testing Checklist
+
+After pushing, open https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
+
+- [ ] Section headers show `grab` cursor on hover
+- [ ] Drag "Japan Trip" above "Admin & Finance" → order updates visually
+- [ ] Refresh → order persists
+- [ ] Switch to Work mode → Work sections unaffected
+- [ ] Switch back to Personal → Personal order still correct
+- [ ] Mark a task done inside a reordered section → task disappears, section stays in place
+- [ ] Notes, links, XP still work on tasks inside reordered sections
+- [ ] No JS errors in DevTools console during or after drag
 
 ---
 
@@ -440,30 +343,8 @@ were created by Haiku and contain **inaccurate code examples** that don't match 
 - They reference `doneList`, `tasks`, `markTaskDone(task)` — none of these exist in the real file
 - Fix 1.3 (CSRF nonce) — not needed for a personal single-user tool
 - Fix 2.1 (IndexedDB archival) — over-engineered; `S.done` stores tiny objects, quota won't be hit
-- Fix 2.2 (error boundary wrapper) — doesn't apply to this DOM-driven architecture
-- "15–20 hours" estimate — wildly off; these 5 fixes are 2–3 hours total
 
 **Use this document, not the Haiku docs.**
-
----
-
-## Testing Checklist
-
-After each commit, open https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html
-
-**Fix A:** DevTools → localStorage: no `yl_gist_token`. DevTools → sessionStorage: token present.
-Refresh → token gone, warning notification appears.
-
-**Fix B:** With invalid token, trigger sync → visible error notification (not just console).
-
-**Fix C:** Claude Tasks tab shows current `cl`-marked tasks. Mark one done → it disappears.
-Mode switch → tab updates to show correct mode's tasks.
-
-**Fix D:** DevTools → Network → reload → no 404 for queue.json.
-
-**Fix E:** Mark all tasks done → DTN shows "All tasks cleared", no JS error in console.
-
-**Fix F:** Drag "Japan Trip" section above "Admin & Finance" → updates visually. Refresh → order persists. Switch mode → other views unaffected. Tasks still completable after drag.
 
 ---
 
