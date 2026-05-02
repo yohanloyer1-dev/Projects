@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-05-02 | Fix F: drag-and-drop section reordering | Claude Code
+
+### Requested
+- Implement Fix F from CLAUDE_CODE_SESSION_PROMPT.md: drag-and-drop section reordering with localStorage persistence
+
+### Done
+- Wrapped all 10 sections in `<div class="section-block" data-section-id="...">` (7 personal + 2 freelance + 1 work)
+- Added CSS: `.section-block.dragging`, `.section-block.drag-over`, `.sh[draggable="true"]` cursor styles
+- Added JS: `saveSectionOrder()`, `restoreSectionOrders()`, `initSectionDrag()`, `resetSectionOrder()`
+- Wired `restoreSectionOrders()` + `initSectionDrag()` at page init; `initSectionDrag()` at end of `setMode()`
+- Note: concurrent session had already committed Fix F as part of bdcb7bb; changelog hash updated to reflect that
+- Version snapshot: `versions/dashboard_v3.3_2026-05-02_pre-drag-sections.html`
+
+### Key decisions
+- Section order stored per view in `yl_section_orders` localStorage key (object keyed by view id)
+- `initSectionDrag()` called on every `setMode()` so drag re-initializes after mode switch
+- `resetSectionOrder(viewId)` exposed for future reset-button use
+
+---
+
 ## 2026-05-02 | Option 3 research system + dashboard cleanup | Claude Code
 
 ### Requested
