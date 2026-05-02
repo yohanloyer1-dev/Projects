@@ -117,6 +117,7 @@
 - [x] **Fix C — Dynamic Claude Tasks tab** — Done 2026-05-02 (commit ec12ed2). renderClaudeTasks() live. 🤖
 - [x] **Fix D — Disable dead fetchClaudeQueue()** — Done 2026-05-02 (commit ec12ed2). syncQueueResults call also disabled. 🤖
 - [x] **Fix E — dtnSkipIdx divide-by-zero guard** — Done 2026-05-02 (commit ec12ed2). 🤖
+- [ ] **Fix F — Drag-and-drop section reordering** — Drag whole sections (e.g. Japan Trip above Admin & Finance) within a view. Order persists to localStorage. Spec in CLAUDE_CODE_SESSION_PROMPT.md. 🤖
 
 ---
 
