@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Fixes C + D(complete) + E: dynamic Claude tab, queue call disabled, DTN guard | pending
+## 2026-05-02 | Fixes C + D(complete) + E: dynamic Claude tab, queue call disabled, DTN guard | ec12ed2
 
 ### Changes
 - **Fix C — renderClaudeTasks()** (line ~4666): New function replaces 8 hardcoded `.claude-task` cards
@@ -23,7 +23,7 @@
 
 ---
 
-## 2026-05-02 | Revert Fix A: restore yl_gist_token to localStorage | pending
+## 2026-05-02 | Revert Fix A: restore yl_gist_token to localStorage | 1988e82
 
 ### Reason for revert
 Fix A moved the GitHub token to sessionStorage, requiring re-entry every session.
