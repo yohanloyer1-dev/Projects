@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-02 | Fix gistPull 401/other errors: add notify() popups | pending
+## 2026-05-02 | Fix gistPull 401/other errors: add notify() popups | b1f5582
 
 ### Problem Fixed
 - `gistPull` 401 only updated banner text — no visible popup, inconsistent with `gistPush` Fix B
