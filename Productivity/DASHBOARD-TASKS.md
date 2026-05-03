@@ -5,6 +5,7 @@
 ## Personal
 
 ### Strategy & Vision
+- [ ] **SYNC TEST — sync_tasks.py** — Dummy injection test. Delete after verification. 🤖
 - [!] **Complete Ohtani Matrix with ChatGPT** — Build the full 81-box Mandala document. Continue in ChatGPT.
 - [_] **Embed interactive Ohtani Matrix in dashboard** — Once matrix is complete, build a visual/interactive version inside dashboard.html 🤖
 - [ ] **Créer 2026 goals, sub-goals and tasks** — Use Claude to build full goal tree with sub-tasks 🤖

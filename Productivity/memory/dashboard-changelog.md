@@ -4,6 +4,77 @@
 
 ---
 
+## 2026-05-04 | sync_tasks.py: inject 63 task(s) | pending
+
+### Changes
+- Auto-injected via sync_tasks.py from DASHBOARD-TASKS.md:
+  - `sync-test-sync-tasks-py` [normal] — SYNC TEST — sync_tasks.py
+  - `embed-interactive-ohtani-matrix-in-dashboard` [sd] — Embed interactive Ohtani Matrix in dashboard
+  - `create-a-vision-board-tasks-app` [normal] — Create a vision board/tasks app
+  - `netlify-hosting` [wt] — Netlify hosting
+  - `build-whatsapp-agent-via-kapso` [sd] — Build WhatsApp agent via Kapso
+  - `build-voice-notes-workflow-in-n8n` [sd] — Build voice notes workflow in n8n
+  - `pay-1000-impôts` [hi] — Pay 1000€ impôts
+  - `pay-1000-impôts-2` [normal] — Pay 1000€ impôts
+  - `pay-1000-impôts-3` [normal] — Pay 1000€ impôts
+  - `pay-1000-impôts-4` [normal] — Pay 1000€ impôts
+  - `pay-1000-impôts-5` [normal] — Pay 1000€ impôts
+  - `check-situation-bp-follow-up-if-needed` [urg] — Check situation BP - Follow up if needed
+  - `update-taux-d-impôsition` [hi] — Update taux d'impôsition
+  - `payer-rattrapage-impôts` [hi] — Payer rattrapage impôts
+  - `déclaration-impôts-2025` [urg] — Déclaration impôts 2025
+  - `déclaration-impôts-2026` [hi] — Déclaration impôts 2026
+  - `review-lucis-results-and-recommendations` [normal] — Review Lucis results and recommendations
+  - `book-follow-up-checkup-lucis` [hi] — Book follow-up checkup Lucis
+  - `book-appointment-teeth-july-léa-victoria` [hi] — Book appointment teeth July (Léa + Victoria)
+  - `send-documents-crédit-coopératif` [urg] — Send documents Crédit Coopératif
+  - `send-documents-crédit-mutuel` [urg] — Send documents Crédit Mutuel
+  - `envoyer-informations-assurance-immo-à-benjamin-pour-devis` [hi] — Envoyer informations assurance immo à Benjamin pour devis
+  - `log-into-home-exchange-account-for-japan` [urg] — Log into Home Exchange account for Japan
+  - `check-accomodation-on-local-platforms` [hi] — Check accomodation on local platforms
+  - `book-ferry-tokashiki` [urg] — Book Ferry Tokashiki
+  - `book-ferry-tokashiki-2` [urg] — Book Ferry Tokashiki
+  - `cancel-super-com-account` [urg] — Cancel super.com account
+  - `add-amélia-to-easyjet-flight-to-nice` [urg] — Add Amélia to Easyjet flight to Nice
+  - `vip-customer-rule-no-ai-agent` [sd] — VIP customer rule — no AI Agent
+  - `fix-a-token-security-move-yl-gist-token-to-sessionstorage` [hi] — Fix A — Token security: move yl_gist_token to sessionStorage
+  - `fix-f-drag-and-drop-section-reordering` [normal] — Fix F — Drag-and-drop section reordering
+  - `merge-google-maps-saved-perso-gorgias` [normal] — Merge Google Maps saved Perso + Gorgias
+  - `close-at-least-50-tabs` [hi] — Close AT LEAST 50 tabs
+  - `book-flight-paris-athens` [normal] — Book flight Paris --> Athens
+  - `book-flight-bbq-axome` [normal] — Book flight BBQ Axome
+  - `book-hotel-shoptalk` [normal] — Book Hotel Shoptalk
+  - `book-flights-gorgias-connect` [normal] — Book flights Gorgias Connect
+  - `book-hotel-gorgias-connect` [normal] — Book hotel Gorgias Connect
+  - `book-flight-paris-athens-2` [urg] — Book flight Paris --> Athens
+  - `book-flight-bbq-axome-2` [normal] — Book flight BBQ Axome
+  - `book-hotel-shoptalk-2` [normal] — Book Hotel Shoptalk
+  - `create-list-of-partners-to-hand-over` [urg] — Create list of partners to hand over
+  - `intro-chiara-nabla-cosmetics-csm-am` [urg] — Intro Chiara Nabla Cosmetics (CSM+AM)
+  - `introduce-micha-to-lauren` [urg] — Introduce Micha to Lauren
+  - `intro-nabla-cosmetics` [urg] — Intro Nabla Cosmetics
+  - `intro-micha-x-lauren` [urg] — Intro Micha x Lauren
+  - `get-back-to-amber` [urg] — Get back to Amber
+  - `create-ooo-email-auto-responder` [urg] — Create OOO Email auto-responder
+  - `get-back-to-sendcloud-antadis` [normal] — Get back to Sendcloud + Antadis
+  - `follow-up-all-wtbad-deals-before-pat-leave` [urg] — Follow up all WTBAD deals before Pat Leave
+  - `follow-up-portuguese-brands` [urg] — Follow up Portuguese Brands
+  - `fik-deal-attribution` [urg] — FIK deal attribution
+  - `vip-customer-rule-no-ai-agent-2` [sd] — VIP customer rule — no AI Agent
+  - `push-nébuleuse-project-files-to-github` [sd] — Push Nébuleuse project files to GitHub
+  - `challenge-gaia-on-flow-automation` [urg] — Challenge Gaia on Flow Automation
+  - `find-good-bad-csat-examples` [urg] — Find Good/Bad CSAT Examples
+  - `review-qa-with-rob` [hi] — Review QA with Rob
+  - `check-bigcommerce-ai-agents` [hi] — Check BigCommerce AI Agents
+  - `ask-gaia-gorgias-qa-analysis` [hi] — Ask Gaia: Gorgias QA Analysis
+  - `ask-gaia-returns-one-touch-breakdown` [hi] — Ask Gaia: Returns One-Touch Breakdown
+  - `help-center-scraping` [hi] — Help Center scraping
+  - `step-5-you-claude-obsidian-mcp-integration` [sd] — STEP 5 [YOU + CLAUDE] Obsidian MCP integration
+  - `step-6-claude-backlink-knowledge-graph` [sd] — STEP 6 [CLAUDE] Backlink knowledge graph
+- No structural or JS changes
+
+---
+
 ## 2026-05-03 | Added Voice Profile Project tasks to LinkedIn Content card | pending
 
 ### Changes
