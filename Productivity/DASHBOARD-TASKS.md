@@ -222,6 +222,7 @@
 - [~] **Help Center scraping** — Scheduled Mondays 9am · Phase 1: new articles only
 
 ### LinkedIn Content
+- [>] **Run Yohan Voice Interview — build yohan-voice.md** _(45-60min)_ — Dictated 100-question interview to capture raw writing taste. Session doc ready at `Linkedin posting/VOICE-INTERVIEW-SESSION.md`. Use Opus 4.7 + Extended Thinking + Wispr Flow. Output: `yohan-voice.md` → pushed to GitHub. 🤖
 - [>] **Update LinkedIn profile** — Headline + About (copy is ready)
 - [ ] **Publish Post 01 — contrarian opener** 🤖
 - [ ] **Maintain 2 posts/week cadence**
