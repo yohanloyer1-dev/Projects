@@ -433,6 +433,28 @@ That's it. Claude now has both the strategic layer (brief) and the taste layer (
 
 ---
 
+## Obsidian — Edit Your Voice File Like a Google Doc
+
+Obsidian turns your entire `/Users/yohanloyer/Projects` folder into an editable vault. This means `yohan-voice.md`, `YOHAN_MASTER_BRIEF.md`, and every memory file becomes directly editable like a document — no terminal, no code editor needed.
+
+**Why this matters for the voice file:** Your taste evolves. Obsidian is how you keep `yohan-voice.md` updated as it does. Open it, edit a line, save — Cowork picks it up automatically on next session.
+
+**Setup (10 minutes):**
+1. Download free at [obsidian.md](https://obsidian.md)
+2. Open Obsidian → click "Open folder as vault"
+3. Select `/Users/yohanloyer/Projects`
+4. Your entire project memory is now navigable and editable as a knowledge base
+
+**What you can do with it:**
+- Edit `yohan-voice.md` directly after a session when something feels off
+- Browse and update all memory files (`CLAUDE.md`, `YOHAN_MASTER_BRIEF.md`, project memories)
+- Add notes to yourself that Claude reads next session
+- See all your files linked and connected visually (graph view)
+
+**Note:** Obsidian doesn't sync to GitHub automatically — you still push changes via Claude or terminal. It's a local editor, not a sync tool. GitHub remains source of truth.
+
+---
+
 ## Anything Else Worth Researching Before?
 
 *These are the open questions worth addressing before or after the interview:*
