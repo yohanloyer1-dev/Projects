@@ -223,12 +223,12 @@
 
 ### LinkedIn Content — Voice Profile Project
 <!-- SEQUENCE: Step 1 → 2 → 3 → 4 → 5 → 6. Do not skip. -->
-- [>] **STEP 1 [YOU] Run Voice Interview** _(~90min)_ — Open new Cowork session "Yohan — Voice Interview". Opus 4.7 + Extended Thinking + Wispr Flow. Paste Prompt 1 from `Linkedin posting/VOICE-INTERVIEW-SESSION.md`. Answer 100 questions dictated. Then paste Prompt 2 in same session to compress to ~4K tokens. 🎙️
-- [>] **STEP 2 [CLAUDE] Save + push yohan-voice.md** — Claude saves compressed output to `Linkedin posting/yohan-voice.md`, pushes to GitHub, adds pointer in YOHAN_MASTER_BRIEF.md and linkedin-content-system.md. 🤖
-- [>] **STEP 3 [CLAUDE] Test voice file in blank session** — Claude opens fresh session with only yohan-voice.md, writes 1 sample LinkedIn post, reports what sounds off. 🤖
-- [>] **STEP 4 [YOU] Install Obsidian + open as vault** _(10min)_ — Download free at obsidian.md → "Open folder as vault" → select `/Users/yohanloyer/Projects`. Explore your knowledge graph. Edit voice file, memory files directly. No setup beyond this for now.
-- [_] **STEP 5 [YOU + CLAUDE] Set up Obsidian MCP integration** _(~30min dedicated session)_ — After using Obsidian for a few days: install Local REST API plugin in Obsidian → Claude connects via MCP → full two-way vault access. Session doc: `Productivity/memory/context/obsidian-mcp-setup.md` (to be created). 🤖
-- [_] **STEP 6 [CLAUDE] Backlink your knowledge graph** — Once MCP live: Claude adds `[[wiki-links]]` between related memory files (nebuleuse ↔ gorgias-agency ↔ linkedin-content-system ↔ yohan-voice). Makes your system queryable by concept, not just file path. 🤖
+- [>] **STEP 1 [YOU] Run Voice Interview** _(~90min)_ — New Cowork session "Yohan — Voice Interview" · Opus 4.7 + Extended Thinking + Wispr Flow · Full instructions: https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Linkedin%20posting/VOICE-INTERVIEW-SESSION.md · Paste Prompt 1, answer 100 questions dictated, paste Prompt 2 to compress · Output: yohan-voice.md 🎙️
+- [>] **STEP 2 [CLAUDE] Save + push yohan-voice.md** _(after Step 1)_ — Tell Claude in the interview session: "Save the compressed output as yohan-voice.md, push to GitHub, update YOHAN_MASTER_BRIEF.md and linkedin-content-system.md with pointer." 🤖
+- [>] **STEP 3 [CLAUDE] Test voice file** _(after Step 2)_ — Tell Claude: "Open a fresh session with only yohan-voice.md, write 1 sample LinkedIn post on a topic only I would write, flag what sounds off." 🤖
+- [>] **STEP 4 [YOU] Install Obsidian** _(10min, after Step 3)_ — obsidian.md → free download → "Open folder as vault" → select /Users/yohanloyer/Projects · Your full knowledge system becomes a navigable graph · Edit yohan-voice.md as taste evolves
+- [_] **STEP 5 [YOU + CLAUDE] Obsidian MCP integration** _(~30min, after using Obsidian a few days)_ — Dedicated session: install Local REST API plugin in Obsidian → Claude gets live two-way vault access → no more file paths, full concept search 🤖
+- [_] **STEP 6 [CLAUDE] Backlink knowledge graph** _(after Step 5)_ — Claude adds [[wiki-links]] between memory files · System becomes queryable by concept across all projects 🤖
 - [>] **Update LinkedIn profile** — Headline + About (copy is ready)
 - [ ] **Publish Post 01 — contrarian opener** 🤖
 - [ ] **Maintain 2 posts/week cadence**
