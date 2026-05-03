@@ -123,6 +123,7 @@
 ---
 
 - [ ] **Merge Google Maps saved Perso + Gorgias** _(10min)_
+- [>] **Close AT LEAST 50 tabs** _(30min)_ — Due: 2026-05-16
 ## Professional (Gorgias)
 
 ### Work Travel & Expenses
