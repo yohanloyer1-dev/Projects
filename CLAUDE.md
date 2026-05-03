@@ -62,6 +62,7 @@ Public face of Gorgias in EMEA — keynote speaker, webinar host, event lead (EM
 - Voice: confident, direct, insider POV. No cringe engagement bait. Short sentences.
 - Constraint: still at Gorgias → anonymize all client stories, no fake metrics.
 - Key files: `/Users/yohanloyer/Projects/Linkedin posting/YOHAN_MASTER_BRIEF.md` (paste at start of any LinkedIn session)
+- Voice profile (when built): `/Users/yohanloyer/Projects/Linkedin posting/yohan-voice.md` — taste layer, use alongside YOHAN_MASTER_BRIEF.md
 
 ## Terms & Shorthand
 | Term | Meaning |
@@ -82,6 +83,12 @@ Public face of Gorgias in EMEA — keynote speaker, webinar host, event lead (EM
 | **CX** | Customer Experience |
 | **CSM** | Customer Success Manager |
 | **DTC** | Direct to Consumer |
+
+## Claude Verification Rule — HARD RULE
+**Before asserting any fact about current AI models, tools, or products: search first, assert second.**
+This applies to: model names, model availability, feature existence, version numbers, pricing, release dates.
+Failure mode that triggered this rule (2026-05-03): Claude stated "Opus 4.7 doesn't exist" from training memory without searching. Opus 4.7 was released 2026-04-16.
+**Fix:** Any claim about current AI capabilities or model availability requires a WebSearch call before stating it as fact. No exceptions.
 
 ## Operating System: The Ohtani Matrix
 Decision OS based on Mandala framework. Full doc: Productivity/memory/context/ohtani-matrix.md
