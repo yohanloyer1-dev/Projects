@@ -5,20 +5,24 @@
 
 ---
 
-## 2026-05-03 | Personal view section reorganization | Claude Code
+## 2026-05-03 | Audit fixes, Gist sync fix, section reorganization | Claude Code
 
 ### Requested
-- Move errands tasks out of "Real Estate & Travel" into a new Misc & Errands section
+- Move errands tasks into a new Misc & Errands section
+- Full technical/UX audit of the dashboard
+- Fix Gist sync ⚠️ warning
 
 ### Done
-- Removed `album-mariage`, `review-mexico`, `errands-misc` from "Travel & Errands" card
-- Renamed card to "Travel" (flights-asia only remains)
-- Added new `section-block[data-section-id="miscellaneous"]` at end of `#view-personal` with "Misc & Errands" section header and "Errands & Reviews" card containing the 3 moved tasks
-- Commit: 16ad113
+- Misc & Errands section: moved `album-mariage`, `review-mexico`, `errands-misc` from "Travel & Errands"; renamed card to "Travel" — commit 16ad113
+- Gist sync root cause: fine-grained PAT "Cowork Sandbox" had Gist: Read-only (no write). User updated to Read and write on GitHub. No code change needed.
+- Audit fix — `--accent` CSS variable: defined `--accent:#5b9bd6` in `:root`; fixes invisible drag-over outline — commit 98fc23c
+- Audit fix — overdue banner: "Dismiss" → "Go to Claude Tasks", now calls `sv('claude')` before hiding — commit 98fc23c
+- Audit fix — Claude Tasks empty state: distinguishes "all done" (green ✓) from "no 🤖 tasks" (grey) — commit 98fc23c
 
 ### Key decisions
-- New section placed at the end of Personal view (after Productivity)
-- Tasks re-tagged `data-project="Misc"` in the new section
+- Token: existing "Cowork Sandbox" fine-grained PAT kept (no new token needed); only permission scope updated
+- Urgency buttons audit item dropped — already had working selected states (CSS + renderUrgencyBtns())
+- Status dropdown toast + token format validation skipped — low value for single-user tool
 
 ---
 

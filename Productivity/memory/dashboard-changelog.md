@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-05-03 | Audit fixes: --accent var, overdue banner nav, Claude Tasks empty states | pending
+## 2026-05-03 | Audit fixes: --accent var, overdue banner nav, Claude Tasks empty states | 98fc23c
 
 ### Changes
 - Added `--accent: #5b9bd6` to `:root` — fixes invisible drag-over outline (was `var(--accent)` with no definition)
@@ -13,7 +13,7 @@
 
 ---
 
-## 2026-05-03 | Add Misc & Errands section, clean up Travel card | pending
+## 2026-05-03 | Add Misc & Errands section, clean up Travel card | 16ad113
 
 ### Changes
 - New section-block `miscellaneous` added at end of `#view-personal` with 3 tasks moved from Travel & Errands: `album-mariage`, `review-mexico`, `errands-misc`
