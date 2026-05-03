@@ -67,7 +67,7 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ---
 
-## Session Wrap-Up
+## Session Wrap-Up (Automated at 5:30pm daily)
 
 **Manual steps:**
 1. Update TASKS.md with completed task statuses
