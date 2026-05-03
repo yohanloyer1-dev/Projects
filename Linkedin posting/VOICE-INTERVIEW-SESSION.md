@@ -433,25 +433,40 @@ That's it. Claude now has both the strategic layer (brief) and the taste layer (
 
 ---
 
-## Obsidian — Edit Your Voice File Like a Google Doc
+## Obsidian — Your Knowledge Graph (Do After the Interview)
 
-Obsidian turns your entire `/Users/yohanloyer/Projects` folder into an editable vault. This means `yohan-voice.md`, `YOHAN_MASTER_BRIEF.md`, and every memory file becomes directly editable like a document — no terminal, no code editor needed.
+Obsidian is **not** just a markdown editor. It's a local-first personal knowledge management system — a "second brain" built on your actual files. Every note can link to every other note with `[[wiki-style links]]`, and Obsidian builds a live visual graph of how your ideas connect.
 
-**Why this matters for the voice file:** Your taste evolves. Obsidian is how you keep `yohan-voice.md` updated as it does. Open it, edit a line, save — Cowork picks it up automatically on next session.
+**Why this matters for your setup:** Your `/Users/yohanloyer/Projects` folder is already a knowledge base — project memories, session logs, client files, LinkedIn content. Obsidian turns that invisible structure into something you can see, navigate, and edit without touching a terminal.
 
-**Setup (10 minutes):**
+### Phase 1 — Basic Setup (10 min, do right after the voice interview)
 1. Download free at [obsidian.md](https://obsidian.md)
-2. Open Obsidian → click "Open folder as vault"
-3. Select `/Users/yohanloyer/Projects`
-4. Your entire project memory is now navigable and editable as a knowledge base
+2. Click "Open folder as vault" → select `/Users/yohanloyer/Projects`
+3. Your entire system is now a navigable knowledge graph
+4. Edit `yohan-voice.md`, `YOHAN_MASTER_BRIEF.md`, and memory files directly — like Google Docs, locally
 
-**What you can do with it:**
-- Edit `yohan-voice.md` directly after a session when something feels off
-- Browse and update all memory files (`CLAUDE.md`, `YOHAN_MASTER_BRIEF.md`, project memories)
-- Add notes to yourself that Claude reads next session
-- See all your files linked and connected visually (graph view)
+**What this immediately unlocks:**
+- Edit and refine `yohan-voice.md` as your taste evolves — no Cowork session needed
+- See all your project memory files as a connected graph (try Graph View)
+- Navigate between `nebuleuse-bijoux.md` → `gorgias-agency.md` → `linkedin-content-system.md` visually
 
-**Note:** Obsidian doesn't sync to GitHub automatically — you still push changes via Claude or terminal. It's a local editor, not a sync tool. GitHub remains source of truth.
+### Phase 2 — MCP Integration (~30 min, dedicated session after using Obsidian a few days)
+
+This is the real upgrade. An MCP server connects Obsidian directly to Claude — giving Claude **two-way, live access** to your entire vault.
+
+**What changes with MCP connected:**
+- Claude can search your vault by concept or tag — "find everything related to automation rate"
+- Claude can append to specific sections of notes surgically — "add this decision to the AP project memory under WISMO"
+- Claude can create daily notes, follow backlinks, and surface connections you didn't know existed
+- No more specifying file paths — Claude navigates by knowledge, not directory structure
+
+**How to set it up (session doc TBD):** Install the Local REST API community plugin in Obsidian → Claude connects via MCP server (`npx obsidian-mcp /path/to/vault`). Full instructions will be in `Productivity/memory/context/obsidian-mcp-setup.md` (Claude creates this when you're ready).
+
+### Phase 3 — Knowledge Graph Linking (Claude does this once MCP is live)
+
+Claude adds `[[wiki-links]]` between your memory files — so `yohan-voice.md` links to `YOHAN_MASTER_BRIEF.md`, `nebuleuse-bijoux.md` links to `gorgias-agency.md`, and so on. Your system becomes queryable by concept, not just file path.
+
+**Important:** GitHub remains source of truth. Obsidian is a local editor and navigator — changes you make in Obsidian need to be pushed via Claude or terminal as usual.
 
 ---
 
