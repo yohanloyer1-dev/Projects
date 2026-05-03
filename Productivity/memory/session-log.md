@@ -1,3 +1,35 @@
+## 2026-05-03 | Voice interview project + Obsidian integration research | YL/OPS
+
+### Requested
+- Evaluate Ruben Hassid LinkedIn post on duplicating yourself into Claude
+- Build session doc for voice interview (Prompts 1 + 2 from source)
+- Add appropriate tasks to dashboard
+- Research Obsidian properly + how it integrates with Claude
+- Fix CLAUDE.md to prevent future AI model fact errors
+- Design sequenced plan for voice profile → Obsidian → MCP
+
+### Done
+- Fetched + verified Opus 4.7 exists (released 2026-04-16) — corrected prior false claim
+- Fetched both Ruben Hassid Substack articles to extract full Prompt 1 (Interviewer) + Prompt 2 (Voice Compiler)
+- Created  — complete session launch doc with both prompts, setup checklist, Obsidian phases, post-interview steps
+- Added hard verification rule to CLAUDE.md: search before asserting any AI model facts
+- Added Obsidian Knowledge System section to CLAUDE.md (3-phase: basic → MCP → graph linking)
+- Added yohan-voice.md pointer to CLAUDE.md LinkedIn section
+- Updated DASHBOARD-TASKS.md: 6-step sequenced project (YOU/CLAUDE labeled, Obsidian phases 4-6 as Someday until ready)
+- Updated linkedin-content-system.md: voice profile project section, updated files table, dual-file session startup instructions
+- Researched Obsidian properly: local-first PKM, bidirectional links, graph view, MCP integration options
+
+### Key Decisions
+- Voice interview FIRST (standalone value, no dependencies) → Obsidian basic SECOND → MCP THIRD
+- Obsidian is not just a markdown editor — it's a knowledge graph. MCP integration makes Claude a native citizen of that graph.
+- Steps 5-6 (MCP + backlinks) marked [_] Someday until Yohan has used basic Obsidian for a few days
+- CLAUDE.md verification rule added as permanent hard rule with specific failure case documented
+
+### Next Steps (Yohan-owned)
+- STEP 1: Book 90-min block → run voice interview session ()
+- STEP 4: Install Obsidian (10 min, do right after interview)
+- STEP 5: Obsidian MCP session when ready (dedicated ~30 min)
+
 # Session Log
 <!-- Running log of Claude sessions — what was requested, what was done, key decisions -->
 <!-- Format: ## YYYY-MM-DD | topic | session type -->
