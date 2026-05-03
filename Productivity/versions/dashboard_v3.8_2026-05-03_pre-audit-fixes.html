@@ -23,7 +23,6 @@
   --red:#d95f4b;    --red-d:rgba(217,95,75,.08);
   --cyan:#3ab8b8;   --cyan-d:rgba(58,184,184,.07);
   --orange:#e07840;
-  --accent:#5b9bd6;
 
   --fd:'Syne',sans-serif; --fm:'DM Mono',monospace; --fb:'DM Sans',sans-serif;
 }
@@ -789,7 +788,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <strong>Claude-ready tasks in queue</strong>
     Use the 🤖 Claude Tasks tab to work on these tasks directly.
   </div>
-  <button class="queue-overdue-banner-btn" onclick="sv('claude');document.getElementById('queueOverdueBanner').classList.remove('show')">Go to Claude Tasks</button>
+  <button class="queue-overdue-banner-btn" onclick="document.getElementById('queueOverdueBanner').classList.remove('show')">Dismiss</button>
   <span class="queue-overdue-banner-dismiss" onclick="document.getElementById('queueOverdueBanner').classList.remove('show')">✕</span>
 </div>
 
@@ -4862,15 +4861,7 @@ function renderClaudeTasks() {
   }
 
   if (!clTasks.length) {
-    const anyClTasks = viewPairs.some(([viewId]) => {
-      const view = document.getElementById(viewId);
-      return view && view.querySelector('.t.cl[data-id]');
-    });
-    if (anyClTasks) {
-      dynamicSection.innerHTML = '<p style="color:var(--green);font-size:13px;font-family:var(--fm);margin-bottom:6px">✓ All Claude tasks complete.</p><p style="color:var(--t3);font-size:11px;font-family:var(--fm);line-height:1.6">No pending 🤖 tasks in this mode. Nice work.</p>';
-    } else {
-      dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm);margin-bottom:6px">No Claude-ready tasks in this mode.</p><p style="color:var(--t3);font-size:11px;font-family:var(--fm);line-height:1.6">Switch to another mode or mark a task with 🤖 to make it Claude-ready.</p>';
-    }
+    dynamicSection.innerHTML = '<p style="color:var(--t3);font-size:13px;font-family:var(--fm);margin-bottom:6px">No Claude-ready tasks in this mode.</p><p style="color:var(--t3);font-size:11px;font-family:var(--fm);line-height:1.6">Switch to another mode or mark a task with 🤖 to make it Claude-ready.</p>';
     return;
   }
 

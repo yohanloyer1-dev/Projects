@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-05-03 | Audit fixes: --accent var, overdue banner nav, Claude Tasks empty states | pending
+
+### Changes
+- Added `--accent: #5b9bd6` to `:root` — fixes invisible drag-over outline (was `var(--accent)` with no definition)
+- Overdue banner "Dismiss" → "Go to Claude Tasks" — now calls `sv('claude')` before hiding banner
+- `renderClaudeTasks()` empty state: distinguishes "all done" (green ✓) from "no 🤖 tasks" (grey prompt)
+
+---
+
 ## 2026-05-03 | Add Misc & Errands section, clean up Travel card | pending
 
 ### Changes
