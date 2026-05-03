@@ -1,4 +1,8 @@
-# Claude Code Session Prompt — Dashboard Fix F
+# ~~Claude Code Session Prompt — Dashboard Fix F~~
+> ⚠️ **COMPLETED & ARCHIVED — 2026-05-03**  
+> All fixes (A–F) are done. Do NOT use this as a session briefing.  
+> Current dashboard version: v3.8. Check `git log` for actual state.
+
 **Date updated:** 2026-05-02
 **Prepared by:** Claude Sonnet (Cowork session)
 **Target file:** `~/Projects/Productivity/dashboard.html`

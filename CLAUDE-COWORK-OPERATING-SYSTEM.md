@@ -101,11 +101,12 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ## GitHub Write Pattern
 
-**Authentication:** PAT stored on disk at `~/Projects/.github-token` (repo + gist scope).
+**Authentication:** Fine-grained PAT stored on disk at `~/Projects/.github-token`.
 
 **Token location:** `~/Projects/.github-token` — never committed (in `.gitignore`).  
 **Dashboard sync:** Token also stored in browser `localStorage` as `yl_gist_token` on the dashboard page.  
-**Setup date:** 2026-04-30 | Token name: "Cowork auto-push"
+**Setup date:** 2026-04-30 | Token name: **"Cowork Sandbox"** (fine-grained PAT, not classic)  
+**Required permissions:** Contents: Read and write + **Gists: Read and write** (account permission — without this, dashboard Gist sync fails with 403)
 
 **From Cowork sandbox (Claude uses this — fully autonomous):**
 ```bash
@@ -129,7 +130,7 @@ git commit -m "Session: [description]"
 git push origin main
 ```
 
-**If token is lost:** Regenerate at github.com/settings/tokens → "Cowork auto-push" → Regenerate. Save to `~/Projects/.github-token` and restore in dashboard localStorage: `localStorage.setItem('yl_gist_token', 'NEW_TOKEN')`.
+**If token is lost:** Go to github.com/settings/tokens?type=beta → "Cowork Sandbox" → Regenerate. Save to `~/Projects/.github-token` and restore in dashboard localStorage: `localStorage.setItem('yl_gist_token', 'NEW_TOKEN')`. Ensure Gists: Read and write is set under Account permissions.
 
 **Never write local-only.** Everything goes to GitHub.
 
