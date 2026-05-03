@@ -1,3 +1,23 @@
+## 2026-05-03 | Memory system + Cowork OS sync | Claude Code (evening)
+
+### Requested
+- Automate version snapshot step (#2 from audit suggestions)
+- Populate Claude Code memory system (#4 from audit suggestions)
+- Sync Cowork global instructions with actual pasted version
+
+### Done
+- Created `snapshot-dashboard.sh` — auto-detects current version, increments minor, copies dashboard with description arg
+- Created 4 Claude Code memory files: `feedback_dashboard_sessions.md`, `feedback_working_style.md`, `project_dashboard_state.md`, `user_tools_and_workflow.md`
+- Updated `MEMORY.md` index with all 4 entries
+- Rewrote `CLAUDE-COWORK-OPERATING-SYSTEM.md` to match actual Cowork global instructions + added PAT info + two behavioral rules
+- User replaced Cowork global instructions with updated MD — now in sync
+
+### Key decisions
+- Cowork OS MD is now the canonical source: paste from raw GitHub URL to update Cowork global instructions
+- Claude Code memory = behavioral/project facts; Cowork memory = CLAUDE.md + routing table files
+
+---
+
 ## 2026-05-03 | Voice interview project + Obsidian integration research | YL/OPS
 
 ### Requested
