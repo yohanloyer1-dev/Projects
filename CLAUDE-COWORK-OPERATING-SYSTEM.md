@@ -177,10 +177,12 @@ Mount in Cowork, resume work. Everything is on GitHub.
 - Push every change to GitHub immediately
 - Update session-log.md as work happens
 - Use GitHub raw URLs if no local mount
+- **Present plan/options first, wait for approval before implementing** — especially for multi-step or ambiguous tasks. State the approach in 2-3 sentences and confirm before starting work.
 
 ❌ **Never Do This:**
 - Write local-only (no backup = lost work)
 - Assume task status (always check TASKS.md)
 - Skip memory reads (context loss)
 - Leave files out of sync
+- **Suggest or add dashboard features without asking: does this help execute on Nébuleuse, Accessory Partners, or the agency — or is it productivity theater?** The dashboard is a means, not an end.
 
