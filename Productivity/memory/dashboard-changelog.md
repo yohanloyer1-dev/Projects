@@ -4,11 +4,13 @@
 
 ---
 
-## 2026-05-04 | sync_tasks.py: inject 63 task(s) | pending
+## 2026-05-04 | sync_tasks.py: inject 62 tasks from DASHBOARD-TASKS.md | b8a801c / 2a6670c
 
 ### Changes
-- Auto-injected via sync_tasks.py from DASHBOARD-TASKS.md:
-  - `sync-test-sync-tasks-py` [normal] — SYNC TEST — sync_tasks.py
+- New tool: `Productivity/sync_tasks.py` — reads DASHBOARD-TASKS.md, injects missing tasks into dashboard.html, pushes via GitHub API
+- Auto-injected 62 tasks (test task added and immediately removed to verify mechanism)
+- Test verification: `sync-test-sync-tasks-py` injected into Strategy card, correct structure confirmed, then removed
+- Tasks injected span: Strategy, Productivity, Admin & Finance, Health, Real Estate, Japan Trip, Travel, Nébuleuse, Gorgias Role, Accessory Partners, Agency, LinkedIn cards
   - `embed-interactive-ohtani-matrix-in-dashboard` [sd] — Embed interactive Ohtani Matrix in dashboard
   - `create-a-vision-board-tasks-app` [normal] — Create a vision board/tasks app
   - `netlify-hosting` [wt] — Netlify hosting
