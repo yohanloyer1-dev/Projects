@@ -5,6 +5,41 @@
 
 ---
 
+## 2026-05-03 | 5:30pm Automated Wrap-Up | YL/OPS
+
+### Requested
+- Automated daily session wrap-up (scheduled task 5:30pm)
+
+### Done
+- Read TASKS.md, DASHBOARD-TASKS.md, CLAUDE.md, session-log.md from GitHub (verified current)
+- Reviewed all 15 commits pushed today (11:03 → 17:39)
+- No new task completions found — TASKS.md and DASHBOARD-TASKS.md already reflect current state
+- Session log already covered morning session (audit fixes, Gist sync, section reorg — commit 16ad113 + 01679d4)
+- Appended this wrap-up entry for afternoon sessions not yet logged
+
+### Afternoon sessions summary (not previously logged)
+- **Voice Interview System** (14:00 → 17:09): Created `Linkedin posting/VOICE-INTERVIEW-SESSION.md` with full 100-question interview prompt + Prompt 2 (Voice Compiler). Added Obsidian section. Dashboard task added. YOU/CLAUDE task split added to DASHBOARD-TASKS.md — commit 12edb50, 8485f30, 0997079, 00662bb
+- **CLAUDE.md — Verification Rule** (17:09): Added hard rule: search before asserting any fact about AI models/products. Added yohan-voice.md pointer to LinkedIn section — commit 3895414
+- **snapshot-dashboard.sh** (17:23): Created helper script that auto-increments version number and copies dashboard before edits — commit d09d9d4
+- **Cowork OS fixes** (17:36): Fixed token name ("Cowork auto-push" not "Cowork Sandbox"), added Gist permission note, archived stale CLAUDE_CODE_SESSION_PROMPT.md — commit 135ea47
+- **Cowork OS strategy guidelines** (17:39): Added strategy-first and dashboard complexity guidelines — commit a06f651
+- **Gorgias Agency video** (17:36): gorgias-roadmap-video.mp4 auto-synced via Claude Code — commit a40131e
+
+### Key Decisions
+- Verification rule added to CLAUDE.md: hard requirement to WebSearch before asserting facts about AI models (triggered by Claude incorrectly claiming Opus 4.7 doesn't exist)
+- Voice interview system is fully prepped: Yohan owns the 90-min session with Wispr Flow
+- snapshot-dashboard.sh replaces the manual version-copy step before dashboard edits
+
+### Next Steps (Yohan-owned)
+- Voice profile: Open new Cowork session "Yohan — Voice Interview", run Wispr Flow, answer 100 questions
+- Install Obsidian (10min) — open Projects folder as vault
+- T-010: Run 5 validation conversations (Gorgias Integrations)
+- T-008: Request ManoMano API access
+- Admin: Déclaration impôts 2025 (was due Apr 28), Payer rattrapage impôts (due May 8)
+- Japan: Book Ferry Tokashiki (was due May 2), Book hotel Taiwan May 9th
+
+---
+
 ## 2026-05-03 | Audit fixes, Gist sync fix, section reorganization | Claude Code
 
 ### Requested
