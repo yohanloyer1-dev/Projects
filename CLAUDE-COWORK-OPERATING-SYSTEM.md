@@ -1,6 +1,6 @@
 # Claude Cowork Operating System
-**Version:** 1.0  
-**Source of Truth:** GitHub (yohanloyer1-dev/Projects)  
+**Version:** 1.1
+**Source of Truth:** GitHub (yohanloyer1-dev/Projects)
 **Status:** Live
 
 ---
@@ -10,7 +10,7 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ---
 
-## Session Startup (5 minutes)
+## Session Startup
 
 **Every session, in order:**
 
@@ -36,7 +36,7 @@ GitHub is the source of truth. Every session: read memory → work → push chan
    - Read last entry in `Productivity/memory/session-log.md` to understand previous session's work
    - Not required for new tasks or fresh starts
 
-**Never assume task status. Always read TASKS.md first.**
+**Critical rule: Never assume task status. Always read TASKS.md first.**
 
 ---
 
@@ -67,14 +67,12 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 ---
 
-## Session Wrap-Up (Automated)
+## Session Wrap-Up
 
-**Trigger:** 5:30pm daily (scheduled task)
-
-**Manual step:**
+**Manual steps:**
 1. Update TASKS.md with completed task statuses
 2. Append to `Productivity/memory/session-log.md`: request, work done, key decisions
-3. Push to GitHub (see GitHub Write Pattern section below)
+3. Push to GitHub
 
 **Files to update before closing:**
 - `/TASKS.md` (root) — update master task list status
@@ -95,44 +93,38 @@ GitHub is the source of truth. Every session: read memory → work → push chan
 
 - Local version ≠ GitHub version → GitHub wins. Always.
 - TASKS.md shows old status → Refresh from GitHub: `git pull origin main` before reading locally.
-- Unsure which version is current → In Cowork, ask Claude: "GitHub status unclear, let me verify..." Then run `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD` to check latest commit.
+- Unsure which version is current → Run `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD` to check latest commit.
 
 ---
 
 ## GitHub Write Pattern
 
-**Authentication:** Fine-grained PAT stored on disk at `~/Projects/.github-token`.
+**Authentication:** HTTPS + credential manager (macOS/Linux/Windows)
 
-**Token location:** `~/Projects/.github-token` — never committed (in `.gitignore`).  
-**Dashboard sync:** Token also stored in browser `localStorage` as `yl_gist_token` on the dashboard page.  
-**Setup date:** 2026-04-30 | Token name: **"Cowork Sandbox"** (fine-grained PAT, not classic)  
-**Required permissions:** Contents: Read and write + **Gists: Read and write** (account permission — without this, dashboard Gist sync fails with 403)
-
-**From Cowork sandbox (Claude uses this — fully autonomous):**
+**macOS (verified setup):**
 ```bash
-TOKEN=$(cat ~/Projects/.github-token)
-# Push via GitHub API
-CONTENT=$(base64 -w 0 /path/to/file)
-SHA=$(curl -s -H "Authorization: token $TOKEN" \
-  "https://api.github.com/repos/yohanloyer1-dev/Projects/contents/PATH" | python3 -c "import sys,json; print(json.load(sys.stdin)['sha'])")
-curl -s -X PUT \
-  -H "Authorization: token $TOKEN" \
-  -H "Content-Type: application/json" \
-  "https://api.github.com/repos/yohanloyer1-dev/Projects/contents/PATH" \
-  -d "{\"message\": \"COMMIT MSG\", \"content\": \"$CONTENT\", \"sha\": \"$SHA\"}"
+git config --global credential.helper osxkeychain
 ```
 
-**From terminal (manual fallback):**
+**Commands:**
 ```bash
-cd ~/Projects
+cd /Users/yohanloyer/Projects
 git add [files]
 git commit -m "Session: [description]"
 git push origin main
 ```
 
-**If token is lost:** Go to github.com/settings/tokens?type=beta → "Cowork Sandbox" → Regenerate. Save to `~/Projects/.github-token` and restore in dashboard localStorage: `localStorage.setItem('yl_gist_token', 'NEW_TOKEN')`. Ensure Gists: Read and write is set under Account permissions.
+**First push on a device:** Git will prompt for GitHub credentials once. osxkeychain saves them for future use.
 
-**Never write local-only.** Everything goes to GitHub.
+**Verify setup:**
+```bash
+git config credential.helper        # → osxkeychain
+git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD  # → commit SHA, no auth prompt
+```
+
+**PAT (for autonomous push without terminal):** Token "Cowork Sandbox" (fine-grained PAT) stored at `~/Projects/.github-token`. Required permissions: Contents: Read and write + Gists: Read and write. Token also stored in browser localStorage as `yl_gist_token` for dashboard Gist sync. If lost: regenerate at `github.com/settings/tokens?type=beta` → "Cowork Sandbox".
+
+**Critical rule: Never write local-only. Everything goes to GitHub.**
 
 ---
 
@@ -140,31 +132,32 @@ git push origin main
 
 | What | URL |
 |------|-----|
-| **Operating System (this doc)** | https://github.com/yohanloyer1-dev/Projects/blob/main/CLAUDE-COWORK-OPERATING-SYSTEM.md |
-| **Live Dashboard** | https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html |
-| **CLAUDE.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md |
-| **TASKS.md (master)** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md |
-| **DASHBOARD-TASKS.md** | https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md |
-| **Repo** | https://github.com/yohanloyer1-dev/Projects |
+| **Operating System (this doc)** | `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE-COWORK-OPERATING-SYSTEM.md` |
+| **CLAUDE.md** | `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/CLAUDE.md` |
+| **TASKS.md (master)** | `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/TASKS.md` |
+| **DASHBOARD-TASKS.md** | `https://raw.githubusercontent.com/yohanloyer1-dev/Projects/main/Productivity/DASHBOARD-TASKS.md` |
+| **Live Dashboard** | `https://yohanloyer1-dev.github.io/Projects/Productivity/dashboard.html` |
+| **Repo** | `https://github.com/yohanloyer1-dev/Projects` |
 
 ---
 
 ## Troubleshooting
 
-**"Mount not available"**  
+**"Mount not available"**
 Use GitHub raw URLs above. Git commands work on remote URLs directly.
 
-**"Authentication failed on first push"**  
-GitHub will prompt for credentials on first HTTPS push. Enter your GitHub username + personal access token (or use SSO). osxkeychain saves credentials automatically.
+**"Authentication failed on first push"**
+GitHub will prompt for credentials on first HTTPS push. Enter your GitHub username + personal access token. Credential manager saves credentials automatically.
 
-**"TASKS.md out of sync"**  
+**"TASKS.md out of sync"**
 Refresh from GitHub: `git pull origin main` before reading files locally.
 
-**"File push failed"**  
-Verify remote is configured: `git remote -v` (should show https://github.com/yohanloyer1-dev/Projects.git). Check credentials with `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD`.
+**"File push failed"**
+Verify remote: `git remote -v` (should show `https://github.com/yohanloyer1-dev/Projects.git`).
+Check credentials: `git ls-remote https://github.com/yohanloyer1-dev/Projects HEAD`.
 
-**"New device / lost laptop"**  
-Clone: `git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects`  
+**"New device / lost laptop"**
+Clone: `git clone https://github.com/yohanloyer1-dev/Projects.git ~/Projects`
 Mount in Cowork, resume work. Everything is on GitHub.
 
 ---
@@ -184,5 +177,4 @@ Mount in Cowork, resume work. Everything is on GitHub.
 - Assume task status (always check TASKS.md)
 - Skip memory reads (context loss)
 - Leave files out of sync
-- **Suggest or add dashboard features without asking: does this help execute on Nébuleuse, Accessory Partners, or the agency — or is it productivity theater?** The dashboard is a means, not an end.
-
+- **Suggest or build new dashboard features without first asking: does this help execute on Nébuleuse, Accessory Partners, or the agency — or is it just productivity theater?** The dashboard is a means, not an end.
