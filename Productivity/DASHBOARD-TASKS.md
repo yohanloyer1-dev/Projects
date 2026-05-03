@@ -221,8 +221,11 @@
 - [ ] **Complete 7 stub integration articles** — ShipStation, ShipBob, ShipHero, Shipmonk, Skio, Loop Returns (~1,300 words each) 🤖
 - [~] **Help Center scraping** — Scheduled Mondays 9am · Phase 1: new articles only
 
-### LinkedIn Content
-- [>] **Run Yohan Voice Interview — build yohan-voice.md** _(45-60min)_ — Dictated 100-question interview to capture raw writing taste. Session doc ready at `Linkedin posting/VOICE-INTERVIEW-SESSION.md`. Use Opus 4.7 + Extended Thinking + Wispr Flow. Output: `yohan-voice.md` → pushed to GitHub. 🤖
+### LinkedIn Content — Voice Profile Project
+- [>] **[YOU] Run Voice Interview session** _(~90min)_ — Open new Cowork session named "Yohan — Voice Interview". Use Opus 4.7 + Extended Thinking + Wispr Flow. Paste Prompt 1 from `Linkedin posting/VOICE-INTERVIEW-SESSION.md`. Answer 100 questions dictated. Then paste Prompt 2 in same session to compress. Save output as `yohan-voice.md`.
+- [>] **[YOU] Install Obsidian + open Projects folder as vault** _(10min)_ — Download free at obsidian.md → Open folder as vault → select `/Users/yohanloyer/Projects`. Lets you edit `yohan-voice.md` and all memory files like a Google Doc. Syncs automatically with Cowork.
+- [>] **[CLAUDE] Push yohan-voice.md to GitHub + update YOHAN_MASTER_BRIEF.md** — After voice interview is done, Claude saves file, pushes to GitHub, adds pointer at top of YOHAN_MASTER_BRIEF.md. 🤖
+- [>] **[CLAUDE] Test yohan-voice.md in blank session** — Claude opens fresh session with only yohan-voice.md attached, writes a sample LinkedIn post, flags what sounds off. 🤖
 - [>] **Update LinkedIn profile** — Headline + About (copy is ready)
 - [ ] **Publish Post 01 — contrarian opener** 🤖
 - [ ] **Maintain 2 posts/week cadence**
