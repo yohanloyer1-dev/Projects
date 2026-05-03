@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-05-03 | Added Voice Profile Project tasks to LinkedIn Content card | pending
+
+### Changes
+- Added 4 new task cards to LinkedIn Content `.tl` div (before linkedin-profile):
+  - `voice-interview` [hi] — Run Voice Interview ~90min, links to VOICE-INTERVIEW-SESSION.md
+  - `voice-push` [cl] — Save + push yohan-voice.md (🤖 Claude)
+  - `voice-test` [cl] — Test voice file in blank session (🤖 Claude)
+  - `obsidian-install` [hi] — Install Obsidian + open as vault, 10min
+- No structural or JS changes — task list only
+
+---
+
 ## 2026-05-03 | Audit fixes: --accent var, overdue banner nav, Claude Tasks empty states | 98fc23c
 
 ### Changes
