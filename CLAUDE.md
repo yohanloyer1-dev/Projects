@@ -187,6 +187,16 @@ chmod +x .git/hooks/pre-commit .git/hooks/pre-push
 - Passionate about AI, automation, Claude — maximize leverage here
 - Multilingual content: EN / FR / ES
 
+## Obsidian Knowledge System
+- **What it is:** Local-first personal knowledge base. Opens `/Users/yohanloyer/Projects` as a vault — every `.md` file becomes navigable, editable, and linkable with `[[wiki-links]]`. Think: visual graph of your entire system.
+- **Status:** Not yet set up. See DASHBOARD-TASKS.md "Voice Profile Project" steps 4–6.
+- **Setup sequence:**
+  - Step 4 (basic): Install Obsidian → open Projects as vault → edit files visually. 10 min, no dependencies.
+  - Step 5 (MCP): Install Local REST API plugin → connect Claude via MCP server → Claude gets full two-way vault access. ~30 min dedicated session. Setup doc: `Productivity/memory/context/obsidian-mcp-setup.md`
+  - Step 6 (graph): Claude adds `[[wiki-links]]` between memory files → system becomes queryable by concept.
+- **Why it matters for this system:** Your Projects folder is already a rich knowledge base (project memories, session logs, LinkedIn content, client files). Obsidian + MCP turns Claude from a file-reader into a knowledge graph navigator — able to search by tag, follow backlinks, and surface connections across all projects without explicit file paths.
+- **Key files once set up:** `yohan-voice.md`, `YOHAN_MASTER_BRIEF.md`, all `Productivity/memory/projects/*.md` files become interlinked nodes.
+
 ## Dashboard System
 - Location: `Productivity/dashboard.html` — source file, pushed to GitHub automatically by Claude
 - Current version: v2.6+ — see `Productivity/versions/` for history
