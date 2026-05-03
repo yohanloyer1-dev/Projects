@@ -1,0 +1,9 @@
+# Video / large media reference files
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+
+# macOS
+.DS_Store
