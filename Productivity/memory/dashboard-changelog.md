@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-05-03 | Add Misc & Errands section, clean up Travel card | pending
+
+### Changes
+- New section-block `miscellaneous` added at end of `#view-personal` with 3 tasks moved from Travel & Errands: `album-mariage`, `review-mexico`, `errands-misc`
+- "Travel & Errands" card renamed to "Travel" (subtitle: "Asia · flights") — now only contains `flights-asia`
+- Snapshot: `versions/dashboard_v3.7_2026-05-03_pre-misc-section.html`
+
+---
+
 ## 2026-05-02 | Plan fixes: gist mutex, localStorage quota, DTN button, CSS polish | cd65c2e
 
 ### Changes
