@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-05-03 | Personal view section reorganization | Claude Code
+
+### Requested
+- Move errands tasks out of "Real Estate & Travel" into a new Misc & Errands section
+
+### Done
+- Removed `album-mariage`, `review-mexico`, `errands-misc` from "Travel & Errands" card
+- Renamed card to "Travel" (flights-asia only remains)
+- Added new `section-block[data-section-id="miscellaneous"]` at end of `#view-personal` with "Misc & Errands" section header and "Errands & Reviews" card containing the 3 moved tasks
+- Commit: 16ad113
+
+### Key decisions
+- New section placed at the end of Personal view (after Productivity)
+- Tasks re-tagged `data-project="Misc"` in the new section
+
+---
+
 ## 2026-05-02 | Fix F: drag-and-drop section reordering | Claude Code
 
 ### Requested
