@@ -1,3 +1,42 @@
+## 2026-05-04 | TikTok SaaS multi-agent system D1-D14 | Claude Code (overnight)
+
+### Requested
+- Build entire TikTok content automation system from scratch per detailed spec
+- 14 deliverables: architecture challenge, schema, agent colony, n8n workflows, prompts, character setup, lead funnel, onboarding, sales funnel, SaaS spec, pricing, launch checklist
+- Self-pace overnight while user sleeps
+
+### Done
+- Scaffolded full repo at `~/Projects/tiktok-saas/` (37 files, ~5,600 lines)
+- D1: ARCHITECTURE.md — stack challenge, 14-row gap analysis, agent colony design, decision log
+- D2: Supabase schema (11 tables, RLS, triggers, indexes)
+- D4: 8 agent instruction files (orchestrator, research, content, production, distribution, intelligence, monitor, ab-persona)
+- D5: 7 importable n8n workflow JSONs
+- D6: CONTENT-INTELLIGENCE.md (transcript subworkflow, pattern library schema, Intelligence Agent prompt, feedback loop)
+- D7: 4 versioned Claude prompt templates (research-summary, script-generator, compliance-rewrite, orchestrator)
+- D8: HIGGSFIELD-SETUP.md — MCP session steps, persona.md template, replication instructions
+- D9: CHATFUEL-EMAIL-FUNNEL.md — replaces ManyChat (which doesn't work in EU), Kit 5-email sequence
+- D10: CLIENT-ONBOARDING.md — Typeform spec, 12-step checklist, test protocol
+- D11: SALES-FUNNEL.md — 3 LinkedIn drafts, Lovable landing, application form, follow-up sequence
+- D12: LOVABLE-SAAS-SPEC.md — 13 screens, RBAC, Stripe tiers, API endpoints, migration
+- D13: PRICING-ECONOMICS.md — DFY tiers, SaaS gross margins (91% Starter, 80% Pro), GO/NO-GO criteria
+- D14: LAUNCH-CHECKLIST.md — 75 dependency-ordered actions across 8 phases
+- clients/c_001/ initialized (memory, persona, pattern-library, performance-log)
+
+### Critical research-driven changes from original spec
+1. **ManyChat → Chatfuel**: Original spec said ManyChat. Research revealed ManyChat cannot connect to TikTok in EU at all (TikTok-side GDPR block, not workaround-able). Yohan is in France. Chatfuel works in EU AND has comment-to-DM (which ManyChat doesn't have in any Western market). Net better than spec.
+2. **TikTok Direct Post API audit**: timeline confirmed 5-10 business days (not 2-8 weeks). Audit submission added to Week 4.
+3. **CTAs can be comment-OR-DM** (was DM-first only).
+
+### Key decisions
+- Repo nested under `Projects/tiktok-saas/` (not separate repo) — token has access, ships immediately. Must move to private OR flip Projects to private before first DFY client (Week 10+).
+- Pushed to `tiktok-saas-init` branch (avoids dashboard.html merge conflicts on main).
+
+### Next session
+- User merges `tiktok-saas-init` into `main` after reviewing
+- LAUNCH-CHECKLIST.md Phase 0: Supabase + R2 + Railway n8n + Telegram bot setup (~90 min)
+
+---
+
 ## 2026-05-03 | Memory system + Cowork OS sync | Claude Code (evening)
 
 ### Requested
