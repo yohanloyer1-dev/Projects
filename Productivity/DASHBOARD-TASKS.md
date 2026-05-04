@@ -5,7 +5,6 @@
 ## Personal
 
 ### Strategy & Vision
-- [ ] **SYNC TEST — sync_tasks.py** — Dummy injection test. Delete after verification. 🤖
 - [!] **Complete Ohtani Matrix with ChatGPT** — Build the full 81-box Mandala document. Continue in ChatGPT.
 - [_] **Embed interactive Ohtani Matrix in dashboard** — Once matrix is complete, build a visual/interactive version inside dashboard.html 🤖
 - [ ] **Créer 2026 goals, sub-goals and tasks** — Use Claude to build full goal tree with sub-tasks 🤖
@@ -121,6 +120,9 @@
 - [x] **Fix D — Disable dead fetchClaudeQueue()** — Done 2026-05-02 (commit ec12ed2). syncQueueResults call also disabled. 🤖
 - [x] **Fix E — dtnSkipIdx divide-by-zero guard** — Done 2026-05-02 (commit ec12ed2). 🤖
 - [ ] **Fix F — Drag-and-drop section reordering** — Drag whole sections (e.g. Japan Trip above Admin & Finance) within a view. Order persists to localStorage. Spec in CLAUDE_CODE_SESSION_PROMPT.md. 🤖
+- [ ] **sync_tasks.py — add Claude OS project card** — Create a Claude OS card in dashboard.html (Freelance view, after Agency card). Add `"Claude OS": "Claude OS"` to SECTION_PROJECT in sync_tasks.py. Then run sync to inject the 4 Claude OS tasks. 🤖
+- [ ] **sync_tasks.py — clean up duplicate VIP task** — Two "VIP customer rule — no AI Agent" divs exist in the Nébuleuse card (injected from two separate MD sections). Delete the second one (data-id="vip-customer-rule-no-ai-agent-2"). 🤖
+- [ ] **sync_tasks.py — clean up duplicate Work Travel tasks** — 3 tasks were injected twice (general list + deadline version): Book flight Paris→Athens, Book flight BBQ Axome, Book Hotel Shoptalk. Keep the "-2" versions (they have estimate + due date), delete the originals. 🤖
 
 ---
 
