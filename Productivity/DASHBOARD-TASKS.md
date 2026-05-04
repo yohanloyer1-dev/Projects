@@ -237,6 +237,72 @@
 - [ ] **Publish Post 01 — contrarian opener** 🤖
 - [ ] **Maintain 2 posts/week cadence**
 
+### TikTok SaaS — Multi-agent content automation
+<!-- Built 2026-05-04 overnight. Full repo at Projects/tiktok-saas/. Branch: tiktok-saas-init. Read SESSION-SUMMARY.md first, then ARCHITECTURE.md, then LAUNCH-CHECKLIST.md. -->
+
+#### Repo housekeeping
+- [!] **Review + merge `tiktok-saas-init` branch into main** _(15min)_ — PR: https://github.com/yohanloyer1-dev/Projects/pull/new/tiktok-saas-init · Conflicts only on dashboard.html (your other work, NOT tiktok-saas). Either merge via PR with conflict resolution or fast-forward locally after pulling main.
+- [>] **Decide repo privacy** _(2min decision)_ — Currently in PUBLIC Projects repo. Options: (a) flip Projects to private, (b) move tiktok-saas to its own private repo before first DFY client. Hard deadline: Week 10 per LAUNCH-CHECKLIST.md.
+
+#### Phase 0 — Infrastructure (Days 1-3, ~90 min total)
+- [>] **Create Supabase project** _(15min)_ — Pro tier, EU region. Run `tiktok-saas/workflows/supabase-schema.sql` in SQL Editor. Verify RLS enabled.
+- [>] **Sign up Cloudflare R2 + create bucket `tiktok-saas-prod`** _(10min)_ — S3-compatible credentials.
+- [>] **Deploy n8n on Railway.app** _(15min)_ — One-click deploy. Get custom URL. Set N8N_URL env var.
+- [>] **Set n8n environment variables** _(15min)_ — Full list in LAUNCH-CHECKLIST.md ENV section. SUPABASE_URL, R2 keys, etc.
+- [>] **Configure n8n Supabase credential (service key)** _(5min)_ — Test query.
+- [>] **Create Telegram bot via BotFather + create channel** _(10min)_ — Store bot token + chat ID.
+
+#### Phase 1 — External accounts (Days 2-4, can parallelize)
+- [>] **ScrapeCreators signup** _(5min)_ — $10/mo plan. API key → n8n env.
+- [>] **Supadata signup** _(5min)_ — Free tier first, paid if needed. API key → n8n env.
+- [>] **Higgsfield AI signup** _(10min)_ — Paid plan with MCP + REST API access.
+- [>] **Anthropic API key** _(5min)_ — Probably already have it. Add to n8n env.
+- [>] **Metricool signup** _(10min)_ — TikTok integration.
+- [>] **Upgrade TikTok account to Business** _(5min, 24h approval wait)_ — Required for ManyChat/Chatfuel/API.
+- [>] **Chatfuel signup + connect TikTok** _(15min)_ — Chatfuel (NOT ManyChat — ManyChat doesn't work in EU). Pro plan ~$15-20/mo.
+- [>] **Kit (ConvertKit) Creator plan + create form/tag** _(20min)_ — Form ID + tag ID. Configure double opt-in (GDPR).
+- [>] **Build Typeform onboarding form** _(30min)_ — Per CLIENT-ONBOARDING.md spec. Webhook to n8n.
+
+#### Phase 2 — n8n workflow imports (Day 4, ~30 min)
+- [ ] **Import all 7 n8n workflow JSONs from `tiktok-saas/workflows/`** _(20min)_ 🤖 — onboarding, weekly-research, script-generation, video-generation-fallback, scheduling-posting, chatfuel-leadcapture, observability. Activate all.
+- [ ] **Test webhook reachability** _(5min)_ — `curl POST {N8N_URL}/webhook/health` → 200.
+
+#### Phase 3 — Higgsfield character (Day 5, ~75 min)
+- [ ] **Generate 3 reference photos in Midjourney for c_001 persona** _(30min)_ — 9:16, character consistent across all 3.
+- [ ] **Upload reference photos to R2** _(10min)_ — Public URLs for Higgsfield.
+- [ ] **Run HIGGSFIELD-SETUP.md MCP session in Claude Code** _(30min)_ 🤖 — Get character_id, generate 3 test videos, validate consistency.
+- [ ] **Update Supabase client_config + write persona.md to GitHub** _(10min)_ 🤖
+
+#### Phase 4 — c_001 self-validation provisioning (Day 6)
+- [ ] **Submit Typeform onboarding for c_001** _(10min)_ — All Phase 0-3 complete first.
+- [ ] **Configure Chatfuel keyword flow + External Request to n8n** _(30min)_ — Per CHATFUEL-EMAIL-FUNNEL.md.
+- [ ] **Configure Kit automation: subscribe → Day 0-14 emails** _(15min)_ — Plain text templates in CHATFUEL-EMAIL-FUNNEL.md section f.
+- [ ] **Connect Metricool to TikTok account for c_001** _(10min)_ — Store metricool_user_id.
+
+#### Phase 5 — First test run (Day 7)
+- [ ] **Manually trigger weekly-research workflow** _(2min + 10min wait)_ 🤖 — Verify ≥20 content_insights created.
+- [ ] **Approve Week 1 scripts in Telegram** _(5min)_ — Tap "Approve All."
+- [ ] **Verify all 5 videos generate via Higgsfield MCP** _(60min)_ — Check R2 + Supabase video_jobs.completed.
+- [ ] **Test Chatfuel: comment CTA_KEYWORD from test account** _(5min)_ — Verify dm_leads row + Kit subscriber.
+- [ ] **Wait 24h + 72h for perf data capture** _(passive)_ — Verify posts.perf_24h, perf_72h.
+
+#### Phase 6 — Intelligence loop (Saturday, Day 14)
+- [ ] **Verify Intelligence Agent runs Saturday 08:00** _(passive)_ — Performance-log + pattern-library updated in GitHub.
+- [ ] **Manual review of Intelligence output** _(15min)_ — Sanity-check insights against actual performance.
+
+#### Phase 7-8 — Stabilization + sales funnel (Weeks 2-12)
+- [_] **6 consecutive weeks stable c_001 operation** _(passive monitoring)_ — <5% error rate per week.
+- [_] **TikTok Direct Post API audit submission** _(Week 4, 4-8 hours prep)_ — Demo video + privacy policy + creator preview UI. 5-10 business days approval typical.
+- [_] **First LinkedIn reveal post** _(Week 4-6)_ — Post 1 from SALES-FUNNEL.md (system reveal, no pitch).
+- [_] **Build Lovable landing page** _(Week 6-8, ~4 hours)_ — Per SALES-FUNNEL.md spec.
+- [_] **Build Typeform DFY application form** _(Week 6-8, ~1 hour)_ — Filter qualifier questions.
+- [_] **Open DFY waitlist (LinkedIn Post 2)** _(Week 8-10)_ — When 30-day case study data exists.
+- [_] **First DFY client (c_002) onboarding** _(Week 10+, ~90min)_ — Per CLIENT-ONBOARDING.md.
+
+#### Strategic gates (DO NOT skip)
+- [_] **GO/NO-GO for SaaS build** _(Month 6)_ — All 7 criteria in PRICING-ECONOMICS.md must pass before touching Lovable for SaaS frontend. Public-repo migration is one criterion.
+- [_] **A/B Persona Agent activation** _(after 30 days c_001 stable)_ — agents/ab-persona.md.
+
 ---
 
 ## Done
