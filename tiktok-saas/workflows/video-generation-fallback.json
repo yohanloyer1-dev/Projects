@@ -1,0 +1,265 @@
+{
+  "name": "5d. Video Generation Fallback (REST API — automated n8n runs only)",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Production Start Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "production/start",
+        "responseMode": "lastNode"
+      },
+      "notes": "Primary path (MCP) runs in Claude Code session — see agents/production.md. This workflow is fallback REST API path only."
+    },
+    {
+      "id": "validate-fetch-scripts",
+      "name": "Validate + Fetch Approved Scripts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst body = $input.first().json.body || {};\nconst sig = $input.first().json.headers?.['x-hub-signature-256'];\nif (sig) {\n  const expected = 'sha256=' + crypto.createHmac('sha256', process.env.N8N_SHARED_SECRET || '').update(JSON.stringify(body)).digest('hex');\n  if (sig !== expected) throw new Error('HMAC validation failed');\n}\nreturn [{ json: { client_id: body.client_id, week_start: body.week_start, script_ids: body.script_ids || [] } }];"
+      }
+    },
+    {
+      "id": "fetch-scripts",
+      "name": "Fetch Approved Scripts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/scripts?client_id=eq.{{ $json.client_id }}&week_start=eq.{{ $json.week_start }}&status=eq.approved&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "fetch-persona",
+      "name": "Fetch Persona from Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/client_config?client_id=eq.{{ $('Validate + Fetch Approved Scripts').item.json.client_id }}&select=higgsfield_character_id,persona_ref_image_url",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "split-scripts",
+      "name": "Split Per Script",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [900, 300],
+      "parameters": {"batchSize": 1}
+    },
+    {
+      "id": "insert-video-job",
+      "name": "Insert video_job (queued)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate + Fetch Approved Scripts').item.json.client_id, script_id: $json.script_id, status: 'in_progress', generation_mode: 'rest_api', persona_variant: 'A' }) }}"
+      }
+    },
+    {
+      "id": "build-hf-prompt",
+      "name": "Build Higgsfield Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 300],
+      "parameters": {
+        "jsCode": "const script = $('Split Per Script').item.json;\nconst persona = $('Fetch Persona from Supabase').item.json[0] || {};\nconst scriptJson = script.script_json;\n\n// Consistency validation\nconst requiredChecks = ['9:16'];\nfor (const check of requiredChecks) {\n  // In production: read persona.md from GitHub to get full persona spec\n  // For now: add 9:16 to all prompts by default\n}\n\nconst beatsText = (scriptJson.beats || []).map(b => `[${b.t}s] ${b.visual_direction} | Text: \"${b.on_screen_text}\"`).join(' | ');\n\nconst prompt = `${scriptJson.render_notes?.persona_consistency_notes || 'Professional character'}. ${scriptJson.render_notes?.style || ''}. 9:16 vertical format. ${beatsText}. Duration: 35-45 seconds.`;\n\nreturn [{\n  json: {\n    video_job_id: $('Insert video_job (queued)').item.json[0]?.video_job_id,\n    script_id: script.script_id,\n    client_id: script.client_id,\n    prompt: prompt,\n    persona_ref_image_url: persona.persona_ref_image_url\n  }\n}];"
+      }
+    },
+    {
+      "id": "post-higgsfield",
+      "name": "POST to Higgsfield REST",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://platform.higgsfield.ai/v1/image2video/dop",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "=Bearer {{ $env.HIGGSFIELD_API_KEY }}"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'dop-turbo', prompt: $json.prompt, input_images: [{ type: 'image_url', image_url: $json.persona_ref_image_url }], aspect_ratio: '9:16', duration: 40 }) }}"
+      }
+    },
+    {
+      "id": "store-request-id",
+      "name": "Store hf_request_id",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1700, 300],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs?video_job_id=eq.{{ $('Build Higgsfield Prompt').item.json.video_job_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ hf_request_id: $json.request_id || $json.id, hf_raw: $json }) }}"
+      }
+    },
+    {
+      "id": "wait-30s",
+      "name": "Wait 30s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1900, 300],
+      "parameters": {"unit": "seconds", "amount": 30}
+    },
+    {
+      "id": "poll-status",
+      "name": "Poll Higgsfield Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2100, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://platform.higgsfield.ai/requests/{{ $('Store hf_request_id').item.json.hf_request_id || $('POST to Higgsfield REST').item.json.request_id }}/status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Authorization", "value": "=Bearer {{ $env.HIGGSFIELD_API_KEY }}"}]
+        }
+      }
+    },
+    {
+      "id": "check-completed",
+      "name": "Completed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2300, 300],
+      "parameters": {
+        "conditions": {
+          "string": [{"value1": "={{ $json.status }}", "operation": "equals", "value2": "completed"}]
+        }
+      }
+    },
+    {
+      "id": "upload-r2",
+      "name": "Upload to Cloudflare R2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2500, 200],
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://{{ $env.CLOUDFLARE_R2_BUCKET }}.{{ $env.CLOUDFLARE_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com/clients/{{ $('Build Higgsfield Prompt').item.json.client_id }}/videos/{{ $('Validate + Fetch Approved Scripts').item.json.week_start }}/script_{{ $('Split Per Script').item.json.idx }}/v1.mp4",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "video/mp4"},
+            {"name": "Authorization", "value": "=AWS4-HMAC-SHA256 — compute dynamically via Code node"}
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "binaryData",
+        "notes": "In production: fetch video from Higgsfield URL, then stream to R2. Requires binary data pipeline."
+      }
+    },
+    {
+      "id": "update-job-complete",
+      "name": "Update video_job completed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2700, 200],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs?video_job_id=eq.{{ $('Build Higgsfield Prompt').item.json.video_job_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ status: 'completed', video_url: $('Poll Higgsfield Status').item.json.video_url || $('Poll Higgsfield Status').item.json.output_url, r2_url: 'r2://...' }) }}"
+      }
+    },
+    {
+      "id": "check-all-complete",
+      "name": "All 5 Jobs Complete?",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2900, 200],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs?client_id=eq.{{ $('Validate + Fetch Approved Scripts').item.json.client_id }}&week_start_filter=TODO&status=eq.completed&select=count",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "trigger-distribution",
+      "name": "Trigger Distribution Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3100, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_URL }}/webhook/distribution/start",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate + Fetch Approved Scripts').item.json.client_id, week_start: $('Validate + Fetch Approved Scripts').item.json.week_start }) }}"
+      }
+    },
+    {
+      "id": "retry-or-fail",
+      "name": "Still Pending — Loop or Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2500, 450],
+      "parameters": {
+        "jsCode": "// Check attempt count. Max 20 polls (10 min).\n// In production: use a counter stored in Supabase or workflow static data.\nconst status = $input.first().json.status;\nif (status === 'failed') {\n  throw new Error('Higgsfield generation failed: ' + JSON.stringify($input.first().json));\n}\n// Otherwise: route back to Wait node (n8n Loop)\nreturn [{ json: { status, retry: true } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Production Start Webhook": {"main": [[{"node": "Validate + Fetch Approved Scripts", "type": "main", "index": 0}]]},
+    "Validate + Fetch Approved Scripts": {"main": [[{"node": "Fetch Approved Scripts", "type": "main", "index": 0}]]},
+    "Fetch Approved Scripts": {"main": [[{"node": "Fetch Persona from Supabase", "type": "main", "index": 0}]]},
+    "Fetch Persona from Supabase": {"main": [[{"node": "Split Per Script", "type": "main", "index": 0}]]},
+    "Split Per Script": {"main": [[{"node": "Insert video_job (queued)", "type": "main", "index": 0}]]},
+    "Insert video_job (queued)": {"main": [[{"node": "Build Higgsfield Prompt", "type": "main", "index": 0}]]},
+    "Build Higgsfield Prompt": {"main": [[{"node": "POST to Higgsfield REST", "type": "main", "index": 0}]]},
+    "POST to Higgsfield REST": {"main": [[{"node": "Store hf_request_id", "type": "main", "index": 0}]]},
+    "Store hf_request_id": {"main": [[{"node": "Wait 30s", "type": "main", "index": 0}]]},
+    "Wait 30s": {"main": [[{"node": "Poll Higgsfield Status", "type": "main", "index": 0}]]},
+    "Poll Higgsfield Status": {"main": [[{"node": "Completed?", "type": "main", "index": 0}]]},
+    "Completed?": {
+      "main": [
+        [{"node": "Upload to Cloudflare R2", "type": "main", "index": 0}],
+        [{"node": "Still Pending — Loop or Fail", "type": "main", "index": 0}]
+      ]
+    },
+    "Upload to Cloudflare R2": {"main": [[{"node": "Update video_job completed", "type": "main", "index": 0}]]},
+    "Update video_job completed": {"main": [[{"node": "All 5 Jobs Complete?", "type": "main", "index": 0}]]},
+    "All 5 Jobs Complete?": {"main": [[{"node": "Trigger Distribution Agent", "type": "main", "index": 0}]]},
+    "Still Pending — Loop or Fail": {"main": [[{"node": "Wait 30s", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "REST FALLBACK ONLY — MCP primary path runs in Claude Code session (see agents/production.md). R2 upload requires AWS SigV4 signing — implement in a Code node using crypto module. Loop max: 20 iterations (add counter to Supabase video_jobs or n8n static data). Add Error Trigger for all nodes → Supabase events + Telegram."
+  }
+}

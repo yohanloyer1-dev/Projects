@@ -1,0 +1,248 @@
+{
+  "name": "5e. Scheduling & Posting (Metricool primary)",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Distribution Start Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "distribution/start",
+        "responseMode": "lastNode"
+      }
+    },
+    {
+      "id": "validate-fetch",
+      "name": "Validate + Fetch Video Jobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst body = $input.first().json.body || {};\nconst sig = $input.first().json.headers?.['x-hub-signature-256'];\nif (sig) {\n  const expected = 'sha256=' + crypto.createHmac('sha256', process.env.N8N_SHARED_SECRET || '').update(JSON.stringify(body)).digest('hex');\n  if (sig !== expected) throw new Error('HMAC validation failed');\n}\nreturn [{ json: body }];"
+      }
+    },
+    {
+      "id": "fetch-video-jobs",
+      "name": "Fetch Completed Video Jobs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs?client_id=eq.{{ $json.client_id }}&status=eq.completed&select=*,scripts(*)&order=script_id.asc",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "fetch-schedules",
+      "name": "Fetch Active Schedules",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 450],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schedules?client_id=eq.{{ $('Validate + Fetch Video Jobs').item.json.client_id }}&active=eq.true&order=day_of_week.asc",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "fetch-client-config",
+      "name": "Fetch Client Config",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 600],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/client_config?client_id=eq.{{ $('Validate + Fetch Video Jobs').item.json.client_id }}&select=tiktok_scheduler,metricool_user_id,niche",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "map-and-insert-posts",
+      "name": "Map Videos to Slots + Insert Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 400],
+      "parameters": {
+        "jsCode": "const videoJobs = $('Fetch Completed Video Jobs').all().map(i => i.json);\nconst schedules = $('Fetch Active Schedules').all().map(i => i.json);\nconst config = $('Fetch Client Config').item.json[0] || $('Fetch Client Config').item.json;\nconst clientId = $('Validate + Fetch Video Jobs').item.json.client_id;\n\n// Compute next occurrence of each schedule slot\nconst now = new Date();\nconst postRows = videoJobs.slice(0, schedules.length).map((job, idx) => {\n  const sched = schedules[idx];\n  // Find next occurrence of day_of_week\n  const targetDay = sched.day_of_week; // 1=Mon ... 7=Sun\n  const d = new Date(now);\n  const jsDay = d.getDay(); // 0=Sun ... 6=Sat\n  const days = ((targetDay % 7) - jsDay + 7) % 7 || 7;\n  d.setDate(d.getDate() + days);\n  const [h, m] = (sched.time_local || '08:30').split(':');\n  d.setHours(parseInt(h), parseInt(m), 0, 0);\n\n  return {\n    client_id: clientId,\n    video_job_id: job.video_job_id,\n    planned_publish_at: d.toISOString(),\n    platform: 'tiktok',\n    platform_status: 'scheduled'\n  };\n});\n\nreturn postRows.map(r => ({ json: { ...r, scheduler_mode: config.tiktok_scheduler || 'metricool', metricool_user_id: config.metricool_user_id } }));"
+      }
+    },
+    {
+      "id": "insert-posts",
+      "name": "INSERT posts (scheduled)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $json.client_id, video_job_id: $json.video_job_id, planned_publish_at: $json.planned_publish_at, platform: 'tiktok', platform_status: 'scheduled' }) }}"
+      }
+    },
+    {
+      "id": "split-posts",
+      "name": "Split Per Post",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1100, 400],
+      "parameters": {"batchSize": 1}
+    },
+    {
+      "id": "update-uploading",
+      "name": "Update status: uploading",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1300, 400],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts?post_id=eq.{{ $json.post_id || $json[0]?.post_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"platform_status\": \"uploading\"}"
+      }
+    },
+    {
+      "id": "post-to-metricool",
+      "name": "POST to Metricool",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "https://app.metricool.com/api/v1.1/scheduler/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "=Bearer {{ $env.METRICOOL_API_KEY }}"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ user_id: $('Map Videos to Slots + Insert Posts').item.json.metricool_user_id, networks: ['tiktok'], text: $json.scripts?.caption || $json.caption || '', scheduled_date: $json.planned_publish_at, media: [{ type: 'video', url: $('Split Per Post').item.json.video_jobs?.r2_url || $('Split Per Post').item.json.r2_url }], tiktok_options: { privacy_level: 'PUBLIC_TO_EVERYONE', disable_duet: false, disable_stitch: false } }) }}"
+      }
+    },
+    {
+      "id": "update-processing",
+      "name": "Update status: processing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1700, 400],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts?post_id=eq.{{ $('Split Per Post').item.json.post_id || $('INSERT posts (scheduled)').item.json[0]?.post_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ platform_status: 'processing', metricool_post_id: $('POST to Metricool').item.json.id || $('POST to Metricool').item.json.post_id }) }}"
+      }
+    },
+    {
+      "id": "wait-2min",
+      "name": "Wait 2min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1900, 400],
+      "parameters": {"unit": "minutes", "amount": 2}
+    },
+    {
+      "id": "poll-metricool",
+      "name": "Poll Metricool Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2100, 400],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://app.metricool.com/api/v1.1/scheduler/post/{{ $('POST to Metricool').item.json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Authorization", "value": "=Bearer {{ $env.METRICOOL_API_KEY }}"}]
+        }
+      }
+    },
+    {
+      "id": "check-posted",
+      "name": "Published?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2300, 400],
+      "parameters": {
+        "conditions": {
+          "string": [{"value1": "={{ $json.status }}", "operation": "equals", "value2": "published"}]
+        }
+      }
+    },
+    {
+      "id": "update-posted",
+      "name": "Update status: posted",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2500, 300],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts?metricool_post_id=eq.{{ $('POST to Metricool').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ platform_status: 'posted', posted_at: new Date().toISOString(), platform_publish_id: $json.tiktok_post_id || $json.network_post_id }) }}"
+      }
+    },
+    {
+      "id": "schedule-perf-poll",
+      "name": "Schedule 24h Perf Poll",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2700, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/events",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate + Fetch Video Jobs').item.json.client_id, agent: 'distribution', level: 'info', message: 'perf_poll_scheduled', payload: { post_id: $('INSERT posts (scheduled)').item.json[0]?.post_id, platform_publish_id: $('Update status: posted').item.json.platform_publish_id, poll_at_24h: new Date(Date.now() + 86400000).toISOString(), poll_at_72h: new Date(Date.now() + 259200000).toISOString(), type: 'perf_poll' } }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Distribution Start Webhook": {"main": [[{"node": "Validate + Fetch Video Jobs", "type": "main", "index": 0}]]},
+    "Validate + Fetch Video Jobs": {"main": [[{"node": "Fetch Completed Video Jobs", "type": "main", "index": 0}, {"node": "Fetch Active Schedules", "type": "main", "index": 0}, {"node": "Fetch Client Config", "type": "main", "index": 0}]]},
+    "Fetch Completed Video Jobs": {"main": [[{"node": "Map Videos to Slots + Insert Posts", "type": "main", "index": 0}]]},
+    "Map Videos to Slots + Insert Posts": {"main": [[{"node": "INSERT posts (scheduled)", "type": "main", "index": 0}]]},
+    "INSERT posts (scheduled)": {"main": [[{"node": "Split Per Post", "type": "main", "index": 0}]]},
+    "Split Per Post": {"main": [[{"node": "Update status: uploading", "type": "main", "index": 0}]]},
+    "Update status: uploading": {"main": [[{"node": "POST to Metricool", "type": "main", "index": 0}]]},
+    "POST to Metricool": {"main": [[{"node": "Update status: processing", "type": "main", "index": 0}]]},
+    "Update status: processing": {"main": [[{"node": "Wait 2min", "type": "main", "index": 0}]]},
+    "Wait 2min": {"main": [[{"node": "Poll Metricool Status", "type": "main", "index": 0}]]},
+    "Poll Metricool Status": {"main": [[{"node": "Published?", "type": "main", "index": 0}]]},
+    "Published?": {
+      "main": [
+        [{"node": "Update status: posted", "type": "main", "index": 0}],
+        [{"node": "Wait 2min", "type": "main", "index": 0}]
+      ]
+    },
+    "Update status: posted": {"main": [[{"node": "Schedule 24h Perf Poll", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Requires: METRICOOL_API_KEY, SUPABASE_URL, N8N_SHARED_SECRET env vars. Add Observability workflow cron that reads perf_poll events and fires TikTok Creator API calls at 24h and 72h marks. TikTok Direct Post API path: add IF node checking config.tiktok_scheduler='tiktok_content_posting_api' and route accordingly."
+  }
+}

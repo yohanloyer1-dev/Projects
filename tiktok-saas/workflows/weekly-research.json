@@ -1,0 +1,286 @@
+{
+  "name": "5b. Weekly Research",
+  "nodes": [
+    {
+      "id": "cron-trigger",
+      "name": "Monday 06:00 Cron",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "rule": {"interval": [{"field": "cronExpression", "expression": "0 6 * * 1"}]}
+      }
+    },
+    {
+      "id": "webhook-trigger",
+      "name": "Research Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 450],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "research/start",
+        "responseMode": "lastNode"
+      },
+      "notes": "Validate HMAC in first Code node before processing"
+    },
+    {
+      "id": "validate-hmac",
+      "name": "Validate HMAC + Get Clients",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 370],
+      "parameters": {
+        "jsCode": "// HMAC validation for webhook path\nconst sig = $input.first().json.headers?.['x-hub-signature-256'];\nif (sig) {\n  const crypto = require('crypto');\n  const body = JSON.stringify($input.first().json.body || {});\n  const expected = 'sha256=' + crypto.createHmac('sha256', process.env.N8N_SHARED_SECRET || '').update(body).digest('hex');\n  if (sig !== expected) throw new Error('HMAC validation failed — unauthorized webhook call');\n}\n\n// Compute week_start (most recent Monday)\nconst now = new Date();\nconst day = now.getDay();\nconst diff = (day === 0 ? -6 : 1 - day);\nconst monday = new Date(now);\nmonday.setDate(now.getDate() + diff);\nconst weekStart = monday.toISOString().split('T')[0];\n\n// If triggered by webhook, extract specific client_id\nconst webhookBody = $input.first().json.body;\nreturn [{ json: { week_start: weekStart, specific_client_id: webhookBody?.client_id || null } }];"
+      }
+    },
+    {
+      "id": "fetch-active-clients",
+      "name": "Fetch Active Clients",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 370],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/clients?status=eq.active&select=*,client_config(*)",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "filter-client",
+      "name": "Filter if Specific Client",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 370],
+      "parameters": {
+        "jsCode": "const clients = $input.all().map(i => i.json);\nconst specificId = $('Validate HMAC + Get Clients').item.json.specific_client_id;\nconst weekStart = $('Validate HMAC + Get Clients').item.json.week_start;\nconst filtered = specificId ? clients.filter(c => c.client_id === specificId) : clients;\nreturn filtered.map(c => ({ json: { ...c, week_start: weekStart } }));"
+      }
+    },
+    {
+      "id": "split-clients",
+      "name": "Split Per Client",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [900, 370],
+      "parameters": {"batchSize": 1, "options": {}}
+    },
+    {
+      "id": "mark-run-in-progress",
+      "name": "Upsert research_run in_progress",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 370],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/research_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "resolution=merge-duplicates,return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $json.client_id, week_start: $json.week_start, status: 'in_progress' }) }}"
+      }
+    },
+    {
+      "id": "build-queries",
+      "name": "Build Query Pack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 370],
+      "parameters": {
+        "jsCode": "const client = $('Split Per Client').item.json;\nconst config = client.client_config;\nconst researchRunId = $json[0]?.research_run_id;\n\n// Build niche hashtag from niche string\nconst nicheHashtag = config.niche.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);\nconst audienceHashtag = config.target_audience.toLowerCase().replace(/\\s+/g, '').substring(0, 20);\n\nreturn [{\n  json: {\n    client_id: client.client_id,\n    config,\n    week_start: client.week_start,\n    research_run_id: researchRunId,\n    niche_query: config.niche,\n    audience_query: config.target_audience,\n    niche_hashtag: nicheHashtag,\n    audience_hashtag: audienceHashtag,\n    api_key: $env.SCRAPECREATORS_API_KEY\n  }\n}];"
+      }
+    },
+    {
+      "id": "scrape-keyword-niche",
+      "name": "ScrapeCreators: keyword niche",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 200],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.scrapecreators.com/v1/tiktok/search/keyword?query={{ encodeURIComponent($json.niche_query) }}&date_posted=this-week&sort_by=most-liked",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "x-api-key", "value": "={{ $json.api_key }}"}]}
+      }
+    },
+    {
+      "id": "scrape-top-niche",
+      "name": "ScrapeCreators: top niche",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 320],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.scrapecreators.com/v1/tiktok/search/top?query={{ encodeURIComponent($json.niche_query) }}&publish_time=this-week&sort_by=most-liked",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "x-api-key", "value": "={{ $json.api_key }}"}]}
+      }
+    },
+    {
+      "id": "scrape-hashtag-niche",
+      "name": "ScrapeCreators: hashtag niche",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 440],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.scrapecreators.com/v1/tiktok/search/hashtag?hashtag={{ $json.niche_hashtag }}",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "x-api-key", "value": "={{ $json.api_key }}"}]}
+      }
+    },
+    {
+      "id": "scrape-trending",
+      "name": "ScrapeCreators: trending feed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 560],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.scrapecreators.com/v1/tiktok/get-trending-feed",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "x-api-key", "value": "={{ $('Build Query Pack').item.json.api_key }}"}]}
+      }
+    },
+    {
+      "id": "merge-results",
+      "name": "Merge + Score + Deduplicate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1700, 370],
+      "parameters": {
+        "jsCode": "// Merge all ScrapeCreators results\nconst allItems = $input.all();\nconst seen = new Set();\nconst videos = [];\n\nfor (const item of allItems) {\n  const results = item.json?.data || item.json?.videos || item.json?.items || [];\n  for (const v of results) {\n    const url = v.url || v.share_url || v.video_url;\n    if (!url || seen.has(url)) continue;\n    seen.add(url);\n    const play = parseInt(v.play_count || v.stats?.play_count || 0);\n    const like = parseInt(v.digg_count || v.stats?.digg_count || v.like_count || 0);\n    const comment = parseInt(v.comment_count || v.stats?.comment_count || 0);\n    const share = parseInt(v.share_count || v.stats?.share_count || 0);\n    const score = play * 0.5 + like * 0.25 + comment * 0.15 + share * 0.10;\n    videos.push({\n      tiktok_url: url,\n      author_handle: v.author?.uniqueId || v.author_handle || v.username,\n      caption: v.desc || v.caption || '',\n      stats: { play_count: play, digg_count: like, comment_count: comment, share_count: share },\n      score: Math.round(score)\n    });\n  }\n}\n\nvideos.sort((a, b) => b.score - a.score);\nconst top30 = videos.slice(0, 30);\nconst top10 = top30.slice(0, 10);\n\nconst clientData = $('Build Query Pack').item.json;\nreturn [{ json: { client_id: clientData.client_id, config: clientData.config, week_start: clientData.week_start, research_run_id: clientData.research_run_id, top30, top10 } }];"
+      }
+    },
+    {
+      "id": "extract-transcripts",
+      "name": "Extract Transcripts (top 10)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1900, 370],
+      "parameters": {
+        "jsCode": "const { top10, top30, client_id, config, week_start, research_run_id } = $input.first().json;\nconst results = [];\n\nfor (let i = 0; i < top10.length; i++) {\n  const video = top10[i];\n  try {\n    // Note: n8n HTTP Request doesn't support synchronous loops well.\n    // This code node prepares the payload; actual HTTP calls use a sub-workflow or manual HTTP Request nodes.\n    // In production: replace this with n8n's Loop Over Items + HTTP Request node.\n    results.push({ ...video, transcript: null, needs_transcript: true });\n  } catch(e) {\n    results.push({ ...video, transcript: null, needs_transcript: false, transcript_error: e.message });\n  }\n}\n\n// Merge: top10 (with transcript flag) + videos 11-30 (no transcript)\nconst allVideos = [\n  ...results,\n  ...top30.slice(10).map(v => ({ ...v, transcript: null, needs_transcript: false }))\n];\n\nreturn [{ json: { client_id, config, week_start, research_run_id, videos: allVideos } }];"
+      },
+      "notes": "Production: replace with n8n Loop Over Items node calling Supadata API per URL. See comments in agents/research.md for API spec."
+    },
+    {
+      "id": "call-claude-analysis",
+      "name": "Claude Pattern Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2100, 370],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "x-api-key", "value": "={{ $env.CLAUDE_API_KEY }}"},
+            {"name": "anthropic-version", "value": "2023-06-01"},
+            {"name": "content-type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4096, system: 'You are a TikTok content researcher. Analyze the provided video data and return ONLY valid JSON. No markdown, no explanation.', messages: [{ role: 'user', content: 'Analyze these TikTok videos from the niche: ' + $json.config.niche + '. For each video with a transcript, identify: hook_type (question|statement|statistic|story), emotional_trigger (fear|curiosity|aspiration|relief), and key patterns. Then provide a cross-video pattern summary. Return JSON: {videos: [{tiktok_url, hook_type, emotional_trigger, hook_phrase, key_patterns}], summary: {top_hook_types, top_triggers, emerging_phrases, beat_structure_winner, cta_patterns}}. Videos: ' + JSON.stringify($json.videos.slice(0,10)) }] }) }}"
+      }
+    },
+    {
+      "id": "upsert-insights",
+      "name": "Upsert content_insights",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2300, 370],
+      "parameters": {
+        "jsCode": "const claudeResponse = $input.first().json;\nconst analysis = JSON.parse(claudeResponse.content[0].text || '{}');\nconst prevData = $('Claude Pattern Analysis').item;\n\n// Return array of upsert payloads\nconst { client_id, research_run_id, week_start, videos } = $('Merge + Score + Deduplicate').item.json;\n\nreturn videos.map(v => {\n  const analysed = (analysis.videos || []).find(a => a.tiktok_url === v.tiktok_url) || {};\n  return {\n    json: {\n      client_id,\n      research_run_id,\n      source: 'scrapecreators',\n      tiktok_url: v.tiktok_url,\n      author_handle: v.author_handle,\n      caption: v.caption,\n      transcript: v.transcript,\n      hook_type: analysed.hook_type || null,\n      emotional_trigger: analysed.emotional_trigger || null,\n      stats: v.stats,\n      score: v.score\n    }\n  };\n});"
+      }
+    },
+    {
+      "id": "post-insights",
+      "name": "POST content_insights to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2500, 370],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/content_insights",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "resolution=merge-duplicates,return=minimal"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      }
+    },
+    {
+      "id": "mark-research-complete",
+      "name": "Mark research_run completed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2700, 370],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/research_runs?client_id=eq.{{ $('Merge + Score + Deduplicate').item.json.client_id }}&week_start=eq.{{ $('Merge + Score + Deduplicate').item.json.week_start }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"status\": \"completed\", \"outputs\": { \"videos_found\": {{ $('Merge + Score + Deduplicate').item.json.top30.length }}, \"transcripts_extracted\": {{ $('Merge + Score + Deduplicate').item.json.top10.length }} } }"
+      }
+    },
+    {
+      "id": "trigger-content-agent",
+      "name": "Trigger Content Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2900, 370],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_URL }}/webhook/content/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "X-Hub-Signature-256", "value": "=sha256={{ $env.N8N_SHARED_SECRET_HMAC_PLACEHOLDER }}"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Merge + Score + Deduplicate').item.json.client_id, week_start: $('Merge + Score + Deduplicate').item.json.week_start, research_run_id: $('Merge + Score + Deduplicate').item.json.research_run_id }) }}",
+        "notes": "HMAC header must be computed dynamically — use n8n Function node with crypto.createHmac"
+      }
+    }
+  ],
+  "connections": {
+    "Monday 06:00 Cron": {"main": [[{"node": "Validate HMAC + Get Clients", "type": "main", "index": 0}]]},
+    "Research Webhook Trigger": {"main": [[{"node": "Validate HMAC + Get Clients", "type": "main", "index": 0}]]},
+    "Validate HMAC + Get Clients": {"main": [[{"node": "Fetch Active Clients", "type": "main", "index": 0}]]},
+    "Fetch Active Clients": {"main": [[{"node": "Filter if Specific Client", "type": "main", "index": 0}]]},
+    "Filter if Specific Client": {"main": [[{"node": "Split Per Client", "type": "main", "index": 0}]]},
+    "Split Per Client": {"main": [[{"node": "Upsert research_run in_progress", "type": "main", "index": 0}]]},
+    "Upsert research_run in_progress": {"main": [[{"node": "Build Query Pack", "type": "main", "index": 0}]]},
+    "Build Query Pack": {"main": [[{"node": "ScrapeCreators: keyword niche", "type": "main", "index": 0}, {"node": "ScrapeCreators: top niche", "type": "main", "index": 0}, {"node": "ScrapeCreators: hashtag niche", "type": "main", "index": 0}, {"node": "ScrapeCreators: trending feed", "type": "main", "index": 0}]]},
+    "ScrapeCreators: keyword niche": {"main": [[{"node": "Merge + Score + Deduplicate", "type": "main", "index": 0}]]},
+    "ScrapeCreators: top niche": {"main": [[{"node": "Merge + Score + Deduplicate", "type": "main", "index": 1}]]},
+    "ScrapeCreators: hashtag niche": {"main": [[{"node": "Merge + Score + Deduplicate", "type": "main", "index": 2}]]},
+    "ScrapeCreators: trending feed": {"main": [[{"node": "Merge + Score + Deduplicate", "type": "main", "index": 3}]]},
+    "Merge + Score + Deduplicate": {"main": [[{"node": "Extract Transcripts (top 10)", "type": "main", "index": 0}]]},
+    "Extract Transcripts (top 10)": {"main": [[{"node": "Claude Pattern Analysis", "type": "main", "index": 0}]]},
+    "Claude Pattern Analysis": {"main": [[{"node": "Upsert content_insights", "type": "main", "index": 0}]]},
+    "Upsert content_insights": {"main": [[{"node": "POST content_insights to Supabase", "type": "main", "index": 0}]]},
+    "POST content_insights to Supabase": {"main": [[{"node": "Mark research_run completed", "type": "main", "index": 0}]]},
+    "Mark research_run completed": {"main": [[{"node": "Trigger Content Agent", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Environment vars: SUPABASE_URL, CLAUDE_API_KEY, SCRAPECREATORS_API_KEY, N8N_SHARED_SECRET, N8N_URL, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID. Add n8n Error Trigger node connecting to Supabase events insert + Telegram alert. Supadata transcript calls: add Loop Over Items node between Extract Transcripts and Claude Pattern Analysis, calling POST https://api.supadata.ai/v1/transcript per URL."
+  }
+}

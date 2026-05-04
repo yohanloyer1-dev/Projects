@@ -1,0 +1,237 @@
+{
+  "name": "5c. Script Generation",
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Content Start Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "content/start",
+        "responseMode": "lastNode"
+      }
+    },
+    {
+      "id": "validate-and-fetch",
+      "name": "Validate HMAC + Fetch Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst body = $input.first().json.body || {};\nconst sig = $input.first().json.headers?.['x-hub-signature-256'];\nif (sig) {\n  const expected = 'sha256=' + crypto.createHmac('sha256', process.env.N8N_SHARED_SECRET || '').update(JSON.stringify(body)).digest('hex');\n  if (sig !== expected) throw new Error('HMAC validation failed');\n}\nreturn [{ json: { client_id: body.client_id, week_start: body.week_start, research_run_id: body.research_run_id } }];"
+      }
+    },
+    {
+      "id": "fetch-client-config",
+      "name": "Fetch Client Config",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/client_config?client_id=eq.{{ $json.client_id }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "fetch-insights",
+      "name": "Fetch Top Insights",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 450],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/content_insights?client_id=eq.{{ $('Validate HMAC + Fetch Data').item.json.client_id }}&research_run_id=eq.{{ $('Validate HMAC + Fetch Data').item.json.research_run_id }}&order=score.desc&limit=30&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "fetch-github-patterns",
+      "name": "Fetch Pattern Library from GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 600],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://raw.githubusercontent.com/{{ $env.GITHUB_OWNER }}/{{ $env.GITHUB_REPO }}/main/clients/{{ $('Validate HMAC + Fetch Data').item.json.client_id }}/pattern-library.md",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Authorization", "value": "=token {{ $env.GITHUB_TOKEN }}"}]
+        }
+      }
+    },
+    {
+      "id": "fetch-last-week-top",
+      "name": "Fetch Last Week Top Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 750],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts?client_id=eq.{{ $('Validate HMAC + Fetch Data').item.json.client_id }}&select=*,video_jobs(*,scripts(*))&order=perf_72h->views.desc&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "insert-script-batch",
+      "name": "Insert script_batch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/script_batches",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate HMAC + Fetch Data').item.json.client_id, week_start: $('Validate HMAC + Fetch Data').item.json.week_start, status: 'generating', prompt_version: 'v1' }) }}"
+      }
+    },
+    {
+      "id": "template-1-claude",
+      "name": "Template 1 — Research Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "x-api-key", "value": "={{ $env.CLAUDE_API_KEY }}"},
+            {"name": "anthropic-version", "value": "2023-06-01"},
+            {"name": "content-type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=See prompts/research-summary-v1.md for full prompt. Construct JSON body dynamically from client_config + top 30 insights."
+      },
+      "notes": "In production: build the full messages array from research-summary-v1.md template + data. See prompts/ directory."
+    },
+    {
+      "id": "template-2-claude",
+      "name": "Template 2 — Batch Script Generator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "x-api-key", "value": "={{ $env.CLAUDE_API_KEY }}"},
+            {"name": "anthropic-version", "value": "2023-06-01"},
+            {"name": "content-type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=See prompts/script-generator-v1.md for full prompt. Inject research_summary + pattern-library top 3 + last week top performer."
+      }
+    },
+    {
+      "id": "validate-json-schema",
+      "name": "Validate Script JSON Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 300],
+      "parameters": {
+        "jsCode": "let scripts;\ntry {\n  const raw = $input.first().json.content[0].text;\n  const parsed = JSON.parse(raw);\n  scripts = parsed.scripts;\n} catch(e) {\n  throw new Error('Claude returned invalid JSON: ' + e.message);\n}\n\nif (!Array.isArray(scripts) || scripts.length !== 5) throw new Error('Expected exactly 5 scripts, got: ' + (scripts?.length || 0));\n\nconst required = ['idx','topic','hook','beats','cta','caption','hashtags','compliance'];\nfor (const script of scripts) {\n  for (const field of required) {\n    if (script[field] === undefined) throw new Error(`Script ${script.idx}: missing field '${field}'`);\n  }\n  if (!Array.isArray(script.beats) || script.beats.length < 3) throw new Error(`Script ${script.idx}: beats must have ≥3 items`);\n  if (!script.cta.spoken || !script.cta.on_screen || !script.cta.dm_prompt) throw new Error(`Script ${script.idx}: cta missing fields`);\n}\n\nreturn [{ json: { scripts, valid: true } }];"
+      }
+    },
+    {
+      "id": "compliance-check",
+      "name": "Compliance Rewrite (flagged scripts)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, 300],
+      "parameters": {
+        "jsCode": "const { scripts } = $input.first().json;\nconst flagged = scripts.filter(s => s.compliance?.risk_flags?.length > 0);\nconst clean = scripts.filter(s => !s.compliance?.risk_flags?.length);\n\n// In production: loop over flagged scripts, call Claude API with compliance-rewrite-v1.md\n// For now: mark flagged scripts for separate compliance-rewrite HTTP calls\nreturn [{ json: { all_scripts: scripts, flagged_count: flagged.length, flagged_idx: flagged.map(s => s.idx) } }];"
+      }
+    },
+    {
+      "id": "insert-scripts",
+      "name": "Insert 5 scripts to Supabase",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1700, 300],
+      "parameters": {
+        "jsCode": "const { all_scripts } = $input.first().json;\nconst batchId = $('Insert script_batch').item.json[0]?.script_batch_id;\nconst clientId = $('Validate HMAC + Fetch Data').item.json.client_id;\nconst weekStart = $('Validate HMAC + Fetch Data').item.json.week_start;\n\nreturn all_scripts.map(s => ({\n  json: {\n    client_id: clientId,\n    script_batch_id: batchId,\n    week_start: weekStart,\n    idx: s.idx,\n    status: 'pending_approval',\n    script_json: s,\n    approval_attempt: 1\n  }\n}));"
+      }
+    },
+    {
+      "id": "post-scripts",
+      "name": "POST scripts to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/scripts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      }
+    },
+    {
+      "id": "send-telegram-approval",
+      "name": "Send Telegram Approval Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2100, 300],
+      "parameters": {
+        "jsCode": "// Format all 5 scripts into one Telegram message with inline keyboard\nconst scripts = $('Insert scripts to Supabase').all().map(i => i.json);\nconst savedScripts = $('POST scripts to Supabase').all().map(i => i.json[0] || i.json);\nconst batchId = savedScripts[0]?.script_batch_id || 'unknown';\n\nlet text = `📋 *Week Scripts Ready — ${savedScripts[0]?.week_start}*\\n`;\ntext += `Client: ${savedScripts[0]?.client_id}\\n\\n`;\n\nfor (const s of scripts) {\n  const sc = s.script_json || s;\n  text += `*Script ${sc.idx}: ${sc.topic}*\\n`;\n  text += `Hook: \"${sc.hook}\"\\n`;\n  text += `Beats: ${sc.beats?.length || 0} | Duration: ~40s\\n`;\n  text += `CTA: \"${sc.cta?.spoken}\"\\n`;\n  text += `Risk flags: ${sc.compliance?.risk_flags?.length > 0 ? sc.compliance.risk_flags.join(', ') : 'None'}\\n\\n`;\n}\n\nconst inlineKeyboard = {\n  inline_keyboard: [\n    [{ text: '✅ Approve All', callback_data: `approve_all:${batchId}` }],\n    [{ text: '✏️ Request Revision', callback_data: `reject_all:${batchId}` }]\n  ]\n};\n\nreturn [{ json: { text, reply_markup: JSON.stringify(inlineKeyboard) } }];"
+      }
+    },
+    {
+      "id": "telegram-send",
+      "name": "POST to Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2300, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $json.text, reply_markup: $json.reply_markup, parse_mode: 'Markdown' }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Content Start Webhook": {"main": [[{"node": "Validate HMAC + Fetch Data", "type": "main", "index": 0}]]},
+    "Validate HMAC + Fetch Data": {"main": [[{"node": "Fetch Client Config", "type": "main", "index": 0}, {"node": "Fetch Top Insights", "type": "main", "index": 0}, {"node": "Fetch Pattern Library from GitHub", "type": "main", "index": 0}, {"node": "Fetch Last Week Top Post", "type": "main", "index": 0}]]},
+    "Fetch Client Config": {"main": [[{"node": "Insert script_batch", "type": "main", "index": 0}]]},
+    "Insert script_batch": {"main": [[{"node": "Template 1 — Research Summary", "type": "main", "index": 0}]]},
+    "Template 1 — Research Summary": {"main": [[{"node": "Template 2 — Batch Script Generator", "type": "main", "index": 0}]]},
+    "Template 2 — Batch Script Generator": {"main": [[{"node": "Validate Script JSON Schema", "type": "main", "index": 0}]]},
+    "Validate Script JSON Schema": {"main": [[{"node": "Compliance Rewrite (flagged scripts)", "type": "main", "index": 0}]]},
+    "Compliance Rewrite (flagged scripts)": {"main": [[{"node": "Insert 5 scripts to Supabase", "type": "main", "index": 0}]]},
+    "Insert 5 scripts to Supabase": {"main": [[{"node": "POST scripts to Supabase", "type": "main", "index": 0}]]},
+    "POST scripts to Supabase": {"main": [[{"node": "Send Telegram Approval Request", "type": "main", "index": 0}]]},
+    "Send Telegram Approval Request": {"main": [[{"node": "POST to Telegram", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Requires: SUPABASE_URL, CLAUDE_API_KEY, GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, N8N_SHARED_SECRET env vars. Add separate webhook handler for Telegram callback_data (approve_all, reject_all) — triggers Production Agent or re-runs Template 2 with feedback."
+  }
+}

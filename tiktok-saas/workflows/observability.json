@@ -1,0 +1,188 @@
+{
+  "name": "5g. Observability (Monitor Agent)",
+  "nodes": [
+    {
+      "id": "error-trigger",
+      "name": "n8n Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [100, 200],
+      "parameters": {}
+    },
+    {
+      "id": "daily-cron",
+      "name": "Daily 08:00 Cron",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 450],
+      "parameters": {
+        "rule": {"interval": [{"field": "cronExpression", "expression": "0 8 * * *"}]}
+      }
+    },
+    {
+      "id": "log-error-event",
+      "name": "Log Error to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/events",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ agent: 'monitor', workflow: $json.workflow?.name || 'unknown', level: ($json.error?.message || '').includes('401') || ($json.error?.message || '').includes('Unauthorized') ? 'critical' : ($json.error?.message || '').includes('timeout') || ($json.error?.message || '').includes('rate limit') ? 'warning' : 'error', message: $json.error?.message || 'Workflow execution failed', payload: { node_name: $json.execution?.nodeError?.name, execution_id: $json.execution?.id, timestamp: new Date().toISOString() } }) }}"
+      }
+    },
+    {
+      "id": "determine-severity",
+      "name": "Determine Severity + Format Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 200],
+      "parameters": {
+        "jsCode": "const err = $input.first().json;\nconst msg = err.error?.message || 'Unknown error';\nconst workflow = err.workflow?.name || 'unknown workflow';\n\nlet emoji = '⚠️';\nlet action = 'Monitor — auto-retry may resolve.';\n\nif (msg.includes('401') || msg.includes('Unauthorized') || msg.includes('auth')) {\n  emoji = '🔴';\n  action = 'Action required: re-authenticate affected service.';\n} else if (msg.includes('connection') || msg.includes('database')) {\n  emoji = '🔴';\n  action = 'Check Supabase connectivity.';\n} else if (msg.includes('timeout')) {\n  emoji = '⚠️';\n  action = 'Timeout — auto-retry triggered.';\n}\n\nconst text = `${emoji} ${new Date().toISOString().split('T')[0]} — ${workflow}: ${msg.substring(0, 200)}. Action: ${action}`;\nreturn [{ json: { text } }];"
+      }
+    },
+    {
+      "id": "telegram-error-alert",
+      "name": "Telegram Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $json.text }) }}"
+      }
+    },
+    {
+      "id": "check-stuck-video-jobs",
+      "name": "Check Stuck Video Jobs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 450],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_jobs?status=eq.in_progress&updated_at=lt.{{ new Date(Date.now()-1800000).toISOString() }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "check-stuck-posts",
+      "name": "Check Stuck Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 560],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/posts?platform_status=eq.uploading&updated_at=lt.{{ new Date(Date.now()-900000).toISOString() }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "check-missing-research",
+      "name": "Check Missing Research Runs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 670],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/clients?status=eq.active&select=client_id,client_name",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "check-pending-approvals",
+      "name": "Check Unanswered Approvals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 780],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/scripts?status=eq.pending_approval&created_at=lt.{{ new Date(Date.now()-86400000).toISOString() }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "auto-reject-72h",
+      "name": "Auto-Reject Scripts >72h",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 780],
+      "parameters": {
+        "jsCode": "const scripts = $input.all().map(i => i.json);\nconst cutoff72h = Date.now() - 259200000;\nconst toReject = scripts.filter(s => new Date(s.created_at).getTime() < cutoff72h);\nconst toWarn = scripts.filter(s => new Date(s.created_at).getTime() >= cutoff72h);\nreturn [{ json: { to_reject: toReject, to_warn: toWarn } }];"
+      }
+    },
+    {
+      "id": "check-perf-polls",
+      "name": "Check Due Performance Polls",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 890],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/events?level=eq.info&message=eq.perf_poll_scheduled&resolved=eq.false&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "process-perf-polls",
+      "name": "Fire Due Performance Polls",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 890],
+      "parameters": {
+        "jsCode": "const events = $input.all().map(i => i.json);\nconst now = Date.now();\nconst due24h = events.filter(e => e.payload?.poll_at_24h && new Date(e.payload.poll_at_24h).getTime() <= now && !e.payload?.perf_24h_done);\nconst due72h = events.filter(e => e.payload?.poll_at_72h && new Date(e.payload.poll_at_72h).getTime() <= now && !e.payload?.perf_72h_done);\n\n// For each due poll: fire TikTok Creator API call and update posts table\n// In production: these become separate HTTP Request + PATCH nodes in a loop\nreturn [{ json: { due_24h: due24h.length, due_72h: due72h.length, polls: [...due24h.map(e => ({...e, poll_type: '24h'})), ...due72h.map(e => ({...e, poll_type: '72h'}))] } }];"
+      }
+    },
+    {
+      "id": "compose-daily-summary",
+      "name": "Compose Daily Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 600],
+      "parameters": {
+        "jsCode": "const stuckJobs = $('Check Stuck Video Jobs').all().map(i => i.json);\nconst stuckPosts = $('Check Stuck Posts').all().map(i => i.json);\nconst pendingApprovals = $('Check Unanswered Approvals').all().map(i => i.json);\nconst issues = [];\n\nif (stuckJobs.length > 0) {\n  issues.push(`• ${stuckJobs.length} video job(s) stuck >30min: ${stuckJobs.map(j => j.client_id).join(', ')}`);\n}\nif (stuckPosts.length > 0) {\n  issues.push(`• ${stuckPosts.length} post(s) stuck uploading >15min: ${stuckPosts.map(p => p.client_id).join(', ')}`);\n}\nif (pendingApprovals.length > 0) {\n  const old = pendingApprovals.filter(s => Date.now() - new Date(s.created_at).getTime() > 86400000);\n  if (old.length > 0) issues.push(`• ${old.length} script(s) awaiting approval >24h: ${[...new Set(old.map(s => s.client_id))].join(', ')}`);\n}\n\nconst today = new Date().toISOString().split('T')[0];\nlet text;\nif (issues.length === 0) {\n  text = `✅ ${today} — All systems healthy. No issues detected.`;\n} else {\n  text = `📊 ${today} Daily Check — ${issues.length} issue(s):\\n${issues.join('\\n')}`;\n}\n\nreturn [{ json: { text, has_issues: issues.length > 0 } }];"
+      }
+    },
+    {
+      "id": "send-daily-telegram",
+      "name": "Send Daily Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 600],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: $json.text }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "n8n Error Trigger": {"main": [[{"node": "Log Error to Supabase", "type": "main", "index": 0}]]},
+    "Log Error to Supabase": {"main": [[{"node": "Determine Severity + Format Alert", "type": "main", "index": 0}]]},
+    "Determine Severity + Format Alert": {"main": [[{"node": "Telegram Error Alert", "type": "main", "index": 0}]]},
+    "Daily 08:00 Cron": {"main": [[{"node": "Check Stuck Video Jobs", "type": "main", "index": 0}, {"node": "Check Stuck Posts", "type": "main", "index": 0}, {"node": "Check Missing Research Runs", "type": "main", "index": 0}, {"node": "Check Unanswered Approvals", "type": "main", "index": 0}, {"node": "Check Due Performance Polls", "type": "main", "index": 0}]]},
+    "Check Unanswered Approvals": {"main": [[{"node": "Auto-Reject Scripts >72h", "type": "main", "index": 0}]]},
+    "Check Due Performance Polls": {"main": [[{"node": "Fire Due Performance Polls", "type": "main", "index": 0}]]},
+    "Check Stuck Video Jobs": {"main": [[{"node": "Compose Daily Summary", "type": "main", "index": 0}]]},
+    "Check Stuck Posts": {"main": [[{"node": "Compose Daily Summary", "type": "main", "index": 1}]]},
+    "Auto-Reject Scripts >72h": {"main": [[{"node": "Compose Daily Summary", "type": "main", "index": 2}]]},
+    "Compose Daily Summary": {"main": [[{"node": "Send Daily Telegram", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Error Trigger catches errors from ALL other workflows — connect in n8n UI. Add TikTok Creator API calls inside Fire Due Performance Polls for perf_24h and perf_72h data retrieval. Add auto-retry: stuck video_jobs UPDATE status=queued after alerting."
+  }
+}

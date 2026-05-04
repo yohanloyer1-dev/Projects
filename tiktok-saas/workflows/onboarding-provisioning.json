@@ -1,0 +1,235 @@
+{
+  "name": "5a. Onboarding Provisioning",
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Typeform Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "typeform/onboard",
+        "responseMode": "responseNode",
+        "authentication": "none"
+      },
+      "notes": "Receives Typeform submission. All fields mapped from Typeform hidden/visible fields."
+    },
+    {
+      "id": "validate-payload",
+      "name": "Validate & Parse Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst answers = body.form_response?.answers || body;\n\n// Extract fields (adjust field refs to match your Typeform field IDs)\nconst fields = {\n  CLIENT_ID: (answers.find(a => a.field?.ref === 'client_id') || {}).text || body.CLIENT_ID,\n  CLIENT_NAME: (answers.find(a => a.field?.ref === 'client_name') || {}).text || body.CLIENT_NAME,\n  NICHE: (answers.find(a => a.field?.ref === 'niche') || {}).text || body.NICHE,\n  TARGET_AUDIENCE: (answers.find(a => a.field?.ref === 'target_audience') || {}).text || body.TARGET_AUDIENCE,\n  TONE_GUIDE: (answers.find(a => a.field?.ref === 'tone_guide') || {}).text || body.TONE_GUIDE,\n  CTA_KEYWORD: (answers.find(a => a.field?.ref === 'cta_keyword') || {}).text || body.CTA_KEYWORD,\n  TIMEZONE: (answers.find(a => a.field?.ref === 'timezone') || {}).text || 'Europe/Paris',\n  FREE_RESOURCE_URL: (answers.find(a => a.field?.ref === 'free_resource_url') || {}).url || body.FREE_RESOURCE_URL,\n  BRAND_TERMS_TO_AVOID: ((answers.find(a => a.field?.ref === 'brand_terms') || {}).text || '').split(',').map(t => t.trim()).filter(Boolean)\n};\n\n// Validation\nconst errors = [];\nif (!fields.CLIENT_ID || !/^c_[a-z0-9_]{2,20}$/.test(fields.CLIENT_ID)) errors.push('CLIENT_ID must match c_[a-z0-9_]{2,20}');\nif (!fields.CLIENT_NAME) errors.push('CLIENT_NAME required');\nif (!fields.NICHE) errors.push('NICHE required');\nif (!fields.TARGET_AUDIENCE) errors.push('TARGET_AUDIENCE required');\nif (!fields.TONE_GUIDE) errors.push('TONE_GUIDE required');\nif (!fields.CTA_KEYWORD || fields.CTA_KEYWORD.length < 2 || fields.CTA_KEYWORD.length > 15) errors.push('CTA_KEYWORD must be 2-15 chars');\nif (!fields.FREE_RESOURCE_URL || !/^https?:\\/\\/.+/.test(fields.FREE_RESOURCE_URL)) errors.push('FREE_RESOURCE_URL must be valid URL');\n\nif (errors.length > 0) {\n  throw new Error('Validation failed: ' + errors.join('; '));\n}\n\n// Compute week_start (most recent Monday)\nconst now = new Date();\nconst day = now.getDay();\nconst diff = (day === 0 ? -6 : 1 - day);\nconst monday = new Date(now);\nmonday.setDate(now.getDate() + diff);\nfields.WEEK_START = monday.toISOString().split('T')[0];\n\nreturn [{ json: fields }];"
+      }
+    },
+    {
+      "id": "validation-error-branch",
+      "name": "Validation Error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [500, 300],
+      "parameters": {
+        "conditions": {
+          "boolean": [{"value1": "={{ $execution.error !== undefined }}", "value2": true}]
+        }
+      },
+      "notes": "Routes to error handler if validation failed"
+    },
+    {
+      "id": "upsert-client",
+      "name": "Upsert clients row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/clients",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Prefer", "value": "resolution=merge-duplicates,return=minimal"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {"name": "client_id", "value": "={{ $json.CLIENT_ID }}"},
+            {"name": "client_name", "value": "={{ $json.CLIENT_NAME }}"},
+            {"name": "status", "value": "active"},
+            {"name": "timezone", "value": "={{ $json.TIMEZONE }}"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "upsert-client-config",
+      "name": "Upsert client_config row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/client_config",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Prefer", "value": "resolution=merge-duplicates,return=minimal"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate & Parse Payload').item.json.CLIENT_ID, niche: $('Validate & Parse Payload').item.json.NICHE, target_audience: $('Validate & Parse Payload').item.json.TARGET_AUDIENCE, tone_guide: $('Validate & Parse Payload').item.json.TONE_GUIDE, cta_keyword: $('Validate & Parse Payload').item.json.CTA_KEYWORD, brand_terms_to_avoid: $('Validate & Parse Payload').item.json.BRAND_TERMS_TO_AVOID, free_resource_url: $('Validate & Parse Payload').item.json.FREE_RESOURCE_URL, tiktok_scheduler: 'metricool', email_provider: 'ConvertKit', disclaimer_rules: {} }) }}"
+      }
+    },
+    {
+      "id": "insert-schedules",
+      "name": "Insert 5 schedule rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 200],
+      "parameters": {
+        "jsCode": "const clientId = $('Validate & Parse Payload').item.json.CLIENT_ID;\nconst tz = $('Validate & Parse Payload').item.json.TIMEZONE;\n// Mon=1 Tue=2 Wed=3 Thu=4 Fri=5\nconst scheduleRows = [1,2,3,4,5].map(dow => ({\n  client_id: clientId,\n  day_of_week: dow,\n  time_local: '08:30:00',\n  timezone: tz,\n  active: true\n}));\nreturn [{ json: { scheduleRows } }];"
+      }
+    },
+    {
+      "id": "post-schedules",
+      "name": "POST schedules to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1300, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schedules",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Prefer", "value": "resolution=ignore-duplicates,return=minimal"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.scheduleRows) }}"
+      }
+    },
+    {
+      "id": "insert-research-run",
+      "name": "Insert research_run (queued)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/research_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Prefer", "value": "resolution=ignore-duplicates,return=minimal"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate & Parse Payload').item.json.CLIENT_ID, week_start: $('Validate & Parse Payload').item.json.WEEK_START, status: 'queued' }) }}"
+      }
+    },
+    {
+      "id": "telegram-welcome",
+      "name": "Send Telegram Welcome",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1700, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: '✅ New client provisioned!\\n\\nClient: ' + $('Validate & Parse Payload').item.json.CLIENT_NAME + ' (' + $('Validate & Parse Payload').item.json.CLIENT_ID + ')\\nNiche: ' + $('Validate & Parse Payload').item.json.NICHE + '\\nCTA: ' + $('Validate & Parse Payload').item.json.CTA_KEYWORD + '\\nWeek start: ' + $('Validate & Parse Payload').item.json.WEEK_START + '\\n\\nResearch run queued for next Monday 06:00.', parse_mode: 'HTML' }) }}"
+      }
+    },
+    {
+      "id": "respond-200",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1900, 200],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"client_id\": \"{{ $('Validate & Parse Payload').item.json.CLIENT_ID }}\" }"
+      }
+    },
+    {
+      "id": "error-handler",
+      "name": "Log Error + Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 450],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/events",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ agent: 'onboarding', workflow: 'onboarding-provisioning', level: 'error', message: $execution.error?.message || 'Validation failed', payload: { body: $('Typeform Webhook').item.json } }) }}"
+      }
+    },
+    {
+      "id": "telegram-error",
+      "name": "Telegram Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 450],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, text: '🔴 Onboarding failed: ' + ($execution.error?.message || 'Unknown error'), parse_mode: 'HTML' }) }}"
+      }
+    },
+    {
+      "id": "respond-400",
+      "name": "Respond 400 Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1100, 450],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 400,
+        "responseBody": "={ \"success\": false, \"error\": \"{{ $execution.error?.message }}\" }"
+      }
+    }
+  ],
+  "connections": {
+    "Typeform Webhook": {"main": [[{"node": "Validate & Parse Payload", "type": "main", "index": 0}]]},
+    "Validate & Parse Payload": {"main": [[{"node": "Upsert clients row", "type": "main", "index": 0}]]},
+    "Upsert clients row": {"main": [[{"node": "Upsert client_config row", "type": "main", "index": 0}]]},
+    "Upsert client_config row": {"main": [[{"node": "Insert 5 schedule rows", "type": "main", "index": 0}]]},
+    "Insert 5 schedule rows": {"main": [[{"node": "POST schedules to Supabase", "type": "main", "index": 0}]]},
+    "POST schedules to Supabase": {"main": [[{"node": "Insert research_run (queued)", "type": "main", "index": 0}]]},
+    "Insert research_run (queued)": {"main": [[{"node": "Send Telegram Welcome", "type": "main", "index": 0}]]},
+    "Send Telegram Welcome": {"main": [[{"node": "Respond 200 OK", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Import into n8n. Set SUPABASE_URL, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID as n8n environment variables. Configure supabaseApi credential with SUPABASE_SERVICE_KEY. Error branch nodes (Log Error + Alert, Telegram Error Alert, Respond 400) connect from n8n Error Trigger node added to workflow."
+  }
+}

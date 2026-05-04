@@ -1,0 +1,175 @@
+{
+  "name": "5f. Chatfuel Lead Capture (TikTok comment + DM, EU-compatible)",
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Chatfuel Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chatfuel/lead",
+        "responseMode": "responseNode"
+      },
+      "notes": "Chatfuel External Request sends payload here. Must respond within 10s."
+    },
+    {
+      "id": "validate-payload",
+      "name": "Validate Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst errors = [];\n\nif (!body.client_id) errors.push('client_id missing');\nif (!body.keyword) errors.push('keyword missing');\nif (!body.email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(body.email)) errors.push('invalid email');\nif (!body.consent || body.consent !== true) errors.push('consent must be true');\n\nif (errors.length > 0) throw new Error('Validation: ' + errors.join('; '));\n\nreturn [{ json: {\n  client_id: body.client_id,\n  chatfuel_user_id: body.chatfuel_user_id || null,\n  tiktok_user_id: body.tiktok_user_id || null,\n  keyword: (body.keyword || '').toUpperCase().trim(),\n  email: (body.email || '').toLowerCase().trim(),\n  consent: true,\n  free_resource_url: body.free_resource_url || null,\n  payload: body\n} }];"
+      }
+    },
+    {
+      "id": "fetch-client-config",
+      "name": "Fetch Client Config + Verify Keyword",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/client_config?client_id=eq.{{ $json.client_id }}&select=cta_keyword,convertkit_form_id,convertkit_tag_id,free_resource_url",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi"
+      }
+    },
+    {
+      "id": "verify-keyword",
+      "name": "Verify CTA Keyword Match",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "parameters": {
+        "conditions": {
+          "string": [{"value1": "={{ $json[0]?.cta_keyword?.toUpperCase() }}", "operation": "equals", "value2": "={{ $('Validate Payload').item.json.keyword }}"}]
+        }
+      },
+      "notes": "Exact match first. Add fuzzy fallback if needed (Levenshtein distance ≤1)."
+    },
+    {
+      "id": "insert-dm-lead",
+      "name": "Insert dm_leads row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/dm_leads",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Prefer", "value": "return=representation"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate Payload').item.json.client_id, chatfuel_user_id: $('Validate Payload').item.json.chatfuel_user_id, tiktok_user_id: $('Validate Payload').item.json.tiktok_user_id, keyword: $('Validate Payload').item.json.keyword, email: $('Validate Payload').item.json.email, consent: true, double_opt_in_confirmed: false, payload: $('Validate Payload').item.json.payload }) }}"
+      }
+    },
+    {
+      "id": "subscribe-convertkit",
+      "name": "Subscribe to Kit (ConvertKit)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.convertkit.com/v3/forms/{{ $('Fetch Client Config + Verify Keyword').item.json[0].convertkit_form_id }}/subscribe",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ api_key: $env.EMAIL_PROVIDER_API_KEY, email: $('Validate Payload').item.json.email, tags: [$('Fetch Client Config + Verify Keyword').item.json[0].convertkit_tag_id] }) }}"
+      }
+    },
+    {
+      "id": "update-subscriber-id",
+      "name": "Update dm_leads with subscriber_id",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1300, 200],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/dm_leads?email=eq.{{ $('Validate Payload').item.json.email }}&client_id=eq.{{ $('Validate Payload').item.json.client_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ email_provider_subscriber_id: $json.subscription?.subscriber?.id || $json.subscriber?.id }) }}"
+      }
+    },
+    {
+      "id": "log-success-event",
+      "name": "Log Success Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/events",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ client_id: $('Validate Payload').item.json.client_id, agent: 'manychat', level: 'info', message: 'Lead captured: ' + $('Validate Payload').item.json.email, payload: { keyword: $('Validate Payload').item.json.keyword, source: 'tiktok_dm' } }) }}"
+      }
+    },
+    {
+      "id": "respond-manychat-success",
+      "name": "Respond to Chatfuel — Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1700, 200],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"messages\": [{ \"text\": \"✅ You're in! Check your email for your free resource. Follow the channel for weekly tips.\" }], \"set_attributes\": { \"lead_captured\": \"true\", \"lead_source\": \"tiktok_chatfuel\" } }"
+      }
+    },
+    {
+      "id": "keyword-mismatch-response",
+      "name": "Keyword Mismatch — Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 450],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"messages\": [{ \"text\": \"Hmm, I didn't recognize that keyword. Try the exact word from the video!\" }] }"
+      }
+    },
+    {
+      "id": "error-log",
+      "name": "Error: Log + Respond",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 600],
+      "parameters": {
+        "jsCode": "// Log to Supabase events table (separate HTTP node in production)\n// Return Chatfuel retry message in expected format\nreturn [{ json: { messages: [{ text: 'Something went wrong. Please try again in a moment.' }] } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Chatfuel Lead Webhook": {"main": [[{"node": "Validate Payload", "type": "main", "index": 0}]]},
+    "Validate Payload": {"main": [[{"node": "Fetch Client Config + Verify Keyword", "type": "main", "index": 0}]]},
+    "Fetch Client Config + Verify Keyword": {"main": [[{"node": "Verify CTA Keyword Match", "type": "main", "index": 0}]]},
+    "Verify CTA Keyword Match": {
+      "main": [
+        [{"node": "Insert dm_leads row", "type": "main", "index": 0}],
+        [{"node": "Keyword Mismatch — Respond", "type": "main", "index": 0}]
+      ]
+    },
+    "Insert dm_leads row": {"main": [[{"node": "Subscribe to Kit (ConvertKit)", "type": "main", "index": 0}]]},
+    "Subscribe to Kit (ConvertKit)": {"main": [[{"node": "Update dm_leads with subscriber_id", "type": "main", "index": 0}]]},
+    "Update dm_leads with subscriber_id": {"main": [[{"node": "Log Success Event", "type": "main", "index": 0}]]},
+    "Log Success Event": {"main": [[{"node": "Respond to Chatfuel — Success", "type": "main", "index": 0}]]}
+  },
+  "_meta": {
+    "instanceId": "tiktok-saas",
+    "templateNotes": "Chatfuel External Request must point to {N8N_URL}/webhook/chatfuel/lead. Must respond within 10s. Kit (ConvertKit) double opt-in must be configured at form level in Kit UI — not enforced here. GDPR: consent column stored, double_opt_in_confirmed updated via ConvertKit webhook when subscriber confirms. Add ConvertKit webhook → Supabase PATCH workflow to update double_opt_in_confirmed=true."
+  }
+}
